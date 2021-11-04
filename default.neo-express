@@ -37,6 +37,24 @@
       }
     }
   ],
-  "wallets": [],
+  "wallets": [
+    {
+      "name": "coz",
+      "accounts": [
+        {
+          "private-key": "0375efd821c672bc23c727150b39ddfb847b695f1cfcd85d092bce1d546aa4e9",
+          "script-hash": "NMdLsuFLRnzZWqdcwBjTR4NKavmkMJYWcp",
+          "label": null,
+          "is-default": true,
+          "contract": {
+            "script": "0c21039c3975f63e7e6d458f88499fd1edaf089d91cb00f11db030fe0eb6179029f3854156e7b327",
+            "parameters": [
+              "Signature"
+            ]
+          }
+        }
+      ]
+    }
+  ],
   "settings": {}
 }

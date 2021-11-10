@@ -14,5 +14,10 @@ isengard project
 * Verify transfers
 * Begin to differentiate the nep11
 * CI for testing
+* auto setup and deployment script
 * Contract Unit Tests
 * Bootstrap react app
+
+## Useful links:
++ Miro Board: https://miro.com/app/board/o9J_lrXdZTE=/?invite_link_id=178542714739
++ GDD Draft: https://docs.google.com/document/d/1cwyWnDF0AhPt95ZxRz9cKBc9sCbblHtA4eXQZQW1oQg/edit

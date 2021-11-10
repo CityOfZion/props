@@ -15,3 +15,4 @@ isengard project
 * Begin to differentiate the nep11
 * CI for testing
 * Contract Unit Tests
+* Bootstrap react app

@@ -324,7 +324,7 @@ def propertiesJson(token_id: bytes) -> bytes:
 
 
 @public
-def _deploy(data: Any, upgrade: bool):
+def deploy(data: Any, upgrade: bool):
     """
     The contracts initial entry point, on deployment.
     """

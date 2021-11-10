@@ -1,6 +1,14 @@
 import Neon from "@cityofzion/neon-js";
 import StackItemJson, { wallet } from "@cityofzion/neon-core";
 
+
+export interface InteropInterface {
+  type: string,
+  iterator?: StackItemJson.sc.StackItemJson[],
+  truncated: boolean
+  value?: StackItemJson.sc.StackItemJson[]
+}
+
 export class NeoInterface {
   /**
    * A method for executing test invocations on the Neo blockchain
@@ -17,7 +25,7 @@ export class NeoInterface {
     scriptHash: string,
     operation: string,
     args: any[]
-  ): Promise<StackItemJson.sc.StackItemJson[] | undefined> {
+  ): Promise<StackItemJson.sc.StackItemJson[] | InteropInterface[] | undefined> {
     const contract = new Neon.experimental.SmartContract(
       Neon.u.HexString.fromHex(scriptHash),
       {

@@ -24,7 +24,9 @@
   },
   "dependencies": {
     "@cityofzion/neon-core": "^5.0.0-next.16",
-    "@cityofzion/neon-js": "^5.0.0-next.16"
+    "@cityofzion/neon-js": "^5.0.0-next.16",
+    "@types/lodash": "^4.14.176",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "assert": "^2.0.0",

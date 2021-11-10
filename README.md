@@ -1,6 +1,17 @@
 # isengard
 isengard project
 
+
+## Running
+* To run:
+
+1. transfer gas to the coz account on your local instance
+2. deploy the smart contract to the network
+3. issue the `deploy` method (refer to the test example in `./sdk/test/basic.js`)
+4. reference the sdk tests to use the abstracted methods.  More will be added as the project matures.
+
 ## Bootstrap Todo:
-* Import NEP11 template and build out sdk and interfaces
-* Auto setup and deployment script
+* Verify transfers
+* Begin to differentiate the nep11
+* CI for testing
+* Contract Unit Tests

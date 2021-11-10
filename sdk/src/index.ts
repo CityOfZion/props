@@ -1,2 +1,2 @@
-export * from "./interface";
 export * as api from "./api";
+export * from "./nep11Wrapper"

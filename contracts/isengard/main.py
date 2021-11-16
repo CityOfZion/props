@@ -15,8 +15,7 @@ from boa3.builtin.type import UInt160, UInt256
 from boa3.builtin.interop.contract import CallFlags
 from boa3.builtin.interop.json import json_serialize, json_deserialize
 from boa3.builtin.interop.runtime import get_network
-
-
+from .objects.character import Character
 # -------------------------------------------
 # METADATA
 # -------------------------------------------
@@ -780,3 +779,13 @@ def mk_meta_key(token_id: bytes) -> bytes:
 
 def mk_royalties_key(token_id: bytes) -> bytes:
     return ROYALTIES_PREFIX + token_id
+
+
+#############################
+#############################
+
+@public
+def mint_character() -> bool:
+    new_character = Character()
+    new_character.generate()
+    return True

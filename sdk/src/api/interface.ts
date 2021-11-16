@@ -1,4 +1,4 @@
-import Neon from "@cityofzion/neon-js";
+import Neon, { rpc } from "@cityofzion/neon-js";
 import StackItemJson, { wallet } from "@cityofzion/neon-core";
 
 
@@ -26,15 +26,12 @@ export class NeoInterface {
     operation: string,
     args: any[]
   ): Promise<StackItemJson.sc.StackItemJson[] | InteropInterface[] | undefined> {
-    const contract = new Neon.experimental.SmartContract(
-      Neon.u.HexString.fromHex(scriptHash),
-      {
-        networkMagic,
-        rpcAddress,
-      }
-    );
-    let res = await contract.testInvoke(operation, args);
 
+    const res = await new rpc.RPCClient(rpcAddress).invokeFunction(
+      scriptHash,
+      operation,
+      args
+    )
     return res.stack;
   }
 

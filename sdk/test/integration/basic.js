@@ -4,10 +4,10 @@ const fs = require("fs")
 var assert = require('assert');
 
 describe("Basic System Test Suite", () => {
-    let wrapper, network
+    let wrapper, network, options
 
     beforeEach( async function () {
-
+        this.timeout(0);
         //initialize the contract wrapper
         const options = {
             node: "http://localhost:50012",
@@ -73,6 +73,8 @@ describe("Basic System Test Suite", () => {
         console.log(res)
     })
 
-
-
 })
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

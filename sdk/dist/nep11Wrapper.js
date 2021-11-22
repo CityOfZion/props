@@ -41,6 +41,18 @@ class Nep11Wrapper {
     async mint(meta, royalties, data, account) {
         return api_1.Nep11.mint(this.node.url, this.networkMagic, this.scriptHash, account.address, meta, royalties, data, account);
     }
+    async getCharacter(uid) {
+        return api_1.Nep11.getCharacter(this.node.url, this.networkMagic, this.scriptHash, uid);
+    }
+    async mintCharacter(owner, account) {
+        return api_1.Nep11.mintCharacter(this.node.url, this.networkMagic, this.scriptHash, owner, account);
+    }
+    async rollDie(type) {
+        return api_1.Nep11.rollDie(this.node.url, this.networkMagic, this.scriptHash, type);
+    }
+    async rollInitialStat() {
+        return api_1.Nep11.rollInitialStat(this.node.url, this.networkMagic, this.scriptHash);
+    }
     async ownerOf(tokenId) {
         return api_1.Nep11.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId);
     }

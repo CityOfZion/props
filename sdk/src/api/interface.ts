@@ -1,5 +1,6 @@
-import Neon, { rpc } from "@cityofzion/neon-js";
+import Neon, { rpc, u } from "@cityofzion/neon-js";
 import StackItemJson, { wallet } from "@cityofzion/neon-core";
+import {BigInteger} from "@cityofzion/neon-core/lib/u";
 
 
 export interface InteropInterface {
@@ -52,12 +53,15 @@ export class NeoInterface {
     args: any[],
     account: wallet.Account
   ): Promise<string | undefined> {
+
     const contract = new Neon.experimental.SmartContract(
       Neon.u.HexString.fromHex(scriptHash),
       {
         networkMagic,
         rpcAddress,
         account,
+        systemFeeOverride: u.BigInteger.fromDecimal(2, 8),
+
       }
     );
 

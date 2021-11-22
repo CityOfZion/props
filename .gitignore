@@ -1,1 +1,3 @@
 sdk/node_modules
+.idea
+*/.idea

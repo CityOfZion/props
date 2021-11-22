@@ -3,19 +3,28 @@ from typing import Any, Dict, List, Union, cast, MutableSequence
 from boa3.builtin import CreateNewEvent, NeoMetadata, metadata, public
 from boa3.builtin.contract import Nep17TransferEvent, abort
 from boa3.builtin.interop.blockchain import get_contract, Transaction
-from boa3.builtin.interop.contract import NEO, GAS, call_contract, destroy_contract, update_contract
-from boa3.builtin.interop.runtime import notify, log, calling_script_hash, executing_script_hash, check_witness, \
-    script_container
-from boa3.builtin.interop.stdlib import serialize, deserialize, base58_encode
+from boa3.builtin.interop.contract import call_contract, update_contract, GAS
+from boa3.builtin.interop.runtime import check_witness, script_container, calling_script_hash
+from boa3.builtin.interop.stdlib import serialize, deserialize
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.storage.findoptions import FindOptions
 from boa3.builtin.interop.iterator import Iterator
-from boa3.builtin.interop.crypto import ripemd160, sha256
-from boa3.builtin.type import UInt160, UInt256
-from boa3.builtin.interop.contract import CallFlags
-from boa3.builtin.interop.json import json_serialize, json_deserialize
+from boa3.builtin.type import UInt160
 from boa3.builtin.interop.runtime import get_network
-from .objects.character import Character
+from boa3.builtin.interop.runtime import get_random
+
+
+# TODO: Mint security
+# TODO: Change tokensOf to an iterator
+# TODO: Update Authorization
+# TODO: Add derived named field the Character class
+# TODO: Align docstring
+# TODO: Split out dice into separate contract
+# TODO: update onNEP17 payment to support other scripthashes
+# TODO: Offline Minting
+# TODO: variable payments
+# TODO: titles
+# TODO: fix TOKEN_COUNT (it isnt persisting to storage)
 # -------------------------------------------
 # METADATA
 # -------------------------------------------
@@ -47,20 +56,7 @@ TOKEN_DECIMALS = 0
 # Whether the smart contract was deployed or not
 DEPLOYED = b'deployed'
 
-# Whether the smart contract is paused or not
-PAUSED = b'paused'
-
-# -------------------------------------------
-# Prefixes
-# -------------------------------------------
-
-ACCOUNT_PREFIX = b'ACC'
-TOKEN_PREFIX = b'TPF'
-TOKEN_DATA_PREFIX = b'TDP'
-BALANCE_PREFIX = b'BLP'
-SUPPLY_PREFIX = b'SPP'
-META_PREFIX = b'MDP'
-ROYALTIES_PREFIX = b'RYP'
+MINT_COST: int = 100000000 # GAS
 
 # -------------------------------------------
 # Keys
@@ -123,7 +119,6 @@ def symbol() -> str:
 
     :return: a short string representing symbol of the token managed in this contract.
     """
-    debug(['symbol: ', TOKEN_SYMBOL])
     return TOKEN_SYMBOL
 
 
@@ -137,7 +132,6 @@ def decimals() -> int:
 
     :return: the number of decimals used by the token.
     """
-    debug(['decimals: ', TOKEN_DECIMALS])
     return TOKEN_DECIMALS
 
 
@@ -151,8 +145,7 @@ def totalSupply() -> int:
 
     :return: the total token supply deployed in the system.
     """
-    debug(['totalSupply: ', get(SUPPLY_PREFIX).to_int()])
-    return get(SUPPLY_PREFIX).to_int()
+    return get(TOKEN_COUNT).to_int()
 
 
 @public
@@ -168,12 +161,12 @@ def balanceOf(owner: UInt160) -> int:
     :raise AssertionError: raised if `owner` length is not 20.
     """
     assert len(owner) == 20, "Incorrect `owner` length"
-    debug(['balanceOf: ', get(mk_balance_key(owner)).to_int()])
-    return get(mk_balance_key(owner)).to_int()
+    user: User = get_user(owner)
+    return len(user.get_owned_tokens())
 
 
 @public
-def tokensOf(owner: UInt160) -> Iterator:
+def tokensOf(owner: UInt160) -> [bytes]:
     """
     Get all of the token ids owned by the specified address
 
@@ -185,7 +178,8 @@ def tokensOf(owner: UInt160) -> Iterator:
     :raise AssertionError: raised if `owner` length is not 20.
     """
     assert len(owner) == 20, "Incorrect `owner` length"
-    return find(mk_account_key(owner))
+    user: User = get_user(owner)
+    return user.get_owned_tokens()
 
 
 @public
@@ -212,23 +206,30 @@ def transfer(to: UInt160, token_id: bytes, data: Any) -> bool:
     :type data: Any 
     :return: whether the transfer was successful 
     :raise AssertionError: raised if `to` length is not 20 or if `token_id` is not a valid 
-    NFT or if the contract is paused. 
+    NFT
     """
     assert len(to) == 20, "Incorrect `to` length"
-    assert not isPaused(), "Contract is currently paused"
-    token_owner = get_owner_of(token_id)
 
+    character: Character = get_character(token_id)
+    token_owner: UInt160 = character.get_owner()
+    formatted_token_id: bytes = character.get_token_id()
     if not check_witness(token_owner):
         return False
 
+    owner_user: User = get_user(token_owner)
+    to_user: User = get_user(to)
+
     if token_owner != to:
-        set_balance(token_owner, -1)
-        remove_token_account(token_owner, token_id)
 
-        set_balance(to, 1)
+        x: bool = owner_user.remove_owned_token(formatted_token_id)
+        x = to_user.add_owned_token(formatted_token_id)
 
-        set_owner_of(token_id, to)
-        add_token_account(to, token_id)
+        save_user(token_owner, owner_user)
+        save_user(to, to_user)
+
+        x = character.set_owner(to)
+        save_character(character)
+
     post_transfer(token_owner, to, token_id, data)
     return True
 
@@ -267,8 +268,8 @@ def ownerOf(token_id: bytes) -> UInt160:
     :return: the owner of the specified token.
     :raise AssertionError: raised if `token_id` is not a valid NFT.
     """
-    owner = get_owner_of(token_id)
-    debug(['ownerOf: ', owner])
+    character: Character = get_character(token_id)
+    owner = character.get_owner()
     return owner
 
 
@@ -286,7 +287,7 @@ def tokens() -> Iterator:
 
 
 @public
-def properties(token_id: bytes) -> Dict[str, str]:
+def properties(token_id: bytes) -> Dict[str, Any]:
     """
     Get the properties of a token.
 
@@ -297,71 +298,49 @@ def properties(token_id: bytes) -> Dict[str, str]:
     :return: a serialized NVM object containing the properties for the given NFT.
     :raise AssertionError: raised if `token_id` is not a valid NFT, or if no metadata available.
     """
-    meta_bytes = cast(str, get_meta(token_id))
-    assert len(meta_bytes) != 0, 'No metadata available for token'
-    meta_object = cast(Dict[str, str], json_deserialize(meta_bytes))
+    character_json = get_character_json(token_id)
+    assert len(character_json) != 0, 'Character does not exist'
 
-    return meta_object
-
-
-@public
-def propertiesJson(token_id: bytes) -> bytes:
-    """
-    Get the properties of a token.
-
-    The parameter token_id SHOULD be a valid NFT. If no metadata is found (invalid token_id), an exception is thrown.
-
-    :param token_id: the token for which to check the properties
-    :type token_id: ByteString
-    :return: a serialized NVM object containing the properties for the given NFT.
-    :raise AssertionError: raised if `token_id` is not a valid NFT, or if no metadata available.
-    """
-    meta = get_meta(token_id)
-    assert len(meta) != 0, 'No metadata available for token'
-    debug(['properties: ', meta])
-    return meta
+    return character_json
 
 
 @public
-def deploy(data: Any, upgrade: bool):
+def deploy(data: Any, upgrade: bool) -> bool:
     """
     The contracts initial entry point, on deployment.
     """
-    debug(["deploy now"])
     if upgrade:
-        return
+        return False
 
     if get(DEPLOYED).to_bool():
-        return
+        return False
 
     tx = cast(Transaction, script_container)
-    debug(["tx.sender: ", tx.sender, get_network()])
     owner: UInt160 = tx.sender
     network = get_network()
     # DEBUG_START
     # custom owner for tests, ugly hack, because TestEnginge sets an unkown tx.sender...
     if data is not None and network == 860833102:
         new_owner = cast(UInt160, data)
-        debug(["check", new_owner])
         internal_deploy(new_owner)
-        return
+        return True
 
     if data is None and network == 860833102:
-        return
+        return True
     # DEBUG_END
-    debug(["owner: ", owner])
     internal_deploy(owner)
+    return True
 
 
-def internal_deploy(owner: UInt160):
-    debug(["internal: ", owner])
+def internal_deploy(owner: UInt160) -> bool:
     put(DEPLOYED, True)
-    put(PAUSED, False)
     put(TOKEN_COUNT, 0)
 
-    auth: List[UInt160] = [owner]
-    serialized = serialize(auth)
-    put(AUTH_ADDRESSES, serialized)
+    user: User = User()
+    x: bool = user.set_contract_upgrade(True)
+    x = user.set_offline_mint(True)
+    save_user(owner, user)
+    return True
 
 
 @public
@@ -379,6 +358,7 @@ def onNEP11Payment(from_address: UInt160, amount: int, token_id: bytes, data: An
     abort()
 
 
+
 @public
 def onNEP17Payment(from_address: UInt160, amount: int, data: Any):
     """
@@ -390,29 +370,23 @@ def onNEP17Payment(from_address: UInt160, amount: int, data: Any):
     :type data: Any
     """
     # TODO_TEMPLATE: add own logic if necessary, or uncomment below to prevent any NEP17 except GAS to be sent to the
-    # contract (as a failsafe, but would prevent any minting fee logic) if calling_script_hash != GAS: abort() 
+    # contract (as a failsafe, but would prevent any minting fee logic) if calling_script_hash != GAS: abort()
+
+    debug(['onNEP17Payment!: ', from_address, calling_script_hash, GAS, amount, MINT_COST])
+    if calling_script_hash == GAS and amount == MINT_COST:
+        debug(['minting!'])
+        internal_mint(from_address)
+    else:
+        abort()
 
 
 # -------------------------------------------
 # Methods
 # -------------------------------------------
 
-@public
-def burn(token_id: bytes) -> bool:
-    """
-    Burn a token.
-
-    :param token_id: the token to burn
-    :type token_id: ByteString
-    :return: whether the burn was successful.
-    :raise AssertionError: raised if the contract is paused.
-    """
-    assert not isPaused(), "Contract is currently paused"
-    return internal_burn(token_id)
-
 
 @public
-def mint(account: UInt160, meta: bytes, royalties: bytes, data: Any) -> bytes:
+def mint(account: UInt160) -> bytes:
     """
     Mint new token.
 
@@ -420,39 +394,20 @@ def mint(account: UInt160, meta: bytes, royalties: bytes, data: Any) -> bytes:
     :type account: UInt160
     :param meta: the metadata to use for this token
     :type meta: bytes
-    :param royalties: the royalties to use for this token
-    :type royalties: bytes
     :param data: whatever data is pertinent to the mint method
     :type data: Any
     :return: token_id of the token minted
-    :raise AssertionError: raised if the contract is paused or if check witness fails.
     """
-    assert not isPaused(), "Contract is currently paused"
 
     # TODO_TEMPLATE: add own logic if necessary, or uncomment below to restrict minting to contract authorized addresses
     # assert verify(), '`acccount` is not allowed to mint'
     assert check_witness(account), "Invalid witness"
 
-    return internal_mint(account, meta, royalties, data)
+    return internal_mint(account)
 
 
 @public
-def getRoyalties(token_id: bytes) -> bytes:
-    """
-    Get a token royalties values.
-
-    :param token_id: the token to get royalties values
-    :type token_id: ByteString
-    :return: bytes of addresses and values for this token royalties.
-    :raise AssertionError: raised if any `token_id` is not a valid NFT.
-    """
-    royalties = get_royalties(token_id)
-    debug(['getRoyalties: ', royalties])
-    return royalties
-
-
-@public
-def getAuthorizedAddress() -> list[UInt160]:
+def getAuthorizedAddresses() -> list[UInt160]:
     """
     Configure authorized addresses.
 
@@ -467,7 +422,6 @@ def getAuthorizedAddress() -> list[UInt160]:
     :return: whether the transaction signature is correct
     :raise AssertionError: raised if witness is not verified.
     """
-    # assert verify(), '`acccount` is not allowed for setAuthorizedAddress'
     serialized = get(AUTH_ADDRESSES)
     auth = cast(list[UInt160], deserialize(serialized))
 
@@ -511,38 +465,6 @@ def setAuthorizedAddress(address: UInt160, authorized: bool):
         on_auth(address, 0, False)
 
 
-@public
-def updatePause(status: bool) -> bool:
-    """
-    Set contract pause status.
-
-    :param status: the status of the contract pause
-    :type status: bool
-    :return: the contract pause status
-    :raise AssertionError: raised if witness is not verified.
-    """
-    assert verify(), '`acccount` is not allowed for updatePause'
-    put(PAUSED, status)
-    debug(['updatePause: ', get(PAUSED).to_bool()])
-    return get(PAUSED).to_bool()
-
-
-@public
-def isPaused() -> bool:
-    """
-    Get the contract pause status.
-
-    If the contract is paused, some operations are restricted.
-
-    :return: whether the contract is paused
-    """
-    debug(['isPaused: ', get(PAUSED).to_bool()])
-    if get(PAUSED).to_bool():
-        return True
-    return False
-
-
-@public
 def verify() -> bool:
     """
     Check if the address is allowed.
@@ -581,211 +503,482 @@ def update(script: bytes, manifest: bytes):
     debug(['update called and done'])
 
 
-@public
-def destroy():
-    """
-    Destroy the contract.
-
-    :raise AssertionError: raised if witness is not verified
-    """
-    assert verify(), '`acccount` is not allowed for destroy'
-    destroy_contract()
-    debug(['destroy called and done'])
-
-
-def internal_burn(token_id: bytes) -> bool:
-    """
-    Burn a token - internal
-
-    :param token_id: the token to burn
-    :type token_id: ByteString
-    :return: whether the burn was successful.
-    :raise AssertionError: raised if `token_id` is not a valid NFT.
-    """
-    owner = get_owner_of(token_id)
-
-    if not check_witness(owner):
-        return False
-
-    remove_owner_of(token_id)
-    set_balance(owner, -1)
-    add_to_supply(-1)
-    remove_meta(token_id)
-    remove_royalties(token_id)
-    remove_token_account(owner, token_id)
-
-    post_transfer(owner, None, token_id, None)
-    return True
-
-
-def internal_mint(account: UInt160, meta: bytes, royalties: bytes, data: Any) -> bytes:
+def internal_mint(owner: UInt160) -> bytes:
     """
     Mint new token - internal
 
-    :param account: the address of the account that is minting token
-    :type account: UInt160
-    :param meta: the metadata to use for this token
-    :type meta: bytes
-    :param royalties: the royalties to use for this token
-    :type royalties: bytes
-    :param data: whatever data is pertinent to the mint method
-    :type data: Any
+    :param owner: the address of the account that is minting token
+    :type owner: UInt160
     :return: token_id of the token minted
-    :raise AssertionError: raised if meta is empty, or if contract is paused.
     """
-    assert len(meta) != 0, '`meta` can not be empty'
-
-    token_id = get(TOKEN_COUNT).to_int() + 1
+    new_character: Character = Character()
+    x: bool = new_character.generate(owner)
+    save_character(new_character)
+    token_id: bytes = new_character.get_token_id()
     put(TOKEN_COUNT, token_id)
-    token_id_bytes = token_id.to_bytes()
 
-    set_owner_of(token_id_bytes, account)
-    set_balance(account, 1)
-    add_to_supply(1)
+    user: User = get_user(owner)
+    x = user.add_owned_token(token_id)
+    save_user(owner, user)
 
-    add_meta(token_id_bytes, meta)
-    debug(['metadata: ', meta])
-
-    if len(royalties) != 0:
-        add_royalties(token_id_bytes, cast(str, royalties))
-        debug(['royalties: ', royalties])
-
-    add_token_account(account, token_id_bytes)
-    post_transfer(None, account, token_id_bytes, None)
-    return token_id_bytes
+    post_transfer(None, owner, token_id, None)
+    return token_id
 
 
-def remove_token_account(holder: UInt160, token_id: bytes):
-    key = mk_account_key(holder) + token_id
-    debug(['add_token_account: ', key, token_id])
-    delete(key)
+#############################
+#############################
+
+ACCOUNT_PREFIX = b'a'
 
 
-def add_token_account(holder: UInt160, token_id: bytes):
-    key = mk_account_key(holder) + token_id
-    debug(['add_token_account: ', key, token_id])
-    put(key, token_id)
+class User:
+
+    def __init__(self):
+        self._owned_tokens: [bytes] = []
+        self._offline_mint: bool = False
+        self._contract_upgrade: bool = False
+
+    def get_owned_tokens(self) -> [bytes]:
+        return self._owned_tokens
+
+    def add_owned_token(self, token_id: bytes) -> bool:
+        owned_tokens: [bytes] = self._owned_tokens
+        owned_tokens.append(token_id)
+        self._owned_tokens = owned_tokens
+        return True
+
+    def remove_owned_token(self, token_id: bytes) -> bool:
+        owned_tokens: [bytes] = self._owned_tokens
+        owned_tokens.remove(token_id)
+        self._owned_tokens = owned_tokens
+        return True
+
+    def get_offline_mint(self) -> bool:
+        return self._offline_mint
+
+    def set_offline_mint(self, value: bool) -> bool:
+        self._offline_mint = value
+        return True
+
+    def get_contract_upgrade(self) -> bool:
+        return self._contract_upgrade
+
+    def set_contract_upgrade(self, value: bool) -> bool:
+        self._contract_upgrade = value
+        return True
 
 
-def get_token_data(token_id: bytes) -> Union[bytes, None]:
-    key = mk_token_data_key(token_id)
-    debug(['get_token_data: ', key, token_id])
-    val = get(key)
-    return val
+def get_user(address: UInt160) -> User:
+    user_bytes: bytes = get_user_raw(address)
+    if len(user_bytes) != 0:
+        return cast(User, deserialize(user_bytes))
+    return User()
 
 
-def add_token_data(token_id: bytes, data: bytes):
-    key = mk_token_data_key(token_id)
-    debug(['add_token_data: ', key, token_id])
-    put(key, data)
+def get_user_raw(address: UInt160) -> bytes:
+    return get(mk_user_key(address))
 
 
-def get_owner_of(token_id: bytes) -> UInt160:
-    key = mk_token_key(token_id)
-    debug(['get_owner_of: ', key, token_id])
-    owner = get(key)
-    return UInt160(owner)
+def save_user(address: UInt160, user: User) -> bool:
+    put(mk_user_key(address), serialize(user))
+    return True
 
 
-def remove_owner_of(token_id: bytes):
-    key = mk_token_key(token_id)
-    debug(['remove_owner_of: ', key, token_id])
-    delete(key)
-
-
-def set_owner_of(token_id: bytes, owner: UInt160):
-    key = mk_token_key(token_id)
-    debug(['set_owner_of: ', key, token_id])
-    put(key, owner)
-
-
-def add_to_supply(amount: int):
-    total = totalSupply() + amount
-    debug(['add_to_supply: ', amount])
-    put(SUPPLY_PREFIX, total)
-
-
-def set_balance(owner: UInt160, amount: int):
-    old = balanceOf(owner)
-    new = old + amount
-    debug(['set_balance: ', amount])
-
-    key = mk_balance_key(owner)
-    if new > 0:
-        put(key, new)
-    else:
-        delete(key)
-
-
-def get_meta(token_id: bytes) -> bytes:
-    key = mk_meta_key(token_id)
-    debug(['get_meta: ', key, token_id])
-    val = get(key)
-    return val
-
-
-def remove_meta(token_id: bytes):
-    key = mk_meta_key(token_id)
-    debug(['remove_meta: ', key, token_id])
-    delete(key)
-
-
-def add_meta(token_id: bytes, meta: bytes):
-    key = mk_meta_key(token_id)
-    debug(['add_meta: ', key, token_id])
-    put(key, meta)
-
-
-def get_royalties(token_id: bytes) -> bytes:
-    key = mk_royalties_key(token_id)
-    debug(['get_royalties: ', key, token_id])
-    val = get(key)
-    return val
-
-
-def add_royalties(token_id: bytes, royalties: str):
-    key = mk_royalties_key(token_id)
-    debug(['add_royalties: ', key, token_id])
-    put(key, royalties)
-
-
-def remove_royalties(token_id: bytes):
-    key = mk_royalties_key(token_id)
-    debug(['remove_royalties: ', key, token_id])
-    delete(key)
-
-
-# helpers
-
-def mk_account_key(address: UInt160) -> bytes:
+def mk_user_key(address: UInt160) -> bytes:
     return ACCOUNT_PREFIX + address
 
 
-def mk_balance_key(address: UInt160) -> bytes:
-    return BALANCE_PREFIX + address
+#############################
+####### Character ###########
+#############################
+#############################
+
+# A mapping for attribute modifiers which can be indexed by attribute "value"
+ATTRIBUTE_MODIFIERS: List[int] = [
+    -6,  # impossible to have a 0 map
+    -5,  # 1
+    -4, -4,  # 2-3
+    -3, -3,  # 4-5
+    -2, -2,  # 6-7
+    -1, -1,  # 8-9
+    0, 0,  # 10-11
+    1, 1,  # 12-13
+    2, 2,  # 14-15
+    3, 3,  # 16-17
+    4, 4,  # 18-19
+    5, 5,  # 20-21
+    6, 6,  # 22-23
+    7, 7,  # 24-25
+    8, 8,  # 26-27
+    9, 9,  # 28-29
+    10  # 30
+]
+
+# A set of options for a character hit die
+HIT_DIE_OPTIONS: List[str] = ["d6","d8","d10","d12"]
+
+TOKEN_PREFIX = b't'
+
+
+class Character:
+
+    def __init__(self):
+        self._token_id: bytes = b''
+        self._charisma: int = 0
+        self._constitution: int = 0
+        self._dexterity: int = 0
+        self._intelligence: int = 0
+        self._strength: int = 0
+        self._wisdom: int = 0
+        self._hit_die: str = "d4"
+        self._features: [str] = []
+        self._owner: UInt160 = UInt160()
+
+    def export(self) -> Dict[str, Any]:
+        exported: Dict[str, Any] = {
+            'attributes': {
+                'charisma': self._charisma,
+                'constitution': self._constitution,
+                'dexterity': self._dexterity,
+                'intelligence': self._intelligence,
+                'strength': self._strength,
+                'wisdom': self._wisdom,
+            },
+            'hit_die': self._hit_die,
+            'features': self._features,
+            'token_id': self._token_id,
+            'owner': self._owner
+        }
+        return exported
+
+    def generate(self, owner: UInt160) -> bool:
+        """
+        Generates a character's core features
+        @return: boolean indicating success
+        """
+        entropy: bytes = get_random().to_bytes()
+
+        # generate base attributes
+        self._charisma = roll_initial_stat_with_entropy(entropy[0:2])
+        self._constitution = roll_initial_stat_with_entropy(entropy[2:4])
+        self._dexterity = roll_initial_stat_with_entropy(entropy[4:6])
+        self._intelligence = roll_initial_stat_with_entropy(entropy[6:8])
+        self._strength = roll_initial_stat_with_entropy(entropy[8:10])
+        self._wisdom = roll_initial_stat_with_entropy(entropy[10:12])
+        self._hit_die = get_hit_die(roll_dice_with_entropy("d4", 1, entropy[12].to_bytes())[0] - 1)
+
+        # Generate a character token_id and set the owner
+        self._owner = owner
+        self._token_id = (totalSupply() + 1).to_bytes()
+
+        return True
+
+    def get_armor_class(self) -> int:
+        """
+        Gets the armor class for a character
+        @return: an integer representing the base armor class of the character
+        """
+        dexterity: int = self.get_dexterity()
+        return 10 + get_attribute_mod(dexterity)
+
+    def get_charisma(self) -> int:
+        """
+        Getter for the charisma base attribute
+        @return: integer range(3-18) representing the charisma of a character
+        """
+        return self._charisma
+
+    def get_constitution(self) -> int:
+        """
+        Getter for the constitution base attribute
+        @return: integer range(3-18) representing the constitution of a character
+        """
+        return self._constitution
+
+    def get_dexterity(self) -> int:
+        """
+        Getter for the dexterity base attribute
+        @return: integer range(3-18) representing the dexterity of a character
+        """
+        return self._dexterity
+
+    def get_intelligence(self) -> int:
+        """
+        Getter for the intelligence base attribute
+        @return: integer range(3-18) representing the intelligence of a character
+        """
+        return self._intelligence
+
+    def get_owner(self) -> UInt160:
+        """
+        Getter for the character owner
+        @return: bytes representing the owner of the character
+        """
+        return UInt160(self._owner)
+
+    def get_state(self) -> Dict[str, Any]:
+        """
+        Gets the state of the character.  This differs from an export in that it includes all secondary features like
+        proficiency bonus and armor class.  Attributes may also differ from the core attributes depending
+        on a character's situation.
+        @return:
+        """
+        exported: Dict[str, Any] = {
+            'attributes': {
+                'charisma': self.get_charisma(),
+                'constitution': self.get_constitution(),
+                'dexterity': self.get_dexterity(),
+                'intelligence': self.get_intelligence(),
+                'strength': self.get_strength(),
+                'wisdom': self.get_wisdom(),
+            },
+            'armorClass': self.get_armor_class(),
+            'hitDie': self._hit_die,
+            'token_id': self._token_id,
+            'features': self._features,
+            'owner': self._owner
+        }
+        return exported
+
+    def get_strength(self) -> int:
+        """
+        Getter for the strength base attribute
+        @return: integer range(3-18) representing the strength of a character
+        """
+        return self._strength
+
+    def get_token_id(self) -> bytes:
+        """
+        Getter for the character unique identifier
+        @return: integer representing the unique identifier
+        """
+        return self._token_id
+
+    def get_wisdom(self) -> int:
+        """
+        Getter for the wisdom base attribute
+        @return: integer range(3-18) representing the wisdom of a character
+        """
+        return self._wisdom
+
+    def load(self, abstract: Dict[str, Any]) -> bool:
+        """
+        Loads a character from a character abstract
+        @param abstract: a character abstract json
+        @return: a boolean indicating the success
+        """
+        attributes: Dict[str, int] = abstract['attributes']
+        self._charisma: int = attributes['charisma']
+        self._constitution: int = attributes['constitution']
+        self._dexterity: int = attributes['dexterity']
+        self._intelligence: int = attributes['intelligence']
+        self._strength: int = attributes['strength']
+        self._wisdom: int = attributes['wisdom']
+        self._features: [str] = abstract['features']
+        self._token_id: [int] = abstract['token_id']
+        self._owner: bytes = abstract['owner']
+        return True
+
+    def set_owner(self, owner: UInt160) -> bool:
+        """
+        Setter for the character owner
+        @param owner: bytes representing the owner of the character
+        @return: Boolean indicating success
+        """
+        self._owner = owner
+        return True
+
+
+def get_character(token_id: bytes) -> Character:
+    """
+    A factory method to get a character from storage
+    @param token_id: the unique identifier of the character
+    @return: The requested character
+    """
+    character_bytes: bytes = get_character_raw(token_id)
+    return cast(Character, deserialize(character_bytes))
+
+
+def get_character_json(token_id: bytes) -> Dict[str, Any]:
+    """
+    Gets a dict representation of the character's base stats
+    @param token_id: the unique character identifier
+    @return: A dict representing the character
+    """
+    character: Character = get_character(token_id)
+    return character.export()
+
+
+@public
+def get_attribute_mod(attribute_value: int) -> int:
+    """
+    Gets the attribute modifier for an attribute value.
+    @param attribute_value: The attribute value to get the modifier for range(0-30)
+    @return: An attribute modifier for use in mechanics.
+    """
+    return ATTRIBUTE_MODIFIERS[attribute_value]
+
+
+
+def get_hit_die(roll: int) -> str:
+    """
+    Gets a string representation of a hit die when provided an input.
+    @param roll: An index for the hit die range(0-3)
+    @return:
+    """
+    return HIT_DIE_OPTIONS[roll]
+
+
+@public
+def get_character_raw(token_id: bytes) -> bytes:
+    """
+    Gets the serialized character definition
+    @param token_id: the unique character identifier
+    @return: a serialize character
+    """
+    return get(mk_token_key(token_id))
+
+
+def save_character(character: Character) -> bool:
+    """
+    A factory method to persist a character to storage
+    @param character: A character to save
+    @return: A boolean representing the results of the save
+    """
+    token_id: bytes = character.get_token_id()
+    put(mk_token_key(token_id), serialize(character))
+    return True
 
 
 def mk_token_key(token_id: bytes) -> bytes:
     return TOKEN_PREFIX + token_id
 
-
-def mk_token_data_key(token_id: bytes) -> bytes:
-    return TOKEN_DATA_PREFIX + token_id
-
-
-def mk_meta_key(token_id: bytes) -> bytes:
-    return META_PREFIX + token_id
-
-
-def mk_royalties_key(token_id: bytes) -> bytes:
-    return ROYALTIES_PREFIX + token_id
-
-
+#############################
+#######Dice##################
 #############################
 #############################
+
+# A discrete representation of the distribution representing 4d6 drop one for indexing using a halfword.
+INITIAL_STAT_PROBABILITY = [3, 4, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+                            8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10,
+                            10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+                            10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+                            11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+                            11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+                            12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13,
+                            13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
+                            13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 14, 14,
+                            14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
+                            14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15,
+                            15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+                            15, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+                            16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18,
+                            18, 18, 18, 18]
+
+MAX_INT = [
+    0,
+    128,
+    32768,
+    8388608,
+    2147483648
+]
+
+ENTROPY_MAP: Dict[
+    str,
+    Dict[str, int]
+] = {
+    'd4': {
+        'min_entropy': 1,
+        'num_scalar': 4,
+    },
+    'd6': {
+        'min_entropy': 1,
+        'num_scalar': 6,
+    },
+    'd8': {
+        'min_entropy': 1,
+        'num_scalar': 8,
+    },
+    'd10': {
+        'min_entropy': 1,
+        'num_scalar': 10,
+    },
+    'd12': {
+        'min_entropy': 1,
+        'num_scalar': 12,
+    },
+    'd20': {
+        'min_entropy': 1,
+        'num_scalar': 20,
+    },
+    'd100': {
+        'min_entropy': 1,
+        'num_scalar': 100,
+    },
+    'd1000': {
+        'min_entropy': 2,
+        'num_scalar': 1000,
+    },
+    'd10000': {
+        'min_entropy': 2,
+        'num_scalar': 10000,
+    }
+}
 
 @public
-def mint_character() -> bool:
-    new_character = Character()
-    new_character.generate()
-    return True
+def roll_die(die: str) -> int:
+    """
+    Rolls a requested die and returns the result.
+    @param die: a string indicating the die format in "dX" format (i.e d10)
+    @return: The integer result of the roll.
+    """
+    constants = ENTROPY_MAP[die]
+    entropy: bytes = get_random().to_bytes()
+
+    return roll_dice_with_entropy(die, constants['min_entropy'], entropy[:constants['min_entropy']])[0]
+
+
+@public
+def roll_dice_with_entropy(die: str, precision: int, entropy: bytes) -> [int]:
+    """
+    A deterministic conversation of entropy into dice rolls.
+    @param precision: a byte length to use in each roll
+    @param die: A dX formatted string representing the dice to roll range(d4-d1000)
+    @param entropy: 4-bytes of entropy to use for the dice roll
+    @return: an array of integer dice rolls.  The length is floor( len(entropy)/precision )
+    """
+    constants: Dict[str, int] = ENTROPY_MAP[die]
+    entropy_length = len(entropy)
+
+    assert entropy_length >= constants['min_entropy'], "Not enough entropy"
+
+    rolls: [int] = []
+    roll: int
+    for i in range(entropy_length // precision):
+        e = entropy[i * precision : (i + 1) * precision]
+        numerator: int = constants['num_scalar'] * MAX_INT[precision] * abs(e.to_int())
+        denominator: int = MAX_INT[precision] ** 2
+        roll = numerator // denominator + 1
+        rolls.append(roll)
+    return rolls
+
+
+@public
+def roll_initial_stat() -> int:
+    """
+    Generates a new initial attribute stat using a roll 4d6 and drop the lowest mechanic. We use a discrete distribution
+    to make this computationally cheap.
+    :return: Returns an integer representing an initial character stat range(3-18)
+    """
+    entropy: bytes = get_random().to_bytes()[:2]
+    return roll_initial_stat_with_entropy(entropy)
+
+
+@public
+def roll_initial_stat_with_entropy(entropy: bytes) -> int:
+    """
+    Rolls an initial attribute using existing entropy
+    @param entropy: 2 bytes of entropy
+    @return: an integer representing initial stats
+    """
+    return INITIAL_STAT_PROBABILITY[entropy.to_int() // 100]

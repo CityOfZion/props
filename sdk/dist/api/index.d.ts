@@ -1,2 +1,2 @@
-export * from "./nep11";
+export * from "./character";
 export * from "./interface";

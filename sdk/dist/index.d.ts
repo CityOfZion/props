@@ -1,2 +1,3 @@
 export * as api from "./api";
-export * from "./nep11Wrapper";
+export * as helpers from "./helpers";
+export * from "./Character";

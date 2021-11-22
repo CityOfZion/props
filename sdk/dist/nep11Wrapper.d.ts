@@ -1,4 +1,5 @@
 import { rpc, wallet } from '@cityofzion/neon-core';
+import { Character } from "./interface";
 export interface Nep11WrapperOptions {
     node?: string;
     scriptHash?: string;
@@ -14,6 +15,10 @@ export declare class Nep11Wrapper {
     balanceOf(address: string): Promise<number>;
     decimals(): Promise<number>;
     mint(meta: string, royalties: string, data: string, account: wallet.Account): Promise<string | undefined>;
+    getCharacter(uid: number): Promise<Character | undefined>;
+    mintCharacter(owner: string, account: wallet.Account): Promise<boolean>;
+    rollDie(type: string): Promise<number>;
+    rollInitialStat(): Promise<boolean>;
     ownerOf(tokenId: string): Promise<string>;
     properties(tokenId: string): Promise<any>;
     symbol(): Promise<string>;

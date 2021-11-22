@@ -1,6 +1,6 @@
 import { wallet } from "@cityofzion/neon-core";
-import { Character } from '../interface';
-export declare class Nep11 {
+import { CharacterType } from "../interface";
+export declare class CharacterAPI {
     /**
      * Returns the token symbol
      * @param node
@@ -37,7 +37,18 @@ export declare class Nep11 {
      * @param contractHash
      * @param address The string formatted address of an account
      */
-    static tokensOf(node: string, networkMagic: number, contractHash: string, address: string): Promise<string[]>;
+    static tokensOf(node: string, networkMagic: number, contractHash: string, address: string): Promise<number[]>;
+    /**
+     * Transfers a token to another account
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param toAddress
+     * @param tokenId
+     * @param signer
+     * @param data
+     */
+    static transfer(node: string, networkMagic: number, contractHash: string, toAddress: string, tokenId: number, signer: wallet.Account, data?: any): Promise<any>;
     /**
      * Gets the owner account of a tokenId
      * @param node
@@ -45,14 +56,14 @@ export declare class Nep11 {
      * @param contractHash
      * @param tokenId The tokenId to return the owner of
      */
-    static ownerOf(node: string, networkMagic: number, contractHash: string, tokenId: string): Promise<string>;
+    static ownerOf(node: string, networkMagic: number, contractHash: string, tokenId: number): Promise<wallet.Account | undefined>;
     /**
      * Gets and array of strings(tokenIds) representing all the tokens associated with the contract
      * @param node
      * @param networkMagic
      * @param contractHash
      */
-    static tokens(node: string, networkMagic: number, contractHash: string): Promise<string[]>;
+    static tokens(node: string, networkMagic: number, contractHash: string): Promise<number[]>;
     /**
      * Gets the properties of a token
      * @param node
@@ -60,11 +71,7 @@ export declare class Nep11 {
      * @param contractHash
      * @param tokenId The tokenId of the token being requested
      */
-    static properties(node: string, networkMagic: number, contractHash: string, tokenId: string): Promise<any>;
-    static mintCharacter(node: string, networkMagic: number, contractHash: string, owner: string, signer: wallet.Account): Promise<any>;
-    static getCharacter(node: string, networkMagic: number, contractHash: string, uid: number): Promise<Character | undefined>;
-    static rollDie(node: string, networkMagic: number, contractHash: string, type: string): Promise<number>;
-    static rollInitialStat(node: string, networkMagic: number, contractHash: string): Promise<any>;
+    static properties(node: string, networkMagic: number, contractHash: string, tokenId: number): Promise<CharacterType | undefined>;
     /**
      * Initializes the smart contract on first deployment (REQUIRED)
      * @param node
@@ -76,16 +83,14 @@ export declare class Nep11 {
      */
     static deploy(node: string, networkMagic: number, contractHash: string, data: object, //we arent using this...
     upgrade: boolean, account: wallet.Account): Promise<any>;
-    /**
-     * Creates a new NEP11 token on the contract
-     * @param node
-     * @param networkMagic
-     * @param contractHash
-     * @param address The address to mint to.
-     * @param meta The meta data for the token (properties)
-     * @param royalties Are there royalties?
-     * @param data: mint-required data payload
-     * @param account The signing account
-     */
-    static mint(node: string, networkMagic: number, contractHash: string, address: string, meta: string, royalties: string, data: any, account: wallet.Account): Promise<string | undefined>;
+    static mint(node: string, networkMagic: number, contractHash: string, owner: string, signer: wallet.Account): Promise<any>;
+    static getAuthorizedAddresses(node: string, networkMagic: number, contractHash: string): Promise<any>;
+    static setAuthorizedAddress(node: string, networkMagic: number, contractHash: string, address: string, authorized: boolean, signer: wallet.Account): Promise<any>;
+    static update(node: string, networkMagic: number, contractHash: string, script: string, manifest: string, signer: wallet.Account): Promise<any>;
+    static getCharacterRaw(node: string, networkMagic: number, contractHash: string, tokenId: string): Promise<any>;
+    static rollDie(node: string, networkMagic: number, contractHash: string, die: string): Promise<number>;
+    static rollDiceWithEntropy(node: string, networkMagic: number, contractHash: string, die: string, precision: number, entropy: string): Promise<number>;
+    static rollInitialStat(node: string, networkMagic: number, contractHash: string): Promise<any>;
+    static rollInitialStatWithEntropy(node: string, networkMagic: number, contractHash: string, entropy: string): Promise<any>;
+    static getAttributeMod(node: string, networkMagic: number, contractHash: string, attributeValue: number): Promise<any>;
 }

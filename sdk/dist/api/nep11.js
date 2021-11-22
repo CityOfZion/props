@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Nep11 = void 0;
 const interface_1 = require("./interface");
 const neon_js_1 = __importStar(require("@cityofzion/neon-js"));
+const helpers_1 = require("../helpers");
 class Nep11 {
     /**
      * Returns the token symbol
@@ -32,6 +33,7 @@ class Nep11 {
     static async symbol(node, networkMagic, contractHash) {
         const method = "symbol";
         const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
+        console.log(res);
         if (res === undefined) {
             throw new Error("unrecognized response");
         }
@@ -189,6 +191,70 @@ class Nep11 {
             throw new Error("unrecognized response");
         }
         return res[0].value;
+    }
+    static async mintCharacter(node, networkMagic, contractHash, owner, signer) {
+        const method = "mint_character";
+        const params = [
+            neon_js_1.sc.ContractParam.hash160(owner)
+        ];
+        try {
+            const res = await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, signer);
+            console.log(res);
+            if (res === undefined || res.length === 0) {
+                throw new Error("unrecognized response");
+            }
+            return res;
+        }
+        catch (e) {
+            console.log(e);
+            return;
+        }
+    }
+    static async getCharacter(node, networkMagic, contractHash, uid) {
+        const method = "get_character";
+        try {
+            const param = [
+                neon_js_1.sc.ContractParam.integer(uid)
+            ];
+            const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
+            if (res === undefined || res.length === 0) {
+                throw new Error("unrecognized response");
+            }
+            if (res && res[0] && res[0].value) {
+                const entries = res[0].value;
+                return helpers_1.parseToJSON(entries);
+            }
+            return undefined;
+        }
+        catch (e) {
+            console.log(e);
+            return undefined;
+        }
+    }
+    static async rollDie(node, networkMagic, contractHash, type) {
+        const method = "roll_die";
+        const param = [
+            neon_js_1.sc.ContractParam.string(type)
+        ];
+        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
+        if (res === undefined || res.length === 0) {
+            throw new Error("unrecognized response");
+        }
+        return parseInt(res[0].value);
+    }
+    static async rollInitialStat(node, networkMagic, contractHash) {
+        const method = "roll_initial_stat";
+        try {
+            const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
+            if (res === undefined || res.length === 0) {
+                throw new Error("unrecognized response");
+            }
+            return res;
+        }
+        catch (e) {
+            console.log(e);
+            return;
+        }
     }
     /*
     static async propertiesJson() {}

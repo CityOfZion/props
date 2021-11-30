@@ -19,11 +19,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CharacterAPI = void 0;
+exports.PuppetAPI = void 0;
 const interface_1 = require("./interface");
 const neon_js_1 = __importStar(require("@cityofzion/neon-js"));
 const neon_core_1 = require("@cityofzion/neon-core");
-class CharacterAPI {
+class PuppetAPI {
     /**
      * Returns the token symbol
      * @param node
@@ -185,7 +185,7 @@ class CharacterAPI {
         if (res === undefined || res.length === 0) {
             throw new Error("unrecognized response");
         }
-        const character = {
+        const puppet = {
             armorClass: 0,
             attributes: {
                 charisma: 0,
@@ -208,7 +208,7 @@ class CharacterAPI {
                 let rawValue;
                 switch (key) {
                     case "armorClass":
-                        character.armorClass = parseInt(entry.value.value);
+                        puppet.armorClass = parseInt(entry.value.value);
                         break;
                     case "attributes":
                         let attrs = entry.value.value;
@@ -216,50 +216,50 @@ class CharacterAPI {
                             let attrKey = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(attrRaw.key.value));
                             switch (attrKey) {
                                 case "charisma":
-                                    character.attributes.charisma = parseInt(attrRaw.value.value);
+                                    puppet.attributes.charisma = parseInt(attrRaw.value.value);
                                     break;
                                 case "constitution":
-                                    character.attributes.constitution = parseInt(attrRaw.value.value);
+                                    puppet.attributes.constitution = parseInt(attrRaw.value.value);
                                     break;
                                 case "dexterity":
-                                    character.attributes.dexterity = parseInt(attrRaw.value.value);
+                                    puppet.attributes.dexterity = parseInt(attrRaw.value.value);
                                     break;
                                 case "intelligence":
-                                    character.attributes.intelligence = parseInt(attrRaw.value.value);
+                                    puppet.attributes.intelligence = parseInt(attrRaw.value.value);
                                     break;
                                 case "strength":
-                                    character.attributes.strength = parseInt(attrRaw.value.value);
+                                    puppet.attributes.strength = parseInt(attrRaw.value.value);
                                     break;
                                 case "wisdom":
-                                    character.attributes.wisdom = parseInt(attrRaw.value.value);
+                                    puppet.attributes.wisdom = parseInt(attrRaw.value.value);
                                     break;
                             }
                         });
                         break;
                     case "hitDie":
-                        character.hitDie = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
+                        puppet.hitDie = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
                         break;
                     case "name":
-                        character.name = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
+                        puppet.name = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
                         break;
                     case "owner":
                         rawValue = neon_js_1.u.base642hex(entry.value.value);
-                        character.owner = new neon_core_1.wallet.Account(neon_js_1.u.reverseHex(rawValue));
+                        puppet.owner = new neon_core_1.wallet.Account(neon_js_1.u.reverseHex(rawValue));
                         break;
                     case "traits":
                         break;
                     case "tokenId":
-                        character.tokenId = parseInt(entry.value.value);
+                        puppet.tokenId = parseInt(entry.value.value);
                         break;
                     case "tokenURI":
-                        character.tokenURI = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
+                        puppet.tokenURI = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
                         break;
                     default:
                         throw new Error('unrecognized property: ' + key);
                 }
             });
         }
-        return character;
+        return puppet;
     }
     /**
      * Initializes the smart contract on first deployment (REQUIRED)
@@ -279,8 +279,8 @@ class CharacterAPI {
         ];
         return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, account);
     }
-    static async mint(node, networkMagic, contractHash, owner, signer) {
-        const method = "mint";
+    static async offlineMint(node, networkMagic, contractHash, owner, signer) {
+        const method = "offline_mint";
         const params = [
             neon_js_1.sc.ContractParam.hash160(owner)
         ];
@@ -314,8 +314,8 @@ class CharacterAPI {
             return;
         }
     }
-    static async getCharacterRaw(node, networkMagic, contractHash, tokenId) {
-        const method = "get_character_raw";
+    static async getPuppetRaw(node, networkMagic, contractHash, tokenId) {
+        const method = "get_puppet_raw";
         const params = [neon_js_1.sc.ContractParam.string(tokenId)];
         const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, params);
         if (res === undefined || res.length === 0) {
@@ -323,62 +323,20 @@ class CharacterAPI {
         }
         return res[0].value;
     }
-    //getMintFee
-    //setMintFee
-    static async rollDie(node, networkMagic, contractHash, die) {
-        const method = "roll_die";
-        const param = [
-            neon_js_1.sc.ContractParam.string(die)
-        ];
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
+    static async getMintFee(node, networkMagic, contractHash) {
+        const method = "get_mint_fee";
+        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
         if (res === undefined || res.length === 0) {
             throw new Error("unrecognized response");
         }
         return parseInt(res[0].value);
     }
-    static async rollDiceWithEntropy(node, networkMagic, contractHash, die, precision, entropy) {
-        const method = "roll_dice_with_entropy";
-        const param = [
-            neon_js_1.sc.ContractParam.string(die),
-            neon_js_1.sc.ContractParam.integer(precision),
-            neon_js_1.sc.ContractParam.string(entropy)
+    static async setMintFee(node, networkMagic, contractHash, fee, signer) {
+        const method = "set_mint_fee";
+        const params = [
+            neon_js_1.sc.ContractParam.integer(fee)
         ];
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return parseInt(res[0].value);
-    }
-    static async rollInitialStat(node, networkMagic, contractHash) {
-        const method = "roll_initial_stat";
-        try {
-            const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-            if (res === undefined || res.length === 0) {
-                throw new Error("unrecognized response");
-            }
-            return res[0].value;
-        }
-        catch (e) {
-            console.log(e);
-            return;
-        }
-    }
-    static async rollInitialStatWithEntropy(node, networkMagic, contractHash, entropy) {
-        const method = "roll_initial_stat";
-        const param = [
-            neon_js_1.sc.ContractParam.string(entropy)
-        ];
-        try {
-            const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
-            if (res === undefined || res.length === 0) {
-                throw new Error("unrecognized response");
-            }
-            return res;
-        }
-        catch (e) {
-            console.log(e);
-            return;
-        }
+        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, signer);
     }
     static async getAttributeMod(node, networkMagic, contractHash, attributeValue) {
         const method = "roll_initial_stat";
@@ -397,6 +355,57 @@ class CharacterAPI {
             return;
         }
     }
+    //////////////EPOCHS/////////////
+    //////////////EPOCHS/////////////
+    //////////////EPOCHS/////////////
+    static async totalEpochs(node, networkMagic, contractHash) {
+        const method = "total_epochs";
+        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
+        if (res === undefined || res.length === 0) {
+            throw new Error("unrecognized response");
+        }
+        return parseInt(res[0].value);
+    }
+    static async totalTraitLevels(node, networkMagic, contractHash) {
+        const method = "total_trait_levels";
+        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
+        if (res === undefined || res.length === 0) {
+            throw new Error("unrecognized response");
+        }
+        return parseInt(res[0].value);
+    }
+    static async setCurrentEpoch(node, networkMagic, contractHash, epochId, account) {
+        const method = "set_current_epoch";
+        const param = [
+            neon_js_1.sc.ContractParam.integer(epochId)
+        ];
+        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, param, account);
+    }
+    static async getCurrentEpoch(node, networkMagic, contractHash) {
+        const method = "get_current_epoch";
+        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
+        if (res === undefined || res.length === 0) {
+            throw new Error("unrecognized response");
+        }
+        return parseInt(res[0].value);
+    }
+    static async createEpoch(node, networkMagic, contractHash, label, totalSupply, maxTraits, traits, account) {
+        const method = "create_epoch";
+        const traitArray = traits.map((trait) => {
+            const traitPointers = trait.traits.map((pointer) => {
+                return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(pointer.collection_id), neon_js_1.sc.ContractParam.integer(pointer.index));
+            });
+            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(trait.drop_score), neon_js_1.sc.ContractParam.boolean(trait.unique), neon_js_1.sc.ContractParam.array(...traitPointers));
+        });
+        console.log(label, totalSupply, maxTraits);
+        const param = [
+            neon_js_1.sc.ContractParam.string(label),
+            neon_js_1.sc.ContractParam.integer(totalSupply),
+            neon_js_1.sc.ContractParam.integer(maxTraits),
+            neon_js_1.sc.ContractParam.array(...traitArray)
+        ];
+        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, param, account);
+    }
 }
-exports.CharacterAPI = CharacterAPI;
-//# sourceMappingURL=character.js.map
+exports.PuppetAPI = PuppetAPI;
+//# sourceMappingURL=puppet.js.map

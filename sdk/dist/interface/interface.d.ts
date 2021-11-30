@@ -7,10 +7,29 @@ export interface BaseStats {
     strength: number;
     wisdom: number;
 }
-export interface CharacterType {
+export interface PuppetType {
+    armorClass: number;
     attributes: BaseStats;
     hitDie: string;
+    name: string;
     owner: wallet.Account;
-    titles: string[];
+    traits: string[];
     tokenId: number;
+    tokenURI: string;
+}
+export interface CollectionType {
+    id: number;
+    description: string;
+    type: string;
+    values: string[] | number[];
+    valuesRaw: any[];
+}
+export interface Trait {
+    drop_score: number;
+    unique: boolean;
+    traits: CollectionPointer[];
+}
+export interface CollectionPointer {
+    collection_id: number;
+    index: number;
 }

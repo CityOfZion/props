@@ -25,5 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.helpers = exports.api = void 0;
 exports.api = __importStar(require("./api"));
 exports.helpers = __importStar(require("./helpers"));
-__exportStar(require("./Character"), exports);
+__exportStar(require("./Collection"), exports);
+__exportStar(require("./Dice"), exports);
+__exportStar(require("./Puppet"), exports);
 //# sourceMappingURL=index.js.map

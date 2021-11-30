@@ -33,6 +33,9 @@ class NeoInterface {
      */
     static async testInvoke(rpcAddress, networkMagic, scriptHash, operation, args) {
         const res = await new neon_js_1.rpc.RPCClient(rpcAddress).invokeFunction(scriptHash, operation, args);
+        if (res.exception) {
+            throw new Error("Invocation Error: " + res.exception);
+        }
         return res.stack;
     }
     /**
@@ -49,7 +52,7 @@ class NeoInterface {
             networkMagic,
             rpcAddress,
             account,
-            systemFeeOverride: neon_js_1.u.BigInteger.fromDecimal(2, 8),
+            //systemFeeOverride: u.BigInteger.fromDecimal(10, 8),
         });
         let result;
         try {

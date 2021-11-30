@@ -1,3 +1,5 @@
 export * as api from "./api";
 export * as helpers from "./helpers"
-export * from "./Character"
+export * from "./Collection"
+export * from "./Dice"
+export * from "./Puppet"

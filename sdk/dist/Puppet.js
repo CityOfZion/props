@@ -48,8 +48,8 @@ class Puppet {
     async ownerOf(tokenId) {
         return api_1.PuppetAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId);
     }
-    async mint(signer) {
-        return api_1.PuppetAPI.mint(this.node.url, this.networkMagic, this.scriptHash, signer.address, signer);
+    async offlineMint(signer) {
+        return api_1.PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, signer.address, signer);
     }
     async properties(tokenId) {
         return api_1.PuppetAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId);
@@ -57,12 +57,11 @@ class Puppet {
     async purchase(signer) {
         const method = "transfer";
         const GASScriptHash = "0xd2a4cff31913016155e38e474a2c06d08be276cf";
-        const GASPrecision = 10 ** 8;
-        const purchasePrice = 1;
+        const purchasePrice = await api_1.PuppetAPI.getMintFee(this.node.url, this.networkMagic, this.scriptHash);
         const params = [
             neon_js_1.sc.ContractParam.hash160(signer.address),
             neon_js_1.sc.ContractParam.hash160(this.scriptHash),
-            neon_js_1.sc.ContractParam.integer(purchasePrice * GASPrecision),
+            neon_js_1.sc.ContractParam.integer(purchasePrice),
             neon_js_1.sc.ContractParam.any()
         ];
         try {
@@ -73,20 +72,14 @@ class Puppet {
             throw new Error(e);
         }
     }
-    async rollDie(die) {
-        return api_1.PuppetAPI.rollDie(this.node.url, this.networkMagic, this.scriptHash, die);
-    }
-    async rollDiceWithEntropy(die, precision, entropy) {
-        return api_1.PuppetAPI.rollDiceWithEntropy(this.node.url, this.networkMagic, this.scriptHash, die, precision, entropy);
-    }
-    async rollInitialStat() {
-        return api_1.PuppetAPI.rollInitialStat(this.node.url, this.networkMagic, this.scriptHash);
-    }
-    async rollInitialStateWithEntropy(entropy) {
-        return api_1.PuppetAPI.rollInitialStatWithEntropy(this.node.url, this.networkMagic, this.scriptHash, entropy);
+    async setMintFee(fee, signer) {
+        return api_1.PuppetAPI.setMintFee(this.node.url, this.networkMagic, this.scriptHash, fee, signer);
     }
     async symbol() {
         return api_1.PuppetAPI.symbol(this.node.url, this.networkMagic, this.scriptHash);
+    }
+    async getMintFee() {
+        return api_1.PuppetAPI.getMintFee(this.node.url, this.networkMagic, this.scriptHash);
     }
     async tokens() {
         return api_1.PuppetAPI.tokens(this.node.url, this.networkMagic, this.scriptHash);
@@ -103,6 +96,18 @@ class Puppet {
     async update(script, manifest, signer) {
         return api_1.PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, signer);
     }
+    async totalEpochs() {
+        return api_1.PuppetAPI.totalEpochs(this.node.url, this.networkMagic, this.scriptHash);
+    }
+    async setCurrentEpoch(epoch_id, signer) {
+        return api_1.PuppetAPI.setCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash, epoch_id, signer);
+    }
+    async getCurrentEpoch() {
+        return api_1.PuppetAPI.getCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash);
+    }
+    async createEpoch(label, totalSupply, maxTraits, traits, signer) {
+        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, totalSupply, maxTraits, traits, signer);
+    }
 }
 exports.Puppet = Puppet;
-//# sourceMappingURL=Character.js.map
+//# sourceMappingURL=Puppet.js.map

@@ -33,6 +33,9 @@ export class NeoInterface {
       operation,
       args
     )
+    if (res.exception) {
+      throw new Error("Invocation Error: " + res.exception)
+    }
     return res.stack;
   }
 
@@ -60,7 +63,7 @@ export class NeoInterface {
         networkMagic,
         rpcAddress,
         account,
-        systemFeeOverride: u.BigInteger.fromDecimal(2, 8),
+        //systemFeeOverride: u.BigInteger.fromDecimal(10, 8),
 
       }
     );

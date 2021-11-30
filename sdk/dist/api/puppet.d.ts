@@ -1,6 +1,6 @@
 import { wallet } from "@cityofzion/neon-core";
-import { CharacterType } from "../interface";
-export declare class CharacterAPI {
+import { PuppetType, Trait } from "../interface";
+export declare class PuppetAPI {
     /**
      * Returns the token symbol
      * @param node
@@ -71,7 +71,7 @@ export declare class CharacterAPI {
      * @param contractHash
      * @param tokenId The tokenId of the token being requested
      */
-    static properties(node: string, networkMagic: number, contractHash: string, tokenId: number): Promise<CharacterType | undefined>;
+    static properties(node: string, networkMagic: number, contractHash: string, tokenId: number): Promise<PuppetType | undefined>;
     /**
      * Initializes the smart contract on first deployment (REQUIRED)
      * @param node
@@ -83,12 +83,15 @@ export declare class CharacterAPI {
      */
     static deploy(node: string, networkMagic: number, contractHash: string, data: object, //we arent using this...
     upgrade: boolean, account: wallet.Account): Promise<any>;
-    static mint(node: string, networkMagic: number, contractHash: string, owner: string, signer: wallet.Account): Promise<any>;
+    static offlineMint(node: string, networkMagic: number, contractHash: string, owner: string, signer: wallet.Account): Promise<any>;
     static update(node: string, networkMagic: number, contractHash: string, script: string, manifest: string, signer: wallet.Account): Promise<any>;
-    static getCharacterRaw(node: string, networkMagic: number, contractHash: string, tokenId: string): Promise<any>;
-    static rollDie(node: string, networkMagic: number, contractHash: string, die: string): Promise<number>;
-    static rollDiceWithEntropy(node: string, networkMagic: number, contractHash: string, die: string, precision: number, entropy: string): Promise<number>;
-    static rollInitialStat(node: string, networkMagic: number, contractHash: string): Promise<any>;
-    static rollInitialStatWithEntropy(node: string, networkMagic: number, contractHash: string, entropy: string): Promise<any>;
+    static getPuppetRaw(node: string, networkMagic: number, contractHash: string, tokenId: string): Promise<any>;
+    static getMintFee(node: string, networkMagic: number, contractHash: string): Promise<number>;
+    static setMintFee(node: string, networkMagic: number, contractHash: string, fee: number, signer: wallet.Account): Promise<any>;
     static getAttributeMod(node: string, networkMagic: number, contractHash: string, attributeValue: number): Promise<any>;
+    static totalEpochs(node: string, networkMagic: number, contractHash: string): Promise<number>;
+    static totalTraitLevels(node: string, networkMagic: number, contractHash: string): Promise<number>;
+    static setCurrentEpoch(node: string, networkMagic: number, contractHash: string, epochId: number, account: wallet.Account): Promise<any>;
+    static getCurrentEpoch(node: string, networkMagic: number, contractHash: string): Promise<number>;
+    static createEpoch(node: string, networkMagic: number, contractHash: string, label: string, totalSupply: number, maxTraits: number, traits: Trait[], account: wallet.Account): Promise<any>;
 }

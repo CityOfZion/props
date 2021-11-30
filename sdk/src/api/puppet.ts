@@ -1,10 +1,11 @@
 import {InteropInterface, NeoInterface} from "./interface";
 import Neon, { sc, u } from "@cityofzion/neon-js";
 import { wallet } from "@cityofzion/neon-core";
-import {StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
-import {CharacterType} from "../interface";
+import StackItem, {StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
+import {CollectionPointer, CollectionType, PuppetType, Trait} from "../interface";
+import {ContractParamJson, ContractParamLike} from "@cityofzion/neon-core/lib/sc/ContractParam";
 
-export class CharacterAPI {
+export class PuppetAPI {
 
   /**
    * Returns the token symbol
@@ -141,26 +142,19 @@ export class CharacterAPI {
       throw new Error("unrecognized response");
     }
 
-    if (res[0].type === "Array") {
-      const values = res[0].value as StackItemJson[]
-      return values.map( (value: StackItemJson) => {
-        let bytes = u.base642hex(value.value as string)
+    const iterator: InteropInterface = res[0] as InteropInterface
+    if (iterator.iterator && iterator.iterator.length >= 0) {
+      return iterator.iterator.map( (token: StackItemJson) => {
+        const attrs: StackItemJson[] = token.value as StackItemJson[]
+        let bytes = u.base642hex((attrs[1].value as string))
         return parseInt(u.reverseHex(bytes),16)
       })
     }
 
-    /*
-    //iterator parsing code
-    const iterator: InteropInterface = res[0] as InteropInterface
-    if (iterator.iterator && iterator.iterator.length >= 0 && iterator.iterator![0].value) {
-      return iterator.iterator.map( (token: StackItemJson) => {
-          const attrs: StackItemJson[] = token.value as StackItemJson[]
-          return u.HexString.fromBase64(attrs[1].value as string).toString() as string
-      })
-    }
 
-     */
     throw new Error("unable to resolve respond format")
+
+
   }
 
   /**
@@ -286,8 +280,8 @@ export class CharacterAPI {
     node: string,
     networkMagic: number,
     contractHash: string,
-    tokenId: number,
-  ): Promise<CharacterType | undefined> {
+    tokenId: number
+  ): Promise<PuppetType | undefined> {
     const method = "properties";
     const params = [sc.ContractParam.integer(tokenId)];
     const res = await NeoInterface.testInvoke(
@@ -301,7 +295,9 @@ export class CharacterAPI {
     if (res === undefined || res.length === 0) {
       throw new Error("unrecognized response");
     }
-    const character: CharacterType = {
+
+    const puppet: PuppetType = {
+      armorClass: 0,
       attributes: {
         charisma: 0,
         constitution: 0,
@@ -311,59 +307,71 @@ export class CharacterAPI {
         wisdom: 0,
       },
       hitDie: '',
-      titles: [],
+      name: '',
+      owner: new wallet.Account(),
+      traits: [],
       tokenId: 0,
-      owner: new wallet.Account()
+      tokenURI: '',
     }
 
     if (res[0] && res[0].value) {
       (res[0].value as unknown as StackItemMapLike[]).forEach( (entry: StackItemMapLike) => {
         let key = u.hexstring2str(u.base642hex(entry.key.value as string))
-
         let rawValue
         switch (key) {
+          case "armorClass":
+            puppet.armorClass = parseInt(entry.value.value as string)
+            break
           case "attributes":
             let attrs = entry.value.value as unknown as StackItemMapLike[]
             attrs.forEach( (attrRaw: StackItemMapLike) => {
               let attrKey = u.hexstring2str(u.base642hex(attrRaw.key.value as string))
               switch (attrKey) {
                 case "charisma":
-                  character.attributes.charisma = parseInt(attrRaw.value.value as string)
+                  puppet.attributes.charisma = parseInt(attrRaw.value.value as string)
                   break
                 case "constitution":
-                  character.attributes.constitution = parseInt(attrRaw.value.value as string)
+                  puppet.attributes.constitution = parseInt(attrRaw.value.value as string)
                   break
                 case "dexterity":
-                  character.attributes.dexterity = parseInt(attrRaw.value.value as string)
+                  puppet.attributes.dexterity = parseInt(attrRaw.value.value as string)
                   break
                 case "intelligence":
-                  character.attributes.intelligence = parseInt(attrRaw.value.value as string)
+                  puppet.attributes.intelligence = parseInt(attrRaw.value.value as string)
                   break
                 case "strength":
-                  character.attributes.strength = parseInt(attrRaw.value.value as string)
+                  puppet.attributes.strength = parseInt(attrRaw.value.value as string)
                   break
                 case "wisdom":
-                  character.attributes.wisdom = parseInt(attrRaw.value.value as string)
+                  puppet.attributes.wisdom = parseInt(attrRaw.value.value as string)
                   break
               }
             })
             break
-          case "hit_die":
-            character.hitDie = u.hexstring2str(u.base642hex(entry.value.value as string))
+          case "hitDie":
+            puppet.hitDie = u.hexstring2str(u.base642hex(entry.value.value as string))
+            break
+          case "name":
+            puppet.name = u.hexstring2str(u.base642hex(entry.value.value as string))
             break
           case "owner":
             rawValue = u.base642hex(entry.value.value as string)
-            character.owner = new wallet.Account(u.reverseHex(rawValue))
-          case "titles":
+            puppet.owner = new wallet.Account(u.reverseHex(rawValue))
             break
-          case "token_id":
-            rawValue = u.base642hex(entry.value.value as string)
-            character.tokenId = parseInt(u.reverseHex(rawValue),16)
+          case "traits":
             break
+          case "tokenId":
+            puppet.tokenId = parseInt(entry.value.value as string)
+            break
+          case "tokenURI":
+            puppet.tokenURI = u.hexstring2str(u.base642hex(entry.value.value as string))
+            break
+          default:
+            throw new Error('unrecognized property: ' + key)
         }
       })
     }
-    return character
+    return puppet
   }
 
 
@@ -400,70 +408,16 @@ export class CharacterAPI {
     );
   }
 
-
-  static async mint(
+  static async offlineMint(
     node: string,
     networkMagic: number,
     contractHash: string,
     owner: string,
     signer: wallet.Account
   ): Promise<any> {
-    const method = "mint";
+    const method = "offline_mint";
     const params = [
       sc.ContractParam.hash160(owner)
-    ]
-    try {
-      const res = await NeoInterface.publishInvoke(
-        node,
-        networkMagic,
-        contractHash,
-        method,
-        params,
-        signer
-      );
-      if (res === undefined || res.length === 0) {
-        throw new Error("unrecognized response");
-      }
-      return res;
-    } catch(e){
-      console.log(e)
-      return
-    }
-  }
-
-  static async getAuthorizedAddresses(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-  ): Promise<any> {
-    const method = "getAuthorizedAddresses";
-
-    const res = await NeoInterface.testInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      []
-    );
-
-    if (res === undefined || res.length === 0) {
-      throw new Error("unrecognized response");
-    }
-    return res;
-  }
-
-  static async setAuthorizedAddress(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-    address: string,
-    authorized: boolean,
-    signer: wallet.Account
-  ): Promise<any> {
-    const method = "setAuthorizedAddress";
-    const params = [
-      sc.ContractParam.hash160(address),
-      sc.ContractParam.boolean(authorized)
     ]
     try {
       const res = await NeoInterface.publishInvoke(
@@ -517,13 +471,13 @@ export class CharacterAPI {
   }
 
 
-  static async getCharacterRaw(
+  static async getPuppetRaw(
     node: string,
     networkMagic: number,
     contractHash: string,
     tokenId: string
   ): Promise<any> {
-    const method = "get_character_raw";
+    const method = "get_puppet_raw";
 
     const params = [sc.ContractParam.string(tokenId)];
     const res = await NeoInterface.testInvoke(
@@ -539,22 +493,19 @@ export class CharacterAPI {
     return res[0].value;
   }
 
-  static async rollDie(
+  static async getMintFee(
     node: string,
     networkMagic: number,
-    contractHash: string,
-    die: string
+    contractHash: string
   ): Promise<number> {
-    const method = "roll_die";
-    const param = [
-      sc.ContractParam.string(die)
-    ]
+    const method = "get_mint_fee";
+
     const res = await NeoInterface.testInvoke(
       node,
       networkMagic,
       contractHash,
       method,
-      param
+      []
     );
     if (res === undefined || res.length === 0) {
       throw new Error("unrecognized response");
@@ -562,83 +513,26 @@ export class CharacterAPI {
     return parseInt(res[0].value as string);
   }
 
-  static async rollDiceWithEntropy(
+  static async setMintFee(
     node: string,
     networkMagic: number,
     contractHash: string,
-    die: string,
-    precision: number,
-    entropy: string
-  ): Promise<number> {
-    const method = "roll_dice_with_entropy";
-    const param = [
-      sc.ContractParam.string(die),
-      sc.ContractParam.integer(precision),
-      sc.ContractParam.string(entropy)
-    ]
-    const res = await NeoInterface.testInvoke(
+    fee: number,
+    signer: wallet.Account,
+  ): Promise<any> {
+    const method = "set_mint_fee";
+    const params = [
+      sc.ContractParam.integer(fee)
+    ];
+
+    return await NeoInterface.publishInvoke(
       node,
       networkMagic,
       contractHash,
       method,
-      param
+      params,
+      signer
     );
-    if (res === undefined || res.length === 0) {
-      throw new Error("unrecognized response");
-    }
-    return parseInt(res[0].value as string);
-  }
-
-  static async rollInitialStat(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-  ): Promise<any> {
-    const method = "roll_initial_stat";
-    try {
-      const res = await NeoInterface.testInvoke(
-        node,
-        networkMagic,
-        contractHash,
-        method,
-        [],
-      );
-      if (res === undefined || res.length === 0) {
-        throw new Error("unrecognized response");
-      }
-      return res[0].value as number;
-    } catch(e){
-      console.log(e)
-      return
-    }
-  }
-
-  static async rollInitialStatWithEntropy(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-    entropy: string
-  ): Promise<any> {
-    const method = "roll_initial_stat";
-    const param = [
-      sc.ContractParam.string(entropy)
-    ]
-    try {
-      const res = await NeoInterface.testInvoke(
-        node,
-        networkMagic,
-        contractHash,
-        method,
-        param
-      );
-      if (res === undefined || res.length === 0) {
-        throw new Error("unrecognized response");
-      }
-      return res;
-    } catch(e){
-      console.log(e)
-      return
-    }
   }
 
   static async getAttributeMod(
@@ -670,6 +564,137 @@ export class CharacterAPI {
   }
 
 
+  //////////////EPOCHS/////////////
+  //////////////EPOCHS/////////////
+  //////////////EPOCHS/////////////
 
+  static async totalEpochs(
+    node: string,
+    networkMagic: number,
+    contractHash: string
+  ): Promise<number> {
+    const method = "total_epochs";
+
+    const res = await NeoInterface.testInvoke(
+      node,
+      networkMagic,
+      contractHash,
+      method,
+      []
+    );
+    if (res === undefined || res.length === 0) {
+      throw new Error("unrecognized response");
+    }
+    return parseInt(res[0].value as string);
+  }
+
+  static async totalTraitLevels(
+    node: string,
+    networkMagic: number,
+    contractHash: string
+  ): Promise<number> {
+    const method = "total_trait_levels";
+
+    const res = await NeoInterface.testInvoke(
+      node,
+      networkMagic,
+      contractHash,
+      method,
+      []
+    );
+    if (res === undefined || res.length === 0) {
+      throw new Error("unrecognized response");
+    }
+    return parseInt(res[0].value as string);
+  }
+
+  static async setCurrentEpoch(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    epochId: number,
+    account: wallet.Account
+  ): Promise<any> {
+    const method = "set_current_epoch";
+
+    const param = [
+      sc.ContractParam.integer(epochId)
+    ]
+
+    return await NeoInterface.publishInvoke(
+      node,
+      networkMagic,
+      contractHash,
+      method,
+      param,
+      account
+    );
+  }
+
+  static async getCurrentEpoch(
+    node: string,
+    networkMagic: number,
+    contractHash: string
+  ): Promise<number> {
+    const method = "get_current_epoch";
+
+    const res = await NeoInterface.testInvoke(
+      node,
+      networkMagic,
+      contractHash,
+      method,
+      []
+    );
+    if (res === undefined || res.length === 0) {
+      throw new Error("unrecognized response");
+    }
+    return parseInt(res[0].value as string);
+  }
+
+  static async createEpoch(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    label: string,
+    totalSupply: number,
+    maxTraits: number,
+    traits:Trait[],
+    account: wallet.Account
+  ): Promise<any> {
+    const method = "create_epoch";
+
+    const traitArray = traits.map( (trait) => {
+
+      const traitPointers = trait.traits.map((pointer) => {
+        return sc.ContractParam.array(
+          sc.ContractParam.integer(pointer.collection_id),
+          sc.ContractParam.integer(pointer.index)
+        )
+      })
+
+      return sc.ContractParam.array(
+        sc.ContractParam.integer(trait.drop_score),
+        sc.ContractParam.boolean(trait.unique),
+        sc.ContractParam.array(...traitPointers)
+      )
+    })
+
+    console.log(label, totalSupply, maxTraits)
+    const param = [
+      sc.ContractParam.string(label),
+      sc.ContractParam.integer(totalSupply),
+      sc.ContractParam.integer(maxTraits),
+      sc.ContractParam.array(...traitArray)
+    ]
+
+    return await NeoInterface.publishInvoke(
+      node,
+      networkMagic,
+      contractHash,
+      method,
+      param,
+      account
+    );
+  }
 
 }

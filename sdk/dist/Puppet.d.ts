@@ -1,4 +1,5 @@
 import { rpc, wallet } from '@cityofzion/neon-core';
+import { Trait } from "./interface";
 export interface PuppetOptions {
     node?: string;
     scriptHash?: string;
@@ -16,17 +17,19 @@ export declare class Puppet {
     getAttributeMod(attributeValue: number): Promise<any>;
     getPuppetRaw(tokenId: string): Promise<string | undefined>;
     ownerOf(tokenId: number): Promise<wallet.Account | undefined>;
-    mint(signer: wallet.Account): Promise<string | undefined>;
+    offlineMint(signer: wallet.Account): Promise<string | undefined>;
     properties(tokenId: number): Promise<any>;
     purchase(signer: wallet.Account): Promise<string | undefined>;
-    rollDie(die: string): Promise<number>;
-    rollDiceWithEntropy(die: string, precision: number, entropy: string): Promise<any>;
-    rollInitialStat(): Promise<boolean>;
-    rollInitialStateWithEntropy(entropy: string): Promise<any>;
+    setMintFee(fee: number, signer: wallet.Account): Promise<number>;
     symbol(): Promise<string>;
+    getMintFee(): Promise<number>;
     tokens(): Promise<number[]>;
     tokensOf(address: string): Promise<number[]>;
     transfer(to: string, tokenId: number, signer: wallet.Account, data: any): Promise<boolean | undefined>;
     totalSupply(): Promise<number>;
     update(script: string, manifest: string, signer: wallet.Account): Promise<boolean>;
+    totalEpochs(): Promise<number | undefined>;
+    setCurrentEpoch(epoch_id: number, signer: wallet.Account): Promise<boolean | undefined>;
+    getCurrentEpoch(): Promise<number | undefined>;
+    createEpoch(label: string, totalSupply: number, maxTraits: number, traits: Trait[], signer: wallet.Account): Promise<string | undefined>;
 }

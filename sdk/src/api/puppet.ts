@@ -2,8 +2,9 @@ import {InteropInterface, NeoInterface} from "./interface";
 import Neon, { sc, u } from "@cityofzion/neon-js";
 import { wallet } from "@cityofzion/neon-core";
 import StackItem, {StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
-import {CollectionPointer, CollectionType, PuppetType, Trait} from "../interface";
+import {CollectionPointer, CollectionType, Epoch, PuppetType, TraitLevel} from "../interface";
 import {ContractParamJson, ContractParamLike} from "@cityofzion/neon-core/lib/sc/ContractParam";
+import {parseToJSON} from "../helpers";
 
 export class PuppetAPI {
 
@@ -296,23 +297,7 @@ export class PuppetAPI {
       throw new Error("unrecognized response");
     }
 
-    const puppet: PuppetType = {
-      armorClass: 0,
-      attributes: {
-        charisma: 0,
-        constitution: 0,
-        dexterity: 0,
-        intelligence: 0,
-        strength: 0,
-        wisdom: 0,
-      },
-      hitDie: '',
-      name: '',
-      owner: new wallet.Account(),
-      traits: [],
-      tokenId: 0,
-      tokenURI: '',
-    }
+    const puppet: PuppetType = {} as PuppetType
 
     if (res[0] && res[0].value) {
       (res[0].value as unknown as StackItemMapLike[]).forEach( (entry: StackItemMapLike) => {
@@ -656,16 +641,15 @@ export class PuppetAPI {
     networkMagic: number,
     contractHash: string,
     label: string,
-    totalSupply: number,
     maxTraits: number,
-    traits:Trait[],
+    traits: TraitLevel[],
     account: wallet.Account
   ): Promise<any> {
     const method = "create_epoch";
 
     const traitArray = traits.map( (trait) => {
 
-      const traitPointers = trait.traits.map((pointer) => {
+      const traitPointers = trait.traits.map((pointer: CollectionPointer) => {
         return sc.ContractParam.array(
           sc.ContractParam.integer(pointer.collection_id),
           sc.ContractParam.integer(pointer.index)
@@ -679,10 +663,8 @@ export class PuppetAPI {
       )
     })
 
-    console.log(label, totalSupply, maxTraits)
     const param = [
       sc.ContractParam.string(label),
-      sc.ContractParam.integer(totalSupply),
       sc.ContractParam.integer(maxTraits),
       sc.ContractParam.array(...traitArray)
     ]
@@ -697,4 +679,46 @@ export class PuppetAPI {
     );
   }
 
+  static async getEpochJSON(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    epochId: number
+  ): Promise<any> {
+    const method = "get_epoch_json";
+
+    const param = [
+      sc.ContractParam.integer(epochId)
+    ]
+
+    const res = await NeoInterface.testInvoke(
+      node,
+      networkMagic,
+      contractHash,
+      method,
+      param
+    );
+    if (res === undefined || res.length === 0) {
+      throw new Error("unrecognized response");
+    }
+    return parseToJSON(res[0].value) as Epoch
+  }
+
+  static async pickTraits(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    account: wallet.Account
+  ): Promise<any> {
+    const method = "pick_traits";
+
+    return await NeoInterface.publishInvoke(
+      node,
+      networkMagic,
+      contractHash,
+      method,
+      [],
+      account
+    );
+  }
 }

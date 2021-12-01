@@ -1,5 +1,5 @@
 import { wallet } from "@cityofzion/neon-core";
-import { PuppetType, Trait } from "../interface";
+import { PuppetType, TraitLevel } from "../interface";
 export declare class PuppetAPI {
     /**
      * Returns the token symbol
@@ -93,5 +93,7 @@ export declare class PuppetAPI {
     static totalTraitLevels(node: string, networkMagic: number, contractHash: string): Promise<number>;
     static setCurrentEpoch(node: string, networkMagic: number, contractHash: string, epochId: number, account: wallet.Account): Promise<any>;
     static getCurrentEpoch(node: string, networkMagic: number, contractHash: string): Promise<number>;
-    static createEpoch(node: string, networkMagic: number, contractHash: string, label: string, totalSupply: number, maxTraits: number, traits: Trait[], account: wallet.Account): Promise<any>;
+    static createEpoch(node: string, networkMagic: number, contractHash: string, label: string, maxTraits: number, traits: TraitLevel[], account: wallet.Account): Promise<any>;
+    static getEpochJSON(node: string, networkMagic: number, contractHash: string, epochId: number): Promise<any>;
+    static pickTraits(node: string, networkMagic: number, contractHash: string, account: wallet.Account): Promise<any>;
 }

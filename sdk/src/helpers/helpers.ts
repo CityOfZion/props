@@ -15,7 +15,10 @@ export function parseToJSON(entries: any): any {
         value = parseToJSON(entry.value.value)
         break
       case "Array":
-        value = entry.value.value
+        value = entry.value.value.map((e: any) => {
+          return parseToJSON(e.value)
+        })
+
         break
       default:
         if (key === 'token_id') {

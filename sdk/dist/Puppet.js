@@ -105,8 +105,14 @@ class Puppet {
     async getCurrentEpoch() {
         return api_1.PuppetAPI.getCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash);
     }
-    async createEpoch(label, totalSupply, maxTraits, traits, signer) {
-        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, totalSupply, maxTraits, traits, signer);
+    async createEpoch(label, maxTraits, traitLevels, signer) {
+        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, maxTraits, traitLevels, signer);
+    }
+    async getEpochJSON(epochId) {
+        return api_1.PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId);
+    }
+    async pickTraits(signer) {
+        return api_1.PuppetAPI.pickTraits(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
 }
 exports.Puppet = Puppet;

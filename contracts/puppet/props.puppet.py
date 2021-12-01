@@ -12,6 +12,8 @@ from boa3.builtin.type import UInt160
 from boa3.builtin.interop.runtime import get_network
 from boa3.builtin.interop.runtime import get_random
 from helpers.dice import roll_initial_stat_with_entropy_internal, roll_dice_with_entropy_internal
+from object.epoch import Epoch, get_current_epoch, get_epoch
+
 # TODO: set user authorization
 # TODO: Align docstring
 # TODO: Finish splitting out dice into separate contract
@@ -599,7 +601,7 @@ class Puppet:
         self._strength: int = 0
         self._wisdom: int = 0
         self._hit_die: str = "d4"
-        self._traits: [str] = []
+        self._traits: [bytes] = []
         self._owner: UInt160 = UInt160()
 
     def export(self) -> Dict[str, Any]:
@@ -634,6 +636,12 @@ class Puppet:
         self._wisdom = roll_initial_stat_with_entropy_internal(entropy[10:12])
         self._hit_die = get_hit_die(roll_dice_with_entropy_internal("d4", 1, entropy[12].to_bytes())[0] - 1)
 
+        # mint traits
+        epoch_id: int = get_current_epoch()
+        epoch_id_bytes: bytes = epoch_id.to_bytes()
+        epoch: Epoch = get_epoch(epoch_id_bytes)
+        traits: [bytes] = epoch.mint_traits()
+        self._traits = traits
 
         # Generate a puppet token_id and set the owner
         self._owner = owner

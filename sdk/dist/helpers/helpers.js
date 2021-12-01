@@ -13,7 +13,9 @@ function parseToJSON(entries) {
                 value = parseToJSON(entry.value.value);
                 break;
             case "Array":
-                value = entry.value.value;
+                value = entry.value.value.map((e) => {
+                    return parseToJSON(e.value);
+                });
                 break;
             default:
                 if (key === 'token_id') {

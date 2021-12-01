@@ -2,7 +2,7 @@ import { merge } from 'lodash'
 import {rpc, wallet} from '@cityofzion/neon-core'
 import {PuppetAPI, NeoInterface} from './api'
 import {sc} from "@cityofzion/neon-js";
-import {CollectionType, Trait} from "./interface";
+import {CollectionType, TraitLevel} from "./interface";
 
 const DEFAULT_OPTIONS: PuppetOptions = {
   node: 'http://localhost:50012',
@@ -143,8 +143,15 @@ export class Puppet {
     return PuppetAPI.getCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash)
   }
 
-  async createEpoch(label: string, totalSupply: number, maxTraits: number, traits: Trait[], signer: wallet.Account): Promise<string | undefined> {
-    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, totalSupply, maxTraits, traits, signer)
+  async createEpoch(label: string, maxTraits: number, traitLevels: TraitLevel[], signer: wallet.Account): Promise<string | undefined> {
+    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, maxTraits, traitLevels, signer)
   }
 
+  async getEpochJSON(epochId: number): Promise<string | undefined> {
+    return PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId)
+  }
+
+  async pickTraits(signer: wallet.Account): Promise<string | undefined> {
+    return PuppetAPI.pickTraits(this.node.url, this.networkMagic, this.scriptHash, signer)
+  }
 }

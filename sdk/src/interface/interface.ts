@@ -28,7 +28,13 @@ export interface CollectionType {
   valuesRaw: any[]
 }
 
-export interface Trait {
+export interface Epoch {
+  label: string,
+  maxTraits: number,
+  traitLevels: TraitLevel[]
+}
+
+export interface TraitLevel {
   drop_score: number,
   unique: boolean,
   traits: CollectionPointer[]

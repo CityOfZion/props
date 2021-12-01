@@ -52,7 +52,7 @@ class NeoInterface {
             networkMagic,
             rpcAddress,
             account,
-            //systemFeeOverride: u.BigInteger.fromDecimal(10, 8),
+            systemFeeOverride: neon_js_1.u.BigInteger.fromDecimal(10, 8),
         });
         let result;
         try {

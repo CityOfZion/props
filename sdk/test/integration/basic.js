@@ -12,7 +12,7 @@ describe("Basic System Test Suite", function() {
         //initialize the contract puppet
         options = {
             node: "http://localhost:50012",
-            scriptHash: "0x4946e70b5362ac7aaea29da1a7aa14b0e17a0654"
+            scriptHash: "0xba7def4924881da2f85ee097ab7de171c6cb719a"
         }
         puppet = await new sdk.Puppet(options)
         await puppet.init()
@@ -92,7 +92,6 @@ describe("Basic System Test Suite", function() {
         const owner = await puppet.ownerOf(res[0])
         assert(cozWallet.address === owner.address)
     })
-
 
     it("should transfer a character to a user", async() => {
         const cozWallet = network.wallets[0].wallet
@@ -183,27 +182,124 @@ describe("Basic System Test Suite", function() {
         assert.equal(currentEpoch, 5)
     })
 
-    it("should create an epoch", async() => {
+    it("should create an epoch using a collection", async() => {
         const cozWallet = network.wallets[0].wallet
 
-        const newEpoch = [{
-            "drop_score": 500,
-            "unique": true,
-            "traits": [{
-                "collection_id": 1,
-                "index": 15
-            }]
-        }]
 
-        const res = await puppet.createEpoch("testEpoch", 20, 3, newEpoch, cozWallet)
+        options = {
+            node: "http://localhost:50012",
+            scriptHash: "0x863dbb9f115be11f3643077c8eb7e61c8bbe342b"
+        }
+
+        const collection = await new sdk.Collection(options)
+        const collectionId = await collection.totalCollections()
+        const initialCollection = await collection.getCollectionJSON(collectionId)
+
+
+        const newEpoch = [
+            {
+            "drop_score": 1000,
+            "unique": true,
+            "traits": []
+            },
+            {
+                "drop_score": 600,
+                "unique": true,
+                "traits": []
+            }]
+
+        initialCollection.values.forEach((value, i) => {
+            if (i < 200) {
+                newEpoch[i % 2].traits.push({
+                    "collection_id": collectionId,
+                    "index": i
+                })
+            }
+        })
+
+        const res = await puppet.createEpoch("testEpoch", 3, newEpoch, cozWallet)
         await sleep(2000)
 
         const client = new Neon.rpc.RPCClient(options.node)
         const tx = await client.getApplicationLog(res)
         console.log(tx)
         console.log('gas consumed: ', tx.executions[0].gasconsumed / 10 ** 8)
+
+        const epoch_id = await puppet.totalEpochs()
+        const res2 = await puppet.getEpochJSON(epoch_id)
+        console.log(res2)
     })
 
+
+    it("should create an epoch from a collection and sample from it", async() => {
+        const cozWallet = network.wallets[0].wallet
+        const client = new Neon.rpc.RPCClient(options.node)
+
+        options = {
+            node: "http://localhost:50012",
+            scriptHash: "0x863dbb9f115be11f3643077c8eb7e61c8bbe342b"
+        }
+
+        const collection = await new sdk.Collection(options)
+        const collectionId = await collection.totalCollections()
+        const initialCollection = await collection.getCollectionJSON(collectionId)
+
+        let newEpoch = []
+        let traits = []
+        let dropScore = 100
+        initialCollection.values.forEach((value, i) => {
+            traits.push({
+                    "collection_id": collectionId,
+                    "index": i
+                }
+            )
+            if (traits.length > 10) {
+                newEpoch.push({
+                    "drop_score": dropScore,
+                    "unique": false,
+                    "traits": traits
+                })
+                dropScore += 100
+                traits = []
+            }
+        })
+        const maxTraits = 10
+
+        console.log(newEpoch.length)
+        //Create the Epoch
+        console.log("create epoch: ")
+        let res = await puppet.createEpoch("testEpoch", maxTraits, newEpoch, cozWallet)
+        await sleep(2000)
+        let tx = await client.getApplicationLog(res)
+        console.log("Create Epoch: ", res, tx.executions[0].vmstate)
+        console.log('gas consumed: ', tx.executions[0].gasconsumed / 10 ** 8)
+
+        //Set the current Epoch
+        console.log("set epoch: ")
+        const epoch_id = await puppet.totalEpochs()
+        res = await puppet.setCurrentEpoch(epoch_id, cozWallet)
+        await sleep(2000)
+        tx = await client.getApplicationLog(res)
+        console.log("Set Epoch: ", res, tx.executions[0].vmstate)
+        console.log('gas consumed: ', tx.executions[0].gasconsumed / 10 ** 8)
+
+        //Pick some traits
+        console.log("pick traits: ")
+        res = await puppet.pickTraits(cozWallet)
+        await sleep(2000)
+        tx = await client.getApplicationLog(res)
+        console.log("Pick Traits: ", res)
+        if (tx.executions[0].vmstate ==='FAULT') {
+            console.log(tx)
+        }
+        console.log('gas consumed: ', tx.executions[0].gasconsumed / 10 ** 8)
+
+        tx.executions[0].notifications.forEach((n) => {
+            console.log(n.state.value[0].value.map((entry) => {
+                return sdk.helpers.formatter(entry)
+            }))
+        })
+    })
 })
 
 function sleep(ms) {

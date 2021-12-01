@@ -1,5 +1,5 @@
 import { rpc, wallet } from '@cityofzion/neon-core';
-import { Trait } from "./interface";
+import { TraitLevel } from "./interface";
 export interface PuppetOptions {
     node?: string;
     scriptHash?: string;
@@ -31,5 +31,7 @@ export declare class Puppet {
     totalEpochs(): Promise<number | undefined>;
     setCurrentEpoch(epoch_id: number, signer: wallet.Account): Promise<boolean | undefined>;
     getCurrentEpoch(): Promise<number | undefined>;
-    createEpoch(label: string, totalSupply: number, maxTraits: number, traits: Trait[], signer: wallet.Account): Promise<string | undefined>;
+    createEpoch(label: string, maxTraits: number, traitLevels: TraitLevel[], signer: wallet.Account): Promise<string | undefined>;
+    getEpochJSON(epochId: number): Promise<string | undefined>;
+    pickTraits(signer: wallet.Account): Promise<string | undefined>;
 }

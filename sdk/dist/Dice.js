@@ -6,7 +6,7 @@ const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("./api");
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x3f57010287f648889d1ce5264d4fa7839fdab000'
+    scriptHash: '0x68021f61e872098627da52dc82ca793575c83826'
 };
 class Dice {
     constructor(options = {}) {
@@ -29,17 +29,17 @@ class Dice {
         }
         throw new Error('node scripthash defined');
     }
-    async rollDie(die) {
-        return api_1.DiceAPI.rollDie(this.node.url, this.networkMagic, this.scriptHash, die);
+    async randBetween(start, end, signer) {
+        return api_1.DiceAPI.randBetween(this.node.url, this.networkMagic, this.scriptHash, start, end, signer);
     }
-    async rollDiceWithEntropy(die, precision, entropy) {
-        return api_1.DiceAPI.rollDiceWithEntropy(this.node.url, this.networkMagic, this.scriptHash, die, precision, entropy);
+    async mapBytesOntoRange(start, end, entropy, signer) {
+        return api_1.DiceAPI.mapBytesOntoRange(this.node.url, this.networkMagic, this.scriptHash, start, end, entropy, signer);
     }
-    async rollInitialStat() {
-        return api_1.DiceAPI.rollInitialStat(this.node.url, this.networkMagic, this.scriptHash);
+    async rollDie(die, signer) {
+        return api_1.DiceAPI.rollDie(this.node.url, this.networkMagic, this.scriptHash, die, signer);
     }
-    async rollInitialStateWithEntropy(entropy) {
-        return api_1.DiceAPI.rollInitialStatWithEntropy(this.node.url, this.networkMagic, this.scriptHash, entropy);
+    async rollDiceWithEntropy(die, precision, entropy, signer) {
+        return api_1.DiceAPI.rollDiceWithEntropy(this.node.url, this.networkMagic, this.scriptHash, die, precision, entropy, signer);
     }
 }
 exports.Dice = Dice;

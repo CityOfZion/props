@@ -2,31 +2,10 @@ import {sc, u} from "@cityofzion/neon-js";
 import {NeoInterface} from "./interface";
 import {wallet} from "@cityofzion/neon-core";
 import {CollectionType} from "../interface";
-import {StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
-import {ContractParamLike} from "@cityofzion/neon-core/lib/sc/ContractParam";
+import {ContractParamLike, StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
+import {formatter, variableInvoke} from "../helpers";
 
 export class CollectionAPI {
-
-
-  static async totalCollections(
-    node: string,
-    networkMagic: number,
-    contractHash: string
-  ): Promise<number> {
-    const method = "total_collections";
-
-    const res = await NeoInterface.testInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      []
-    );
-    if (res === undefined || res.length === 0) {
-      throw new Error("unrecognized response");
-    }
-    return parseInt(res[0].value as string);
-  }
 
   static async createCollection(
     node: string,
@@ -37,28 +16,128 @@ export class CollectionAPI {
     extra: any,
     values: string[],
     signer: wallet.Account,
-  ): Promise<any> {
+  ): Promise<string> {
     const method = "create_collection";
 
     const raw_traits = values.map( (value) => {
       return sc.ContractParam.string(value)
     })
 
-    const params = [
+    const param = [
       sc.ContractParam.string(description),
       sc.ContractParam.string(collection_type),
       sc.ContractParam.string(extra),
       sc.ContractParam.array(...raw_traits)
     ];
 
-    return await NeoInterface.publishInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      params,
-      signer
-    );
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+    return u.base642hex(res[0].value as string)
+  }
+
+  static async createCollectionRaw(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    description: string,
+    collection_type: string,
+    extra: any,
+    values: ContractParamLike[],
+    signer: wallet.Account,
+  ): Promise<string> {
+    const method = "create_collection";
+
+    const param = [
+      sc.ContractParam.string(description),
+      sc.ContractParam.string(collection_type),
+      sc.ContractParam.string(extra),
+      sc.ContractParam.array(...values)
+    ];
+
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+    return u.base642hex(res[0].value as string)
+  }
+
+  static async getCollectionJSON(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    collectionId: number,
+    signer?: wallet.Account
+  ): Promise<CollectionType> {
+    const method = "get_collection_json"
+    const param = [
+      sc.ContractParam.integer(collectionId)
+    ]
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+
+    const result: CollectionType = {} as CollectionType
+    if (res[0] && res[0].value) {
+      (res[0].value as unknown as StackItemMapLike[]).forEach((entry: StackItemMapLike) => {
+        let key = u.hexstring2str(u.base642hex(entry.key.value as string))
+        let bytes
+        switch (key) {
+          case "id":
+            bytes = u.base642hex(entry.value.value as string)
+            result.id = parseInt(bytes, 16)
+            break
+          case "author":
+            bytes = u.base642hex(entry.value.value as string)
+            result.author = new wallet.Account(bytes)
+            break
+          case "type":
+            result.type = u.hexstring2str(u.base642hex(entry.value.value as string))
+            break
+          case "description":
+            result.description = u.hexstring2str(u.base642hex(entry.value.value as string))
+            break
+          case "values":
+            result.valuesRaw = entry.value.value as StackItemJson[]
+            break
+        }
+      })
+    }
+    switch (result.type) {
+      case "string":
+        result.values = result.valuesRaw!.map( (value) => {
+          return formatter(value)
+        })
+        break
+      case "int":
+        result.values = result.valuesRaw!.map( (value) => {
+          let bytes = formatter(value)
+          return parseInt(bytes, 16)
+        })
+        break
+    }
+
+    return result;
+  }
+
+  static async getCollection(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    collectionId: number,
+    signer?: wallet.Account
+  ): Promise<string> {
+    const method = "get_collection"
+    const param = [
+      sc.ContractParam.integer(collectionId)
+    ]
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+    return u.base642hex(res[0].value as string)
   }
 
   static async getCollectionElement(
@@ -66,132 +145,114 @@ export class CollectionAPI {
     networkMagic: number,
     contractHash: string,
     collectionId: number,
-    index: number
-  ): Promise<string | undefined> {
+    index: number,
+    signer?: wallet.Account
+  ): Promise<string> {
     const method = "get_collection_element"
     const param = [
       sc.ContractParam.integer(collectionId),
       sc.ContractParam.integer(index)
     ]
-    try {
-      const res = await NeoInterface.testInvoke(
-        node,
-        networkMagic,
-        contractHash,
-        method,
-        param
-      );
-
-      if (res === undefined || res.length === 0) {
-        throw new Error("unrecognized response");
-      }
-      return u.base642hex(res[0].value as string)
-    } catch(e) {
-      console.log(e)
-      return
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
     }
+    return u.base642hex(res[0].value as string)
   }
 
-  static async getCollection(
+  static async getCollectionLength(
     node: string,
     networkMagic: number,
     contractHash: string,
-    collectionId: number
-  ): Promise<string | undefined> {
-    const method = "get_collection"
+    collectionId: number,
+    signer?: wallet.Account
+  ): Promise<number> {
+    const method = "get_collection_length"
     const param = [
       sc.ContractParam.integer(collectionId)
     ]
-    try {
-      const res = await NeoInterface.testInvoke(
-        node,
-        networkMagic,
-        contractHash,
-        method,
-        param
-      );
-      if (res === undefined || res.length === 0) {
-        throw new Error("unrecognized response");
-      }
-
-      if (res[0] && res[0].value) {
-        return u.base642hex(res[0].value as string)
-      }
-  } catch(e) {
-      console.log(e)
-      return
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
     }
-}
+    return parseInt(res[0].value as string);
+  }
 
-  static async getCollectionJSON(
+  static async getCollectionValues(
     node: string,
     networkMagic: number,
     contractHash: string,
-    collectionId: number
-  ): Promise<CollectionType | undefined> {
-    const method = "get_collection_json"
+    collectionId: number,
+    signer?: wallet.Account
+  ): Promise<string[] | any> {
+    const method = "get_collection_values"
     const param = [
       sc.ContractParam.integer(collectionId)
     ]
-    try {
-      const res = await NeoInterface.testInvoke(
-        node,
-        networkMagic,
-        contractHash,
-        method,
-        param
-      );
-      if (res === undefined || res.length === 0) {
-        throw new Error("unrecognized response");
-      }
-
-      const result: CollectionType = {
-        id: 0,
-        description: "",
-        type: "",
-        values: [],
-        valuesRaw: []
-      }
-
-      if (res[0] && res[0].value) {
-        (res[0].value as unknown as StackItemMapLike[]).forEach((entry: StackItemMapLike) => {
-          let key = u.hexstring2str(u.base642hex(entry.key.value as string))
-          switch (key) {
-            case "id":
-              let bytes = u.base642hex(entry.value.value as string)
-              result.id = parseInt(bytes, 16)
-              break
-            case "type":
-              result.type = u.hexstring2str(u.base642hex(entry.value.value as string))
-              break
-            case "description":
-              result.description = u.hexstring2str(u.base642hex(entry.value.value as string))
-              break
-            case "values":
-              result.valuesRaw = entry.value.value as StackItemJson[]
-              break
-          }
-        })
-      }
-
-      switch (result.type) {
-        case "string":
-          result.values = result.valuesRaw.map( (value) => {
-            return u.hexstring2str(u.base642hex(value.value as string))
-          })
-          break
-        case "number":
-          result.values = result.valuesRaw.map( (value) => {
-            let bytes = u.base642hex(value as string)
-            return parseInt(bytes, 16)
-          })
-          break
-      }
-
-      return result;
-    } catch(e){
-      console.log(e)
-      return
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
     }
+
+    return res[0].value.map( (value: any) => {
+      return u.base642hex(value.value as string)
+    })
   }
+
+  static async mapBytesOntoCollection(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    collectionId: number,
+    entropy: string,
+    signer?: wallet.Account
+  ): Promise<string> {
+    const method = "map_bytes_onto_collection"
+    const param = [
+      sc.ContractParam.integer(collectionId),
+      sc.ContractParam.string(entropy)
+    ]
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+    return u.base642hex(res[0].value as string)
+  }
+
+  static async sampleFromCollection(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    collectionId: number,
+    signer?: wallet.Account
+  ): Promise<string> {
+    const method = "sample_from_collection"
+    const param = [
+      sc.ContractParam.integer(collectionId),
+    ]
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+    return u.base642hex(res[0].value as string)
+  }
+
+  static async totalCollections(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    signer?: wallet.Account
+  ): Promise<number> {
+    const method = "total_collections";
+
+    const res = await variableInvoke(node, networkMagic, contractHash, method, [], signer)
+    if (signer) {
+      return res
+    }
+    if (res === undefined || res.length === 0) {
+      throw new Error("unrecognized response");
+    }
+    return parseInt(res[0].value as string);
+  }
+
 }

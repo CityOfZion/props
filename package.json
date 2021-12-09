@@ -1,0 +1,24 @@
+{
+  "name": "props",
+  "version": "1.0.0",
+  "description": "isengard project",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "node scripts/deploy.js",
+    "initialize": "node scripts/initialize.js",
+    "mintPuppets": "node scripts/mint_puppets.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityOfZion/isengard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CityOfZion/isengard/issues"
+  },
+  "homepage": "https://github.com/CityOfZion/isengard#readme",
+  "dependencies": {
+    "@cityofzion/neon-core": "^5.0.0-next.16"
+  }
+}

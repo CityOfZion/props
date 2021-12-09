@@ -156,19 +156,15 @@ class PuppetAPI {
             throw new Error("unrecognized response");
         }
         const iterator = res[0];
-        if (iterator.iterator && iterator.iterator.length >= 0 && iterator.iterator[0].value) {
+        if (iterator.iterator && iterator.iterator.length > 0 && iterator.iterator[0].value) {
             return iterator.iterator.map((token) => {
                 const attrs = token.value;
                 let bytes = neon_js_1.u.base642hex(attrs[0].value);
                 return parseInt(neon_js_1.u.reverseHex(bytes), 16);
             });
         }
-        if (res[0].type === "Array") {
-            const values = res[0].value;
-            return values.map((value) => {
-                let bytes = neon_js_1.u.base642hex(value.value);
-                return parseInt(neon_js_1.u.reverseHex(bytes), 16);
-            });
+        if (iterator.iterator && iterator.iterator.length === 0) {
+            return [];
         }
         throw new Error("unable to resolve respond format");
     }
@@ -186,7 +182,24 @@ class PuppetAPI {
         if (res === undefined || res.length === 0) {
             throw new Error("unrecognized response");
         }
-        const puppet = {};
+        const puppet = {
+            armorClass: 0,
+            attributes: {
+                charisma: 0,
+                constitution: 0,
+                dexterity: 0,
+                intelligence: 0,
+                strength: 0,
+                wisdom: 0,
+            },
+            hitDie: '',
+            epoch: 0,
+            name: '',
+            owner: new neon_core_1.wallet.Account(),
+            traits: [],
+            tokenId: 0,
+            tokenURI: '',
+        };
         if (res[0] && res[0].value) {
             res[0].value.forEach((entry) => {
                 let key = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.key.value));
@@ -232,12 +245,18 @@ class PuppetAPI {
                         puppet.owner = new neon_core_1.wallet.Account(neon_js_1.u.reverseHex(rawValue));
                         break;
                     case "traits":
+                        puppet.traits = entry.value.value.map((t) => {
+                            return helpers_1.formatter(t);
+                        });
                         break;
                     case "tokenId":
                         puppet.tokenId = parseInt(entry.value.value);
                         break;
                     case "tokenURI":
                         puppet.tokenURI = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
+                        break;
+                    case "epoch":
+                        puppet.epoch = parseInt(entry.value.value);
                         break;
                     default:
                         throw new Error('unrecognized property: ' + key);
@@ -255,14 +274,9 @@ class PuppetAPI {
      * @param upgrade Indicates whether the deployment is an upgrade
      * @param account The signing account, which will become the first admin if upgrade == false
      */
-    static async deploy(node, networkMagic, contractHash, data, //we arent using this...
-    upgrade, account) {
+    static async deploy(node, networkMagic, contractHash, account) {
         const method = "deploy";
-        const params = [
-            neon_js_1.sc.ContractParam.hash160(account.address),
-            neon_js_1.sc.ContractParam.boolean(upgrade),
-        ];
-        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, account);
+        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, [], account);
     }
     static async offlineMint(node, networkMagic, contractHash, owner, signer) {
         const method = "offline_mint";

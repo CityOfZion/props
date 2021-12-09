@@ -12,12 +12,13 @@ export declare class Puppet {
     get node(): rpc.RPCClient;
     get scriptHash(): string;
     balanceOf(address: string): Promise<number>;
+    createEpochFromFile(path: string, signer: wallet.Account): Promise<string>;
     decimals(): Promise<number>;
-    deploy(data: object, upgrade: boolean, signer: wallet.Account): Promise<any>;
+    deploy(signer: wallet.Account): Promise<any>;
     getAttributeMod(attributeValue: number): Promise<any>;
     getPuppetRaw(tokenId: string): Promise<string | undefined>;
     ownerOf(tokenId: number): Promise<wallet.Account | undefined>;
-    offlineMint(signer: wallet.Account): Promise<string | undefined>;
+    offlineMint(target: string, signer: wallet.Account): Promise<string | undefined>;
     properties(tokenId: number): Promise<any>;
     purchase(signer: wallet.Account): Promise<string | undefined>;
     setMintFee(fee: number, signer: wallet.Account): Promise<number>;

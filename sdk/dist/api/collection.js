@@ -2,122 +2,170 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectionAPI = void 0;
 const neon_js_1 = require("@cityofzion/neon-js");
-const interface_1 = require("./interface");
+const neon_core_1 = require("@cityofzion/neon-core");
+const helpers_1 = require("../helpers");
 class CollectionAPI {
-    static async totalCollections(node, networkMagic, contractHash) {
-        const method = "total_collections";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return parseInt(res[0].value);
-    }
     static async createCollection(node, networkMagic, contractHash, description, collection_type, extra, values, signer) {
         const method = "create_collection";
         const raw_traits = values.map((value) => {
             return neon_js_1.sc.ContractParam.string(value);
         });
-        const params = [
+        const param = [
             neon_js_1.sc.ContractParam.string(description),
             neon_js_1.sc.ContractParam.string(collection_type),
             neon_js_1.sc.ContractParam.string(extra),
             neon_js_1.sc.ContractParam.array(...raw_traits)
         ];
-        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
+        }
+        return neon_js_1.u.base642hex(res[0].value);
     }
-    static async getCollectionElement(node, networkMagic, contractHash, collectionId, index) {
+    static async createCollectionRaw(node, networkMagic, contractHash, description, collection_type, extra, values, signer) {
+        const method = "create_collection";
+        const param = [
+            neon_js_1.sc.ContractParam.string(description),
+            neon_js_1.sc.ContractParam.string(collection_type),
+            neon_js_1.sc.ContractParam.string(extra),
+            neon_js_1.sc.ContractParam.array(...values)
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
+        }
+        return neon_js_1.u.base642hex(res[0].value);
+    }
+    static async getCollectionJSON(node, networkMagic, contractHash, collectionId, signer) {
+        const method = "get_collection_json";
+        const param = [
+            neon_js_1.sc.ContractParam.integer(collectionId)
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
+        }
+        const result = {};
+        if (res[0] && res[0].value) {
+            res[0].value.forEach((entry) => {
+                let key = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.key.value));
+                let bytes;
+                switch (key) {
+                    case "id":
+                        bytes = neon_js_1.u.base642hex(entry.value.value);
+                        result.id = parseInt(bytes, 16);
+                        break;
+                    case "author":
+                        bytes = neon_js_1.u.base642hex(entry.value.value);
+                        result.author = new neon_core_1.wallet.Account(bytes);
+                        break;
+                    case "type":
+                        result.type = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
+                        break;
+                    case "description":
+                        result.description = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
+                        break;
+                    case "values":
+                        result.valuesRaw = entry.value.value;
+                        break;
+                }
+            });
+        }
+        switch (result.type) {
+            case "string":
+                result.values = result.valuesRaw.map((value) => {
+                    return helpers_1.formatter(value);
+                });
+                break;
+            case "int":
+                result.values = result.valuesRaw.map((value) => {
+                    let bytes = helpers_1.formatter(value);
+                    return parseInt(bytes, 16);
+                });
+                break;
+        }
+        return result;
+    }
+    static async getCollection(node, networkMagic, contractHash, collectionId, signer) {
+        const method = "get_collection";
+        const param = [
+            neon_js_1.sc.ContractParam.integer(collectionId)
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
+        }
+        return neon_js_1.u.base642hex(res[0].value);
+    }
+    static async getCollectionElement(node, networkMagic, contractHash, collectionId, index, signer) {
         const method = "get_collection_element";
         const param = [
             neon_js_1.sc.ContractParam.integer(collectionId),
             neon_js_1.sc.ContractParam.integer(index)
         ];
-        try {
-            const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
-            if (res === undefined || res.length === 0) {
-                throw new Error("unrecognized response");
-            }
-            return neon_js_1.u.base642hex(res[0].value);
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
         }
-        catch (e) {
-            console.log(e);
-            return;
-        }
+        return neon_js_1.u.base642hex(res[0].value);
     }
-    static async getCollection(node, networkMagic, contractHash, collectionId) {
-        const method = "get_collection";
+    static async getCollectionLength(node, networkMagic, contractHash, collectionId, signer) {
+        const method = "get_collection_length";
         const param = [
             neon_js_1.sc.ContractParam.integer(collectionId)
         ];
-        try {
-            const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
-            if (res === undefined || res.length === 0) {
-                throw new Error("unrecognized response");
-            }
-            if (res[0] && res[0].value) {
-                return neon_js_1.u.base642hex(res[0].value);
-            }
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
         }
-        catch (e) {
-            console.log(e);
-            return;
-        }
+        return parseInt(res[0].value);
     }
-    static async getCollectionJSON(node, networkMagic, contractHash, collectionId) {
-        const method = "get_collection_json";
+    static async getCollectionValues(node, networkMagic, contractHash, collectionId, signer) {
+        const method = "get_collection_values";
         const param = [
             neon_js_1.sc.ContractParam.integer(collectionId)
         ];
-        try {
-            const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
-            if (res === undefined || res.length === 0) {
-                throw new Error("unrecognized response");
-            }
-            const result = {
-                id: 0,
-                description: "",
-                type: "",
-                values: [],
-                valuesRaw: []
-            };
-            if (res[0] && res[0].value) {
-                res[0].value.forEach((entry) => {
-                    let key = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.key.value));
-                    switch (key) {
-                        case "id":
-                            let bytes = neon_js_1.u.base642hex(entry.value.value);
-                            result.id = parseInt(bytes, 16);
-                            break;
-                        case "type":
-                            result.type = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
-                            break;
-                        case "description":
-                            result.description = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
-                            break;
-                        case "values":
-                            result.valuesRaw = entry.value.value;
-                            break;
-                    }
-                });
-            }
-            switch (result.type) {
-                case "string":
-                    result.values = result.valuesRaw.map((value) => {
-                        return neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(value.value));
-                    });
-                    break;
-                case "number":
-                    result.values = result.valuesRaw.map((value) => {
-                        let bytes = neon_js_1.u.base642hex(value);
-                        return parseInt(bytes, 16);
-                    });
-                    break;
-            }
-            return result;
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
         }
-        catch (e) {
-            console.log(e);
-            return;
+        return res[0].value.map((value) => {
+            return neon_js_1.u.base642hex(value.value);
+        });
+    }
+    static async mapBytesOntoCollection(node, networkMagic, contractHash, collectionId, entropy, signer) {
+        const method = "map_bytes_onto_collection";
+        const param = [
+            neon_js_1.sc.ContractParam.integer(collectionId),
+            neon_js_1.sc.ContractParam.string(entropy)
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
         }
+        return neon_js_1.u.base642hex(res[0].value);
+    }
+    static async sampleFromCollection(node, networkMagic, contractHash, collectionId, signer) {
+        const method = "sample_from_collection";
+        const param = [
+            neon_js_1.sc.ContractParam.integer(collectionId),
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
+        }
+        return neon_js_1.u.base642hex(res[0].value);
+    }
+    static async totalCollections(node, networkMagic, contractHash, signer) {
+        const method = "total_collections";
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        if (signer) {
+            return res;
+        }
+        if (res === undefined || res.length === 0) {
+            throw new Error("unrecognized response");
+        }
+        return parseInt(res[0].value);
     }
 }
 exports.CollectionAPI = CollectionAPI;

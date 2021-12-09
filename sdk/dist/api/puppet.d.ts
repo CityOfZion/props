@@ -81,8 +81,7 @@ export declare class PuppetAPI {
      * @param upgrade Indicates whether the deployment is an upgrade
      * @param account The signing account, which will become the first admin if upgrade == false
      */
-    static deploy(node: string, networkMagic: number, contractHash: string, data: object, //we arent using this...
-    upgrade: boolean, account: wallet.Account): Promise<any>;
+    static deploy(node: string, networkMagic: number, contractHash: string, account: wallet.Account): Promise<any>;
     static offlineMint(node: string, networkMagic: number, contractHash: string, owner: string, signer: wallet.Account): Promise<any>;
     static update(node: string, networkMagic: number, contractHash: string, script: string, manifest: string, signer: wallet.Account): Promise<any>;
     static getPuppetRaw(node: string, networkMagic: number, contractHash: string, tokenId: string): Promise<any>;

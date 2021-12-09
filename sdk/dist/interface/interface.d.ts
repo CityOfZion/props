@@ -10,6 +10,7 @@ export interface BaseStats {
 export interface PuppetType {
     armorClass: number;
     attributes: BaseStats;
+    epoch: number;
     hitDie: string;
     name: string;
     owner: wallet.Account;
@@ -19,10 +20,12 @@ export interface PuppetType {
 }
 export interface CollectionType {
     id: number;
+    author: wallet.Account;
     description: string;
     type: string;
     values: string[] | number[];
-    valuesRaw: any[];
+    extra: any;
+    valuesRaw?: any[];
 }
 export interface Epoch {
     label: string;

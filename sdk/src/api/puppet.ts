@@ -1,10 +1,10 @@
 import {InteropInterface, NeoInterface} from "./interface";
 import Neon, { sc, u } from "@cityofzion/neon-js";
 import { wallet } from "@cityofzion/neon-core";
-import StackItem, {StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
+import StackItem, {StackItemJson, StackItemLike, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
 import {CollectionPointer, CollectionType, Epoch, PuppetType, TraitLevel} from "../interface";
 import {ContractParamJson, ContractParamLike} from "@cityofzion/neon-core/lib/sc/ContractParam";
-import {parseToJSON} from "../helpers";
+import {formatter, parseToJSON} from "../helpers";
 
 export class PuppetAPI {
 
@@ -250,7 +250,7 @@ export class PuppetAPI {
       throw new Error("unrecognized response");
     }
     const iterator: InteropInterface = res[0] as InteropInterface
-    if (iterator.iterator && iterator.iterator.length >= 0 && iterator.iterator![0].value) {
+    if (iterator.iterator && iterator.iterator.length > 0 && iterator.iterator[0].value) {
       return iterator.iterator.map( (token: StackItemJson) => {
         const attrs: StackItemJson[] = token.value as StackItemJson[]
         let bytes = u.base642hex((attrs[0].value as string))
@@ -258,13 +258,8 @@ export class PuppetAPI {
 
       })
     }
-
-    if (res[0].type === "Array") {
-      const values = res[0].value as StackItemJson[]
-      return values.map( (value: StackItemJson) => {
-        let bytes = u.base642hex(value.value as string)
-        return parseInt(u.reverseHex(bytes),16)
-      })
+    if (iterator.iterator && iterator.iterator.length === 0) {
+      return []
     }
 
     throw new Error("unable to resolve respond format")
@@ -297,7 +292,24 @@ export class PuppetAPI {
       throw new Error("unrecognized response");
     }
 
-    const puppet: PuppetType = {} as PuppetType
+    const puppet: PuppetType = {
+      armorClass: 0,
+      attributes: {
+        charisma: 0,
+        constitution: 0,
+        dexterity: 0,
+        intelligence: 0,
+        strength: 0,
+        wisdom: 0,
+      },
+      hitDie: '',
+      epoch: 0,
+      name: '',
+      owner: new wallet.Account(),
+      traits: [],
+      tokenId: 0,
+      tokenURI: '',
+    }
 
     if (res[0] && res[0].value) {
       (res[0].value as unknown as StackItemMapLike[]).forEach( (entry: StackItemMapLike) => {
@@ -344,12 +356,18 @@ export class PuppetAPI {
             puppet.owner = new wallet.Account(u.reverseHex(rawValue))
             break
           case "traits":
+            puppet.traits = (entry.value.value as StackItemLike[]).map( (t) => {
+              return formatter(t)
+            })
             break
           case "tokenId":
             puppet.tokenId = parseInt(entry.value.value as string)
             break
           case "tokenURI":
             puppet.tokenURI = u.hexstring2str(u.base642hex(entry.value.value as string))
+            break
+          case "epoch":
+            puppet.epoch = parseInt(entry.value.value as string)
             break
           default:
             throw new Error('unrecognized property: ' + key)
@@ -373,22 +391,16 @@ export class PuppetAPI {
     node: string,
     networkMagic: number,
     contractHash: string,
-    data: object, //we arent using this...
-    upgrade: boolean,
     account: wallet.Account
   ): Promise<any> {
     const method = "deploy";
-    const params = [
-      sc.ContractParam.hash160(account.address),
-      sc.ContractParam.boolean(upgrade),
-    ];
 
     return await NeoInterface.publishInvoke(
       node,
       networkMagic,
       contractHash,
       method,
-      params,
+      [],
       account
     );
   }
@@ -400,6 +412,7 @@ export class PuppetAPI {
     owner: string,
     signer: wallet.Account
   ): Promise<any> {
+
     const method = "offline_mint";
     const params = [
       sc.ContractParam.hash160(owner)
@@ -454,7 +467,6 @@ export class PuppetAPI {
       return
     }
   }
-
 
   static async getPuppetRaw(
     node: string,

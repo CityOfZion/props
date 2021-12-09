@@ -1,12 +1,12 @@
 {
-  "name": "isengard_sdk",
+  "name": "props",
   "version": "0.0.1",
-  "description": "",
+  "description": "an sdk for interfacing with props to use in decentralized applications",
   "main": "dist/index",
   "types": "dist/index",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CityOfZion/isengard"
+    "url": "git+https://github.com/CityOfZion/isengard.git"
   },
   "publishConfig": {
     "access": "public"
@@ -26,6 +26,7 @@
     "@cityofzion/neon-core": "^5.0.0-next.16",
     "@cityofzion/neon-js": "^5.0.0-next.16",
     "@types/lodash": "^4.14.176",
+    "@types/node": "^16.11.11",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

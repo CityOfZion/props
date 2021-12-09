@@ -1,6 +1,8 @@
 from typing import Any, Dict, cast
 from boa3.builtin.interop.stdlib import serialize, deserialize
 from boa3.builtin.interop.storage import get, put
+from boa3.builtin.type import UInt160
+from boa3.builtin import CreateNewEvent
 
 """
 INTERNAL MODULE:
@@ -17,6 +19,7 @@ class Collection:
 
     def __init__(self):
         self._id: bytes = b''
+        self._author: UInt160 = b''
         self._description: bytes = b''
         self._type: bytes = b''
         self._extra: bytes = b''
@@ -25,9 +28,16 @@ class Collection:
     def get_id(self) -> bytes:
         return self._id
 
+    def get_values(self) -> [bytes]:
+        return self._values
+
     def get_value(self, index: int) -> bytes:
         collection_values: [bytes] = self._values
         return collection_values[index]
+
+    def set_author(self, author: UInt160) -> bool:
+        self._author = author
+        return True
 
     def set_extra(self, extra: bytes) -> bool:
         self._extra = extra
@@ -52,6 +62,7 @@ class Collection:
     def export(self) -> Dict[str, Any]:
         exported = {
             'id': self._id,
+            'author': self._author,
             'description': self._description,
             'extra': self._extra,
             'type': self._type,
@@ -60,10 +71,11 @@ class Collection:
         return exported
 
 
-def create_collection_internal(description: bytes, collection_type: bytes, extra: bytes, values: [bytes]) -> bytes:
+def create_collection_internal(author: UInt160, description: bytes, collection_type: bytes, extra: bytes, values: [bytes]) -> bytes:
     collection: Collection = Collection()
     collection_id: bytes = (total_collections_internal() + 1).to_bytes()
     x: bool = collection.set_id(collection_id)
+    x = collection.set_author(author)
     x = collection.set_description(description)
     x = collection.set_values(values)
     x = collection.set_extra(extra)

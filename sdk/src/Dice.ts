@@ -5,7 +5,7 @@ import {sc} from "@cityofzion/neon-js";
 
 const DEFAULT_OPTIONS: DiceOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x3f57010287f648889d1ce5264d4fa7839fdab000'
+  scriptHash: '0x68021f61e872098627da52dc82ca793575c83826'
 }
 
 export interface DiceOptions {
@@ -40,19 +40,20 @@ export class Dice {
     throw new Error('node scripthash defined')
   }
 
-  async rollDie(die: string): Promise<number> {
-    return DiceAPI.rollDie(this.node.url, this.networkMagic, this.scriptHash, die)
+  async randBetween(start: number, end: number, signer?: wallet.Account): Promise<number | string> {
+    return DiceAPI.randBetween(this.node.url, this.networkMagic, this.scriptHash, start, end, signer)
   }
 
-  async rollDiceWithEntropy(die: string, precision: number, entropy: string): Promise<any> {
-    return DiceAPI.rollDiceWithEntropy(this.node.url, this.networkMagic, this.scriptHash, die, precision, entropy)
+  async mapBytesOntoRange(start: number, end: number, entropy: string, signer?: wallet.Account): Promise<number | string> {
+    return DiceAPI.mapBytesOntoRange(this.node.url, this.networkMagic, this.scriptHash, start, end, entropy, signer)
   }
 
-  async rollInitialStat(): Promise<boolean> {
-    return DiceAPI.rollInitialStat(this.node.url, this.networkMagic, this.scriptHash)
+  async rollDie(die: string, signer?: wallet.Account): Promise<number | string> {
+    return DiceAPI.rollDie(this.node.url, this.networkMagic, this.scriptHash, die, signer)
   }
 
-  async rollInitialStateWithEntropy(entropy: string): Promise<any> {
-    return DiceAPI.rollInitialStatWithEntropy(this.node.url, this.networkMagic, this.scriptHash, entropy)
+  async rollDiceWithEntropy(die: string, precision: number, entropy: string, signer?: wallet.Account): Promise<any> {
+    return DiceAPI.rollDiceWithEntropy(this.node.url, this.networkMagic, this.scriptHash, die, precision, entropy, signer)
   }
+
 }

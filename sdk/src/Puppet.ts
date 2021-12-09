@@ -1,12 +1,13 @@
 import { merge } from 'lodash'
-import {rpc, wallet} from '@cityofzion/neon-core'
-import {PuppetAPI, NeoInterface} from './api'
+import {rpc, u, wallet} from '@cityofzion/neon-core'
+import {PuppetAPI, NeoInterface, CollectionAPI} from './api'
 import {sc} from "@cityofzion/neon-js";
-import {CollectionType, TraitLevel} from "./interface";
+import {CollectionType, Epoch, TraitLevel} from "./interface";
+import fs from "fs";
 
 const DEFAULT_OPTIONS: PuppetOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x3f57010287f648889d1ce5264d4fa7839fdab000'
+  scriptHash: '0x3391fbb1db055679b60982fb4da6f4c36647140e'
 }
 
 export interface PuppetOptions {
@@ -45,12 +46,17 @@ export class Puppet {
     return PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address)
   }
 
+  async createEpochFromFile(path: string, signer: wallet.Account): Promise<string> {
+    const localEpoch = JSON.parse(fs.readFileSync(path).toString()) as Epoch
+    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, localEpoch.label, localEpoch.maxTraits, localEpoch.traitLevels, signer)
+  }
+
   async decimals(): Promise<number> {
     return PuppetAPI.decimals(this.node.url, this.networkMagic, this.scriptHash)
   }
 
-  async deploy(data: object, upgrade: boolean, signer: wallet.Account): Promise<any> {
-    return PuppetAPI.deploy(this.node.url, this.networkMagic, this.scriptHash, data, upgrade, signer)
+  async deploy(signer: wallet.Account): Promise<any> {
+    return PuppetAPI.deploy(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 
   async getAttributeMod(attributeValue: number): Promise<any> {
@@ -65,8 +71,8 @@ export class Puppet {
     return PuppetAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId)
   }
 
-  async offlineMint(signer: wallet.Account): Promise<string | undefined> {
-    return PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, signer.address, signer)
+  async offlineMint(target: string, signer: wallet.Account): Promise<string | undefined> {
+    return PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, target, signer)
   }
 
   async properties(tokenId: number): Promise<any> {

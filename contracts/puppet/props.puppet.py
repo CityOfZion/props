@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Union, cast
-from boa3.builtin import CreateNewEvent, NeoMetadata, metadata, public
+from boa3.builtin import contract, CreateNewEvent, NeoMetadata, metadata, public
 from boa3.builtin.contract import abort
 from boa3.builtin.interop.blockchain import get_contract, Transaction
 from boa3.builtin.interop.contract import call_contract, update_contract, GAS
@@ -9,21 +9,17 @@ from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.storage.findoptions import FindOptions
 from boa3.builtin.interop.iterator import Iterator
 from boa3.builtin.type import UInt160
-from boa3.builtin.interop.runtime import get_network
 from boa3.builtin.interop.runtime import get_random
-from helpers.dice import roll_initial_stat_with_entropy_internal, roll_dice_with_entropy_internal
-from object.epoch import Epoch, get_current_epoch, get_epoch
 
-# TODO: set user authorization
 # TODO: Align docstring
-# TODO: Finish splitting out dice into separate contract
-# TODO: titles
-# TODO: Verify contract interoperability
-# TODO: Max Sale mechanics
+# TODO: Max Mint mechanics
+# TODO: Epoch Uniques
 # TODO: Verify upgrade
-# TODO: fixed length strings?
-# TODO: update dice rolls to use unsigned lengths
-# TODO: Update dice to set distribution in storage
+# TODO: Break our EPOCH into its own contract
+# TODO: Break out User Accounts into its own contract
+# TODO: is checkwitness needed if we get tx.sender?
+# TODO: verify drops on attributes and hit dice
+
 # -------------------------------------------
 # METADATA
 # -------------------------------------------
@@ -47,7 +43,7 @@ def manifest_metadata() -> NeoMetadata:
 # -------------------------------------------
 
 # Symbol of the Token
-TOKEN_SYMBOL = 'ISN'  # TODO_TEMPLATE
+TOKEN_SYMBOL = 'PUPPET'  # TODO_TEMPLATE
 
 # Number of decimal places
 TOKEN_DECIMALS = 0
@@ -95,6 +91,7 @@ debug = CreateNewEvent(
 
 
 # DEBUG_END
+
 # -------------------------------------------
 # NEP-11 Methods
 # -------------------------------------------
@@ -136,7 +133,10 @@ def totalSupply() -> int:
 
     :return: the total token supply deployed in the system.
     """
-    return get(TOKEN_COUNT).to_int()
+    total: bytes = get(TOKEN_COUNT)
+    if len(total) == 0:
+        return 0
+    return total.to_int()
 
 
 @public
@@ -241,8 +241,8 @@ def post_transfer(token_owner: Union[UInt160, None], to: Union[UInt160, None], t
     """
     on_transfer(token_owner, to, 1, token_id)
     if not isinstance(to, None):  # TODO: change to 'is not None' when `is` semantic is implemented
-        contract = get_contract(to)
-        if not isinstance(contract, None):  # TODO: change to 'is not None' when `is` semantic is implemented
+        recipient_contract = get_contract(to)
+        if not isinstance(recipient_contract, None):  # TODO: change to 'is not None' when `is` semantic is implemented
             call_contract(to, 'onNEP11Payment', [token_owner, 1, token_id, data])
             pass
 
@@ -296,29 +296,16 @@ def properties(token_id: bytes) -> Dict[str, Any]:
 
 
 @public
-def deploy(data: Any, upgrade: bool) -> bool:
+def deploy() -> bool:
     """
     The contracts initial entry point, on deployment.
     """
-    if upgrade:
-        return False
-
     if get(DEPLOYED).to_bool():
         return False
 
     tx = cast(Transaction, script_container)
     owner: UInt160 = tx.sender
-    network = get_network()
-    # DEBUG_START
-    # custom owner for tests, ugly hack, because TestEnginge sets an unkown tx.sender...
-    if data is not None and network == 860833102:
-        new_owner = cast(UInt160, data)
-        internal_deploy(new_owner)
-        return True
 
-    if data is None and network == 860833102:
-        return True
-    # DEBUG_END
     internal_deploy(owner)
     return True
 
@@ -326,15 +313,19 @@ def deploy(data: Any, upgrade: bool) -> bool:
 def internal_deploy(owner: UInt160) -> bool:
     put(DEPLOYED, True)
     put(TOKEN_COUNT, 0)
-    put(ACCOUNT_COUNT, 0)
+    put(ACCOUNT_COUNT, 1)
     put(MINT_FEE, INITIAL_MINT_FEE.to_bytes())
 
-    (total_accounts() + 1).to_bytes()
-
+    super_user_permissions: Dict[str, bool] = {
+        'offline_mint': True,
+        'contract_upgrade': True,
+        'set_mint_fee': True,
+        'set_epoch': True,
+        'create_epoch': True,
+        'set_permissions': True
+    }
     user: User = User()
-    x: bool = user.set_contract_upgrade(True)
-    x = user.set_offline_mint(True)
-    x = user.set_set_mint_fee(True)
+    x: bool = user.set_permissions(super_user_permissions)
     save_user(owner, user)
     return True
 
@@ -352,7 +343,6 @@ def onNEP11Payment(from_address: UInt160, amount: int, token_id: bytes, data: An
     :type data: Any
     """
     abort()
-
 
 
 @public
@@ -387,7 +377,10 @@ def total_accounts() -> int:
 
     :return: the number of accounts in the system.
     """
-    return get(ACCOUNT_COUNT).to_int()
+    total: bytes = get(ACCOUNT_COUNT)
+    if len(total) == 0:
+        return 0
+    return total.to_int()
 
 
 @public
@@ -421,7 +414,6 @@ def update(script: bytes, manifest: bytes):
     assert user.get_contract_upgrade(), "User Permission Denied"
 
     update_contract(script, manifest)
-    debug(['update called and done'])
 
 
 @public
@@ -445,19 +437,14 @@ def internal_mint(owner: UInt160) -> bytes:
     :type owner: UInt160
     :return: token_id of the token minted
     """
-    total_supply: int = totalSupply()
-    token_id: bytes = (total_supply + 1).to_bytes()
+    token_id: bytes = (totalSupply() + 1).to_bytes()
     new_puppet: Puppet = Puppet()
     x: bool = new_puppet.generate(owner, token_id)
     save_puppet(new_puppet)
     put(TOKEN_COUNT, token_id)
     user: User = get_user(owner)
-    account_id:bytes = user.get_account_id()
-    account_count: int = total_accounts()
-    if account_id.to_int() >  account_count:
-        put(ACCOUNT_COUNT, account_id)
 
-    x = user.add_owned_token(token_id)
+    x:bool = user.add_owned_token(token_id)
     save_user(owner, user)
 
     post_transfer(None, owner, token_id, None)
@@ -475,12 +462,31 @@ class User:
 
     def __init__(self):
         self._balance: int = 0
-        self._offline_mint: bool = False
-        self._contract_upgrade: bool = False
-        self._set_mint_fee: bool = False
-        self._set_titles: bool = False
+        self._permissions: Dict[str, bool] = {
+            'offline_mint': False,
+            'contract_upgrade': False,
+            'set_mint_fee': False,
+            'set_epoch': False,
+            'create_epoch': False,
+            'set_permissions': False
+        }
 
         self._account_id: bytes = (total_accounts() + 1).to_bytes()
+
+    def export(self) -> Dict[str, Any]:
+        exported: Dict[str, Any] = {
+            'balance': self._balance,
+            'account_id': self._account_id,
+            'permissions': self._permissions
+        }
+        return exported
+
+    def set_permissions(self, permissions: Dict[str, bool]) -> bool:
+        perm_clone = self._permissions
+        for key in permissions.keys():
+            perm_clone[key] = permissions[key]
+        self._permissions = perm_clone
+        return True
 
     def get_account_id(self) -> bytes:
         return self._account_id
@@ -504,34 +510,30 @@ class User:
         return True
 
     def get_offline_mint(self) -> bool:
-        return self._offline_mint
+        return self._permissions['offline_mint']
 
-    def set_offline_mint(self, value: bool) -> bool:
-        self._offline_mint = value
-        return True
+    def get_set_permissions(self) -> bool:
+        return self._permissions['set_permissions']
 
     def get_contract_upgrade(self) -> bool:
-        return self._contract_upgrade
-
-    def set_contract_upgrade(self, value: bool) -> bool:
-        self._contract_upgrade = value
-        return True
+        return self._permissions['contract_upgrade']
 
     def get_set_mint_fee(self) -> bool:
-        return self._set_mint_fee
+        return self._permissions['set_mint_fee']
 
-    def set_set_mint_fee(self, value: bool) -> bool:
-        self._set_mint_fee = value
-        return True
+    def get_create_epoch(self) -> bool:
+        return self._permissions['create_epoch']
 
-    def get_set_titles(self) -> bool:
-        return self._set_titles
-
-    def set_set_titles(self, value: bool) -> bool:
-        self._set_titles = value
-        return True
+    def get_set_epoch(self) -> bool:
+        return self._permissions['set_epoch']
 
 
+@public
+def get_user_json(address: UInt160) -> Dict[str, Any]:
+    user: User = get_user(address)
+    return user.export()
+
+@public
 def get_user(address: UInt160) -> User:
     user_bytes: bytes = get_user_raw(address)
     if len(user_bytes) != 0:
@@ -545,6 +547,11 @@ def get_user_raw(address: UInt160) -> bytes:
 
 
 def save_user(address: UInt160, user: User) -> bool:
+    account_id: bytes = user.get_account_id()
+    account_count: int = total_accounts()
+    if account_id.to_int() > account_count:
+        put(ACCOUNT_COUNT, account_id)
+
     put(mk_user_key(address), serialize(user))
     return True
 
@@ -556,11 +563,227 @@ def mk_user_key(address: UInt160) -> bytes:
 def mk_token_index_key(account_id: bytes) -> bytes:
     return TOKEN_INDEX_PREFIX + account_id + b'_'
 
+
+@public
+def set_user_permissions(user: UInt160, permissions: Dict[str, bool]) -> bool:
+    tx = cast(Transaction, script_container)
+    invoking_user: User = get_user(tx.sender)
+    assert invoking_user.get_set_permissions(), "User Permission Denied"
+
+    impacted_user: User = get_user(user)
+    x: bool = impacted_user.set_permissions(permissions)
+    save_user(user, impacted_user)
+    return x
+
+
+#############EPOCH#########################
+#############EPOCH#########################
+#############EPOCH#########################
+
+EPOCH_KEY = b'e'
+CURRENT_EPOCH = b'!CURRENT_EPOCH'
+TOTAL_EPOCHS = b'!TOTAL_EPOCHS'
+
+
+@public
+def total_epochs() -> int:
+    total: bytes = get(TOTAL_EPOCHS)
+    if len(total) == 0:
+        return 0
+    return total.to_int()
+
+
+@public
+def set_current_epoch(epoch_id: bytes) -> bool:
+    tx = cast(Transaction, script_container)
+    user: User = get_user(tx.sender)
+    assert user.get_set_epoch(), "User Permission Denied"
+    put(CURRENT_EPOCH, epoch_id)
+    return True
+
+
+@public
+def get_current_epoch() -> int:
+    return get(CURRENT_EPOCH).to_int()
+
+
+@public
+def create_epoch(label: bytes, max_traits: bytes, traits: List) -> int:
+    tx = cast(Transaction, script_container)
+    user: User = get_user(tx.sender)
+    assert user.get_create_epoch(), "User Permission Denied"
+
+    new_epoch: Epoch = Epoch()
+    x: bool = new_epoch.load(label, max_traits, traits)
+    epoch_id: bytes = new_epoch.get_id()
+    epoch_id_int: int = epoch_id.to_int()
+    save_epoch(new_epoch)
+    put(TOTAL_EPOCHS, epoch_id)
+    return epoch_id_int
+
+
+class CollectionPointer:
+    def __init__(self, collection_id: int, idx: int):
+        self.collection_id: int = collection_id
+        self.idx: int = idx
+
+    def export(self) -> Dict[str, int]:
+        exported: Dict[str, int] = {
+            "collection_id": self.collection_id,
+            "index": self.idx
+        }
+        return exported
+
+    def get_value(self) -> bytes:
+        cid: int = self.collection_id
+        value: bytes = Collection.get_collection_element(cid.to_bytes(), self.idx)
+        return value
+
+
+class TraitLevel:
+
+    def __init__(self, drop_score: bytes, unique: bool, collection_pointers: List):
+        self._drop_score: int = drop_score.to_int()
+        self._unique: bool = unique
+        traits: [CollectionPointer] = []
+        for pointer in collection_pointers:
+            pointer_list: List = cast(List, pointer)
+            collection_id: int = cast(int, pointer_list[0])
+            idx: int = cast(int, pointer_list[1])
+            p: CollectionPointer = CollectionPointer(collection_id, idx)
+            traits.append(p)
+        self._traits: [CollectionPointer] = traits
+
+    def dropped(self, roll: int) -> bool:
+        # // TODO: handle unique state here
+        dropped: bool = roll < self._drop_score
+        return dropped
+
+    def export(self) -> Dict[str, Any]:
+        traits: List[Dict] = []
+        for trait in self._traits:
+            trait_json: Dict[str, Any] = trait.export()
+            traits.append(trait_json)
+
+        exported: Dict[str, Any] = {
+            "drop_score": self._drop_score,
+            "unique": self._unique,
+            "traits": traits
+        }
+        return exported
+
+    def can_mint(self) -> bool:
+        available_traits: int = len(self._traits)
+        return available_traits > 0
+
+    def mint(self, entropy: bytes) -> bytes:
+        max_index: int = len(self._traits) - 1
+        entropy_int: int = entropy.to_int()
+        idx: int = (max_index * entropy_int) // 255
+        trait: CollectionPointer = self._traits[idx]
+        return trait.get_value()
+
+
+class Epoch:
+
+    def __init__(self):
+        self._label: bytes = b''
+        self._max_traits: int = 0
+        self._trait_levels: [TraitLevel] = []
+        self._id: bytes = (total_epochs() + 1).to_bytes()
+
+    def export(self) -> Dict[str, Any]:
+
+        trait_levels: List[Dict] = []
+        for level in self._trait_levels:
+            level_json: Dict[str, Any] = level.export()
+            trait_levels.append(level_json)
+
+        exported: Dict[str, Any] = {
+            "label": self._label,
+            "maxTraits": self._max_traits,
+            "traitLevels": trait_levels
+        }
+        return exported
+
+    def load(self, label: bytes, max_traits: bytes, trait_levels: List) -> bool:
+        self._label = label
+        self._max_traits = max_traits.to_int()
+        new_trait_levels: [TraitLevel] = []
+        for trait_level in trait_levels:
+            trait_list: List = cast(List, trait_level)
+            drop_score: bytes = cast(bytes, trait_list[0])
+            unique: bool = cast(bool, trait_list[1])
+            collection_pointers: List = cast(List, trait_list[2])
+            t: TraitLevel = TraitLevel(drop_score, unique, collection_pointers)
+            new_trait_levels.append(t)
+        self._trait_levels = new_trait_levels
+        return True
+
+    def get_label(self) -> bytes:
+        return self._label
+
+    def get_id(self) -> bytes:
+        return self._id
+
+    def get_traits(self) -> List[TraitLevel]:
+        return self._trait_levels
+
+    def mint_traits(self) -> [bytes]:
+        entropy: bytes = get_random().to_bytes()
+
+        traits: [bytes] = []
+
+        max_traits: int = self._max_traits
+        trait_levels: [TraitLevel] = self._trait_levels
+        for i in range(max_traits):
+            slot_entropy = entropy[i: (i+1) * 3]
+
+            roll: int = Dice.rand_between(0, 9999)
+            for trait_level in trait_levels:
+                if trait_level.dropped(roll):
+                    if trait_level.can_mint():
+                        new_trait: bytes = trait_level.mint(slot_entropy[2].to_bytes())
+                        traits.append(new_trait)
+                    break
+
+        return traits
+
+
+@public
+def get_epoch_json(epoch_id: bytes) -> Dict[str, Any]:
+    epoch: Epoch = get_epoch(epoch_id)
+    return epoch.export()
+
+@public
+def get_epoch(epoch_id: bytes) -> Epoch:
+    epoch_bytes: bytes = get_epoch_raw(epoch_id)
+    return cast(Epoch, deserialize(epoch_bytes))
+
+
+def get_epoch_raw(epoch_id: bytes) -> bytes:
+    """
+    Gets the serialized puppet definition
+    @param token_id: the unique puppet identifier
+    @return: a serialize puppet
+    """
+    return get(mk_epoch_key(epoch_id))
+
+
+def save_epoch(epoch: Epoch) -> bool:
+    id: bytes = epoch.get_id()
+    put(mk_epoch_key(id), serialize(epoch))
+    return True
+
+
+def mk_epoch_key(epoch_id: bytes) -> bytes:
+    return EPOCH_KEY + epoch_id
+
+
 #############################
 ####### Puppet ###########
 #############################
 #############################
-
 
 TOKEN_PREFIX = b't'
 
@@ -594,6 +817,7 @@ class Puppet:
 
     def __init__(self):
         self._token_id: bytes = b''
+        self._epoch: bytes = b''
         self._charisma: int = 0
         self._constitution: int = 0
         self._dexterity: int = 0
@@ -618,6 +842,7 @@ class Puppet:
             'owner': self._owner,
             'tokenId': self._token_id,
             'traits': self._traits,
+            'epoch': self._epoch
         }
         return exported
 
@@ -626,15 +851,29 @@ class Puppet:
         Generates a puppet's core features
         @return: boolean indicating success
         """
-        entropy: bytes = get_random().to_bytes()
         # generate base attributes
-        self._charisma = roll_initial_stat_with_entropy_internal(entropy[0:2])
-        self._constitution = roll_initial_stat_with_entropy_internal(entropy[2:4])
-        self._dexterity = roll_initial_stat_with_entropy_internal(entropy[4:6])
-        self._intelligence = roll_initial_stat_with_entropy_internal(entropy[6:8])
-        self._strength = roll_initial_stat_with_entropy_internal(entropy[8:10])
-        self._wisdom = roll_initial_stat_with_entropy_internal(entropy[10:12])
-        self._hit_die = get_hit_die(roll_dice_with_entropy_internal("d4", 1, entropy[12].to_bytes())[0] - 1)
+
+        initial_roll_collection_id: int = 1
+        charisma: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
+        self._charisma = charisma
+
+        constitution: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
+        self._constitution = constitution
+
+        dexterity: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
+        self._dexterity = dexterity
+
+        intelligence: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
+        self._intelligence = intelligence
+
+        strength: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
+        self._strength = strength
+
+        wisdom: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
+        self._wisdom = wisdom
+
+        hd: str = get_hit_die(Dice.rand_between(0, 3))
+        self._hit_die = hd
 
         # mint traits
         epoch_id: int = get_current_epoch()
@@ -642,6 +881,7 @@ class Puppet:
         epoch: Epoch = get_epoch(epoch_id_bytes)
         traits: [bytes] = epoch.mint_traits()
         self._traits = traits
+        self._epoch = epoch_id_bytes
 
         # Generate a puppet token_id and set the owner
         self._owner = owner
@@ -701,6 +941,8 @@ class Puppet:
         token_id_bytes: bytes = self._token_id
         token_id_int: int = token_id_bytes.to_int()
         token_id_string: str = itoa(token_id_int, 10)
+        epoch_bytes: bytes = self._epoch
+        epoch_int: int = epoch_bytes.to_int()
         exported: Dict[str, Any] = {
             'armorClass': self.get_armor_class(),
             'attributes': {
@@ -716,6 +958,7 @@ class Puppet:
             'owner': self._owner,
             'tokenId': token_id_int,
             'tokenURI': 'https://props.coz.io/puppets/' + token_id_string,
+            'epoch': epoch_int,
             'traits': self._traits,
         }
         return exported
@@ -788,6 +1031,7 @@ def get_hit_die(roll: int) -> str:
     return HIT_DIE_OPTIONS[roll]
 
 
+@public
 def get_puppet(token_id: bytes) -> Puppet:
     """
     A factory method to get a puppet from storage
@@ -798,6 +1042,7 @@ def get_puppet(token_id: bytes) -> Puppet:
     return cast(Puppet, deserialize(puppet_bytes))
 
 
+@public
 def get_puppet_json(token_id: bytes) -> Dict[str, Any]:
     """
     Gets a dict representation of the puppet's base stats
@@ -808,7 +1053,6 @@ def get_puppet_json(token_id: bytes) -> Dict[str, Any]:
     return puppet.get_state()
 
 
-@public
 def get_puppet_raw(token_id: bytes) -> bytes:
     """
     Gets the serialized puppet definition
@@ -831,3 +1075,36 @@ def save_puppet(puppet: Puppet) -> bool:
 
 def mk_token_key(token_id: bytes) -> bytes:
     return TOKEN_PREFIX + token_id
+
+############INTERFACES###########
+############INTERFACES###########
+############INTERFACES###########
+
+
+@contract('0xa80d045ca80e0421aa855c3a000bfbe5dddadced')
+class Collection:
+
+    @staticmethod
+    def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
+        pass
+
+    @staticmethod
+    def sample_from_collection(collection_id: int) -> bytes:
+        pass
+
+    @staticmethod
+    def get_collection_element(collection_id: bytes, index: int) -> bytes:
+        pass
+
+
+@contract('0x68021f61e872098627da52dc82ca793575c83826')
+class Dice:
+
+    @staticmethod
+    def rand_between(start: int, end: int) -> int:
+        pass
+
+    @staticmethod
+    def map_bytes_onto_range(start: int, end: int, entropy: bytes) -> int:
+        pass
+

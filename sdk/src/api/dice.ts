@@ -1,5 +1,7 @@
 import {sc} from "@cityofzion/neon-js";
+import {wallet} from "@cityofzion/neon-core";
 import {NeoInterface} from "./interface";
+import {variableInvoke} from "../helpers";
 
 export class DiceAPI {
 
@@ -7,21 +9,16 @@ export class DiceAPI {
     node: string,
     networkMagic: number,
     contractHash: string,
-    die: string
-  ): Promise<number> {
+    die: string,
+    signer?: wallet.Account
+  ): Promise<number | string> {
     const method = "roll_die";
     const param = [
       sc.ContractParam.string(die)
     ]
-    const res = await NeoInterface.testInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      param
-    );
-    if (res === undefined || res.length === 0) {
-      throw new Error("unrecognized response");
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
     }
     return parseInt(res[0].value as string);
   }
@@ -32,76 +29,61 @@ export class DiceAPI {
     contractHash: string,
     die: string,
     precision: number,
-    entropy: string
-  ): Promise<number> {
+    entropy: string,
+    signer?: wallet.Account
+  ): Promise<number[] | string> {
     const method = "roll_dice_with_entropy";
     const param = [
       sc.ContractParam.string(die),
       sc.ContractParam.integer(precision),
       sc.ContractParam.string(entropy)
     ]
-    const res = await NeoInterface.testInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      param
-    );
-    if (res === undefined || res.length === 0) {
-      throw new Error("unrecognized response");
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+    return [parseInt(res[0].value as string)];
+  }
+
+  static async randBetween(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    start: number,
+    end: number,
+    signer?: wallet.Account
+  ): Promise<number | string> {
+    const method = "rand_between";
+    const param = [
+      sc.ContractParam.integer(start),
+      sc.ContractParam.integer(end)
+    ]
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
     }
     return parseInt(res[0].value as string);
   }
 
-  static async rollInitialStat(
+  static async mapBytesOntoRange(
     node: string,
     networkMagic: number,
     contractHash: string,
-  ): Promise<any> {
-    const method = "roll_initial_stat";
-    try {
-      const res = await NeoInterface.testInvoke(
-        node,
-        networkMagic,
-        contractHash,
-        method,
-        [],
-      );
-      if (res === undefined || res.length === 0) {
-        throw new Error("unrecognized response");
-      }
-      return res[0].value as number;
-    } catch (e) {
-      console.log(e)
-      return
-    }
-  }
-
-  static async rollInitialStatWithEntropy(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-    entropy: string
-  ): Promise<any> {
-    const method = "roll_initial_stat";
+    start: number,
+    end: number,
+    entropy: string,
+    signer?: wallet.Account
+  ): Promise<number | string> {
+    const method = "map_bytes_onto_range";
     const param = [
+      sc.ContractParam.integer(start),
+      sc.ContractParam.integer(end),
       sc.ContractParam.string(entropy)
     ]
-    try {
-      const res = await NeoInterface.testInvoke(
-        node,
-        networkMagic,
-        contractHash,
-        method,
-        param
-      );
-      if (res === undefined || res.length === 0) {
-        throw new Error("unrecognized response");
-      }
-      return res;
-    } catch (e) {
-      console.log(e)
-      return
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
     }
+    return parseInt(res[0].value as string);
   }
 }

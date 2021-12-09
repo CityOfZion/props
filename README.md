@@ -1,21 +1,20 @@
-# isengard
-isengard project
+# Props
 
+## Quickstart
+Currently, setup is handled using node.
 
-## Running
-* To run:
+1) `neoxp run -s 1`
+2) `npm install` from project root
+3) `npm run deploy` to deploy the contracts
+4) `npm run initialize` to load static data into the contracts
+5) `npm run mintPuppets` to mint a bunch of puppets to the coz account.
+5) start developing; You can reference the sdk tests for usage
 
-1. transfer gas to the coz account on your local instance
-2. deploy the smart contract to the network
-3. Refer to the tests directory for use. `props.puppet` requires a deploy invocation before use.
-4. reference the sdk tests to use the abstracted methods.  More will be added as the project matures.
 
 ## Bootstrap Todo:
 * CI for testing
-* auto setup and deployment script
 * Contract Unit Tests
-* Bootstrap react app
-* dice prop needs a generic `randbetween()`
+
 
 ## Useful links:
 + Miro Board: https://miro.com/app/board/o9J_lrXdZTE=/?invite_link_id=178542714739

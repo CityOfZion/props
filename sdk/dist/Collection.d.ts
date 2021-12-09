@@ -11,9 +11,14 @@ export declare class Collection {
     init(): Promise<void>;
     get node(): rpc.RPCClient;
     get scriptHash(): string;
-    totalCollections(): Promise<number | undefined>;
-    createCollection(description: string, collectionType: string, extra: string, values: string[], signer: wallet.Account): Promise<string | undefined>;
-    getCollection(collectionId: number): Promise<string | undefined>;
-    getCollectionElement(collectionId: number, index: number): Promise<string | undefined>;
-    getCollectionJSON(collectionId: number): Promise<CollectionType | undefined>;
+    createCollection(description: string, collectionType: string, extra: string, values: string[], signer: wallet.Account): Promise<string>;
+    createFromFile(path: string, signer: wallet.Account): Promise<string>;
+    getCollectionJSON(collectionId: number, signer?: wallet.Account): Promise<CollectionType>;
+    getCollection(collectionId: number, signer?: wallet.Account): Promise<string>;
+    getCollectionElement(collectionId: number, index: number, signer?: wallet.Account): Promise<string>;
+    getCollectionLength(collectionId: number, signer?: wallet.Account): Promise<number>;
+    getCollectionValues(collectionId: number, signer?: wallet.Account): Promise<string[] | any>;
+    mapBytesOntoCollection(collectionId: number, entropy: string, signer?: wallet.Account): Promise<string>;
+    sampleFromCollection(collectionId: number, signer?: wallet.Account): Promise<string>;
+    totalCollections(signer?: wallet.Account): Promise<number | undefined>;
 }

@@ -1,0 +1,24 @@
+{
+  "description": "A collection of titles for puppets",
+  "type": "string",
+  "extra": "",
+  "values": [
+    "Crypto Jesus",
+    "Bogdanoff",
+    "White Knuckles",
+    "HODL Gang",
+    "Sentinel",
+    "Mouse",
+    "Trinity",
+    "Neo",
+    "Morpheus",
+    "Cipher",
+    "First Blessing",
+    "Second Blessing",
+    "Third Blessing",
+    "Assistant to the Regional Manager",
+    "Da's little helper",
+    "long block",
+    "white rabbit"
+  ]
+}

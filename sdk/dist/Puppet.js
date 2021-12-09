@@ -1,13 +1,17 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Puppet = void 0;
 const lodash_1 = require("lodash");
 const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("./api");
 const neon_js_1 = require("@cityofzion/neon-js");
+const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x3f57010287f648889d1ce5264d4fa7839fdab000'
+    scriptHash: '0x3391fbb1db055679b60982fb4da6f4c36647140e'
 };
 class Puppet {
     constructor(options = {}) {
@@ -33,11 +37,15 @@ class Puppet {
     async balanceOf(address) {
         return api_1.PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address);
     }
+    async createEpochFromFile(path, signer) {
+        const localEpoch = JSON.parse(fs_1.default.readFileSync(path).toString());
+        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, localEpoch.label, localEpoch.maxTraits, localEpoch.traitLevels, signer);
+    }
     async decimals() {
         return api_1.PuppetAPI.decimals(this.node.url, this.networkMagic, this.scriptHash);
     }
-    async deploy(data, upgrade, signer) {
-        return api_1.PuppetAPI.deploy(this.node.url, this.networkMagic, this.scriptHash, data, upgrade, signer);
+    async deploy(signer) {
+        return api_1.PuppetAPI.deploy(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async getAttributeMod(attributeValue) {
         return api_1.PuppetAPI.getAttributeMod(this.node.url, this.networkMagic, this.scriptHash, attributeValue);
@@ -48,8 +56,8 @@ class Puppet {
     async ownerOf(tokenId) {
         return api_1.PuppetAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId);
     }
-    async offlineMint(signer) {
-        return api_1.PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, signer.address, signer);
+    async offlineMint(target, signer) {
+        return api_1.PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, target, signer);
     }
     async properties(tokenId) {
         return api_1.PuppetAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId);

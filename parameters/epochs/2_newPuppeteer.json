@@ -1,0 +1,15 @@
+{
+  "label": "Puppeteer",
+  "traitLevels": [
+    {
+      "trait": "color",
+      "traitLevels": [
+        {
+          "drop_score": 7000,
+          "unique": false,
+          "traits": []
+        }
+      ]
+    }
+  ]
+}

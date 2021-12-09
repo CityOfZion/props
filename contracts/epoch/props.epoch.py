@@ -98,12 +98,32 @@ class TraitLevel:
         return trait.get_value()
 
 
+class Trait:
+    def __init__(self):
+        self._label: bytes = b''
+        self._trait_levels: [TraitLevel] = []
+
+    def get_label(self) -> bytes:
+        return self._label
+
+    def mint(self) -> bytes:
+        slot_entropy = entropy[i: (i+1) * 3]
+        trait_levels: [TraitLevel] = self._trait_levels
+        roll: int = Dice.rand_between(0, 9999)
+        for trait_level in trait_levels:
+            if trait_level.dropped(roll):
+                if trait_level.can_mint():
+                    new_trait: bytes = trait_level.mint(slot_entropy[2].to_bytes())
+                    traits.append(new_trait)
+                break
+
+
 class Epoch:
 
     def __init__(self):
         self._label: bytes = b''
         self._max_traits: int = 0
-        self._trait_levels: [TraitLevel] = []
+        self._traits: [Trait] = []
         self._id: bytes = (total_epochs() + 1).to_bytes()
 
     def export(self) -> Dict[str, Any]:
@@ -143,24 +163,15 @@ class Epoch:
     def get_traits(self) -> List[TraitLevel]:
         return self._trait_levels
 
-    def mint_traits(self) -> [bytes]:
-        entropy: bytes = get_random().to_bytes()
+    def mint_traits(self) -> Dict[str, Any]:
+        traits: Dict[str, Any] = {}
 
-        traits: [bytes] = []
-
-        max_traits: int = self._max_traits
-        trait_levels: [TraitLevel] = self._trait_levels
-        for i in range(max_traits):
-            slot_entropy = entropy[i: (i+1) * 3]
-
-            roll: int = Dice.rand_between(0, 9999)
-            for trait_level in trait_levels:
-                if trait_level.dropped(roll):
-                    if trait_level.can_mint():
-                        new_trait: bytes = trait_level.mint(slot_entropy[2].to_bytes())
-                        traits.append(new_trait)
-                    break
-
+        trait_objects: [Trait] = self._traits
+        for trait_object in trait_objects:
+            label: str = trait_object.get_label() #this is a cast and may be breaking
+            trait: bytes = trait_object.mint()
+            if len(trait) > 0:
+                traits[label] = trait
         return traits
 
 

@@ -2,26 +2,21 @@ import { merge } from 'lodash'
 import {u, rpc, wallet, CONST} from '@cityofzion/neon-core'
 import {DiceAPI, NeoInterface, PuppetAPI} from './api'
 import {sc} from "@cityofzion/neon-js";
-import {CollectionType} from "./interface";
+import {CollectionType, PropConstructorOptions} from "./interface";
 import {CollectionAPI} from "./api/collection";
 import fs from 'fs'
 import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
-const DEFAULT_OPTIONS: CollectionOptions = {
+const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
   scriptHash: '0xa80d045ca80e0421aa855c3a000bfbe5dddadced'
 }
 
-export interface CollectionOptions {
-  node?: string
-  scriptHash?: string
-}
-
 export class Collection {
-  private options: CollectionOptions
+  private options: PropConstructorOptions
   private networkMagic: number = -1
 
-  constructor(options: CollectionOptions = {}) {
+  constructor(options: PropConstructorOptions = {}) {
     this.options = merge({}, DEFAULT_OPTIONS, options)
   }
 

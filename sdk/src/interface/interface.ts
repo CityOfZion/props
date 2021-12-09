@@ -31,7 +31,7 @@ export interface CollectionType {
   valuesRaw?: any[]
 }
 
-export interface Epoch {
+export interface EpochType {
   label: string,
   maxTraits: number,
   traitLevels: TraitLevel[]
@@ -46,4 +46,9 @@ export interface TraitLevel {
 export interface CollectionPointer {
   collection_id: number,
   index: number
+}
+
+export interface PropConstructorOptions {
+  node?: string
+  scriptHash?: string
 }

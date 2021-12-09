@@ -14,4 +14,5 @@ __exportStar(require("./dice"), exports);
 __exportStar(require("./puppet"), exports);
 __exportStar(require("./interface"), exports);
 __exportStar(require("./collection"), exports);
+__exportStar(require("./epoch"), exports);
 //# sourceMappingURL=index.js.map

@@ -1,13 +1,9 @@
 import { rpc, wallet } from '@cityofzion/neon-core';
-import { CollectionType } from "./interface";
-export interface CollectionOptions {
-    node?: string;
-    scriptHash?: string;
-}
+import { CollectionType, PropConstructorOptions } from "./interface";
 export declare class Collection {
     private options;
     private networkMagic;
-    constructor(options?: CollectionOptions);
+    constructor(options?: PropConstructorOptions);
     init(): Promise<void>;
     get node(): rpc.RPCClient;
     get scriptHash(): string;

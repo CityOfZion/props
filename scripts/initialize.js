@@ -14,6 +14,8 @@ network.wallets.forEach( (walletObj) => {
 
 
 async function main() {
+    let result, txid
+
     const signer = network.wallets[0].wallet
 
     const puppet = await new sdk.Puppet({node: NODE})
@@ -21,6 +23,9 @@ async function main() {
 
     const collection = await new sdk.Collection()
     await collection.init()
+
+    const epoch = await new sdk.Epoch()
+    await epoch.init()
 
     console.log('\n' +
         '//////////COLLECTIONS///////////////\n' +
@@ -33,12 +38,33 @@ async function main() {
     let files = fs.readdirSync(basePath)
     for await (let file of files) {
         console.log("Creating Collection: " + file)
-        let txid = await collection.createFromFile(basePath + '/' + file, signer)
+        txid = await collection.createFromFile(basePath + '/' + file, signer)
         console.log("  txid: ", txid)
         await sdk.helpers.sleep(TIME_CONSTANT)
-        let result = await sdk.helpers.txDidComplete(NODE, txid, true)
+        result = await sdk.helpers.txDidComplete(NODE, txid, true)
         console.log("  collection_id: ", result[0], '\n')
     }
+
+
+    console.log('\n' +
+        '//////////EPOCH///////////////\n' +
+        '//////////EPOCH///////////////\n' +
+        '//////////EPOCH///////////////\n'
+    )
+
+    console.log('\nDeploying all epochs: ')
+    basePath = 'parameters/epochs'
+    files = fs.readdirSync(basePath)
+
+    for await (let file of files) {
+        console.log("Creating Epoch: " + file)
+        txid = await epoch.createEpochFromFile(basePath + '/' + file, signer)
+        console.log("  txid: ", txid)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        result = await sdk.helpers.txDidComplete(NODE, txid, true)
+        console.log("  epoch_id: ", result[0], '\n')
+    }
+
 
     console.log('\n' +
         '//////////PUPPET///////////////\n' +
@@ -50,21 +76,9 @@ async function main() {
     txid = await puppet.deploy(signer)
     console.log('  txid: ', txid)
     await sdk.helpers.sleep(TIME_CONSTANT)
-    let result = await sdk.helpers.txDidComplete(NODE, txid, true)
+    result = await sdk.helpers.txDidComplete(NODE, txid, true)
     console.log("  response: ", result[0])
 
-    console.log('\ndeploy all epochs and set the first as active: ')
-    basePath = 'parameters/epochs'
-    files = fs.readdirSync(basePath)
-
-    for await (let file of files) {
-        console.log("Creating Epoch: " + file)
-        txid = await puppet.createEpochFromFile(basePath + '/' + file, signer)
-        console.log("  txid: ", txid)
-        await sdk.helpers.sleep(TIME_CONSTANT)
-        result = await sdk.helpers.txDidComplete(NODE, txid, true)
-        console.log("  epoch_id: ", result[0], '\n')
-    }
     console.log("setting epoch 1 as active")
     txid = await puppet.setCurrentEpoch(1, signer)
     await sdk.helpers.sleep(2000)

@@ -2,22 +2,18 @@ import { merge } from 'lodash'
 import {rpc, wallet, CONST} from '@cityofzion/neon-core'
 import {DiceAPI, NeoInterface} from './api'
 import {sc} from "@cityofzion/neon-js";
+import {PropConstructorOptions} from "./interface";
 
-const DEFAULT_OPTIONS: DiceOptions = {
+const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
   scriptHash: '0x68021f61e872098627da52dc82ca793575c83826'
 }
 
-export interface DiceOptions {
-  node?: string
-  scriptHash?: string
-}
-
 export class Dice {
-  private options: DiceOptions
+  private options: PropConstructorOptions
   private networkMagic: number = -1
 
-  constructor(options: DiceOptions = {}) {
+  constructor(options: PropConstructorOptions = {}) {
     this.options = merge({}, DEFAULT_OPTIONS, options)
   }
 

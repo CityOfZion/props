@@ -1,25 +1,19 @@
 import { merge } from 'lodash'
-import {rpc, u, wallet} from '@cityofzion/neon-core'
-import {PuppetAPI, NeoInterface, CollectionAPI} from './api'
+import {rpc, wallet} from '@cityofzion/neon-core'
+import {PuppetAPI, NeoInterface} from './api'
 import {sc} from "@cityofzion/neon-js";
-import {CollectionType, Epoch, TraitLevel} from "./interface";
-import fs from "fs";
+import {PropConstructorOptions} from "./interface";
 
-const DEFAULT_OPTIONS: PuppetOptions = {
+const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x3391fbb1db055679b60982fb4da6f4c36647140e'
-}
-
-export interface PuppetOptions {
-  node?: string
-  scriptHash?: string
+  scriptHash: '0x6649331674950e1ad598dc6f0fdf8177884fd015'
 }
 
 export class Puppet {
-  private options: PuppetOptions
+  private options: PropConstructorOptions
   private networkMagic: number = -1
 
-  constructor(options: PuppetOptions = {}) {
+  constructor(options: PropConstructorOptions = {}) {
     this.options = merge({}, DEFAULT_OPTIONS, options)
   }
 
@@ -44,11 +38,6 @@ export class Puppet {
 
   async balanceOf(address: string): Promise<number> {
     return PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address)
-  }
-
-  async createEpochFromFile(path: string, signer: wallet.Account): Promise<string> {
-    const localEpoch = JSON.parse(fs.readFileSync(path).toString()) as Epoch
-    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, localEpoch.label, localEpoch.maxTraits, localEpoch.traitLevels, signer)
   }
 
   async decimals(): Promise<number> {
@@ -137,27 +126,11 @@ export class Puppet {
     return PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, signer)
   }
 
-  async totalEpochs(): Promise<number | undefined> {
-    return PuppetAPI.totalEpochs(this.node.url, this.networkMagic, this.scriptHash)
-  }
-
   async setCurrentEpoch(epoch_id: number, signer: wallet.Account): Promise<boolean | undefined> {
     return PuppetAPI.setCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash, epoch_id, signer)
   }
 
   async getCurrentEpoch(): Promise<number | undefined> {
     return PuppetAPI.getCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash)
-  }
-
-  async createEpoch(label: string, maxTraits: number, traitLevels: TraitLevel[], signer: wallet.Account): Promise<string | undefined> {
-    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, maxTraits, traitLevels, signer)
-  }
-
-  async getEpochJSON(epochId: number): Promise<string | undefined> {
-    return PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId)
-  }
-
-  async pickTraits(signer: wallet.Account): Promise<string | undefined> {
-    return PuppetAPI.pickTraits(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 }

@@ -59,18 +59,17 @@ describe("Collections tests", function() {
             traits.push(generateName())
         }
 
-        const res = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
+        const txid = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
         await sleep(2000)
 
-        const client = new Neon.rpc.RPCClient(NODE)
-        const tx = await client.getApplicationLog(res)
-        console.log('gas consumed: ', tx.executions[0].gasconsumed / 10 ** 8)
+        await sdk.helpers.txDidComplete(NODE, txid, true)
 
         const totalCollections = await collection.totalCollections()
 
         const res2 = await collection.getCollectionJSON(totalCollections)
 
         traits.forEach((trait, i) => {
+            console.log(trait, res2.values[i])
             assert(trait === res2.values[i])
         })
 
@@ -105,7 +104,7 @@ describe("Collections tests", function() {
 
     it("should create a small collection and get the values", async() => {
 
-        /*
+
         const cozWallet = network.wallets[0].wallet
 
         const traits = []
@@ -120,18 +119,15 @@ describe("Collections tests", function() {
         await sdk.helpers.txDidComplete(NODE, res, true)
 
         const totalCollections = await collection.totalCollections()
-        */
+
         const res2 = await collection.getCollectionValues(8)
 
-        console.log(res2)
-        /*
         let value
         traits.forEach((trait, i) => {
             value = Neon.u.hexstring2str(res2[i])
             assert(trait === value)
         })
 
-         */
     })
 
     it("should uniformly sample from the range of values in a collection", async() => {

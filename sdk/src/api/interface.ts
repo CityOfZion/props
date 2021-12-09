@@ -1,5 +1,5 @@
-import Neon, { rpc, u } from "@cityofzion/neon-js";
-import StackItemJson, { wallet } from "@cityofzion/neon-core";
+import Neon, {rpc, u} from "@cityofzion/neon-js";
+import StackItemJson, { wallet, tx } from "@cityofzion/neon-core";
 import {BigInteger} from "@cityofzion/neon-core/lib/u";
 
 

@@ -1,17 +1,13 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Puppet = void 0;
 const lodash_1 = require("lodash");
 const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("./api");
 const neon_js_1 = require("@cityofzion/neon-js");
-const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x3391fbb1db055679b60982fb4da6f4c36647140e'
+    scriptHash: '0x6649331674950e1ad598dc6f0fdf8177884fd015'
 };
 class Puppet {
     constructor(options = {}) {
@@ -36,10 +32,6 @@ class Puppet {
     }
     async balanceOf(address) {
         return api_1.PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address);
-    }
-    async createEpochFromFile(path, signer) {
-        const localEpoch = JSON.parse(fs_1.default.readFileSync(path).toString());
-        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, localEpoch.label, localEpoch.maxTraits, localEpoch.traitLevels, signer);
     }
     async decimals() {
         return api_1.PuppetAPI.decimals(this.node.url, this.networkMagic, this.scriptHash);
@@ -104,23 +96,11 @@ class Puppet {
     async update(script, manifest, signer) {
         return api_1.PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, signer);
     }
-    async totalEpochs() {
-        return api_1.PuppetAPI.totalEpochs(this.node.url, this.networkMagic, this.scriptHash);
-    }
     async setCurrentEpoch(epoch_id, signer) {
         return api_1.PuppetAPI.setCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash, epoch_id, signer);
     }
     async getCurrentEpoch() {
         return api_1.PuppetAPI.getCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash);
-    }
-    async createEpoch(label, maxTraits, traitLevels, signer) {
-        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, maxTraits, traitLevels, signer);
-    }
-    async getEpochJSON(epochId) {
-        return api_1.PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId);
-    }
-    async pickTraits(signer) {
-        return api_1.PuppetAPI.pickTraits(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
 }
 exports.Puppet = Puppet;

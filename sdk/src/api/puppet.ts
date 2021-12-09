@@ -1,10 +1,9 @@
 import {InteropInterface, NeoInterface} from "./interface";
 import Neon, { sc, u } from "@cityofzion/neon-js";
 import { wallet } from "@cityofzion/neon-core";
-import StackItem, {StackItemJson, StackItemLike, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
-import {CollectionPointer, CollectionType, Epoch, PuppetType, TraitLevel} from "../interface";
-import {ContractParamJson, ContractParamLike} from "@cityofzion/neon-core/lib/sc/ContractParam";
-import {formatter, parseToJSON} from "../helpers";
+import {StackItemJson, StackItemLike, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
+import {PuppetType} from "../interface";
+import {formatter} from "../helpers";
 
 export class PuppetAPI {
 
@@ -565,45 +564,6 @@ export class PuppetAPI {
   //////////////EPOCHS/////////////
   //////////////EPOCHS/////////////
 
-  static async totalEpochs(
-    node: string,
-    networkMagic: number,
-    contractHash: string
-  ): Promise<number> {
-    const method = "total_epochs";
-
-    const res = await NeoInterface.testInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      []
-    );
-    if (res === undefined || res.length === 0) {
-      throw new Error("unrecognized response");
-    }
-    return parseInt(res[0].value as string);
-  }
-
-  static async totalTraitLevels(
-    node: string,
-    networkMagic: number,
-    contractHash: string
-  ): Promise<number> {
-    const method = "total_trait_levels";
-
-    const res = await NeoInterface.testInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      []
-    );
-    if (res === undefined || res.length === 0) {
-      throw new Error("unrecognized response");
-    }
-    return parseInt(res[0].value as string);
-  }
 
   static async setCurrentEpoch(
     node: string,
@@ -648,89 +608,4 @@ export class PuppetAPI {
     return parseInt(res[0].value as string);
   }
 
-  static async createEpoch(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-    label: string,
-    maxTraits: number,
-    traits: TraitLevel[],
-    account: wallet.Account
-  ): Promise<any> {
-    const method = "create_epoch";
-
-    const traitArray = traits.map( (trait) => {
-
-      const traitPointers = trait.traits.map((pointer: CollectionPointer) => {
-        return sc.ContractParam.array(
-          sc.ContractParam.integer(pointer.collection_id),
-          sc.ContractParam.integer(pointer.index)
-        )
-      })
-
-      return sc.ContractParam.array(
-        sc.ContractParam.integer(trait.drop_score),
-        sc.ContractParam.boolean(trait.unique),
-        sc.ContractParam.array(...traitPointers)
-      )
-    })
-
-    const param = [
-      sc.ContractParam.string(label),
-      sc.ContractParam.integer(maxTraits),
-      sc.ContractParam.array(...traitArray)
-    ]
-
-    return await NeoInterface.publishInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      param,
-      account
-    );
-  }
-
-  static async getEpochJSON(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-    epochId: number
-  ): Promise<any> {
-    const method = "get_epoch_json";
-
-    const param = [
-      sc.ContractParam.integer(epochId)
-    ]
-
-    const res = await NeoInterface.testInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      param
-    );
-    if (res === undefined || res.length === 0) {
-      throw new Error("unrecognized response");
-    }
-    return parseToJSON(res[0].value) as Epoch
-  }
-
-  static async pickTraits(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-    account: wallet.Account
-  ): Promise<any> {
-    const method = "pick_traits";
-
-    return await NeoInterface.publishInvoke(
-      node,
-      networkMagic,
-      contractHash,
-      method,
-      [],
-      account
-    );
-  }
 }

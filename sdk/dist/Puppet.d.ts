@@ -1,18 +1,13 @@
 import { rpc, wallet } from '@cityofzion/neon-core';
-import { TraitLevel } from "./interface";
-export interface PuppetOptions {
-    node?: string;
-    scriptHash?: string;
-}
+import { PropConstructorOptions } from "./interface";
 export declare class Puppet {
     private options;
     private networkMagic;
-    constructor(options?: PuppetOptions);
+    constructor(options?: PropConstructorOptions);
     init(): Promise<void>;
     get node(): rpc.RPCClient;
     get scriptHash(): string;
     balanceOf(address: string): Promise<number>;
-    createEpochFromFile(path: string, signer: wallet.Account): Promise<string>;
     decimals(): Promise<number>;
     deploy(signer: wallet.Account): Promise<any>;
     getAttributeMod(attributeValue: number): Promise<any>;
@@ -29,10 +24,6 @@ export declare class Puppet {
     transfer(to: string, tokenId: number, signer: wallet.Account, data: any): Promise<boolean | undefined>;
     totalSupply(): Promise<number>;
     update(script: string, manifest: string, signer: wallet.Account): Promise<boolean>;
-    totalEpochs(): Promise<number | undefined>;
     setCurrentEpoch(epoch_id: number, signer: wallet.Account): Promise<boolean | undefined>;
     getCurrentEpoch(): Promise<number | undefined>;
-    createEpoch(label: string, maxTraits: number, traitLevels: TraitLevel[], signer: wallet.Account): Promise<string | undefined>;
-    getEpochJSON(epochId: number): Promise<string | undefined>;
-    pickTraits(signer: wallet.Account): Promise<string | undefined>;
 }

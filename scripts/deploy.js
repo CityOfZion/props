@@ -6,6 +6,7 @@ async function main() {
     await sleep(5000)
     await exec("neoxp contract deploy contracts/dice/props.dice.nef coz --force")
     await exec("neoxp contract deploy contracts/collection/props.collection.nef coz --force")
+    await exec("neoxp contract deploy contracts/epoch/props.epoch.nef coz --force")
     await exec("neoxp contract deploy contracts/puppet/props.puppet.nef coz --force")
 }
 main()

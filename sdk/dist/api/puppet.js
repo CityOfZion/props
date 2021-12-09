@@ -357,22 +357,6 @@ class PuppetAPI {
     //////////////EPOCHS/////////////
     //////////////EPOCHS/////////////
     //////////////EPOCHS/////////////
-    static async totalEpochs(node, networkMagic, contractHash) {
-        const method = "total_epochs";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return parseInt(res[0].value);
-    }
-    static async totalTraitLevels(node, networkMagic, contractHash) {
-        const method = "total_trait_levels";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return parseInt(res[0].value);
-    }
     static async setCurrentEpoch(node, networkMagic, contractHash, epochId, account) {
         const method = "set_current_epoch";
         const param = [
@@ -387,36 +371,6 @@ class PuppetAPI {
             throw new Error("unrecognized response");
         }
         return parseInt(res[0].value);
-    }
-    static async createEpoch(node, networkMagic, contractHash, label, maxTraits, traits, account) {
-        const method = "create_epoch";
-        const traitArray = traits.map((trait) => {
-            const traitPointers = trait.traits.map((pointer) => {
-                return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(pointer.collection_id), neon_js_1.sc.ContractParam.integer(pointer.index));
-            });
-            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(trait.drop_score), neon_js_1.sc.ContractParam.boolean(trait.unique), neon_js_1.sc.ContractParam.array(...traitPointers));
-        });
-        const param = [
-            neon_js_1.sc.ContractParam.string(label),
-            neon_js_1.sc.ContractParam.integer(maxTraits),
-            neon_js_1.sc.ContractParam.array(...traitArray)
-        ];
-        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, param, account);
-    }
-    static async getEpochJSON(node, networkMagic, contractHash, epochId) {
-        const method = "get_epoch_json";
-        const param = [
-            neon_js_1.sc.ContractParam.integer(epochId)
-        ];
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return helpers_1.parseToJSON(res[0].value);
-    }
-    static async pickTraits(node, networkMagic, contractHash, account) {
-        const method = "pick_traits";
-        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, [], account);
     }
 }
 exports.PuppetAPI = PuppetAPI;

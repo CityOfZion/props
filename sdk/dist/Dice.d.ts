@@ -1,12 +1,9 @@
 import { rpc, wallet } from '@cityofzion/neon-core';
-export interface DiceOptions {
-    node?: string;
-    scriptHash?: string;
-}
+import { PropConstructorOptions } from "./interface";
 export declare class Dice {
     private options;
     private networkMagic;
-    constructor(options?: DiceOptions);
+    constructor(options?: PropConstructorOptions);
     init(): Promise<void>;
     get node(): rpc.RPCClient;
     get scriptHash(): string;

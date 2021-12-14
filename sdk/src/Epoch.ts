@@ -6,7 +6,7 @@ import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x3cded7bda8960aa465f939c8d13248f83d2874f6'
+  scriptHash: '0x72909f1ef43a843f4b2169f2c577787d9e6994a8'
 }
 
 export class Epoch {
@@ -36,13 +36,13 @@ export class Epoch {
     throw new Error('node scripthash defined')
   }
 
-  async createEpoch(label: string, maxTraits: number, traitLevels: TraitLevel[], signer: wallet.Account): Promise<string | undefined> {
-    return EpochAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, maxTraits, traitLevels, signer)
+  async createEpoch(epoch: EpochType, signer: wallet.Account): Promise<string | undefined> {
+    return EpochAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, epoch.label, epoch.traits, signer)
   }
 
   async createEpochFromFile(path: string, signer: wallet.Account): Promise<string> {
     const localEpoch = JSON.parse(fs.readFileSync(path).toString()) as EpochType
-    return EpochAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, localEpoch.label, localEpoch.maxTraits, localEpoch.traitLevels, signer)
+    return EpochAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, localEpoch.label, localEpoch.traits, signer)
   }
 
   async getEpochJSON(epochId: number): Promise<string | undefined> {

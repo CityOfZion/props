@@ -1,0 +1,22 @@
+{
+  "description": "A small collection of colors",
+  "type": "string",
+  "extra": "",
+  "values": [
+    "blue",
+    "red",
+    "yellow",
+    "orange",
+    "purple",
+    "green",
+    "brown",
+    "teal",
+    "beige",
+    "black",
+    "grey",
+    "white",
+    "opalescent",
+    "obsidian",
+    "ghost"
+  ]
+}

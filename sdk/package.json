@@ -6,22 +6,22 @@
   "types": "dist/index",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CityOfZion/isengard.git"
+    "url": "git+https://github.com/CityOfZion/props.git"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build": "tsc",
+    "docs": "typedoc",
+    "publishDocs": "aws s3 sync ./docs s3://props-coz/prod --acl public-read",
+    "publishDocs:develop": "aws s3 sync ./docs s3://props-coz/dev --acl public-read",
     "fmt": "prettier --write ./src/**/*.ts",
     "test": "mocha test --recursive --exit --timeout 10000"
   },
   "keywords": [],
   "author": "COZ, Inc.",
   "license": "ISC",
-  "devDdependencies": {
-    "typescript": "^4.4.4"
-  },
   "dependencies": {
     "@cityofzion/neon-core": "^5.0.0-next.16",
     "@cityofzion/neon-js": "^5.0.0-next.16",
@@ -33,6 +33,8 @@
     "assert": "^2.0.0",
     "fs": "0.0.1-security",
     "mocha": "^9.1.3",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "typedoc": "^0.22.10",
+    "typescript": "^4.4.4"
   }
 }

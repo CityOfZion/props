@@ -22,7 +22,7 @@ def manifest_metadata() -> NeoMetadata:
     meta.author = "COZ, Inc."
     meta.description = "A public smart contract for storing immutable collections of stuff"
     meta.email = "contact@coz.io"
-    meta.supportedstandards = []
+    meta.supported_standards = []
     meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
 

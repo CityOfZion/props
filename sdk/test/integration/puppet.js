@@ -131,6 +131,7 @@ describe("Basic System Test Suite", function() {
         for (const tokenId of res) {
             const token = await puppet.properties(tokenId)
             assert(token)
+            console.log(token)
         }
     })
 

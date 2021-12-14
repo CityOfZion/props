@@ -1,0 +1,21 @@
+{
+  "description": "A collection of professions",
+  "type": "string",
+  "extra": "",
+  "values": [
+    "accountant",   "alchemist",     "architect",
+    "assassin",     "baker",         "banker",        "bartender",
+    "blacksmith",   "builder",       "carpenter",     "chef",
+    "cleaner",      "courier",       "dragoon",
+    "druid",        "drunkard",      "economist",     "electrician",
+    "farmer",       "healer",        "landlord",
+    "lawyer",       "mathematician", "mechanic",
+    "merchant",     "necromancer",   "operator",      "parkour",
+    "physician",    "poet",          "priest",
+    "ranger",       "sailor",        "scholar",
+    "scientist",    "seer",          "shadow",
+    "shapeshifter", "shill",         "shoeshine",     "shopkeeper",
+    "stealth",      "storyteller",   "teacher",
+    "warrior"
+  ]
+}

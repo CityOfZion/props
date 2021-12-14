@@ -49,6 +49,13 @@ function formatter(field, num = false) {
             return field.value.map((f) => {
                 return formatter(f);
             });
+        case "Map":
+            const object = {};
+            field.value.forEach((f) => {
+                let key = formatter(f.key);
+                object[key] = formatter(f.value);
+            });
+            return object;
         default:
             return field.value;
     }
@@ -73,7 +80,7 @@ async function variableInvoke(node, networkMagic, contractHash, method, param = 
         return res;
     }
     catch (e) {
-        throw new Error(e);
+        throw new Error("Something went wrong: " + e.message);
     }
 }
 exports.variableInvoke = variableInvoke;

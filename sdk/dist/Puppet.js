@@ -7,7 +7,7 @@ const api_1 = require("./api");
 const neon_js_1 = require("@cityofzion/neon-js");
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x6649331674950e1ad598dc6f0fdf8177884fd015'
+    scriptHash: '0xa721c1e3c5ce9fa1c827c19936c1044aed749e3d'
 };
 class Puppet {
     constructor(options = {}) {
@@ -69,7 +69,7 @@ class Puppet {
             return res;
         }
         catch (e) {
-            throw new Error(e);
+            throw new Error("Something went wrong: " + e.message);
         }
     }
     async setMintFee(fee, signer) {

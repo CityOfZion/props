@@ -12,18 +12,20 @@ class EpochAPI {
         }
         return parseInt(res[0].value);
     }
-    static async createEpoch(node, networkMagic, contractHash, label, maxTraits, traits, signer) {
+    static async createEpoch(node, networkMagic, contractHash, label, traits, signer) {
         const method = "create_epoch";
-        const traitArray = traits.map((trait) => {
-            const traitPointers = trait.traits.map((pointer) => {
-                return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(pointer.collection_id), neon_js_1.sc.ContractParam.integer(pointer.index));
+        const traitsFormatted = traits.map((trait) => {
+            const traitLevelsFormatted = trait.traitLevels.map((traitLevel) => {
+                const traitPointers = traitLevel.traits.map((pointer) => {
+                    return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(pointer.collectionId), neon_js_1.sc.ContractParam.integer(pointer.index));
+                });
+                return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitLevel.dropScore), neon_js_1.sc.ContractParam.boolean(traitLevel.unique), neon_js_1.sc.ContractParam.array(...traitPointers));
             });
-            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(trait.drop_score), neon_js_1.sc.ContractParam.boolean(trait.unique), neon_js_1.sc.ContractParam.array(...traitPointers));
+            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.string(trait.label), neon_js_1.sc.ContractParam.integer(trait.slots), neon_js_1.sc.ContractParam.array(...traitLevelsFormatted));
         });
         const param = [
             neon_js_1.sc.ContractParam.string(label),
-            neon_js_1.sc.ContractParam.integer(maxTraits),
-            neon_js_1.sc.ContractParam.array(...traitArray)
+            neon_js_1.sc.ContractParam.array(...traitsFormatted)
         ];
         return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
     }

@@ -4,9 +4,24 @@ from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.runtime import get_random
 
+# TODO: variables in epoch definitions
 #############EPOCH#########################
 #############EPOCH#########################
 #############EPOCH#########################
+
+
+@metadata
+def manifest_metadata() -> NeoMetadata:
+    """
+    Defines this smart contract's metadata information
+    """
+    meta = NeoMetadata()
+    meta.author = "COZ, Inc."
+    meta.description = "A public smart contract for handling probabilistic events"
+    meta.email = "contact@coz.io"
+    meta.supported_standards = []
+    meta.permissions = [{"contract": "*", "methods": "*"}]
+    return meta
 
 
 EPOCH_KEY = b'e'
@@ -22,13 +37,13 @@ def total_epochs() -> int:
 
 
 @public
-def create_epoch(label: bytes, max_traits: bytes, traits: List) -> int:
+def create_epoch(label: bytes, traits: List) -> int:
     #tx = cast(Transaction, script_container)
     #user: User = get_user(tx.sender)
     #assert user.get_create_epoch(), "User Permission Denied"
 
     new_epoch: Epoch = Epoch()
-    x: bool = new_epoch.load(label, max_traits, traits)
+    x: bool = new_epoch.load(label, traits)
     epoch_id: bytes = new_epoch.get_id()
     epoch_id_int: int = epoch_id.to_int()
     save_epoch(new_epoch)
@@ -99,59 +114,88 @@ class TraitLevel:
 
 
 class Trait:
-    def __init__(self):
-        self._label: bytes = b''
-        self._trait_levels: [TraitLevel] = []
+    def __init__(self, label: bytes, slots: int, trait_levels: List):
+        self._label: bytes = label
+        self._slots: int = slots
+
+        new_trait_levels: [TraitLevel] = []
+        for trait_level in trait_levels:
+            trait_list: List = cast(List, trait_level)
+            drop_scope: bytes = cast(bytes, trait_list[0])
+            unique: bool = cast(bool, trait_list[1])
+            traits: List = cast(List, trait_list[2])
+            t: TraitLevel = TraitLevel(drop_scope, unique, traits)
+            new_trait_levels.append(t)
+
+        self._trait_levels: [TraitLevel] = new_trait_levels
 
     def get_label(self) -> bytes:
         return self._label
 
-    def mint(self) -> bytes:
-        slot_entropy = entropy[i: (i+1) * 3]
+    def get_slots(self) -> int:
+        return self._slots
+
+    def mint(self) -> [bytes]:
+        slot_entropy = get_random().to_bytes()
         trait_levels: [TraitLevel] = self._trait_levels
-        roll: int = Dice.rand_between(0, 9999)
-        for trait_level in trait_levels:
-            if trait_level.dropped(roll):
-                if trait_level.can_mint():
-                    new_trait: bytes = trait_level.mint(slot_entropy[2].to_bytes())
-                    traits.append(new_trait)
-                break
+        slots: int = self._slots
+
+        traits: [bytes] = []
+        for i in range(slots):
+            roll: int = Dice.rand_between(0, 9999)
+            for trait_level in trait_levels:
+                if trait_level.dropped(roll):
+                    if trait_level.can_mint():
+                        new_trait: bytes = trait_level.mint(slot_entropy[i].to_bytes())
+                        traits.append(new_trait)
+                    break
+        return traits
+
+    def export(self) -> Dict[str, Any]:
+
+        trait_levels: List[Dict] = []
+        for trait_level in self._trait_levels:
+            level_json: Dict[str, Any] = trait_level.export
+            trait_levels.append(level_json)
+
+        exported: Dict[str, Any] = {
+            'label': self._label,
+            'slots': self._slots,
+            'traitLevels': trait_levels
+        }
+        return exported
 
 
 class Epoch:
-
     def __init__(self):
         self._label: bytes = b''
-        self._max_traits: int = 0
         self._traits: [Trait] = []
         self._id: bytes = (total_epochs() + 1).to_bytes()
 
     def export(self) -> Dict[str, Any]:
 
-        trait_levels: List[Dict] = []
-        for level in self._trait_levels:
-            level_json: Dict[str, Any] = level.export()
-            trait_levels.append(level_json)
+        traits: List[Dict] = []
+        for trait in self._traits:
+            trait_json: Dict[str, Any] = trait.export()
+            traits.append(trait_json)
 
         exported: Dict[str, Any] = {
             "label": self._label,
-            "maxTraits": self._max_traits,
-            "traitLevels": trait_levels
+            "traits": traits
         }
         return exported
 
-    def load(self, label: bytes, max_traits: bytes, trait_levels: List) -> bool:
+    def load(self, label: bytes, traits: List) -> bool:
         self._label = label
-        self._max_traits = max_traits.to_int()
-        new_trait_levels: [TraitLevel] = []
-        for trait_level in trait_levels:
-            trait_list: List = cast(List, trait_level)
-            drop_score: bytes = cast(bytes, trait_list[0])
-            unique: bool = cast(bool, trait_list[1])
-            collection_pointers: List = cast(List, trait_list[2])
-            t: TraitLevel = TraitLevel(drop_score, unique, collection_pointers)
-            new_trait_levels.append(t)
-        self._trait_levels = new_trait_levels
+        new_traits: [Trait] = []
+        for trait in traits:
+            trait_list: List = cast(List, trait)
+            lbl: bytes = cast(bytes, trait_list[0])
+            slots: int = cast(int, trait_list[1])
+            trait_levels: List = cast(List, trait_list[2])
+            t: Trait = Trait(lbl, slots, trait_levels)
+            new_traits.append(t)
+        self._traits = new_traits
         return True
 
     def get_label(self) -> bytes:
@@ -160,8 +204,8 @@ class Epoch:
     def get_id(self) -> bytes:
         return self._id
 
-    def get_traits(self) -> List[TraitLevel]:
-        return self._trait_levels
+    def get_traits(self) -> List[Trait]:
+        return self._traits
 
     def mint_traits(self) -> Dict[str, Any]:
         traits: Dict[str, Any] = {}
@@ -169,9 +213,12 @@ class Epoch:
         trait_objects: [Trait] = self._traits
         for trait_object in trait_objects:
             label: str = trait_object.get_label() #this is a cast and may be breaking
-            trait: bytes = trait_object.mint()
-            if len(trait) > 0:
+            trait: [bytes] = trait_object.mint()
+            traits_count: int = len(trait)
+            if traits_count > 1 or trait_object.get_slots() > 1:
                 traits[label] = trait
+            if traits_count == 1:
+                traits[label] = trait[0]
         return traits
 
 
@@ -187,9 +234,9 @@ def get_epoch(epoch_id: bytes) -> Epoch:
 
 
 @public
-def mint_from_epoch(epoch_id: bytes) -> [bytes]:
+def mint_from_epoch(epoch_id: bytes) -> Dict[str, Any]:
     epoch: Epoch = get_epoch(epoch_id)
-    result: [bytes] = epoch.mint_traits()
+    result: Dict[str, Any] = epoch.mint_traits()
     return result
 
 

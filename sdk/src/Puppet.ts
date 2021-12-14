@@ -6,7 +6,7 @@ import {PropConstructorOptions} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x6649331674950e1ad598dc6f0fdf8177884fd015'
+  scriptHash: '0xa721c1e3c5ce9fa1c827c19936c1044aed749e3d'
 }
 
 export class Puppet {
@@ -90,7 +90,7 @@ export class Puppet {
       );
       return res
     } catch (e) {
-      throw new Error(e)
+      throw new Error("Something went wrong: " + (e as Error).message)
     }
   }
 

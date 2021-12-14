@@ -69,7 +69,7 @@ export class CollectionAPI {
     contractHash: string,
     collectionId: number,
     signer?: wallet.Account
-  ): Promise<CollectionType> {
+  ): Promise<CollectionType | string> {
     const method = "get_collection_json"
     const param = [
       sc.ContractParam.integer(collectionId)

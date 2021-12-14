@@ -1,7 +1,7 @@
 import {NeoInterface} from "./interface";
 import {sc} from "@cityofzion/neon-js";
 import { wallet } from "@cityofzion/neon-core";
-import {CollectionPointer, EpochType, TraitLevel} from "../interface";
+import {CollectionPointer, EpochType, TraitLevel, TraitType} from "../interface";
 import {parseToJSON, variableInvoke} from "../helpers";
 
 export class EpochAPI {
@@ -26,32 +26,37 @@ export class EpochAPI {
     networkMagic: number,
     contractHash: string,
     label: string,
-    maxTraits: number,
-    traits: TraitLevel[],
+    traits: TraitType[],
     signer: wallet.Account
   ): Promise<any> {
     const method = "create_epoch";
 
-    const traitArray = traits.map( (trait) => {
+    const traitsFormatted = traits.map( (trait) => {
+      const traitLevelsFormatted = trait.traitLevels.map((traitLevel) => {
+        const traitPointers = traitLevel.traits.map((pointer: CollectionPointer) => {
+          return sc.ContractParam.array(
+            sc.ContractParam.integer(pointer.collectionId),
+            sc.ContractParam.integer(pointer.index)
+          )
+        })
 
-      const traitPointers = trait.traits.map((pointer: CollectionPointer) => {
         return sc.ContractParam.array(
-          sc.ContractParam.integer(pointer.collection_id),
-          sc.ContractParam.integer(pointer.index)
+          sc.ContractParam.integer(traitLevel.dropScore),
+          sc.ContractParam.boolean(traitLevel.unique),
+          sc.ContractParam.array(...traitPointers)
         )
       })
 
       return sc.ContractParam.array(
-        sc.ContractParam.integer(trait.drop_score),
-        sc.ContractParam.boolean(trait.unique),
-        sc.ContractParam.array(...traitPointers)
+        sc.ContractParam.string(trait.label),
+        sc.ContractParam.integer(trait.slots),
+        sc.ContractParam.array(...traitLevelsFormatted)
       )
     })
 
     const param = [
       sc.ContractParam.string(label),
-      sc.ContractParam.integer(maxTraits),
-      sc.ContractParam.array(...traitArray)
+      sc.ContractParam.array(...traitsFormatted)
     ]
 
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)

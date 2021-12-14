@@ -1,0 +1,945 @@
+{
+  "label": "Puppeteer",
+  "traits": [
+    {
+      "label": "color",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 5000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 3,
+              "index": 0
+            },
+            {
+              "collectionId": 3,
+              "index": 1
+            },
+            {
+              "collectionId": 3,
+              "index": 2
+            },
+            {
+              "collectionId": 3,
+              "index": 3
+            },
+            {
+              "collectionId": 3,
+              "index": 5
+            }
+          ]
+        },
+        {
+          "dropScore": 8000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 3,
+              "index": 6
+            },
+            {
+              "collectionId": 3,
+              "index": 7
+            },
+            {
+              "collectionId": 3,
+              "index": 8
+            },
+            {
+              "collectionId": 3,
+              "index": 4
+            }
+          ]
+        },
+        {
+          "dropScore": 9500,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 3,
+              "index": 9
+            },
+            {
+              "collectionId": 3,
+              "index": 10
+            },
+            {
+              "collectionId": 3,
+              "index": 11
+            }
+          ]
+        },
+        {
+          "dropScore": 9950,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 3,
+              "index": 12
+            },
+            {
+              "collectionId": 3,
+              "index": 13
+            }
+          ]
+        },
+        {
+          "dropScore": 10000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 3,
+              "index": 14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "personality",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 4000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 4,
+              "index": 529
+            },
+            {
+              "collectionId": 4,
+              "index": 213
+            },
+            {
+              "collectionId": 4,
+              "index": 408
+            },
+            {
+              "collectionId": 4,
+              "index": 346
+            },
+            {
+              "collectionId": 4,
+              "index": 505
+            },
+            {
+              "collectionId": 4,
+              "index": 459
+            },
+            {
+              "collectionId": 4,
+              "index": 537
+            },
+            {
+              "collectionId": 4,
+              "index": 26
+            }
+          ]
+        },
+        {
+          "dropScore": 7000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 4,
+              "index": 228
+            },
+            {
+              "collectionId": 4,
+              "index": 414
+            },
+            {
+              "collectionId": 4,
+              "index": 183
+            },
+            {
+              "collectionId": 4,
+              "index": 67
+            },
+            {
+              "collectionId": 4,
+              "index": 15
+            },
+            {
+              "collectionId": 4,
+              "index": 245
+            },
+            {
+              "collectionId": 4,
+              "index": 514
+            },
+            {
+              "collectionId": 4,
+              "index": 41
+            }
+          ]
+        },
+        {
+          "dropScore": 9000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 4,
+              "index": 293
+            },
+            {
+              "collectionId": 4,
+              "index": 124
+            },
+            {
+              "collectionId": 4,
+              "index": 172
+            },
+            {
+              "collectionId": 4,
+              "index": 381
+            },
+            {
+              "collectionId": 4,
+              "index": 335
+            },
+            {
+              "collectionId": 4,
+              "index": 187
+            },
+            {
+              "collectionId": 4,
+              "index": 106
+            },
+            {
+              "collectionId": 4,
+              "index": 208
+            }
+          ]
+        },
+        {
+          "dropScore": 10000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 4,
+              "index": 242
+            },
+            {
+              "collectionId": 4,
+              "index": 38
+            },
+            {
+              "collectionId": 4,
+              "index": 312
+            },
+            {
+              "collectionId": 4,
+              "index": 325
+            },
+            {
+              "collectionId": 4,
+              "index": 440
+            },
+            {
+              "collectionId": 4,
+              "index": 65
+            },
+            {
+              "collectionId": 4,
+              "index": 264
+            },
+            {
+              "collectionId": 4,
+              "index": 567
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "archetype",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 5000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 2,
+              "index": 0
+            },
+            {
+              "collectionId": 2,
+              "index": 1
+            },
+            {
+              "collectionId": 2,
+              "index": 2
+            }
+          ]
+        },
+        {
+          "dropScore": 8000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 2,
+              "index": 3
+            },
+            {
+              "collectionId": 2,
+              "index": 4
+            },
+            {
+              "collectionId": 2,
+              "index": 5
+            }
+          ]
+        },
+        {
+          "dropScore": 9500,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 2,
+              "index": 6
+            },
+            {
+              "collectionId": 2,
+              "index": 7
+            },
+            {
+              "collectionId": 2,
+              "index": 8
+            }
+          ]
+        },
+        {
+          "dropScore": 10000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 2,
+              "index": 9
+            },
+            {
+              "collectionId": 2,
+              "index": 10
+            },
+            {
+              "collectionId": 2,
+              "index": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "trade",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 3000,
+          "unique": false,
+          "traits": []
+        },
+        {
+          "dropScore": 6000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 5,
+              "index": 8
+            },
+            {
+              "collectionId": 5,
+              "index": 18
+            },
+            {
+              "collectionId": 5,
+              "index": 4
+            },
+            {
+              "collectionId": 5,
+              "index": 40
+            },
+            {
+              "collectionId": 5,
+              "index": 6
+            },
+            {
+              "collectionId": 5,
+              "index": 7
+            },
+            {
+              "collectionId": 5,
+              "index": 9
+            }
+          ]
+        },
+        {
+          "dropScore": 8000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 5,
+              "index": 31
+            },
+            {
+              "collectionId": 5,
+              "index": 13
+            },
+            {
+              "collectionId": 5,
+              "index": 14
+            },
+            {
+              "collectionId": 5,
+              "index": 24
+            },
+            {
+              "collectionId": 5,
+              "index": 44
+            },
+            {
+              "collectionId": 5,
+              "index": 2
+            },
+            {
+              "collectionId": 5,
+              "index": 16
+            }
+          ]
+        },
+        {
+          "dropScore": 9000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 5,
+              "index": 3
+            },
+            {
+              "collectionId": 5,
+              "index": 19
+            },
+            {
+              "collectionId": 5,
+              "index": 34
+            },
+            {
+              "collectionId": 5,
+              "index": 42
+            },
+            {
+              "collectionId": 5,
+              "index": 29
+            },
+            {
+              "collectionId": 5,
+              "index": 22
+            },
+            {
+              "collectionId": 5,
+              "index": 5
+            }
+          ]
+        },
+        {
+          "dropScore": 9950,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 5,
+              "index": 1
+            },
+            {
+              "collectionId": 5,
+              "index": 25
+            },
+            {
+              "collectionId": 5,
+              "index": 35
+            },
+            {
+              "collectionId": 5,
+              "index": 37
+            },
+            {
+              "collectionId": 5,
+              "index": 38
+            },
+            {
+              "collectionId": 5,
+              "index": 33
+            },
+            {
+              "collectionId": 5,
+              "index": 12
+            }
+          ]
+        },
+        {
+          "dropScore": 10000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 5,
+              "index": 26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "title",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 7000,
+          "unique": false,
+          "traits": []
+        },
+        {
+          "dropScore": 8000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 44
+            },
+            {
+              "collectionId": 6,
+              "index": 41
+            },
+            {
+              "collectionId": 6,
+              "index": 8
+            }
+          ]
+        },
+        {
+          "dropScore": 8500,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 47
+            },
+            {
+              "collectionId": 6,
+              "index": 30
+            },
+            {
+              "collectionId": 6,
+              "index": 4
+            }
+          ]
+        },
+        {
+          "dropScore": 8750,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 39
+            },
+            {
+              "collectionId": 6,
+              "index": 65
+            },
+            {
+              "collectionId": 6,
+              "index": 26
+            }
+          ]
+        },
+        {
+          "dropScore": 8900,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 13
+            },
+            {
+              "collectionId": 6,
+              "index": 48
+            },
+            {
+              "collectionId": 6,
+              "index": 20
+            }
+          ]
+        },
+        {
+          "dropScore": 8910,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "origin",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 3000,
+          "unique": false,
+          "traits": []
+        },
+        {
+          "dropScore": 7000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 14
+            },
+            {
+              "collectionId": 6,
+              "index": 22
+            },
+            {
+              "collectionId": 6,
+              "index": 67
+            },
+            {
+              "collectionId": 6,
+              "index": 18
+            }
+          ]
+        },
+        {
+          "dropScore": 9000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 11
+            },
+            {
+              "collectionId": 6,
+              "index": 37
+            },
+            {
+              "collectionId": 6,
+              "index": 45
+            },
+            {
+              "collectionId": 6,
+              "index": 34
+            }
+          ]
+        },
+        {
+          "dropScore": 9500,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 66
+            },
+            {
+              "collectionId": 6,
+              "index": 69
+            },
+            {
+              "collectionId": 6,
+              "index": 42
+            }
+          ]
+        },
+        {
+          "dropScore": 9750,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 24
+            },
+            {
+              "collectionId": 6,
+              "index": 36
+            }
+          ]
+        },
+        {
+          "dropScore": 9800,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 28
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "element",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 5000,
+          "unique": false,
+          "traits": []
+        },
+        {
+          "dropScore": 8700,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 15
+            },
+            {
+              "collectionId": 6,
+              "index": 17
+            },
+            {
+              "collectionId": 6,
+              "index": 71
+            },
+            {
+              "collectionId": 6,
+              "index": 70
+            }
+          ]
+        },
+        {
+          "dropScore": 9900,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 38
+            },
+            {
+              "collectionId": 6,
+              "index": 33
+            },
+            {
+              "collectionId": 6,
+              "index": 32
+            },
+            {
+              "collectionId": 6,
+              "index": 27
+            }
+          ]
+        },
+        {
+          "dropScore": 10000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "domain",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 9500,
+          "unique": false,
+          "traits": []
+        },
+        {
+          "dropScore": 10000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 43
+            },
+            {
+              "collectionId": 6,
+              "index": 16
+            },
+            {
+              "collectionId": 6,
+              "index": 3
+            },
+            {
+              "collectionId": 6,
+              "index": 2
+            },
+            {
+              "collectionId": 6,
+              "index": 12
+            },
+            {
+              "collectionId": 6,
+              "index": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "prestige",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 9400,
+          "unique": false,
+          "traits": []
+        },
+        {
+          "dropScore": 9700,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 72
+            },
+            {
+              "collectionId": 6,
+              "index": 7
+            },
+            {
+              "collectionId": 6,
+              "index": 6
+            },
+            {
+              "collectionId": 6,
+              "index": 10
+            }
+          ]
+        },
+        {
+          "dropScore": 9900,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 35
+            },
+            {
+              "collectionId": 6,
+              "index": 29
+            },
+            {
+              "collectionId": 6,
+              "index": 68
+            },
+            {
+              "collectionId": 6,
+              "index": 31
+            }
+          ]
+        },
+        {
+          "dropScore": 9970,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 40
+            },
+            {
+              "collectionId": 6,
+              "index": 21
+            },
+            {
+              "collectionId": 6,
+              "index": 23
+            },
+            {
+              "collectionId": 6,
+              "index": 46
+            }
+          ]
+        },
+        {
+          "dropScore": 10000,
+          "unique": false,
+          "traits": [
+            {
+              "collectionId": 6,
+              "index": 56
+            },
+            {
+              "collectionId": 6,
+              "index": 60
+            },
+            {
+              "collectionId": 6,
+              "index": 63
+            },
+            {
+              "collectionId": 6,
+              "index": 52
+            },
+            {
+              "collectionId": 6,
+              "index": 58
+            },
+            {
+              "collectionId": 6,
+              "index": 53
+            },
+            {
+              "collectionId": 6,
+              "index": 55
+            },
+            {
+              "collectionId": 6,
+              "index": 1
+            },
+            {
+              "collectionId": 6,
+              "index": 61
+            },
+            {
+              "collectionId": 6,
+              "index": 57
+            },
+            {
+              "collectionId": 6,
+              "index": 54
+            },
+            {
+              "collectionId": 6,
+              "index": 51
+            },
+            {
+              "collectionId": 6,
+              "index": 64
+            },
+            {
+              "collectionId": 6,
+              "index": 62
+            },
+            {
+              "collectionId": 6,
+              "index": 59
+            },
+            {
+              "collectionId": 6,
+              "index": 25
+            },
+            {
+              "collectionId": 6,
+              "index": 19
+            },
+            {
+              "collectionId": 6,
+              "index": 49
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

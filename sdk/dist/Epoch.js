@@ -10,7 +10,7 @@ const api_1 = require("./api");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x3cded7bda8960aa465f939c8d13248f83d2874f6'
+    scriptHash: '0x72909f1ef43a843f4b2169f2c577787d9e6994a8'
 };
 class Epoch {
     constructor(options = {}) {
@@ -33,12 +33,12 @@ class Epoch {
         }
         throw new Error('node scripthash defined');
     }
-    async createEpoch(label, maxTraits, traitLevels, signer) {
-        return api_1.EpochAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, maxTraits, traitLevels, signer);
+    async createEpoch(epoch, signer) {
+        return api_1.EpochAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, epoch.label, epoch.traits, signer);
     }
     async createEpochFromFile(path, signer) {
         const localEpoch = JSON.parse(fs_1.default.readFileSync(path).toString());
-        return api_1.EpochAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, localEpoch.label, localEpoch.maxTraits, localEpoch.traitLevels, signer);
+        return api_1.EpochAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, localEpoch.label, localEpoch.traits, signer);
     }
     async getEpochJSON(epochId) {
         return api_1.EpochAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId);

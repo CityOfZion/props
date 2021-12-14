@@ -20,6 +20,7 @@ from boa3.builtin.interop.runtime import get_random
 # TODO: is checkwitness needed if we get tx.sender?
 # TODO: verify drops on attributes and hit dice
 # TODO: audit events
+# TODO: Calling contracts need accounts support
 
 # -------------------------------------------
 # METADATA
@@ -34,7 +35,7 @@ def manifest_metadata() -> NeoMetadata:
     meta.author = "COZ, Inc."
     meta.description = "A public NFT prop with base attributes and interactions"
     meta.email = "contact@coz.io"
-    meta.supportedstandards = ["NEP-11"]
+    meta.supported_standards= ["NEP-11"]
     meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
 
@@ -636,7 +637,7 @@ class Puppet:
         self._strength: int = 0
         self._wisdom: int = 0
         self._hit_die: str = "d4"
-        self._traits: [bytes] = []
+        self._traits: Dict[str, Any] = {}
         self._owner: UInt160 = UInt160()
 
     def export(self) -> Dict[str, Any]:
@@ -690,7 +691,7 @@ class Puppet:
         epoch_id: int = get_current_epoch()
         epoch_id_bytes: bytes = epoch_id.to_bytes()
         debug(['epoch_id_bytes', epoch_id_bytes])
-        traits: [bytes] = Epoch.mint_from_epoch(epoch_id_bytes)
+        traits: Dict[str, List] = Epoch.mint_from_epoch(epoch_id_bytes)
         self._traits = traits
         self._epoch = epoch_id_bytes
 
@@ -920,10 +921,10 @@ class Dice:
         pass
 
 
-@contract('0x3cded7bda8960aa465f939c8d13248f83d2874f6')
+@contract('0x72909f1ef43a843f4b2169f2c577787d9e6994a8')
 class Epoch:
 
     @staticmethod
-    def mint_from_epoch(epoch_id: bytes) -> [bytes]:
+    def mint_from_epoch(epoch_id: bytes) -> Dict[str, Any]:
         pass
 

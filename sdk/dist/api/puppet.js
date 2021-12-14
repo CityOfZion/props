@@ -196,7 +196,7 @@ class PuppetAPI {
             epoch: 0,
             name: '',
             owner: new neon_core_1.wallet.Account(),
-            traits: [],
+            traits: {},
             tokenId: 0,
             tokenURI: '',
         };
@@ -245,9 +245,7 @@ class PuppetAPI {
                         puppet.owner = new neon_core_1.wallet.Account(neon_js_1.u.reverseHex(rawValue));
                         break;
                     case "traits":
-                        puppet.traits = entry.value.value.map((t) => {
-                            return helpers_1.formatter(t);
-                        });
+                        puppet.traits = helpers_1.formatter(entry.value);
                         break;
                     case "tokenId":
                         puppet.tokenId = parseInt(entry.value.value);

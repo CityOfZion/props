@@ -22,9 +22,10 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.helpers = exports.api = void 0;
+exports.types = exports.helpers = exports.api = void 0;
 exports.api = __importStar(require("./api"));
 exports.helpers = __importStar(require("./helpers"));
+exports.types = __importStar(require("./interface"));
 __exportStar(require("./Collection"), exports);
 __exportStar(require("./Dice"), exports);
 __exportStar(require("./Puppet"), exports);

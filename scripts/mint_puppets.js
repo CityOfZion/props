@@ -15,6 +15,8 @@ network.wallets.forEach( (walletObj) => {
 })
 
 async function main() {
+
+
     let txid
 
     const signer = network.wallets[0].wallet
@@ -22,7 +24,8 @@ async function main() {
     const puppet = await new sdk.Puppet({node: NODE})
     await puppet.init()
 
-    console.log(`Minting ${PuppetArmySize} puppets to: `, signer.address)
+    console.log(`Build me an army worthy of ${signer.address} !!!`)
+    console.log(`Minting ${PuppetArmySize} puppets!`)
     console.log('This may take a while, you can watch the action on neo-express.')
 
     const txids = []
@@ -36,11 +39,35 @@ async function main() {
     }
     await sdk.helpers.sleep(TIME_CONSTANT)
 
+
     const totalSupply = await puppet.totalSupply()
     console.log('Puppet Supply: ', totalSupply)
 
     for (let id of txids) {
         await sdk.helpers.txDidComplete(NODE, id)
     }
+
+    for (let i = 1; i <= totalSupply; i++) {
+        let p = await puppet.properties(i)
+        console.log(p)
+    }
+
+    /*
+    const data = [['color', 'personality', 'archetype', 'trade', 'title', 'origin', 'element', 'domain', 'prestige']]
+
+    for (let i = 1; i <= totalSupply; i++) {
+        let p = await puppet.properties(i)
+        const l = Array(data[0].length).fill('')
+        Object.keys(p.traits).forEach( (key) => [
+            l[data[0].indexOf(key)] = p.traits[key]
+        ])
+        data.push(l)
+        //console.log(JSON.stringify(p.traits, null, 2))
+    }
+    const csv = data.map( (row) => row.join(',')).join('\n')
+
+    fs.writeFileSync('traits.csv', csv)
+
+     */
 }
 main()

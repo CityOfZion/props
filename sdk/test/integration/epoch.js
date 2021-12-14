@@ -86,7 +86,7 @@ describe("Basic System Test Suite", function() {
         const txid = await epoch.mintFromEpoch(epoch_id, cozWallet)
         await sdk.helpers.sleep(2000)
         const traits = await sdk.helpers.txDidComplete(NODE, txid)
-        console.log(traits)
+        console.log(traits[0][0].value)
     })
 
 

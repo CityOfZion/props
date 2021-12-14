@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/CityOfZion/isengard#readme",
   "dependencies": {
-    "@cityofzion/neon-core": "^5.0.0-next.16"
+    "@cityofzion/neon-core": "^5.0.0-next.16",
+    "@cityofzion/neon-js": "^5.0.0-next.16",
+    "lodash": "^4.17.21"
   }
 }

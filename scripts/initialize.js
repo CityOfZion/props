@@ -27,6 +27,7 @@ async function main() {
     const epoch = await new sdk.Epoch()
     await epoch.init()
 
+
     console.log('\n' +
         '//////////COLLECTIONS///////////////\n' +
         '//////////COLLECTIONS///////////////\n' +
@@ -84,6 +85,7 @@ async function main() {
     await sdk.helpers.sleep(2000)
     result = await sdk.helpers.txDidComplete(NODE, txid, true)
     console.log('  result: ', result[0])
+
 
 }
 main()

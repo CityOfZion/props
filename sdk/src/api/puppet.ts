@@ -305,7 +305,7 @@ export class PuppetAPI {
       epoch: 0,
       name: '',
       owner: new wallet.Account(),
-      traits: [],
+      traits: {},
       tokenId: 0,
       tokenURI: '',
     }
@@ -355,9 +355,7 @@ export class PuppetAPI {
             puppet.owner = new wallet.Account(u.reverseHex(rawValue))
             break
           case "traits":
-            puppet.traits = (entry.value.value as StackItemLike[]).map( (t) => {
-              return formatter(t)
-            })
+            puppet.traits = formatter(entry.value)
             break
           case "tokenId":
             puppet.tokenId = parseInt(entry.value.value as string)

@@ -14,7 +14,7 @@ export interface PuppetType {
     hitDie: string;
     name: string;
     owner: wallet.Account;
-    traits: string[];
+    traits: {};
     tokenId: number;
     tokenURI: string;
 }
@@ -29,16 +29,20 @@ export interface CollectionType {
 }
 export interface EpochType {
     label: string;
-    maxTraits: number;
+    traits: TraitType[];
+}
+export interface TraitType {
+    label: string;
+    slots: number;
     traitLevels: TraitLevel[];
 }
 export interface TraitLevel {
-    drop_score: number;
+    dropScore: number;
     unique: boolean;
     traits: CollectionPointer[];
 }
 export interface CollectionPointer {
-    collection_id: number;
+    collectionId: number;
     index: number;
 }
 export interface PropConstructorOptions {

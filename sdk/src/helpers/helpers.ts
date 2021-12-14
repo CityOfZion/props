@@ -3,7 +3,7 @@ import {hash160} from "@cityofzion/neon-core/lib/u";
 import {ApplicationLogJson} from "@cityofzion/neon-core/lib/rpc";
 import {NeoInterface} from "../api";
 
-export function parseToJSON(entries: any): any {
+export function parseToJSON(entries: any[]): any {
   const object: {
     [key: string]: any
   } = {}
@@ -52,6 +52,15 @@ export function formatter(field: any, num: boolean = false): any {
       return field.value.map( (f: any) => {
         return formatter(f)
       })
+    case "Map":
+      const object: {
+        [key: string]: any
+      } = {}
+      field.value.forEach( (f: any) => {
+        let key: string = formatter(f.key)
+        object[key] = formatter(f.value)
+      })
+      return object
     default:
       return field.value
   }
@@ -87,7 +96,7 @@ export async function variableInvoke(node: string, networkMagic: number, contrac
     }
     return res;
   } catch (e) {
-    throw new Error(e)
+    throw new Error("Something went wrong: " + (e as Error).message)
   }
 }
 

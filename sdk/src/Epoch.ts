@@ -6,7 +6,7 @@ import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x72909f1ef43a843f4b2169f2c577787d9e6994a8'
+  scriptHash: '0x9bf45059f1028e7425d416bf640d50f0f657f443'
 }
 
 export class Epoch {

@@ -4,7 +4,7 @@ const fs = require("fs")
 var assert = require('assert');
 
 describe("Basic System Test Suite", function() {
-    this.timeout(60000);
+    this.timeout(0);
     let epoch, collection, network, NODE
 
     beforeEach( async function () {
@@ -83,10 +83,26 @@ describe("Basic System Test Suite", function() {
     it("should mint from an epoch", async() => {
         const cozWallet = network.wallets[0].wallet
         const epoch_id = await epoch.totalEpochs()
-        const txid = await epoch.mintFromEpoch(epoch_id, cozWallet)
-        await sdk.helpers.sleep(2000)
-        const traits = await sdk.helpers.txDidComplete(NODE, txid)
-        console.log(traits[0][0].value)
+
+        const txids = []
+
+        for (let i = 0; i < 10000; i++) {
+            const txid = await epoch.mintFromEpoch(epoch_id, cozWallet)
+            txids.push(txid)
+        }
+        await sdk.helpers.sleep(4000)
+
+        const res = []
+        for (let txid of txids) {
+            const traits = await sdk.helpers.txDidComplete(NODE, txid)
+            res.push(traits[0].color)
+        }
+
+        const hist = {}
+        for (const num of res) {
+            hist[num] = hist[num] ? hist[num] + 1 : 1;
+        }
+        console.log(hist)
     })
 
 

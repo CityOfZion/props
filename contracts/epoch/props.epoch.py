@@ -1,10 +1,11 @@
 from typing import Any, Dict, List, cast
-from boa3.builtin import contract, CreateNewEvent, NeoMetadata, metadata, public
+from boa3.builtin import contract, NeoMetadata, metadata, public
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.runtime import get_random
 
 # TODO: variables in epoch definitions
+# TODO: allow calls outside to other contracts besides Collections
 #############EPOCH#########################
 #############EPOCH#########################
 #############EPOCH#########################
@@ -106,9 +107,9 @@ class TraitLevel:
         return available_traits > 0
 
     def mint(self, entropy: bytes) -> bytes:
-        max_index: int = len(self._traits) - 1
+        max_index: int = len(self._traits)
         entropy_int: int = entropy.to_int()
-        idx: int = (max_index * entropy_int) // 255
+        idx: int = (max_index * entropy_int) // 256
         trait: CollectionPointer = self._traits[idx]
         return trait.get_value()
 
@@ -121,10 +122,10 @@ class Trait:
         new_trait_levels: [TraitLevel] = []
         for trait_level in trait_levels:
             trait_list: List = cast(List, trait_level)
-            drop_scope: bytes = cast(bytes, trait_list[0])
+            drop_score: bytes = cast(bytes, trait_list[0])
             unique: bool = cast(bool, trait_list[1])
             traits: List = cast(List, trait_list[2])
-            t: TraitLevel = TraitLevel(drop_scope, unique, traits)
+            t: TraitLevel = TraitLevel(drop_score, unique, traits)
             new_trait_levels.append(t)
 
         self._trait_levels: [TraitLevel] = new_trait_levels

@@ -921,7 +921,7 @@ class Dice:
         pass
 
 
-@contract('0x72909f1ef43a843f4b2169f2c577787d9e6994a8')
+@contract('0x9bf45059f1028e7425d416bf640d50f0f657f443')
 class Epoch:
 
     @staticmethod

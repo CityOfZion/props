@@ -39,7 +39,6 @@ async function main() {
     }
     await sdk.helpers.sleep(TIME_CONSTANT)
 
-
     const totalSupply = await puppet.totalSupply()
     console.log('Puppet Supply: ', totalSupply)
 
@@ -47,15 +46,21 @@ async function main() {
         await sdk.helpers.txDidComplete(NODE, id)
     }
 
+
     for (let i = 1; i <= totalSupply; i++) {
         let p = await puppet.properties(i)
         console.log(p)
     }
 
+
+
     /*
     const data = [['color', 'personality', 'archetype', 'trade', 'title', 'origin', 'element', 'domain', 'prestige']]
 
     for (let i = 1; i <= totalSupply; i++) {
+        if (i%100 ===0) {
+            console.log(`${i/totalSupply * 100}% complete` )
+        }
         let p = await puppet.properties(i)
         const l = Array(data[0].length).fill('')
         Object.keys(p.traits).forEach( (key) => [
@@ -67,7 +72,6 @@ async function main() {
     const csv = data.map( (row) => row.join(',')).join('\n')
 
     fs.writeFileSync('traits.csv', csv)
-
-     */
+    */
 }
 main()

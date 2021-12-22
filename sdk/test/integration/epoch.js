@@ -85,8 +85,9 @@ describe("Basic System Test Suite", function() {
         const epoch_id = await epoch.totalEpochs()
 
         const txids = []
+        const mintCount = 10
 
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < mintCount; i++) {
             const txid = await epoch.mintFromEpoch(epoch_id, cozWallet)
             txids.push(txid)
         }
@@ -95,14 +96,18 @@ describe("Basic System Test Suite", function() {
         const res = []
         for (let txid of txids) {
             const traits = await sdk.helpers.txDidComplete(NODE, txid)
-            res.push(traits[0].color)
+            console.log(traits)
+            //res.push(traits[0].color)
         }
 
+        /*
         const hist = {}
         for (const num of res) {
             hist[num] = hist[num] ? hist[num] + 1 : 1;
         }
         console.log(hist)
+
+         */
     })
 
 

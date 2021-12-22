@@ -1,5 +1,9 @@
 import { wallet } from "@cityofzion/neon-core";
 
+export enum EventTypeEnum {
+  CollectionPointer = 0
+}
+
 export interface BaseStats {
   charisma: number
   constitution: number
@@ -45,7 +49,13 @@ export interface TraitType {
 export interface TraitLevel {
   dropScore: number,
   unique: boolean,
-  traits: CollectionPointer[]
+  traits: EventTypeWrapper[]
+}
+
+export interface EventTypeWrapper {
+  type: EventTypeEnum,
+  args: CollectionPointer
+
 }
 
 export interface CollectionPointer {

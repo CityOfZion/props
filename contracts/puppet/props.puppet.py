@@ -16,8 +16,6 @@ from boa3.builtin.interop.runtime import get_random
 # TODO: Epoch Uniques
 # TODO: Verify upgrade
 # TODO: Epoch authentication for stateful features
-# TODO: Break out User Accounts into its own contract
-# TODO: is checkwitness needed if we get tx.sender?
 # TODO: verify drops on attributes and hit dice
 # TODO: audit events
 # TODO: Calling contracts need accounts support
@@ -921,7 +919,7 @@ class Dice:
         pass
 
 
-@contract('0x9bf45059f1028e7425d416bf640d50f0f657f443')
+@contract('0xe938f1d44002853ffd41ff27ea890c8b5c69a204')
 class Epoch:
 
     @staticmethod

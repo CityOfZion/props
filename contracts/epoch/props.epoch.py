@@ -1,14 +1,25 @@
 from typing import Any, Dict, List, cast
-from boa3.builtin import contract, NeoMetadata, metadata, public
+from boa3.builtin import contract, NeoMetadata, metadata, public, CreateNewEvent
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.runtime import get_random
 
 # TODO: variables in epoch definitions
 # TODO: allow calls outside to other contracts besides Collections
+# TODO: security on epoch features (secure mint for unique)
+# TODO: make GAS fee uniform
+
 #############EPOCH#########################
 #############EPOCH#########################
 #############EPOCH#########################
+
+
+debug = CreateNewEvent(
+    [
+        ('params', list),
+    ],
+    'Debug'
+)
 
 
 @metadata
@@ -39,10 +50,6 @@ def total_epochs() -> int:
 
 @public
 def create_epoch(label: bytes, traits: List) -> int:
-    #tx = cast(Transaction, script_container)
-    #user: User = get_user(tx.sender)
-    #assert user.get_create_epoch(), "User Permission Denied"
-
     new_epoch: Epoch = Epoch()
     x: bool = new_epoch.load(label, traits)
     epoch_id: bytes = new_epoch.get_id()
@@ -52,7 +59,7 @@ def create_epoch(label: bytes, traits: List) -> int:
     return epoch_id_int
 
 
-class CollectionPointer:
+class CollectionPointerEvent:
     def __init__(self, collection_id: int, idx: int):
         self.collection_id: int = collection_id
         self.idx: int = idx
@@ -70,22 +77,49 @@ class CollectionPointer:
         return value
 
 
+class EventInterface:
+    def __init__(self, event_type: int, args: List):
+        self._event_type = event_type
+        if event_type == 0:
+            collection_id: int = cast(int, args[0])
+            idx: int = cast(int, args[1])
+            self._event = CollectionPointerEvent(collection_id, idx)
+
+    def export(self) -> Dict[str, Any]:
+        args: Dict[str, Any] = self._event.export()
+        exported: Dict[str, Any] = {
+            'type': self._event_type,
+            'args': args
+        }
+        return exported
+
+    def get_value(self) -> bytes:
+        if self._event_type == 0:
+            event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
+            return event.get_value()
+
+        raise Exception("Invalid Event Type")
+        return b''
+
+
 class TraitLevel:
 
-    def __init__(self, drop_score: bytes, unique: bool, collection_pointers: List):
+    def __init__(self, drop_score: bytes, unique: bool, events: List):
         self._drop_score: int = drop_score.to_int()
         self._unique: bool = unique
-        traits: [CollectionPointer] = []
-        for pointer in collection_pointers:
-            pointer_list: List = cast(List, pointer)
-            collection_id: int = cast(int, pointer_list[0])
-            idx: int = cast(int, pointer_list[1])
-            p: CollectionPointer = CollectionPointer(collection_id, idx)
-            traits.append(p)
-        self._traits: [CollectionPointer] = traits
 
-    def dropped(self, roll: int) -> bool:
-        # // TODO: handle unique state here
+        traits: [EventInterface] = []
+        for event in events:
+            event_list: List = cast(List, event)
+            event_type: int = cast(int, event_list[0])
+            event_args: List = cast(List, event_list[1])
+            new_event: EventInterface = EventInterface(event_type, event_args)
+            traits.append(new_event)
+        self._traits: [EventInterface] = traits
+
+    def dropped(self, roll: int, unique_drops: bool) -> bool:
+        if self._unique and not unique_drops:
+            return False
         dropped: bool = roll < self._drop_score
         return dropped
 
@@ -110,7 +144,7 @@ class TraitLevel:
         max_index: int = len(self._traits)
         entropy_int: int = entropy.to_int()
         idx: int = (max_index * entropy_int) // 256
-        trait: CollectionPointer = self._traits[idx]
+        trait: EventInterface = self._traits[idx]
         return trait.get_value()
 
 
@@ -145,7 +179,7 @@ class Trait:
         for i in range(slots):
             roll: int = Dice.rand_between(0, 9999)
             for trait_level in trait_levels:
-                if trait_level.dropped(roll):
+                if trait_level.dropped(roll, True): #update this for actual unique support
                     if trait_level.can_mint():
                         new_trait: bytes = trait_level.mint(slot_entropy[i].to_bytes())
                         traits.append(new_trait)
@@ -156,7 +190,7 @@ class Trait:
 
         trait_levels: List[Dict] = []
         for trait_level in self._trait_levels:
-            level_json: Dict[str, Any] = trait_level.export
+            level_json: Dict[str, Any] = trait_level.export()
             trait_levels.append(level_json)
 
         exported: Dict[str, Any] = {

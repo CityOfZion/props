@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EpochAPI = void 0;
 const neon_js_1 = require("@cityofzion/neon-js");
+const interface_1 = require("../interface");
 const helpers_1 = require("../helpers");
 class EpochAPI {
     static async totalEpochs(node, networkMagic, contractHash, signer) {
@@ -16,8 +17,16 @@ class EpochAPI {
         const method = "create_epoch";
         const traitsFormatted = traits.map((trait) => {
             const traitLevelsFormatted = trait.traitLevels.map((traitLevel) => {
-                const traitPointers = traitLevel.traits.map((pointer) => {
-                    return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(pointer.collectionId), neon_js_1.sc.ContractParam.integer(pointer.index));
+                const traitPointers = traitLevel.traits.map((traitEvent) => {
+                    //need to also have the type in here
+                    switch (traitEvent.type) {
+                        case interface_1.EventTypeEnum.CollectionPointer:
+                            const args = traitEvent.args;
+                            //console.log(traitEvent.type, args.collectionId, args.index)
+                            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(args.collectionId), neon_js_1.sc.ContractParam.integer(args.index)));
+                        default:
+                            throw new Error("unrecognized trait event type");
+                    }
                 });
                 return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitLevel.dropScore), neon_js_1.sc.ContractParam.boolean(traitLevel.unique), neon_js_1.sc.ContractParam.array(...traitPointers));
             });

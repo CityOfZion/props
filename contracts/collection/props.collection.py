@@ -6,6 +6,8 @@ from boa3.builtin.interop.runtime import script_container
 from boa3.builtin.interop.storage import get, put
 from boa3.builtin.interop.stdlib import serialize, deserialize
 
+# TODO: split out collection class
+
 """
 This object is designed to provide 3 services to users:
 1) This object is deployed to the Neo N3 mainnet as a contract for direct interfacing via the public methods.
@@ -26,13 +28,6 @@ def manifest_metadata() -> NeoMetadata:
     meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
 
-
-debug = CreateNewEvent(
-    [
-        ('params', list),
-    ],
-    'Debug'
-)
 
 new_collection = CreateNewEvent(
     [
@@ -223,7 +218,6 @@ def total_collections_internal() -> int:
 
 def mk_collection_key(collection_id: bytes) -> bytes:
     return COLLECTION_KEY + collection_id
-
 
 
 @contract('0x68021f61e872098627da52dc82ca793575c83826')

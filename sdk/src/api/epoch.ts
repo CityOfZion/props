@@ -1,8 +1,8 @@
-import {NeoInterface} from "./interface";
 import {sc} from "@cityofzion/neon-js";
-import { wallet } from "@cityofzion/neon-core";
-import {CollectionPointer, EpochType, TraitLevel, TraitType} from "../interface";
+import {wallet} from "@cityofzion/neon-core";
+import {EpochType, EventTypeEnum, EventTypeWrapper, TraitLevel, TraitType} from "../interface";
 import {parseToJSON, variableInvoke} from "../helpers";
+import {CollectionPointer} from "../interface/interface";
 
 export class EpochAPI {
 
@@ -32,12 +32,23 @@ export class EpochAPI {
     const method = "create_epoch";
 
     const traitsFormatted = traits.map( (trait) => {
-      const traitLevelsFormatted = trait.traitLevels.map((traitLevel) => {
-        const traitPointers = traitLevel.traits.map((pointer: CollectionPointer) => {
-          return sc.ContractParam.array(
-            sc.ContractParam.integer(pointer.collectionId),
-            sc.ContractParam.integer(pointer.index)
-          )
+      const traitLevelsFormatted = trait.traitLevels.map((traitLevel: TraitLevel ) => {
+        const traitPointers = traitLevel.traits.map((traitEvent: EventTypeWrapper ) => {
+
+          //need to also have the type in here
+          switch (traitEvent.type) {
+            case EventTypeEnum.CollectionPointer:
+              const args: CollectionPointer = traitEvent.args as CollectionPointer
+              //console.log(traitEvent.type, args.collectionId, args.index)
+              return sc.ContractParam.array(
+                sc.ContractParam.integer(traitEvent.type),
+                sc.ContractParam.array(
+                  sc.ContractParam.integer(args.collectionId),
+                  sc.ContractParam.integer(args.index)
+               ))
+            default:
+              throw new Error("unrecognized trait event type")
+          }
         })
 
         return sc.ContractParam.array(

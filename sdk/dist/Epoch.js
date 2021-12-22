@@ -10,7 +10,7 @@ const api_1 = require("./api");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x9bf45059f1028e7425d416bf640d50f0f657f443'
+    scriptHash: '0xe938f1d44002853ffd41ff27ea890c8b5c69a204'
 };
 class Epoch {
     constructor(options = {}) {

@@ -9,7 +9,6 @@ describe("Collections tests", function() {
     let collection, network, NODE
 
     beforeEach( async function () {
-        this.timeout(0);
         //initialize the contract puppet
         
         NODE = 'http://localhost:50012'

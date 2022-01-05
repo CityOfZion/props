@@ -239,6 +239,9 @@ class Epoch:
         self._author = author
         return True
 
+    def get_author(self) -> UInt160:
+        return self._author
+
     def get_label(self) -> bytes:
         return self._label
 

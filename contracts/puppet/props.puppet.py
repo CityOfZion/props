@@ -308,7 +308,6 @@ def internal_deploy(owner: UInt160) -> bool:
         'contract_upgrade': True,
         'set_mint_fee': True,
         'set_epoch': True,
-        'create_epoch': True,
         'set_permissions': True
     }
     user: User = User()
@@ -457,7 +456,6 @@ class User:
             'contract_upgrade': False,
             'set_mint_fee': False,
             'set_epoch': False,
-            'create_epoch': False,
             'set_permissions': False
         }
 
@@ -510,9 +508,6 @@ class User:
 
     def get_set_mint_fee(self) -> bool:
         return self._permissions['set_mint_fee']
-
-    def get_create_epoch(self) -> bool:
-        return self._permissions['create_epoch']
 
     def get_set_epoch(self) -> bool:
         return self._permissions['set_epoch']

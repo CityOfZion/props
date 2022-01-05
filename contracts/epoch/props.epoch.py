@@ -2,7 +2,9 @@ from typing import Any, Dict, List, cast
 from boa3.builtin import contract, NeoMetadata, metadata, public, CreateNewEvent
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
-from boa3.builtin.interop.runtime import get_random
+from boa3.builtin.interop.runtime import get_random, script_container
+from boa3.builtin.type import UInt160
+from boa3.builtin.interop.blockchain import Transaction
 
 #############EPOCH#########################
 #############EPOCH#########################
@@ -47,8 +49,11 @@ def create_epoch(label: bytes, traits: List) -> int:
     :param traits: A compressed epoch object
     :return: An integer representing the epoch_id
     """
+    tx = cast(Transaction, script_container)
+    author: UInt160 = tx.sender
+
     new_epoch: Epoch = Epoch()
-    x: bool = new_epoch.load(label, traits)
+    x: bool = new_epoch.load(label, traits, author)
     epoch_id: bytes = new_epoch.get_id()
     epoch_id_int: int = epoch_id.to_int()
     save_epoch(new_epoch)
@@ -203,6 +208,7 @@ class Epoch:
         self._label: bytes = b''
         self._traits: [Trait] = []
         self._id: bytes = (total_epochs() + 1).to_bytes()
+        self._author: UInt160 = b''
 
     def export(self) -> Dict[str, Any]:
 
@@ -212,12 +218,14 @@ class Epoch:
             traits.append(trait_json)
 
         exported: Dict[str, Any] = {
+            "id": self._id,
+            "author": self._author,
             "label": self._label,
-            "traits": traits
+            "traits": traits,
         }
         return exported
 
-    def load(self, label: bytes, traits: List) -> bool:
+    def load(self, label: bytes, traits: List, author: UInt160) -> bool:
         self._label = label
         new_traits: [Trait] = []
         for trait in traits:
@@ -228,6 +236,7 @@ class Epoch:
             t: Trait = Trait(lbl, slots, trait_levels)
             new_traits.append(t)
         self._traits = new_traits
+        self._author = author
         return True
 
     def get_label(self) -> bytes:

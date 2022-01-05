@@ -36,6 +36,8 @@ export interface CollectionType {
 }
 
 export interface EpochType {
+  id?: number,
+  author?: string
   label: string,
   traits: TraitType[]
 }

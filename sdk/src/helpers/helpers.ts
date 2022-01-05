@@ -1,7 +1,7 @@
-import {rpc, u, wallet} from '@cityofzion/neon-core'
-import {hash160} from "@cityofzion/neon-core/lib/u";
-import {ApplicationLogJson} from "@cityofzion/neon-core/lib/rpc";
+import {sc, rpc, u, wallet} from '@cityofzion/neon-core'
 import {NeoInterface} from "../api";
+import fs from "fs";
+import {experimental} from "@cityofzion/neon-js";
 
 export function parseToJSON(entries: any[]): any {
   const object: {
@@ -100,6 +100,44 @@ export async function variableInvoke(node: string, networkMagic: number, contrac
   }
 }
 
+export async function deployContract(node: string, networkMagic: number, pathToNEF: string, signer: wallet.Account): Promise<string> {
+  const config = {
+    networkMagic,
+    rpcAddress: node,
+    account: signer
+  }
+
+  const nef = sc.NEF.fromBuffer(
+    fs.readFileSync(
+      pathToNEF
+    )
+  )
+
+  const rawManifest = fs.readFileSync(pathToNEF.replace('.nef', '.manifest.json'))
+  const manifest = sc.ContractManifest.fromJson(
+    JSON.parse(rawManifest.toString())
+  )
+
+  const assembledScript = new sc.ScriptBuilder()
+    .emit(sc.OpCode.ABORT)
+    .emitPush(u.HexString.fromHex(signer.scriptHash))
+    .emitPush(nef.checksum)
+    .emitPush(manifest.name)
+    .build();
+  const scriptHash = u.reverseHex(u.hash160(assembledScript))
+
+  console.log(`deploying ${manifest.name} to 0x${scriptHash} ...`)
+
+
+  return experimental.deployContract(nef, manifest, config)
+}
+
+export async function getEvents(node: string, txid: string): Promise<any[]> {
+  const client = new rpc.RPCClient(node)
+  const tx = await client.getApplicationLog(txid)
+  return parseNotifications(tx)
+}
+
 export async function txDidComplete(node: string, txid: string, showStats: boolean = false): Promise<any>{
   const client = new rpc.RPCClient(node)
   const tx = await client.getApplicationLog(txid)
@@ -121,10 +159,37 @@ export async function txDidComplete(node: string, txid: string, showStats: boole
   return true
 }
 
-function parseNotifications(tx: ApplicationLogJson) {
+function parseNotifications(tx: rpc.ApplicationLogJson) {
   return tx.executions[0].notifications.map( (n) => {
     const notification = formatter(n.state)
-    console.log(n.eventname, notification)
-    return notification
+    return {
+      'eventName': n.eventname,
+      'value': notification
+    }
   })
+}
+
+export function chiSquared(samples: string[]): number {
+  const bins = {}
+
+  for (let sample of samples) {
+    // @ts-ignore
+    if (bins[sample]) {
+      // @ts-ignore
+      bins[sample] += 1
+    } else {
+      // @ts-ignore
+      bins[sample] = 1
+    }
+  }
+
+  // chi-squared test for uniformity
+  let chiSquared = 0
+  const expected = samples.length/Object.keys(bins).length
+  const keys: any[] = Object.keys(bins)
+  for (let i = 0; i< keys.length; i++) {
+    // @ts-ignore
+    chiSquared += ((bins[keys[i]] - expected) ** 2) / expected
+  }
+  return chiSquared
 }

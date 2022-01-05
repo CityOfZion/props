@@ -4,22 +4,9 @@ from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.runtime import get_random
 
-# TODO: variables in epoch definitions
-# TODO: allow calls outside to other contracts besides Collections
-# TODO: security on epoch features (secure mint for unique)
-# TODO: make GAS fee uniform
-
 #############EPOCH#########################
 #############EPOCH#########################
 #############EPOCH#########################
-
-
-debug = CreateNewEvent(
-    [
-        ('params', list),
-    ],
-    'Debug'
-)
 
 
 @metadata
@@ -42,6 +29,10 @@ TOTAL_EPOCHS = b'!TOTAL_EPOCHS'
 
 @public
 def total_epochs() -> int:
+    """
+    Gets the total epoch count
+    :return: An integer representing the total epoch count
+    """
     total: bytes = get(TOTAL_EPOCHS)
     if len(total) == 0:
         return 0
@@ -50,6 +41,12 @@ def total_epochs() -> int:
 
 @public
 def create_epoch(label: bytes, traits: List) -> int:
+    """
+    Creates a new epoch
+    :param label: A byte formatted string defining the epoch
+    :param traits: A compressed epoch object
+    :return: An integer representing the epoch_id
+    """
     new_epoch: Epoch = Epoch()
     x: bool = new_epoch.load(label, traits)
     epoch_id: bytes = new_epoch.get_id()
@@ -259,17 +256,32 @@ class Epoch:
 
 @public
 def get_epoch_json(epoch_id: bytes) -> Dict[str, Any]:
+    """
+    Gets the JSON formatted representation of an epoch
+    :param epoch_id: the byte formatted epoch_id
+    :return: A dictionary representation of an epoch
+    """
     epoch: Epoch = get_epoch(epoch_id)
     return epoch.export()
 
 @public
 def get_epoch(epoch_id: bytes) -> Epoch:
+    """
+    Gets an Epoch class instance
+    :param epoch_id: the byte formatted epoch_id
+    :return: An epoch class instance
+    """
     epoch_bytes: bytes = get_epoch_raw(epoch_id)
     return cast(Epoch, deserialize(epoch_bytes))
 
 
 @public
 def mint_from_epoch(epoch_id: bytes) -> Dict[str, Any]:
+    """
+    Mints events from an epoch object and returns the responses of the events.
+    :param epoch_id: The epoch_id to mint from
+    :return: A dictionary containing the responses of the triggered events
+    """
     epoch: Epoch = get_epoch(epoch_id)
     result: Dict[str, Any] = epoch.mint_traits()
     return result
@@ -277,9 +289,9 @@ def mint_from_epoch(epoch_id: bytes) -> Dict[str, Any]:
 
 def get_epoch_raw(epoch_id: bytes) -> bytes:
     """
-    Gets the serialized puppet definition
-    @param token_id: the unique puppet identifier
-    @return: a serialize puppet
+    Gets a serialized epoch
+    :param epoch_id: the byte formatted pointer to the epoch
+    :return: a serialized epoch
     """
     return get(mk_epoch_key(epoch_id))
 

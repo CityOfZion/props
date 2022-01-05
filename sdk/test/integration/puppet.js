@@ -93,15 +93,15 @@ describe("Basic System Test Suite", function() {
         //Create the Epoch
         console.log("create epoch: ")
         let res = await puppet.createEpoch("testEpoch", maxTraits, newEpoch, cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         //Set the current Epoch
         console.log("set epoch: ")
         const epoch_id = await puppet.totalEpochs()
         res = await puppet.setCurrentEpoch(epoch_id, cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         const currentEpoch = await puppet.getCurrentEpoch()
         assert.equal(currentEpoch, epoch_id)
@@ -116,8 +116,8 @@ describe("Basic System Test Suite", function() {
         const tokensOld = await puppet.tokensOf(cozWallet.address)
 
         const res = await puppet.offlineMint(cozWallet.address, cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res, true)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res, true)
 
         const tokensNew = await puppet.tokensOf(cozWallet.address)
         assert(tokensNew.length === (tokensOld.length + 1))
@@ -159,8 +159,8 @@ describe("Basic System Test Suite", function() {
 
         const initialTokensOfOwner = await puppet.tokensOf(cozWallet.address)
         const res = await puppet.transfer(account.address, initialTokensOfOwner[0], cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         const newTokensOfOwner = await puppet.tokensOf(cozWallet.address)
         const newTokensOfReceiver = await puppet.tokensOf(account.address)
@@ -173,8 +173,8 @@ describe("Basic System Test Suite", function() {
         const cozWallet = network.wallets[0].wallet
         const totalSupply = await puppet.totalSupply()
         const res = await puppet.purchase(cozWallet)
-        await sleep(4000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(4000)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         const newTotalSupply = await puppet.totalSupply()
         assert(totalSupply < newTotalSupply)
@@ -184,9 +184,9 @@ describe("Basic System Test Suite", function() {
         const cozWallet = network.wallets[0].wallet
         const mintFee = 100000000
         const res = await puppet.setMintFee(mintFee, cozWallet)
-        await sleep(2000)
+        await sdk.helpers.sleep(2000)
         console.log(NODE, res)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         const realizedMintFee = await puppet.getMintFee()
         assert.equal(mintFee, realizedMintFee)
@@ -201,8 +201,8 @@ describe("Basic System Test Suite", function() {
 
 
         let res = await puppet.purchase(cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         // verify that the token was purchased
         const newTotalSupply = await puppet.totalSupply()
@@ -212,8 +212,8 @@ describe("Basic System Test Suite", function() {
         // update the mint fee to 10 GAS
         res = await puppet.setMintFee(5 * initialMintFee, cozWallet)
         console.log('set mint fee: ', res)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         // verify the update persisted
         const newMintFee = await puppet.getMintFee()
@@ -222,16 +222,16 @@ describe("Basic System Test Suite", function() {
 
         // buy a new token and verify
         res = await puppet.purchase(cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         const finalTotalSupply = await puppet.totalSupply()
         assert(newTotalSupply < finalTotalSupply)
 
         // reset
         res = await puppet.setMintFee(initialMintFee, cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res)
     })
 
     it("should get the total epochs", async() => {
@@ -268,8 +268,8 @@ describe("Basic System Test Suite", function() {
         })
 
         const res = await puppet.createEpoch("testEpoch", 3, newEpoch, cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        await sdk.helpers.sleep(2000)
+        await sdk.helpers.txDidComplete(NODE, res)
 
         const epoch_id = await puppet.totalEpochs()
         const res2 = await puppet.getEpochJSON(epoch_id)
@@ -280,27 +280,3 @@ describe("Basic System Test Suite", function() {
     })
 
 })
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function txDidComplete(node, txid) {
-    const client = new Neon.rpc.RPCClient(node)
-    const tx = await client.getApplicationLog(txid)
-    console.log('gas consumed: ', tx.executions[0].gasconsumed / 10 ** 8)
-
-    parseNotifications(tx)
-    if (tx.executions[0].vmstate !== "HALT") {
-        throw new Error(tx.executions[0].exception)
-    }
-    return true
-}
-
-function parseNotifications(tx) {
-    return tx.executions[0].notifications.map( (n) => {
-        const notification = sdk.helpers.formatter(n.state)
-        console.log(n.eventname, notification)
-        return notification
-    })
-}

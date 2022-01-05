@@ -8,13 +8,14 @@ var assert = require('assert');
 
 describe("Lets roll some Dice!", function() {
     this.timeout(60000);
+    let TIME_CONSTANT = 4000
     let dice, network, NODE
 
     beforeEach( async function () {
         this.timeout(0);
         //initialize the contract puppet
 
-        const NODE = 'http://localhost:50012'
+        NODE = 'http://localhost:50012'
 
         dice = await new sdk.Dice({node: NODE})
         await dice.init()
@@ -31,8 +32,8 @@ describe("Lets roll some Dice!", function() {
         this.timeout(0)
         const cozWallet = network.wallets[0].wallet
 
-        const runSize = 1000
-        const bins = 4
+        const runSize = 2000
+        const bins = 20
         const binVals = new Array(bins).fill(0)
 
 
@@ -41,26 +42,26 @@ describe("Lets roll some Dice!", function() {
             const res = await dice.randBetween(0, bins - 1, cozWallet)
             txids.push(res)
         }
-        await sdk.helpers.sleep(2000)
+        await sdk.helpers.sleep(TIME_CONSTANT)
         for (let txid of txids) {
             let result = await sdk.helpers.txDidComplete(NODE, txid)
             binVals[result[0]] += 1
         }
-        console.log(binVals)
+
         // chi-squared test for uniformity
         let chiSquared = 0
         const expected = runSize/bins
         for (let i = 0; i< bins; i++) {
             chiSquared += ((binVals[i] - expected) ** 2) / expected
         }
-        assert(chiSquared < 100)
+        assert(chiSquared < 20, chiSquared)
     })
 
     it('should roll some fair dice using rollDie', async function() {
         this.timeout(0)
         const cozWallet = network.wallets[0].wallet
 
-        const runSize = 4000
+        const runSize = 2000
         const bins = 20
         const die = 'd20'
         const binVals = new Array(bins).fill(0)
@@ -70,7 +71,7 @@ describe("Lets roll some Dice!", function() {
             const res = await dice.rollDie(die, cozWallet)
             txids.push(res)
         }
-        await sdk.helpers.sleep(2000)
+        await sdk.helpers.sleep(TIME_CONSTANT)
         for (let txid of txids) {
             let result = await sdk.helpers.txDidComplete(NODE, txid)
             binVals[result[0] - 1] += 1

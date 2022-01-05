@@ -6,14 +6,13 @@ from boa3.builtin.interop.runtime import script_container
 from boa3.builtin.interop.storage import get, put
 from boa3.builtin.interop.stdlib import serialize, deserialize
 
-# TODO: split out collection class
-
 """
 This object is designed to provide 3 services to users:
 1) This object is deployed to the Neo N3 mainnet as a contract for direct interfacing via the public methods.
 2) This object can be imported and interfaced with using the internal methods as a module for other smart contracts.
 3) This object may be imported for use as a decentralized interface for other smart contracts.
 """
+
 
 @metadata
 def manifest_metadata() -> NeoMetadata:
@@ -45,7 +44,14 @@ These methods are publicly exposed on the deployed smart contract.  An SDK is av
 
 @public
 def create_collection(description: bytes, collection_type: bytes, extra: bytes,  values: [bytes]) -> int:
-
+    """
+    Creates a new collection
+    :param description: A brief string formatted description of the collection
+    :param collection_type: A string formatted type definition.  Where possible, use naming the Neo type naming syntax
+    :param extra: An option payload for supplemental data
+    :param values: The array of values in the collection
+    :return: The collection id
+    """
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
@@ -56,28 +62,54 @@ def create_collection(description: bytes, collection_type: bytes, extra: bytes, 
 
 @public
 def get_collection_json(collection_id: bytes) -> Dict[str, Any]:
+    """
+    Gets the JSON formatted collection
+    :param collection_id: The byte formatted collection_id
+    :return: A dictionary representing the collection
+    """
     return get_collection_json_internal(collection_id)
 
 
 @public
 def get_collection(collection_id: bytes) -> Collection:
+    """
+    Gets a Collection class instance
+    :param collection_id: The byte formatted collection_id
+    :return: A Collection instance of the requested collection_id
+    """
     return get_collection_internal(collection_id)
 
 
 @public
 def get_collection_element(collection_id: bytes, index: int) -> bytes:
+    """
+    Gets the value at a requested index in a collection
+    :param collection_id: The collection_id to reference
+    :param index: The index of the value to get
+    :return: bytes at the requested index
+    """
     collection: Collection = get_collection_internal(collection_id)
     return collection.get_value(index)
 
 
 @public
 def get_collection_length(collection_id: bytes) -> int:
+    """
+    Gets the length of a collection
+    :param collection_id: The collection_id to get the length of
+    :return: An integer representing the length of the collection
+    """
     collection_values: [bytes] = get_collection_values(collection_id)
     return len(collection_values)
 
 
 @public
 def get_collection_values(collection_id: bytes) -> [bytes]:
+    """
+    Gets the values of a collection
+    :param collection_id: The collection_id to get the values of
+    :return: An array containing the values of a collection
+    """
     collection: Collection = get_collection_internal(collection_id)
     collection_values: [bytes] = collection.get_values()
     return collection_values
@@ -85,6 +117,12 @@ def get_collection_values(collection_id: bytes) -> [bytes]:
 
 @public
 def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
+    """
+    Returns the value of a collection at an index defined by byte entropy which has been mapped onto the array.
+    :param collection_id: The collection_id of the collection to sample from
+    :param entropy: The entropy value to sample
+    :return: The bytes at the sample location
+    """
     collection: Collection = get_collection_internal(collection_id)
     values: [bytes] = collection.get_values()
     idx: int = Dice.map_bytes_onto_range(0, len(values) - 1, entropy)
@@ -102,6 +140,11 @@ def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
 
 @public
 def sample_from_collection(collection_id: bytes) -> bytes:
+    """
+    Gets the value for a uniform-random index of a colection
+    :param collection_id: The collection_id of the collection to sample from
+    :return: The value at the sampled index
+    """
     collection: Collection = get_collection_internal(collection_id)
     collection_values: [bytes] = collection.get_values()
 
@@ -111,6 +154,10 @@ def sample_from_collection(collection_id: bytes) -> bytes:
 
 @public
 def total_collections() -> int:
+    """
+    Gets the total collection count
+    :return: An integer representing the total collections in the contract
+    """
     return total_collections_internal()
 
 
@@ -119,7 +166,6 @@ def total_collections() -> int:
 
 COLLECTION_KEY = b'c'
 TOTAL_COLLECTIONS = b'!TOTAL_COLLECTIONS'
-
 
 
 class Collection:
@@ -179,6 +225,15 @@ class Collection:
 
 
 def create_collection_internal(author: UInt160, description: bytes, collection_type: bytes, extra: bytes, values: [bytes]) -> bytes:
+    """
+    Creates a new collection
+    :param author: The author of the collection
+    :param description: The collection description
+    :param collection_type: The type of the data being stored
+    :param extra: Extra fields
+    :param values: The values of the collection
+    :return: The collection id
+    """
     collection: Collection = Collection()
     collection_id: bytes = (total_collections_internal() + 1).to_bytes()
     x: bool = collection.set_id(collection_id)
@@ -195,21 +250,40 @@ def create_collection_internal(author: UInt160, description: bytes, collection_t
 
 
 def get_collection_json_internal(collection_id: bytes) -> Dict[str, Any]:
+    """
+    Gets a JSON formatted collection
+    :param collection_id: The collection_id being requested
+    :return: A dictionary representing the collection
+    """
     collection: Collection = get_collection_internal(collection_id)
     return collection.export()
 
 
 def get_collection_internal(collection_id: bytes) -> Collection:
+    """
+    Gets a Collection instance
+    :param collection_id: The collection_id being requested
+    :return: A Collection class instance
+    """
     collection_bytes: bytes = get_collection_raw_internal(collection_id)
     return cast(Collection, deserialize(collection_bytes))
 
 
 def get_collection_raw_internal(collection_id: bytes) -> bytes:
+    """
+    Gets the raw bytes of a collection
+    :param collection_id: The collection_id being requested
+    :return: The serialized Collection class instance
+    """
     key: bytes = mk_collection_key(collection_id)
     return get(key)
 
 
 def total_collections_internal() -> int:
+    """
+    Gets the total collections
+    :return: An integer representation of the total collections
+    """
     total: bytes = get(TOTAL_COLLECTIONS)
     if len(total) == 0:
         return 0

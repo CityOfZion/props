@@ -5,6 +5,7 @@ var assert = require('assert');
 
 describe("Basic System Test Suite", function() {
     this.timeout(0);
+    const TIME_CONSTANT = 4000
     let epoch, collection, network, NODE
 
     beforeEach( async function () {
@@ -25,51 +26,66 @@ describe("Basic System Test Suite", function() {
         })
     })
 
-    it("should create an epoch from a collection set it as active", async() => {
+    it("should create a simple epoch from a collection and sample from the distribution", async() => {
         const cozWallet = network.wallets[0].wallet
 
-        const collectionId = await collection.totalCollections()
-        const initialCollection = await collection.getCollectionJSON(collectionId)
-
-        let newEpoch = []
-        let traits = []
-        let dropScore = 100
-        initialCollection.values.forEach((value, i) => {
-
-            if (i <= 200) {
-                traits.push({
-                        "collection_id": collectionId,
-                        "index": i
-                    }
-                )
-                if (traits.length > 40) {
-                    newEpoch.push({
-                        "drop_score": dropScore,
-                        "unique": false,
-                        "traits": traits
-                    })
-                    dropScore += 100
-                    traits = []
-                }
-            }
-        })
+        const mintCount = 100
         const maxTraits = 5
+        const dropRate = 0.5
+
+        let cid = await createCollection(collection, NODE, TIME_CONSTANT, cozWallet)
+        const initialCollection = await collection.getCollectionJSON(cid)
+
+        const traits = initialCollection.values.map((value, i) => {
+                return {
+                        "type": 0,
+                        "args": {
+                            "collectionId": cid,
+                            "index": i
+                        }
+                    }
+        })
+
+        const newEpoch = {
+            'label': 'new epoch',
+            'traits': [
+                {
+                    "label": "testTrait",
+                    "slots": maxTraits,
+                    "traitLevels": [
+                        {
+                            "dropScore": dropRate * 10000,
+                            "unique": false,
+                            "traits": traits
+                        }
+                    ]
+                }
+            ]
+        }
 
         //Create the Epoch
         console.log("create epoch: ")
-        let res = await puppet.createEpoch("testEpoch", maxTraits, newEpoch, cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        let res = await epoch.createEpoch(newEpoch, cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        let eid = await sdk.helpers.txDidComplete(NODE, res)
+        eid = eid[0]
 
-        //Set the current Epoch
-        console.log("set epoch: ")
-        const epoch_id = await puppet.totalEpochs()
-        res = await puppet.setCurrentEpoch(epoch_id, cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
+        console.log("minting")
+        const mints = await mintFromEpoch(eid, mintCount, cozWallet, TIME_CONSTANT, NODE)
+        let t = []
+        mints.forEach( (mint) => {
+            t = t.concat(mint['testTrait'])
+        })
 
-        const currentEpoch = await puppet.getCurrentEpoch()
-        assert.equal(currentEpoch, epoch_id)
+        //verify mint quantity
+        const traitSlots = mintCount * maxTraits
+        const expectedDrops = (traitSlots * dropRate)
+        const percentError = Math.abs((t.length / expectedDrops) - 1)
+        assert(percentError < 0.05, percentError)
+
+        const chiSquared = sdk.helpers.chiSquared(t)
+        console.log(chiSquared)
+
     })
 
     //test to get the epoch and validate fields
@@ -154,4 +170,31 @@ describe("Basic System Test Suite", function() {
         })
     })
 
+    //test unique
+
+    //test unauthenticated unique
+
+
+    async function createCollection(collection, NODE, timeConstant, signer) {
+        const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
+        await sdk.helpers.sleep(timeConstant)
+        const res = await sdk.helpers.txDidComplete(NODE, txid, true)
+        return res[0]
+    }
+
+    async function mintFromEpoch(epochID, count, wallet, timeConstant, NODE) {
+        const txids = []
+        for (let i = 0; i < count; i++) {
+            const txid = await epoch.mintFromEpoch(epochID, wallet)
+            txids.push(txid)
+        }
+        await sdk.helpers.sleep(timeConstant)
+
+        const res = []
+        for (let txid of txids) {
+            const traits = await sdk.helpers.txDidComplete(NODE, txid)
+            res.push(traits[0])
+        }
+        return res
+    }
 })

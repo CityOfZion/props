@@ -9,16 +9,6 @@ from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.storage.findoptions import FindOptions
 from boa3.builtin.interop.iterator import Iterator
 from boa3.builtin.type import UInt160
-from boa3.builtin.interop.runtime import get_random
-
-# TODO: Align docstring
-# TODO: Max Mint mechanics
-# TODO: Epoch Uniques
-# TODO: Verify upgrade
-# TODO: Epoch authentication for stateful features
-# TODO: verify drops on attributes and hit dice
-# TODO: audit events
-# TODO: Calling contracts need accounts support
 
 # -------------------------------------------
 # METADATA
@@ -43,24 +33,32 @@ def manifest_metadata() -> NeoMetadata:
 # -------------------------------------------
 
 # Symbol of the Token
-TOKEN_SYMBOL = 'PUPPET'  # TODO_TEMPLATE
+TOKEN_SYMBOL = 'PUPPET'
 
 # Number of decimal places
 TOKEN_DECIMALS = 0
 
-# Whether the smart contract was deployed or not
-DEPLOYED = b'!deployed'
-
+# The initial mint fee for a puppet
 INITIAL_MINT_FEE: int = 100000000 # GAS
 
 # -------------------------------------------
 # Keys
 # -------------------------------------------
 
+# Stores the total token count
 TOKEN_COUNT: bytes = b'!TOKEN_COUNT'
+
+# Stores the total account count
 ACCOUNT_COUNT: bytes = b'!ACCOUNT_COUNT'
+
+# Stores the current epoch being minted from
 CURRENT_EPOCH = b'!CURRENT_EPOCH'
+
+# Stores the mint fee
 MINT_FEE: bytes = b'!MINT_FEE'
+
+# Stores whether the contract has been deployed(initialized)
+DEPLOYED = b'!deployed'
 
 # -------------------------------------------
 # Events
@@ -76,21 +74,6 @@ on_transfer = CreateNewEvent(
     ],
     'Transfer'
 )
-
-# DEBUG_START
-# -------------------------------------------
-# DEBUG
-# -------------------------------------------
-
-debug = CreateNewEvent(
-    [
-        ('params', list),
-    ],
-    'Debug'
-)
-
-
-# DEBUG_END
 
 # -------------------------------------------
 # NEP-11 Methods
@@ -271,7 +254,6 @@ def tokens() -> Iterator:
 
     :return: an iterator that contains all of the tokens minted by the contract.
     """
-    # flags = FindOptions.REMOVE_PREFIX | FindOptions.KEYS_ONLY
     flags = FindOptions.REMOVE_PREFIX
     context = get_context()
     return find(TOKEN_PREFIX, context, flags)
@@ -298,7 +280,7 @@ def properties(token_id: bytes) -> Dict[str, Any]:
 @public
 def deploy() -> bool:
     """
-    The contracts initial entry point, on deployment.
+    The contract's initial entry point, on deployment. This method configures the initial admin account.
     """
     if get(DEPLOYED).to_bool():
         return False
@@ -311,6 +293,11 @@ def deploy() -> bool:
 
 
 def internal_deploy(owner: UInt160) -> bool:
+    """
+    Executes the deploy event by creating the initial contract state and admin account
+    :param owner: The initial admin of of the smart contract
+    :return: a boolean indicating success
+    """
     put(DEPLOYED, True)
     put(TOKEN_COUNT, 0)
     put(ACCOUNT_COUNT, 1)
@@ -355,9 +342,6 @@ def onNEP17Payment(from_address: UInt160, amount: int, data: Any):
     :param data: any pertinent data that might validate the transaction
     :type data: Any
     """
-    # TODO_TEMPLATE: add own logic if necessary, or uncomment below to prevent any NEP17 except GAS to be sent to the
-    # contract (as a failsafe, but would prevent any minting fee logic) if calling_script_hash != GAS: abort()
-
     fee: int = get_mint_fee()
     if calling_script_hash == GAS and amount == fee:
         internal_mint(from_address)
@@ -389,9 +373,8 @@ def offline_mint(account: UInt160) -> bytes:
     mints a token
     :param account: the account to mint to
     :return: the token_id of the minted token
+    :raise AssertionError: raised if the signer does not have `offline_mint` permission.
     """
-    # TODO_TEMPLATE: add own logic if necessary, or uncomment below to restrict minting to contract authorized addresses
-    # assert verify(), '`acccount` is not allowed to mint'
     tx = cast(Transaction, script_container)
     user: User = get_user(tx.sender)
     assert user.get_offline_mint(), "User Permission Denied"
@@ -407,7 +390,7 @@ def update(script: bytes, manifest: bytes):
     :type script: bytes
     :param manifest: the contract manifest
     :type manifest: bytes
-    :raise AssertionError: raised if witness is not verified
+    :raise AssertionError: raised if the signer does not have the 'update' permission
     """
     tx = cast(Transaction, script_container)
     user: User = get_user(tx.sender)
@@ -417,11 +400,18 @@ def update(script: bytes, manifest: bytes):
 
 
 @public
-def set_mint_fee(amount: bytes):
+def set_mint_fee(amount: bytes) -> bool:
+    """
+    Updates the mint fee for a puppet
+    :param amount: the GAS cost to charge for the minting of a puppet
+    :raise AssertionError: raised if the signer does not have the 'offline_mint' permission
+    :return: A boolean indicating success
+    """
     tx = cast(Transaction, script_container)
     user: User = get_user(tx.sender)
     assert user.get_set_mint_fee(), "User Permission Denied"
     put(MINT_FEE, amount)
+    return True
 
 
 @public
@@ -530,11 +520,21 @@ class User:
 
 @public
 def get_user_json(address: UInt160) -> Dict[str, Any]:
+    """
+    Gets the JSON representation of a user account
+    :param address: The address being requested
+    :return: A Dict representing the user
+    """
     user: User = get_user(address)
     return user.export()
 
 @public
 def get_user(address: UInt160) -> User:
+    """
+    Gets a User instance
+    :param address: The address being requested
+    :return: The User instance for the requested address
+    """
     user_bytes: bytes = get_user_raw(address)
     if len(user_bytes) != 0:
         return cast(User, deserialize(user_bytes))
@@ -547,6 +547,12 @@ def get_user_raw(address: UInt160) -> bytes:
 
 
 def save_user(address: UInt160, user: User) -> bool:
+    """
+    Saves a user instance
+    :param address: The address to save the user against
+    :param user: the User instance being saved
+    :return: A bool indicating completion
+    """
     account_id: bytes = user.get_account_id()
     account_count: int = total_accounts()
     if account_id.to_int() > account_count:
@@ -566,6 +572,12 @@ def mk_token_index_key(account_id: bytes) -> bytes:
 
 @public
 def set_user_permissions(user: UInt160, permissions: Dict[str, bool]) -> bool:
+    """
+    Sets a user's permissions
+    :param user: The address of the user to edit
+    :param permissions: A dictionary representing the permissions to update
+    :return: a boolean indicating success
+    """
     tx = cast(Transaction, script_container)
     invoking_user: User = get_user(tx.sender)
     assert invoking_user.get_set_permissions(), "User Permission Denied"
@@ -578,6 +590,11 @@ def set_user_permissions(user: UInt160, permissions: Dict[str, bool]) -> bool:
 
 @public
 def set_current_epoch(epoch_id: bytes) -> bool:
+    """
+    Sets the current epoch_id to mint from
+    :param epoch_id: The epoch_id to target when minting a puppet
+    :return: A boolean indicating success
+    """
     tx = cast(Transaction, script_container)
     user: User = get_user(tx.sender)
     assert user.get_set_epoch(), "User Permission Denied"
@@ -688,7 +705,6 @@ class Puppet:
         # mint traits
         epoch_id: int = get_current_epoch()
         epoch_id_bytes: bytes = epoch_id.to_bytes()
-        debug(['epoch_id_bytes', epoch_id_bytes])
         traits: Dict[str, List] = Epoch.mint_from_epoch(epoch_id_bytes)
         self._traits = traits
         self._epoch = epoch_id_bytes
@@ -826,8 +842,8 @@ class Puppet:
 def get_attribute_mod(attribute_value: int) -> int:
     """
     Gets the attribute modifier for an attribute value.
-    @param attribute_value: The attribute value to get the modifier for range(0-30)
-    @return: An attribute modifier for use in mechanics.
+    :param attribute_value: The attribute value to get the modifier for range(0-30)
+    :return: An attribute modifier for use in mechanics.
     """
     return ATTRIBUTE_MODIFIERS[attribute_value]
 
@@ -835,8 +851,8 @@ def get_attribute_mod(attribute_value: int) -> int:
 def get_hit_die(roll: int) -> str:
     """
     Gets a string representation of a hit die when provided an input.
-    @param roll: An index for the hit die range(0-3)
-    @return:
+    :param roll: An index for the hit die range(0-3)
+    :return:
     """
     return HIT_DIE_OPTIONS[roll]
 
@@ -845,8 +861,8 @@ def get_hit_die(roll: int) -> str:
 def get_puppet(token_id: bytes) -> Puppet:
     """
     A factory method to get a puppet from storage
-    @param token_id: the unique identifier of the puppet
-    @return: The requested puppet
+    :param token_id: the unique identifier of the puppet
+    :return: The requested puppet
     """
     puppet_bytes: bytes = get_puppet_raw(token_id)
     return cast(Puppet, deserialize(puppet_bytes))
@@ -856,8 +872,8 @@ def get_puppet(token_id: bytes) -> Puppet:
 def get_puppet_json(token_id: bytes) -> Dict[str, Any]:
     """
     Gets a dict representation of the puppet's base stats
-    @param token_id: the unique puppet identifier
-    @return: A dict representing the puppet
+    :param token_id: the unique puppet identifier
+    :return: A dict representing the puppet
     """
     puppet: Puppet = get_puppet(token_id)
     return puppet.get_state()
@@ -866,8 +882,8 @@ def get_puppet_json(token_id: bytes) -> Dict[str, Any]:
 def get_puppet_raw(token_id: bytes) -> bytes:
     """
     Gets the serialized puppet definition
-    @param token_id: the unique puppet identifier
-    @return: a serialize puppet
+    :param token_id: the unique puppet identifier
+    :return: a serialize puppet
     """
     return get(mk_token_key(token_id))
 
@@ -875,8 +891,8 @@ def get_puppet_raw(token_id: bytes) -> bytes:
 def save_puppet(puppet: Puppet) -> bool:
     """
     A factory method to persist a puppet to storage
-    @param puppet: A puppet to save
-    @return: A boolean representing the results of the save
+    :param puppet: A puppet to save
+    :return: A boolean representing the results of the save
     """
     token_id: bytes = puppet.get_token_id()
     put(mk_token_key(token_id), serialize(puppet))
@@ -895,15 +911,7 @@ def mk_token_key(token_id: bytes) -> bytes:
 class Collection:
 
     @staticmethod
-    def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
-        pass
-
-    @staticmethod
     def sample_from_collection(collection_id: int) -> bytes:
-        pass
-
-    @staticmethod
-    def get_collection_element(collection_id: bytes, index: int) -> bytes:
         pass
 
 
@@ -912,10 +920,6 @@ class Dice:
 
     @staticmethod
     def rand_between(start: int, end: int) -> int:
-        pass
-
-    @staticmethod
-    def map_bytes_onto_range(start: int, end: int, entropy: bytes) -> int:
         pass
 
 

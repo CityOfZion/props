@@ -1,4 +1,3 @@
-
 const sdk = require("../../dist")
 const Neon = require("@cityofzion/neon-core")
 const fs = require("fs")
@@ -6,6 +5,7 @@ var assert = require('assert');
 
 describe("Collections tests", function() {
     this.timeout(60000);
+    const TIME_CONSTANT = 4000
     let collection, network, NODE
 
     beforeEach( async function () {
@@ -24,31 +24,6 @@ describe("Collections tests", function() {
         })
     })
 
-    it("should create a small collection", async() => {
-
-        const cozWallet = network.wallets[0].wallet
-
-        const traits = []
-        for (let i =0; i< 10; i++){
-            traits.push(generateName())
-        }
-
-        const res = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
-        await sleep(2000)
-
-        const client = new Neon.rpc.RPCClient(NODE)
-        const tx = await client.getApplicationLog(res)
-        console.log('gas consumed: ', tx.executions[0].gasconsumed / 10 ** 8)
-
-
-        const totalCollections = await collection.totalCollections()
-        const res2 = await collection.getCollectionJSON(totalCollections)
-
-        traits.forEach((trait, i) => {
-            assert(trait === res2.values[i])
-        })
-    })
-
     it("should create a very large collection", async() => {
 
         const cozWallet = network.wallets[0].wallet
@@ -59,16 +34,14 @@ describe("Collections tests", function() {
         }
 
         const txid = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
-        await sleep(2000)
+        await sdk.helpers.sleep(TIME_CONSTANT)
 
-        await sdk.helpers.txDidComplete(NODE, txid, true)
+        let cid = await sdk.helpers.txDidComplete(NODE, txid, true)
+        cid = cid[0]
 
-        const totalCollections = await collection.totalCollections()
-
-        const res2 = await collection.getCollectionJSON(totalCollections)
+        const res2 = await collection.getCollectionJSON(cid)
 
         traits.forEach((trait, i) => {
-            console.log(trait, res2.values[i])
             assert(trait === res2.values[i])
         })
 
@@ -83,20 +56,18 @@ describe("Collections tests", function() {
         }
 
         const res = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
-        await sleep(2000)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        let cid = await sdk.helpers.txDidComplete(NODE, res, true)
+        cid = cid[0]
 
-        await sdk.helpers.txDidComplete(NODE, res, true)
-
-        const totalCollections = await collection.totalCollections()
-        const collectionLength = await collection.getCollectionLength(totalCollections)
+        const collectionLength = await collection.getCollectionLength(cid)
         assert.equal(traits.length, collectionLength)
 
         let res2
         for (let i = 0; i < collectionLength; i++) {
             let trait = traits[i]
-            res2 = await collection.getCollectionElement(totalCollections, i)
+            res2 = await collection.getCollectionElement(cid, i)
             res2 = Neon.u.hexstring2str(res2)
-            i += 1
             assert.equal(trait, res2)
         }
     })
@@ -106,25 +77,14 @@ describe("Collections tests", function() {
 
         const cozWallet = network.wallets[0].wallet
 
-        const traits = []
-        for (let i =0; i< 10; i++){
-            traits.push(generateName())
-        }
-
-        const res = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
-
-        await sleep(2000)
-
-        await sdk.helpers.txDidComplete(NODE, res, true)
-
-        const totalCollections = await collection.totalCollections()
-
-        const res2 = await collection.getCollectionValues(8)
+        const cid = await createCollection(collection, NODE, TIME_CONSTANT, cozWallet)
+        const localCollection = JSON.parse(fs.readFileSync('../parameters/collections/3_traits.colors.json').toString())
+        const collectionValues = await collection.getCollectionValues(cid)
 
         let value
-        traits.forEach((trait, i) => {
-            value = Neon.u.hexstring2str(res2[i])
-            assert(trait === value)
+        localCollection.values.forEach((val, i) => {
+            value = Neon.u.hexstring2str(collectionValues[i])
+            assert(val === value)
         })
 
     })
@@ -134,28 +94,19 @@ describe("Collections tests", function() {
         const cozWallet = network.wallets[0].wallet
 
 
-        const runSize = 10
+        const runSize = 2000
         const bins = {}
-        const collectionLength = 10
 
-        /*
-        const traits = []
-        for (let i =0; i< collectionLength; i++){
-            traits.push(generateName())
-        }
+        const cid = await createCollection(collection, NODE,TIME_CONSTANT, cozWallet)
+        const collectionLength = await collection.getCollectionLength(cid)
 
-        const res = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
-        await sleep(2000)
-        await sdk.helpers.txDidComplete(NODE, res, true)
-        */
-        const totalCollections = 4
         const txids = []
         for (let i = 0; i < runSize; i++) {
-            const res = await collection.sampleFromCollection(totalCollections, cozWallet)
+            const res = await collection.sampleFromCollection(cid, cozWallet)
             txids.push(res)
         }
 
-        await sdk.helpers.sleep(2000)
+        await sdk.helpers.sleep(TIME_CONSTANT)
 
         for (let txid of txids) {
             let result = await sdk.helpers.txDidComplete(NODE, txid)
@@ -170,19 +121,37 @@ describe("Collections tests", function() {
         let chiSquared = 0
         const expected = runSize/collectionLength
         const keys = Object.keys(bins)
-        console.log(keys.length, bins)
         for (let i = 0; i< keys.length; i++) {
             chiSquared += ((bins[keys[i]] - expected) ** 2) / expected
         }
-        console.log(chiSquared)
         assert(chiSquared < 10)
+
+    })
+
+    it("should get every collection in the contract", async() => {
+
+        const total = await collection.totalCollections()
+        console.log(total)
+
+        let c
+        for (let i = 1; i <= total; i++) {
+            c = await collection.getCollectionJSON(i)
+            console.log({
+                id: c.id,
+                author: c.author.address,
+                description: c.description,
+                type: c.type,
+                samples: c.values.slice(0, 5)
+            })
+        }
     })
 })
 
-
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+async function createCollection(collection, NODE, timeConstant, signer) {
+  const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
+  await sdk.helpers.sleep(timeConstant)
+  const res = await sdk.helpers.txDidComplete(NODE, txid, true)
+  return res[0]
 }
 
 function capFirst(string) {

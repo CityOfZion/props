@@ -1,10 +1,25 @@
-from typing import Any, Dict, List, cast
+from typing import Any, Dict, List, cast, Optional
 from boa3.builtin import contract, NeoMetadata, metadata, public, CreateNewEvent
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
-from boa3.builtin.interop.runtime import get_random, script_container
+from boa3.builtin.interop.runtime import get_random, script_container, calling_script_hash
 from boa3.builtin.type import UInt160
 from boa3.builtin.interop.blockchain import Transaction
+
+# DEBUG_START
+# -------------------------------------------
+# DEBUG
+# -------------------------------------------
+
+debug = CreateNewEvent(
+    [
+        ('params', list),
+    ],
+    'Debug'
+)
+
+
+# DEBUG_END
 
 #############EPOCH#########################
 #############EPOCH#########################
@@ -26,6 +41,7 @@ def manifest_metadata() -> NeoMetadata:
 
 
 EPOCH_KEY = b'e'
+TRAIT_KEY = b't'
 TOTAL_EPOCHS = b'!TOTAL_EPOCHS'
 
 
@@ -42,23 +58,54 @@ def total_epochs() -> int:
 
 
 @public
-def create_epoch(label: bytes, traits: List) -> int:
+def create_epoch(label: bytes, whitelist: [UInt160]) -> int:
     """
     Creates a new epoch
     :param label: A byte formatted string defining the epoch
     :param traits: A compressed epoch object
+    :param whitelist: a list of callers that can use the epoch with state
     :return: An integer representing the epoch_id
     """
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
     new_epoch: Epoch = Epoch()
-    x: bool = new_epoch.load(label, traits, author)
+    x: bool = new_epoch.load(label, author, whitelist)
     epoch_id: bytes = new_epoch.get_id()
     epoch_id_int: int = epoch_id.to_int()
     save_epoch(new_epoch)
     put(TOTAL_EPOCHS, epoch_id)
     return epoch_id_int
+
+@public
+def create_trait(epoch_id: bytes, label: bytes, slots: int, trait_levels: List) -> bytes:
+    """
+    Binds a new trait to an epoch
+    :param epoch_id: the epoch_id to bind the trait to
+    :param label: the trait's label
+    :param slots: the maximum number of events that can mint on this trait
+    :param trait_levels: a list of the trait levels
+    :return: the trait_id
+    """
+    tx = cast(Transaction, script_container)
+    signer: UInt160 = tx.sender
+
+    epoch: Epoch = get_epoch(epoch_id)
+
+    author: UInt160 = epoch.get_author()
+    assert signer == author, "Transaction signer is not the epoch author"
+
+    epoch_traits: [bytes] = epoch.get_traits()
+    trait_length: int = len(epoch_traits)
+    trait_id: bytes = epoch.get_id() + b'_' + trait_length.to_bytes()
+    new_trait: Trait = Trait(trait_id, label, slots, trait_levels)
+    save_trait(new_trait)
+
+    # update the epoch
+    x = epoch.append_trait(trait_id)
+    save_epoch(epoch)
+
+    return trait_id
 
 
 class CollectionPointerEvent:
@@ -151,8 +198,9 @@ class TraitLevel:
 
 
 class Trait:
-    def __init__(self, label: bytes, slots: int, trait_levels: List):
+    def __init__(self, trait_id: bytes, label: bytes, slots: int, trait_levels: List):
         self._label: bytes = label
+        self._id: bytes = trait_id
         self._slots: int = slots
 
         new_trait_levels: [TraitLevel] = []
@@ -202,18 +250,23 @@ class Trait:
         }
         return exported
 
+    def get_id(self) -> bytes:
+        return self._id
+
 
 class Epoch:
     def __init__(self):
         self._label: bytes = b''
-        self._traits: [Trait] = []
+        self._traits: [bytes] = []
         self._id: bytes = (total_epochs() + 1).to_bytes()
         self._author: UInt160 = b''
+        self._whitelist: [UInt160] = []
 
     def export(self) -> Dict[str, Any]:
 
         traits: List[Dict] = []
-        for trait in self._traits:
+        for trait_id in self._traits:
+            trait: Trait = get_trait(trait_id)
             trait_json: Dict[str, Any] = trait.export()
             traits.append(trait_json)
 
@@ -222,25 +275,21 @@ class Epoch:
             "author": self._author,
             "label": self._label,
             "traits": traits,
+            "whitelist": self._whitelist
         }
         return exported
 
-    def load(self, label: bytes, traits: List, author: UInt160) -> bool:
+    def load(self, label: bytes, author: UInt160, whitelist: [UInt160]) -> bool:
         self._label = label
-        new_traits: [Trait] = []
-        for trait in traits:
-            trait_list: List = cast(List, trait)
-            lbl: bytes = cast(bytes, trait_list[0])
-            slots: int = cast(int, trait_list[1])
-            trait_levels: List = cast(List, trait_list[2])
-            t: Trait = Trait(lbl, slots, trait_levels)
-            new_traits.append(t)
-        self._traits = new_traits
         self._author = author
+        self._whitelist = whitelist
         return True
 
     def get_author(self) -> UInt160:
         return self._author
+
+    def get_whitelist(self) -> [UInt160]:
+        return self._whitelist
 
     def get_label(self) -> bytes:
         return self._label
@@ -248,15 +297,24 @@ class Epoch:
     def get_id(self) -> bytes:
         return self._id
 
-    def get_traits(self) -> List[Trait]:
+    def get_traits(self) -> List[bytes]:
         return self._traits
+
+    def append_trait(self, trait_id: bytes) -> bool:
+        trait_list: [bytes] = self._traits
+        trait_list.append(trait_id)
+        self._traits = trait_list
+        return True
 
     def mint_traits(self) -> Dict[str, Any]:
         traits: Dict[str, Any] = {}
 
-        trait_objects: [Trait] = self._traits
-        for trait_object in trait_objects:
-            label: str = trait_object.get_label() #this is a cast and may be breaking
+        trait_objects: [bytes] = self._traits
+        for trait_id in trait_objects:
+            trait_object: Trait = get_trait(trait_id)
+            label_bytes: bytes = trait_object.get_label() #this is a cast and may be breaking
+            label: str = label_bytes.to_str()
+
             trait: [bytes] = trait_object.mint()
             traits_count: int = len(trait)
             if traits_count > 1 or trait_object.get_slots() > 1:
@@ -275,6 +333,7 @@ def get_epoch_json(epoch_id: bytes) -> Dict[str, Any]:
     """
     epoch: Epoch = get_epoch(epoch_id)
     return epoch.export()
+
 
 @public
 def get_epoch(epoch_id: bytes) -> Epoch:
@@ -299,6 +358,24 @@ def mint_from_epoch(epoch_id: bytes) -> Dict[str, Any]:
     return result
 
 
+@public
+def mint_from_epoch_with_state(epoch_id: bytes) -> Dict[str, Any]:
+    """
+    This method behaves similarly to mint_from_epoch, but accepts a scope (instance_id) to handle stateful events
+    :param epoch_id: The epoch_id to mint from
+    :param instance_id: The instance_id to use when minting
+    :return: A dictionary containing the responses of the triggered events
+    """
+    epoch: Epoch = get_epoch(epoch_id)
+    whiteList: [UInt160] = epoch.get_whitelist()
+    caller: UInt160 = cast(UInt160, calling_script_hash)
+    debug([caller, whiteList, caller in whiteList])
+    assert calling_script_hash in whiteList, "contract caller is not in this epoch's whitelist, use mint_from_epoch"
+
+    result: Dict[str, Any] = epoch.mint_traits()
+    return result
+
+
 def get_epoch_raw(epoch_id: bytes) -> bytes:
     """
     Gets a serialized epoch
@@ -309,13 +386,32 @@ def get_epoch_raw(epoch_id: bytes) -> bytes:
 
 
 def save_epoch(epoch: Epoch) -> bool:
-    id: bytes = epoch.get_id()
-    put(mk_epoch_key(id), serialize(epoch))
+    epoch_id: bytes = epoch.get_id()
+    put(mk_epoch_key(epoch_id), serialize(epoch))
     return True
+
+
+def save_trait(trait: Trait) -> bool:
+    trait_id: bytes = trait.get_id()
+    put(mk_trait_key(trait_id), serialize(trait))
+    return True
+
+
+def get_trait(trait_id: bytes) -> Trait:
+    trait_bytes: bytes = get_trait_raw(trait_id)
+    return cast(Trait, deserialize(trait_bytes))
+
+
+def get_trait_raw(trait_id: bytes) -> bytes:
+    return get(mk_trait_key(trait_id))
 
 
 def mk_epoch_key(epoch_id: bytes) -> bytes:
     return EPOCH_KEY + epoch_id
+
+
+def mk_trait_key(trait_id: bytes) -> bytes:
+    return TRAIT_KEY + trait_id
 
 
 @contract('0xa80d045ca80e0421aa855c3a000bfbe5dddadced')

@@ -40,6 +40,7 @@ export interface EpochType {
   author?: string
   label: string,
   traits: TraitType[]
+  whiteList: string[]
 }
 
 export interface TraitType {

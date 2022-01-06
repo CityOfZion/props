@@ -1,5 +1,6 @@
 {
   "label": "Puppeteer",
+  "whiteList": ["0xf112cb2412173f890d50e6996b3e65c85f85636a"],
   "traits": [
     {
       "label": "color",
@@ -1394,6 +1395,27 @@
               "args": {
                 "collectionId": 6,
                 "index": 59
+              }
+            },
+            {
+              "type": 0,
+              "args": {
+                "collectionId": 6,
+                "index": 25
+              }
+            },
+            {
+              "type": 0,
+              "args": {
+                "collectionId": 6,
+                "index": 19
+              }
+            },
+            {
+              "type": 0,
+              "args": {
+                "collectionId": 6,
+                "index": 49
               }
             }
           ]

@@ -14,7 +14,7 @@ async function main(node, signer, timeConstant) {
     const epoch = await new sdk.Epoch()
     await epoch.init()
 
-
+    /*
     console.log('\n' +
         '//////////COLLECTIONS///////////////\n' +
         '//////////COLLECTIONS///////////////\n' +
@@ -33,7 +33,6 @@ async function main(node, signer, timeConstant) {
         console.log("  collection_id: ", result[0], '\n')
     }
 
-
     console.log('\n' +
         '//////////EPOCH///////////////\n' +
         '//////////EPOCH///////////////\n' +
@@ -46,13 +45,14 @@ async function main(node, signer, timeConstant) {
 
     for await (let file of files) {
         console.log("Creating Epoch: " + file)
-        txid = await epoch.createEpochFromFile(basePath + '/' + file, signer)
-        console.log("  txid: ", txid)
+        const txids = await epoch.createEpochFromFile(basePath + '/' + file, signer, timeConstant)
         await sdk.helpers.sleep(timeConstant)
-        result = await sdk.helpers.txDidComplete(node, txid, true)
-        console.log("  epoch_id: ", result[0], '\n')
+        for await (txid of txids) {
+            let result = await sdk.helpers.txDidComplete(node, txid, true)
+            console.log("  id: ", result[0], '\n')
+        }
     }
-
+    */
 
     console.log('\n' +
         '//////////PUPPET///////////////\n' +
@@ -72,7 +72,6 @@ async function main(node, signer, timeConstant) {
     await sdk.helpers.sleep(2000)
     result = await sdk.helpers.txDidComplete(node, txid, true)
     console.log('  result: ', result[0])
-
 
 }
 

@@ -82,8 +82,11 @@ function findPointer(word, basePath) {
 
         if (index !== -1) {
             return {
-                "collectionId": collectionId,
-                "index": index
+                "type": 0,
+                "args": {
+                    "collectionId": collectionId,
+                    "index": index
+                }
             }
         }
     }

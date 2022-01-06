@@ -13,28 +13,36 @@ class EpochAPI {
         }
         return parseInt(res[0].value);
     }
-    static async createEpoch(node, networkMagic, contractHash, label, traits, signer) {
+    static async createEpoch(node, networkMagic, contractHash, label, whiteList, signer) {
         const method = "create_epoch";
-        const traitsFormatted = traits.map((trait) => {
-            const traitLevelsFormatted = trait.traitLevels.map((traitLevel) => {
-                const traitPointers = traitLevel.traits.map((traitEvent) => {
-                    //need to also have the type in here
-                    switch (traitEvent.type) {
-                        case interface_1.EventTypeEnum.CollectionPointer:
-                            const args = traitEvent.args;
-                            //console.log(traitEvent.type, args.collectionId, args.index)
-                            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(args.collectionId), neon_js_1.sc.ContractParam.integer(args.index)));
-                        default:
-                            throw new Error("unrecognized trait event type");
-                    }
-                });
-                return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitLevel.dropScore), neon_js_1.sc.ContractParam.boolean(traitLevel.unique), neon_js_1.sc.ContractParam.array(...traitPointers));
-            });
-            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.string(trait.label), neon_js_1.sc.ContractParam.integer(trait.slots), neon_js_1.sc.ContractParam.array(...traitLevelsFormatted));
-        });
+        const formattedWhitelist = whiteList.map(entry => neon_js_1.sc.ContractParam.hash160(entry));
         const param = [
             neon_js_1.sc.ContractParam.string(label),
-            neon_js_1.sc.ContractParam.array(...traitsFormatted)
+            neon_js_1.sc.ContractParam.array(...formattedWhitelist)
+        ];
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+    }
+    static async createTrait(node, networkMagic, contractHash, epochId, label, slots, levels, signer) {
+        const method = "create_trait";
+        const traitLevelsFormatted = levels.map((traitLevel) => {
+            const traitPointers = traitLevel.traits.map((traitEvent) => {
+                //need to also have the type in here
+                switch (traitEvent.type) {
+                    case interface_1.EventTypeEnum.CollectionPointer:
+                        const args = traitEvent.args;
+                        //console.log(traitEvent.type, args.collectionId, args.index)
+                        return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(args.collectionId), neon_js_1.sc.ContractParam.integer(args.index)));
+                    default:
+                        throw new Error("unrecognized trait event type");
+                }
+            });
+            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitLevel.dropScore), neon_js_1.sc.ContractParam.boolean(traitLevel.unique), neon_js_1.sc.ContractParam.array(...traitPointers));
+        });
+        const param = [
+            neon_js_1.sc.ContractParam.integer(epochId),
+            neon_js_1.sc.ContractParam.string(label),
+            neon_js_1.sc.ContractParam.integer(slots),
+            neon_js_1.sc.ContractParam.array(...traitLevelsFormatted)
         ];
         return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
     }
@@ -49,7 +57,6 @@ class EpochAPI {
         }
         return helpers_1.parseToJSON(res[0].value);
     }
-    //get_epoch
     static async mintFromEpoch(node, networkMagic, contractHash, epochId, signer) {
         const method = "mint_from_epoch";
         const param = [

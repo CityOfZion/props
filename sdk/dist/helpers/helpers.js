@@ -120,7 +120,7 @@ async function txDidComplete(node, txid, showStats = false) {
     const tx = await client.getApplicationLog(txid);
     if (showStats) {
         console.log('gas consumed: ', parseInt(tx.executions[0].gasconsumed) / 10 ** 8);
-        parseNotifications(tx);
+        parseNotifications(tx, true);
     }
     if (tx.executions[0].vmstate !== "HALT") {
         throw new Error(tx.executions[0].exception);
@@ -134,13 +134,18 @@ async function txDidComplete(node, txid, showStats = false) {
     return true;
 }
 exports.txDidComplete = txDidComplete;
-function parseNotifications(tx) {
+function parseNotifications(tx, verbose = false) {
     return tx.executions[0].notifications.map((n) => {
         const notification = formatter(n.state);
-        return {
+        const res = {
             'eventName': n.eventname,
             'value': notification
         };
+        if (verbose) {
+            console.log(`event: ${n.eventname}`);
+            console.log(`  payload: ${notification}`);
+        }
+        return res;
     });
 }
 function chiSquared(samples) {

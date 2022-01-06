@@ -7,8 +7,8 @@ export declare class Epoch {
     init(): Promise<void>;
     get node(): rpc.RPCClient;
     get scriptHash(): string;
-    createEpoch(epoch: EpochType, signer: wallet.Account): Promise<string | undefined>;
-    createEpochFromFile(path: string, signer: wallet.Account): Promise<string>;
+    createEpoch(epoch: EpochType, signer: wallet.Account, timeConstantMS: number): Promise<string[]>;
+    createEpochFromFile(path: string, signer: wallet.Account, timeConstantMS: number): Promise<string[]>;
     getEpochJSON(epochId: number): Promise<string | undefined>;
     mintFromEpoch(epochId: number, signer: wallet.Account): Promise<string | undefined>;
     totalEpochs(): Promise<number | undefined>;

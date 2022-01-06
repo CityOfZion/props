@@ -31,8 +31,11 @@ export interface CollectionType {
     valuesRaw?: any[];
 }
 export interface EpochType {
+    id?: number;
+    author?: string;
     label: string;
     traits: TraitType[];
+    whiteList: string[];
 }
 export interface TraitType {
     label: string;

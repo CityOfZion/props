@@ -144,7 +144,7 @@ export async function txDidComplete(node: string, txid: string, showStats: boole
 
   if (showStats) {
     console.log('gas consumed: ', parseInt(tx.executions[0].gasconsumed) / 10 ** 8)
-    parseNotifications(tx)
+    parseNotifications(tx, true)
   }
   if (tx.executions[0].vmstate !== "HALT") {
     throw new Error((tx.executions[0] as any).exception)
@@ -159,13 +159,18 @@ export async function txDidComplete(node: string, txid: string, showStats: boole
   return true
 }
 
-function parseNotifications(tx: rpc.ApplicationLogJson) {
+function parseNotifications(tx: rpc.ApplicationLogJson, verbose: boolean = false) {
   return tx.executions[0].notifications.map( (n) => {
-    const notification = formatter(n.state)
-    return {
+const notification = formatter(n.state)
+    const res = {
       'eventName': n.eventname,
       'value': notification
     }
+    if (verbose) {
+      console.log(`event: ${n.eventname}`)
+      console.log(`  payload: ${notification}`)
+    }
+    return res
   })
 }
 

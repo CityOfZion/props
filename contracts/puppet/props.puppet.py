@@ -700,7 +700,7 @@ class Puppet:
         # mint traits
         epoch_id: int = get_current_epoch()
         epoch_id_bytes: bytes = epoch_id.to_bytes()
-        traits: Dict[str, List] = Epoch.mint_from_epoch(epoch_id_bytes)
+        traits: Dict[str, Any] = Epoch.mint_from_epoch(epoch_id_bytes)
         self._traits = traits
         self._epoch = epoch_id_bytes
 
@@ -918,7 +918,7 @@ class Dice:
         pass
 
 
-@contract('0xe938f1d44002853ffd41ff27ea890c8b5c69a204')
+@contract('0x445cd3bb2ced044ee05e10cf4cc32180da2b33d0')
 class Epoch:
 
     @staticmethod

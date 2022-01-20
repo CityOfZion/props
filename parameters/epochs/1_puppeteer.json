@@ -1,6 +1,5 @@
 {
   "label": "Puppeteer",
-  "whiteList": ["0xf112cb2412173f890d50e6996b3e65c85f85636a"],
   "traits": [
     {
       "label": "color",
@@ -8,10 +7,10 @@
       "traitLevels": [
         {
           "dropScore": 5000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 0
@@ -19,6 +18,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 1
@@ -26,6 +26,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 2
@@ -33,6 +34,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 3
@@ -40,6 +42,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 5
@@ -49,10 +52,10 @@
         },
         {
           "dropScore": 8000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 6
@@ -60,6 +63,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 7
@@ -67,6 +71,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 8
@@ -74,6 +79,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 4
@@ -83,10 +89,10 @@
         },
         {
           "dropScore": 9500,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 9
@@ -94,6 +100,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 10
@@ -101,6 +108,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 11
@@ -110,10 +118,10 @@
         },
         {
           "dropScore": 9950,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 12
@@ -121,6 +129,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 13
@@ -130,10 +139,10 @@
         },
         {
           "dropScore": 10000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 3,
                 "index": 14
@@ -149,10 +158,10 @@
       "traitLevels": [
         {
           "dropScore": 4000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 529
@@ -160,6 +169,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 213
@@ -167,6 +177,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 408
@@ -174,6 +185,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 346
@@ -181,6 +193,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 505
@@ -188,6 +201,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 459
@@ -195,6 +209,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 537
@@ -202,6 +217,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 26
@@ -210,11 +226,11 @@
           ]
         },
         {
-          "dropScore": 7000,
-          "unique": false,
+          "dropScore": 6400,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 228
@@ -222,6 +238,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 414
@@ -229,6 +246,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 183
@@ -236,6 +254,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 67
@@ -243,6 +262,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 15
@@ -250,6 +270,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 245
@@ -257,6 +278,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 514
@@ -264,6 +286,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 41
@@ -272,11 +295,11 @@
           ]
         },
         {
-          "dropScore": 9000,
-          "unique": false,
+          "dropScore": 8500,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 293
@@ -284,6 +307,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 124
@@ -291,6 +315,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 172
@@ -298,6 +323,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 381
@@ -305,6 +331,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 335
@@ -312,6 +339,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 187
@@ -319,6 +347,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 106
@@ -326,6 +355,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 208
@@ -334,11 +364,11 @@
           ]
         },
         {
-          "dropScore": 10000,
-          "unique": false,
+          "dropScore": 9900,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 242
@@ -346,6 +376,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 38
@@ -353,6 +384,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 312
@@ -360,6 +392,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 325
@@ -367,6 +400,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 440
@@ -374,6 +408,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 65
@@ -381,6 +416,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 264
@@ -388,9 +424,31 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 4,
                 "index": 567
+              }
+            }
+          ]
+        },
+        {
+          "dropScore": 10000,
+          "traits": [
+            {
+              "type": 0,
+              "maxMint": -1,
+              "args": {
+                "collectionId": 6,
+                "index": 7
+              }
+            },
+            {
+              "type": 0,
+              "maxMint": -1,
+              "args": {
+                "collectionId": 6,
+                "index": 6
               }
             }
           ]
@@ -403,10 +461,10 @@
       "traitLevels": [
         {
           "dropScore": 5000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 0
@@ -414,6 +472,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 1
@@ -421,6 +480,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 2
@@ -430,10 +490,10 @@
         },
         {
           "dropScore": 8000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 3
@@ -441,6 +501,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 4
@@ -448,6 +509,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 5
@@ -457,10 +519,10 @@
         },
         {
           "dropScore": 9500,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 6
@@ -468,6 +530,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 7
@@ -475,6 +538,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 8
@@ -484,10 +548,10 @@
         },
         {
           "dropScore": 10000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 9
@@ -495,6 +559,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 10
@@ -502,6 +567,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 2,
                 "index": 11
@@ -514,18 +580,17 @@
     {
       "label": "trade",
       "slots": 1,
-      "traitLevels": [
+      "traitLevels":[
         {
           "dropScore": 3000,
-          "unique": false,
           "traits": []
         },
         {
           "dropScore": 6000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 8
@@ -533,6 +598,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 18
@@ -540,6 +606,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 4
@@ -547,6 +614,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 40
@@ -554,6 +622,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 6
@@ -561,6 +630,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 7
@@ -568,6 +638,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 9
@@ -577,10 +648,10 @@
         },
         {
           "dropScore": 8000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 31
@@ -588,6 +659,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 13
@@ -595,6 +667,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 14
@@ -602,6 +675,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 24
@@ -609,6 +683,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 44
@@ -616,6 +691,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 2
@@ -623,6 +699,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 16
@@ -632,10 +709,10 @@
         },
         {
           "dropScore": 9000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 3
@@ -643,6 +720,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 19
@@ -650,6 +728,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 34
@@ -657,6 +736,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 42
@@ -664,6 +744,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 29
@@ -671,6 +752,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 22
@@ -678,6 +760,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 5
@@ -687,10 +770,10 @@
         },
         {
           "dropScore": 9950,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 1
@@ -698,6 +781,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 25
@@ -705,6 +789,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 35
@@ -712,6 +797,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 37
@@ -719,6 +805,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 38
@@ -726,6 +813,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 33
@@ -733,6 +821,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 12
@@ -742,10 +831,10 @@
         },
         {
           "dropScore": 10000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 5,
                 "index": 26
@@ -761,15 +850,14 @@
       "traitLevels": [
         {
           "dropScore": 7000,
-          "unique": false,
           "traits": []
         },
         {
           "dropScore": 8000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 44
@@ -777,6 +865,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 41
@@ -784,6 +873,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 8
@@ -793,10 +883,10 @@
         },
         {
           "dropScore": 8500,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 47
@@ -804,6 +894,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 30
@@ -811,6 +902,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 4
@@ -820,10 +912,10 @@
         },
         {
           "dropScore": 8750,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 39
@@ -831,6 +923,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 65
@@ -838,6 +931,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 26
@@ -847,10 +941,10 @@
         },
         {
           "dropScore": 8900,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 13
@@ -858,6 +952,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 48
@@ -865,6 +960,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 20
@@ -874,10 +970,10 @@
         },
         {
           "dropScore": 8910,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 0
@@ -893,15 +989,14 @@
       "traitLevels": [
         {
           "dropScore": 3000,
-          "unique": false,
           "traits": []
         },
         {
           "dropScore": 7000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 14
@@ -909,6 +1004,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 22
@@ -916,6 +1012,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 67
@@ -923,6 +1020,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 18
@@ -932,10 +1030,10 @@
         },
         {
           "dropScore": 9000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 11
@@ -943,6 +1041,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 37
@@ -950,6 +1049,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 45
@@ -957,6 +1057,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 34
@@ -966,10 +1067,10 @@
         },
         {
           "dropScore": 9500,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 66
@@ -977,6 +1078,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 69
@@ -984,6 +1086,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 42
@@ -993,10 +1096,10 @@
         },
         {
           "dropScore": 9750,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 24
@@ -1004,6 +1107,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 36
@@ -1013,10 +1117,10 @@
         },
         {
           "dropScore": 9800,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 28
@@ -1029,18 +1133,17 @@
     {
       "label": "element",
       "slots": 1,
-      "traitLevels": [
+      "traitLevels":[
         {
           "dropScore": 5000,
-          "unique": false,
           "traits": []
         },
         {
           "dropScore": 8700,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 15
@@ -1048,6 +1151,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 17
@@ -1055,6 +1159,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 71
@@ -1062,6 +1167,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 70
@@ -1071,10 +1177,10 @@
         },
         {
           "dropScore": 9900,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 38
@@ -1082,6 +1188,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 33
@@ -1089,6 +1196,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 32
@@ -1096,6 +1204,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 27
@@ -1105,10 +1214,10 @@
         },
         {
           "dropScore": 10000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 9
@@ -1121,18 +1230,17 @@
     {
       "label": "domain",
       "slots": 1,
-      "traitLevels": [
+      "traitLevels":[
         {
           "dropScore": 9500,
-          "unique": false,
           "traits": []
         },
         {
           "dropScore": 10000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 43
@@ -1140,6 +1248,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 16
@@ -1147,6 +1256,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 3
@@ -1154,6 +1264,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 2
@@ -1161,6 +1272,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 12
@@ -1168,6 +1280,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 5
@@ -1180,18 +1293,17 @@
     {
       "label": "prestige",
       "slots": 1,
-      "traitLevels": [
+      "traitLevels":[
         {
-          "dropScore": 9400,
-          "unique": false,
+          "dropScore": 9500,
           "traits": []
         },
         {
           "dropScore": 9700,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 72
@@ -1199,20 +1311,7 @@
             },
             {
               "type": 0,
-              "args": {
-                "collectionId": 6,
-                "index": 7
-              }
-            },
-            {
-              "type": 0,
-              "args": {
-                "collectionId": 6,
-                "index": 6
-              }
-            },
-            {
-              "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 10
@@ -1222,10 +1321,10 @@
         },
         {
           "dropScore": 9900,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 35
@@ -1233,6 +1332,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 29
@@ -1240,6 +1340,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 68
@@ -1247,6 +1348,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 31
@@ -1256,10 +1358,10 @@
         },
         {
           "dropScore": 9970,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 40
@@ -1267,6 +1369,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 21
@@ -1274,6 +1377,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 23
@@ -1281,6 +1385,7 @@
             },
             {
               "type": 0,
+              "maxMint": -1,
               "args": {
                 "collectionId": 6,
                 "index": 46
@@ -1290,10 +1395,10 @@
         },
         {
           "dropScore": 10000,
-          "unique": false,
           "traits": [
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 56
@@ -1301,6 +1406,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 60
@@ -1308,6 +1414,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 63
@@ -1315,6 +1422,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 52
@@ -1322,6 +1430,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 58
@@ -1329,6 +1438,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 53
@@ -1336,6 +1446,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 55
@@ -1343,6 +1454,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 1
@@ -1350,6 +1462,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 61
@@ -1357,6 +1470,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 57
@@ -1364,6 +1478,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 54
@@ -1371,6 +1486,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 51
@@ -1378,6 +1494,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 64
@@ -1385,6 +1502,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 62
@@ -1392,6 +1510,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 59
@@ -1399,6 +1518,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 25
@@ -1406,6 +1526,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 19
@@ -1413,6 +1534,7 @@
             },
             {
               "type": 0,
+              "maxMint": 1,
               "args": {
                 "collectionId": 6,
                 "index": 49

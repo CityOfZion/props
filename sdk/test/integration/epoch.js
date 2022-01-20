@@ -101,13 +101,13 @@ describe("Basic System Test Suite", function() {
         const epoch_id = await epoch.totalEpochs()
 
         const txids = []
-        const mintCount = 10
+        const mintCount = 1
 
         for (let i = 0; i < mintCount; i++) {
             const txid = await epoch.mintFromEpoch(epoch_id, cozWallet)
             txids.push(txid)
         }
-        await sdk.helpers.sleep(4000)
+        await sdk.helpers.sleep(TIME_CONSTANT)
 
         const res = []
         for (let txid of txids) {
@@ -130,7 +130,7 @@ describe("Basic System Test Suite", function() {
     it("should create an epoch using a collection", async() => {
         const cozWallet = network.wallets[0].wallet
 
-
+        /*
         const collectionId = await collection.totalCollections()
         const initialCollection = await collection.getCollectionJSON(collectionId)
 
@@ -161,19 +161,59 @@ describe("Basic System Test Suite", function() {
         const res = await epoch.createEpoch("testEpoch", 3, newEpoch, cozWallet)
         await sleep(2000)
         await txDidComplete(NODE, res)
-
+        */
         const epoch_id = await epoch.totalEpochs()
         const res2 = await epoch.getEpochJSON(epoch_id)
+        console.log(epoch_id)
+        console.log(res2.traits[0].traitLevels[0])
+        /*
         initialCollection.values.forEach( (value, i) => {
             console.log(res2)
             assert.equal(value, initialCollection.values[res2.trait_levels[i%2].traits[(Math.floor(i/2))]['index']])
         })
+
+         */
     })
 
     //test unique
+    it("should create a new epoch instance and mint from it, verifying uniqueness", async() => {
+        const cozWallet = network.wallets[0].wallet
+        const epoch_id = await epoch.totalEpochs()
 
+        const sampleCount = 300
+        const masterSet = {}
+        const txids = []
+        let txid
+
+        txid = await epoch.createInstance(epoch_id, cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        const instanceId = await sdk.helpers.txDidComplete(NODE, txid )
+
+        for (let i = 0; i < sampleCount; i++) {
+          txid = await epoch.mintFromInstance(instanceId[0], cozWallet)
+          txids.push(txid)
+        }
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        for (txid of txids) {
+            const res = await sdk.helpers.txDidComplete(NODE, txid)
+            console.log(res[0])
+            Object.keys(res[0]).forEach((key) => {
+                if (masterSet[key]) {
+                    masterSet[key].push(res[0][key])
+                } else {
+                    masterSet[key] = [res[0][key]]
+                }
+            })
+        }
+
+
+        console.log(masterSet)
+
+
+    })
     //test unauthenticated unique
 
+    //add second minter
 
     async function createCollection(collection, NODE, timeConstant, signer) {
         const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)

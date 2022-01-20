@@ -35,7 +35,6 @@ export interface EpochType {
     author?: string;
     label: string;
     traits: TraitType[];
-    whiteList: string[];
 }
 export interface TraitType {
     label: string;
@@ -44,11 +43,11 @@ export interface TraitType {
 }
 export interface TraitLevel {
     dropScore: number;
-    unique: boolean;
     traits: EventTypeWrapper[];
 }
 export interface EventTypeWrapper {
     type: EventTypeEnum;
+    maxMint: number;
     args: CollectionPointer;
 }
 export interface CollectionPointer {

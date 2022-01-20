@@ -4,13 +4,13 @@ const fs = require('fs')
 const basePath = "parameters/collections"
 
 
-let wordParty = `9400\t9700\t9900\t9970\t10000
-\t0.75%\t0.50%\t0.18%\t0.02%
-\t47.75\t31.83\t11.14\t1.06
+let wordParty = `9500\t9700\t9900\t9970\t10000
+\t1.00%\t0.50%\t0.18%\t0.02%
+\t63.66\t31.83\t11.14\t1.06
 \tworker ant\tmeta-whiskers\tnewsie\tThe First Blessing
-\tbullish\tknight of ni\tgrace\tThe Second Blessing
-\tbearish\twarrior ant\tgreater flamingo\tThe Third Blessing
-\tchickpea\tlesser flamingo\trock climber\tThe Assistant to the Regional Manager
+\tchickpea\tknight of ni\tgrace\tThe Second Blessing
+\t\twarrior ant\tgreater flamingo\tThe Third Blessing
+\t\tlesser flamingo\trock climber\tThe Assistant to the Regional Manager
 \t\t\t\tThe Neon
 \t\t\t\tThe Chosen One
 \t\t\t\tThe Explorer
@@ -39,16 +39,11 @@ for (let row of wordParty) {
     if (dropScore !== 0) {
         traitLevels.push({
             'dropScore': parseInt(row[0]),
-            'unique': false,
             'traits': traits
 
         })
     }
 }
-
-
-
-//const wordList = ['herald', 'red', 'green']
 
 traitLevels = traitLevels.map((level) => {
 
@@ -58,18 +53,11 @@ traitLevels = traitLevels.map((level) => {
 
     return {
         "dropScore": level.dropScore,
-        "unique": level.unique,
         "traits": traits
     }
 })
 
 console.log(JSON.stringify(traitLevels, null, 2))
-/*
-const pointers = wordList.map( (w) => {
-    return findPointer(w, basePath)
-})
-console.log(JSON.stringify(pointers, null, 2))
-*/
 
 function findPointer(word, basePath) {
     let files = fs.readdirSync(basePath)
@@ -83,6 +71,7 @@ function findPointer(word, basePath) {
         if (index !== -1) {
             return {
                 "type": 0,
+                "maxMint": -1,
                 "args": {
                     "collectionId": collectionId,
                     "index": index

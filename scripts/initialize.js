@@ -14,7 +14,6 @@ async function main(node, signer, timeConstant) {
     const epoch = await new sdk.Epoch()
     await epoch.init()
 
-    /*
     console.log('\n' +
         '//////////COLLECTIONS///////////////\n' +
         '//////////COLLECTIONS///////////////\n' +
@@ -52,7 +51,6 @@ async function main(node, signer, timeConstant) {
             console.log("  id: ", result[0], '\n')
         }
     }
-    */
 
     console.log('\n' +
         '//////////PUPPET///////////////\n' +

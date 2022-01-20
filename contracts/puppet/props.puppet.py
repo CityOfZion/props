@@ -639,7 +639,7 @@ class Puppet:
 
     def __init__(self):
         self._token_id: bytes = b''
-        self._epoch: bytes = b''
+        self._epoch_instance_id: bytes = b''
         self._charisma: int = 0
         self._constitution: int = 0
         self._dexterity: int = 0
@@ -664,7 +664,7 @@ class Puppet:
             'owner': self._owner,
             'tokenId': self._token_id,
             'traits': self._traits,
-            'epoch': self._epoch
+            'epochInstanceId': self._epoch_instance_id
         }
         return exported
 
@@ -698,11 +698,11 @@ class Puppet:
         self._hit_die = hd
 
         # mint traits
-        epoch_id: int = get_current_epoch()
-        epoch_id_bytes: bytes = epoch_id.to_bytes()
-        traits: Dict[str, Any] = Epoch.mint_from_epoch(epoch_id_bytes)
+        instance_id: int = get_current_epoch()
+        instance_id_bytes: bytes = instance_id.to_bytes()
+        traits: Dict[str, Any] = Epoch.mint_from_instance(instance_id_bytes)
         self._traits = traits
-        self._epoch = epoch_id_bytes
+        self._epoch_instance_id = instance_id_bytes
 
         # Generate a puppet token_id and set the owner
         self._owner = owner
@@ -762,8 +762,8 @@ class Puppet:
         token_id_bytes: bytes = self._token_id
         token_id_int: int = token_id_bytes.to_int()
         token_id_string: str = itoa(token_id_int, 10)
-        epoch_bytes: bytes = self._epoch
-        epoch_int: int = epoch_bytes.to_int()
+        instance_id_bytes: bytes = self._epoch_instance_id
+        instance_id_int: int = instance_id_bytes.to_int()
         exported: Dict[str, Any] = {
             'armorClass': self.get_armor_class(),
             'attributes': {
@@ -779,7 +779,7 @@ class Puppet:
             'owner': self._owner,
             'tokenId': token_id_int,
             'tokenURI': 'https://props.coz.io/puppets/' + token_id_string,
-            'epoch': epoch_int,
+            'epochInstanceId': instance_id_int,
             'traits': self._traits,
         }
         return exported
@@ -918,10 +918,10 @@ class Dice:
         pass
 
 
-@contract('0x445cd3bb2ced044ee05e10cf4cc32180da2b33d0')
-class Epoch:
+@contract('0xccff6257a59416028105709bc1e488a36ffeb9b2')
+class Generator:
 
     @staticmethod
-    def mint_from_epoch(epoch_id: bytes) -> Dict[str, Any]:
+    def mint_from_instance(instance_id: bytes) -> Dict[str, Any]:
         pass
 

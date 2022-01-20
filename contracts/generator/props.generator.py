@@ -35,21 +35,21 @@ def manifest_metadata() -> NeoMetadata:
     return meta
 
 
-EPOCH_KEY = b'e'
-EPOCH_INSTANCE_KEY = b'i'
+GENERATOR_KEY = b'e'
+GENERATOR_INSTANCE_KEY = b'i'
 TRAIT_KEY = b't'
-TOTAL_EPOCHS = b'!TOTAL_EPOCHS'
-TOTAL_EPOCH_INSTANCES = b'!TOTAL_EPOCH_INSTANCES'
+TOTAL_GENERATORS = b'!TOTAL_GENERATORS'
+TOTAL_GENERATOR_INSTANCES = b'!TOTAL_GENERATOR_INSTANCES'
 
 #######################################
-##########EPOCH Instance###############
+##########GENERATOR Instance###############
 #######################################
 
 
-class EpochInstance:
-    def __init__(self, epoch_id: bytes, author: UInt160):
-        self._epoch_id: bytes = epoch_id
-        self._instance_id: bytes = (total_epoch_instances() + 1).to_bytes()
+class GeneratorInstance:
+    def __init__(self, generator_id: bytes, author: UInt160):
+        self._generator_id: bytes = generator_id
+        self._instance_id: bytes = (total_generator_instances() + 1).to_bytes()
         self._author: UInt160 = author
         self._authorized_users: [UInt160] = [author]
         self._storage_keys = []
@@ -60,11 +60,11 @@ class EpochInstance:
     def get_author(self) -> UInt160:
         return self._author
 
-    def get_epoch_id(self) -> bytes:
-        return self._epoch_id
+    def get_generator_id(self) -> bytes:
+        return self._generator_id
 
     def get_scoped_storage(self, storage_key: bytes) -> Dict[str, Any]:
-        instance_key: bytes = mk_epoch_instance_key(self._instance_id)
+        instance_key: bytes = mk_generator_instance_key(self._instance_id)
         key: bytes = append_key_stack(instance_key, storage_key)
         raw_payload: bytes = get(key)
         if len(raw_payload) == 0:
@@ -72,7 +72,7 @@ class EpochInstance:
         return cast(Dict[str, Any], deserialize(raw_payload))
 
     def set_scoped_storage(self, storage_key: bytes, payload: Dict[str, Any]) -> bool:
-        instance_key: bytes = mk_epoch_instance_key(self._instance_id)
+        instance_key: bytes = mk_generator_instance_key(self._instance_id)
         key: bytes = append_key_stack(instance_key, storage_key)
         serialized_payload: bytes = serialize(payload)
         put(key, serialized_payload)
@@ -86,7 +86,7 @@ class EpochInstance:
 
     def export(self) -> Dict[str, Any]:
         exported: Dict[str, Any] = {
-            "epochId": self._epoch_id,
+            "generatorId": self._generator_id,
             "instanceId": self._instance_id,
             "author": self._author,
             "authorizedUsers": self._authorized_users,
@@ -96,17 +96,17 @@ class EpochInstance:
 
 
 @public
-def create_instance(epoch_id: bytes) -> int:
-    # creates an epoch instance for the user to mint from with extended features
+def create_instance(generator_id: bytes) -> int:
+    # creates an generator instance for the user to mint from with extended features
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
-    new_instance: EpochInstance = EpochInstance(epoch_id, author)
+    new_instance: GeneratorInstance = GeneratorInstance(generator_id, author)
     instance_id: bytes = new_instance.get_id()
     instance_id_int: int = instance_id.to_int()
 
-    save_epoch_instance(new_instance)
-    put(TOTAL_EPOCH_INSTANCES, instance_id)
+    save_generator_instance(new_instance)
+    put(TOTAL_GENERATOR_INSTANCES, instance_id)
     return instance_id_int
 
 
@@ -115,13 +115,13 @@ def mint_from_instance(instance_id: bytes) -> Dict[str, Any]:
     tx = cast(Transaction, script_container)
     signer: UInt160 = tx.sender
 
-    epoch_instance: EpochInstance = get_epoch_instance(instance_id)
-    assert epoch_instance.is_authorized(signer), "Transaction signer is not authorized"
+    generator_instance: GeneratorInstance = get_generator_instance(instance_id)
+    assert generator_instance.is_authorized(signer), "Transaction signer is not authorized"
 
-    epoch_id: bytes = epoch_instance.get_epoch_id()
-    epoch: Epoch = get_epoch(epoch_id)
+    generator_id: bytes = generator_instance.get_generator_id()
+    generator: Generator = get_generator(generator_id)
 
-    result: Dict[str, Any] = epoch.mint_traits(epoch_instance)
+    result: Dict[str, Any] = generator.mint_traits(generator_instance)
     return result
 
 
@@ -130,63 +130,63 @@ def set_instance_authorized_users(instance_id: bytes, authorized_users: [UInt160
     tx = cast(Transaction, script_container)
     signer: UInt160 = tx.sender
 
-    epoch_instance: EpochInstance = get_epoch_instance(instance_id)
+    generator_instance: GeneratorInstance = get_generator_instance(instance_id)
 
-    author: UInt160 = epoch_instance.get_author()
+    author: UInt160 = generator_instance.get_author()
     assert signer == author, "Transaction signer is not the instance author"
 
-    epoch_instance.set_authorized_users(authorized_users)
+    generator_instance.set_authorized_users(authorized_users)
 
-    save_epoch_instance(epoch_instance)
+    save_generator_instance(generator_instance)
     return True
 
 
 @public
-def get_epoch_instance_json(instance_id: bytes) -> Dict[str, Any]:
+def get_generator_instance_json(instance_id: bytes) -> Dict[str, Any]:
     """
-    Gets the JSON formatted representation of an epoch instance
+    Gets the JSON formatted representation of an generator instance
     :param instance_id: the byte formatted instance_id
     :return: A dictionary representation of an instance_id
     """
-    epoch_instance: EpochInstance = get_epoch_instance(instance_id)
-    return epoch_instance.export()
+    generator_instance: GeneratorInstance = get_generator_instance(instance_id)
+    return generator_instance.export()
 
 
 @public
-def get_epoch_instance(instance_id: bytes) -> EpochInstance:
+def get_generator_instance(instance_id: bytes) -> GeneratorInstance:
     """
-    Gets an EpochInstance class instance
+    Gets an GeneratorInstance class instance
     :param instance_id: the byte formatted instance_id
-    :return: An epoch instance class instance
+    :return: An generator instance class instance
     """
-    instance_bytes: bytes = get_epoch_instance_raw(instance_id)
-    return cast(EpochInstance, deserialize(instance_bytes))
+    instance_bytes: bytes = get_generator_instance_raw(instance_id)
+    return cast(GeneratorInstance, deserialize(instance_bytes))
 
 
-def get_epoch_instance_raw(instance_id: bytes) -> bytes:
+def get_generator_instance_raw(instance_id: bytes) -> bytes:
     """
-    Gets a serialized epoch instance
-    :param instance_id: the byte formatted pointer to the epoch instance
-    :return: a serialized epoch instance
+    Gets a serialized generator instance
+    :param instance_id: the byte formatted pointer to the generator instance
+    :return: a serialized generator instance
     """
-    return get(mk_epoch_instance_key(instance_id))
+    return get(mk_generator_instance_key(instance_id))
 
 
 @public
-def total_epoch_instances() -> int:
+def total_generator_instances() -> int:
     """
-    Gets the total epoch instances
-    :return: An integer representing the total epoch instances
+    Gets the total generator instances
+    :return: An integer representing the total generator instances
     """
-    total: bytes = get(TOTAL_EPOCH_INSTANCES)
+    total: bytes = get(TOTAL_GENERATOR_INSTANCES)
     if len(total) == 0:
         return 0
     return total.to_int()
 
 
-def save_epoch_instance(epoch_instance: EpochInstance) -> bool:
-    instance_id: bytes = epoch_instance.get_id()
-    put(mk_epoch_instance_key(instance_id), serialize(epoch_instance))
+def save_generator_instance(generator_instance: GeneratorInstance) -> bool:
+    instance_id: bytes = generator_instance.get_id()
+    put(mk_generator_instance_key(instance_id), serialize(generator_instance))
     return True
 
 
@@ -234,9 +234,9 @@ class EventInterface:
         }
         return exported
 
-    def select(self, epoch_instance: EpochInstance) -> bytes:
+    def select(self, generator_instance: GeneratorInstance) -> bytes:
 
-        instance_storage: Dict[str, Any] = epoch_instance.get_scoped_storage(self._id)
+        instance_storage: Dict[str, Any] = generator_instance.get_scoped_storage(self._id)
 
         mint_count: int = 0
         if 'a' in instance_storage.keys():
@@ -248,7 +248,7 @@ class EventInterface:
             return b''
 
         instance_storage['a'] = mint_count
-        x: bool = epoch_instance.set_scoped_storage(self._id, instance_storage)
+        x: bool = generator_instance.set_scoped_storage(self._id, instance_storage)
 
         if self._event_type == 0:
             event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
@@ -305,7 +305,7 @@ class TraitLevel:
         available_traits: int = len(self._traits)
         return available_traits > 0
 
-    def mint(self, entropy: bytes, epoch_instance: EpochInstance) -> bytes:
+    def mint(self, entropy: bytes, generator_instance: GeneratorInstance) -> bytes:
         max_index: int = len(self._traits)
 
         #empty trait level
@@ -315,7 +315,7 @@ class TraitLevel:
         entropy_int: int = entropy.to_int()
         idx: int = (max_index * entropy_int) // 256
         event: EventInterface = self._traits[idx]
-        return event.select(epoch_instance)
+        return event.select(generator_instance)
 
 
 class Trait:
@@ -341,7 +341,7 @@ class Trait:
     def get_slots(self) -> int:
         return self._slots
 
-    def mint(self, epoch_instance: EpochInstance) -> [bytes]:
+    def mint(self, generator_instance: GeneratorInstance) -> [bytes]:
         slot_entropy = get_random().to_bytes()
         trait_levels: [TraitLevel] = self._trait_levels
         slots: int = self._slots
@@ -351,7 +351,7 @@ class Trait:
             roll: int = Dice.rand_between(0, 9999)
             for trait_level in trait_levels:
                 if trait_level.dropped(roll):
-                    new_trait: bytes = trait_level.mint(slot_entropy[i].to_bytes(), epoch_instance)
+                    new_trait: bytes = trait_level.mint(slot_entropy[i].to_bytes(), generator_instance)
                     if len(new_trait) > 0:
                         traits.append(new_trait)
                     break
@@ -377,10 +377,10 @@ class Trait:
 
 
 @public
-def create_trait(epoch_id: bytes, label: bytes, slots: int, trait_levels: List) -> bytes:
+def create_trait(generator_id: bytes, label: bytes, slots: int, trait_levels: List) -> bytes:
     """
-    Binds a new trait to an epoch
-    :param epoch_id: the epoch_id to bind the trait to
+    Binds a new trait to an generator
+    :param generator_id: the generator_id to bind the trait to
     :param label: the trait's label
     :param slots: the maximum number of events that can mint on this trait
     :param trait_levels: a list of the trait levels
@@ -389,20 +389,20 @@ def create_trait(epoch_id: bytes, label: bytes, slots: int, trait_levels: List) 
     tx = cast(Transaction, script_container)
     signer: UInt160 = tx.sender
 
-    epoch: Epoch = get_epoch(epoch_id)
+    generator: Generator = get_generator(generator_id)
 
-    author: UInt160 = epoch.get_author()
-    assert signer == author, "Transaction signer is not the epoch author"
+    author: UInt160 = generator.get_author()
+    assert signer == author, "Transaction signer is not the generator author"
 
-    epoch_traits: [bytes] = epoch.get_traits()
-    trait_length: int = len(epoch_traits)
-    trait_id: bytes = epoch.get_id() + b'_' + trait_length.to_bytes()
+    generator_traits: [bytes] = generator.get_traits()
+    trait_length: int = len(generator_traits)
+    trait_id: bytes = generator.get_id() + b'_' + trait_length.to_bytes()
     new_trait: Trait = Trait(trait_id, label, slots, trait_levels)
     save_trait(new_trait)
 
-    # update the epoch
-    x = epoch.append_trait(trait_id)
-    save_epoch(epoch)
+    # update the generator
+    x = generator.append_trait(trait_id)
+    save_generator(generator)
 
     return trait_id
 
@@ -426,15 +426,15 @@ def append_key_stack(current: bytes, new_key: bytes) -> bytes:
     return current + b'_' + new_key
 
 #######################################
-#################EPOCH#################
+#################GENERATOR#################
 #######################################
 
 
-class Epoch:
+class Generator:
     def __init__(self):
         self._label: bytes = b''
         self._traits: [bytes] = []
-        self._id: bytes = (total_epochs() + 1).to_bytes()
+        self._id: bytes = (total_generators() + 1).to_bytes()
         self._author: UInt160 = b''
 
     def export(self) -> Dict[str, Any]:
@@ -476,7 +476,7 @@ class Epoch:
         self._traits = trait_list
         return True
 
-    def mint_traits(self, epoch_instance: EpochInstance) -> Dict[str, Any]:
+    def mint_traits(self, generator_instance: GeneratorInstance) -> Dict[str, Any]:
         traits: Dict[str, Any] = {}
 
         trait_objects: [bytes] = self._traits
@@ -485,7 +485,7 @@ class Epoch:
             label_bytes: bytes = trait_object.get_label() #this is a cast and may be breaking
             label: str = label_bytes.to_str()
 
-            trait: [bytes] = trait_object.mint(epoch_instance)
+            trait: [bytes] = trait_object.mint(generator_instance)
             traits_count: int = len(trait)
             if traits_count > 1 or trait_object.get_slots() > 1:
                 traits[label] = trait
@@ -495,86 +495,86 @@ class Epoch:
 
 
 @public
-def total_epochs() -> int:
+def total_generators() -> int:
     """
-    Gets the total epoch count
-    :return: An integer representing the total epoch count
+    Gets the total generator count
+    :return: An integer representing the total generator count
     """
-    total: bytes = get(TOTAL_EPOCHS)
+    total: bytes = get(TOTAL_GENERATORS)
     if len(total) == 0:
         return 0
     return total.to_int()
 
 
 @public
-def create_epoch(label: bytes) -> int:
+def create_generator(label: bytes) -> int:
     """
-    Creates a new epoch
-    :param label: A byte formatted string defining the epoch
-    :return: An integer representing the epoch_id
+    Creates a new generator
+    :param label: A byte formatted string defining the generator
+    :return: An integer representing the generator_id
     """
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
-    new_epoch: Epoch = Epoch()
-    x: bool = new_epoch.load(label, author)
-    epoch_id: bytes = new_epoch.get_id()
-    epoch_id_int: int = epoch_id.to_int()
-    save_epoch(new_epoch)
-    put(TOTAL_EPOCHS, epoch_id)
-    return epoch_id_int
+    new_generator: Generator = Generator()
+    x: bool = new_generator.load(label, author)
+    generator_id: bytes = new_generator.get_id()
+    generator_id_int: int = generator_id.to_int()
+    save_generator(new_generator)
+    put(TOTAL_GENERATORS, generator_id)
+    return generator_id_int
 
 
 @public
-def get_epoch_json(epoch_id: bytes) -> Dict[str, Any]:
+def get_generator_json(generator_id: bytes) -> Dict[str, Any]:
     """
-    Gets the JSON formatted representation of an epoch
-    :param epoch_id: the byte formatted epoch_id
-    :return: A dictionary representation of an epoch
+    Gets the JSON formatted representation of an generator
+    :param generator_id: the byte formatted generator_id
+    :return: A dictionary representation of an generator
     """
-    epoch: Epoch = get_epoch(epoch_id)
-    return epoch.export()
+    generator: Generator = get_generator(generator_id)
+    return generator.export()
 
 
 @public
-def get_epoch(epoch_id: bytes) -> Epoch:
+def get_generator(generator_id: bytes) -> Generator:
     """
-    Gets an Epoch class instance
-    :param epoch_id: the byte formatted epoch_id
-    :return: An epoch class instance
+    Gets an Generator class instance
+    :param generator_id: the byte formatted generator_id
+    :return: An generator class instance
     """
-    epoch_bytes: bytes = get_epoch_raw(epoch_id)
-    return cast(Epoch, deserialize(epoch_bytes))
+    generator_bytes: bytes = get_generator_raw(generator_id)
+    return cast(Generator, deserialize(generator_bytes))
 
 
-def get_epoch_raw(epoch_id: bytes) -> bytes:
+def get_generator_raw(generator_id: bytes) -> bytes:
     """
-    Gets a serialized epoch
-    :param epoch_id: the byte formatted pointer to the epoch
-    :return: a serialized epoch
+    Gets a serialized generator
+    :param generator_id: the byte formatted pointer to the generator
+    :return: a serialized generator
     """
-    return get(mk_epoch_key(epoch_id))
+    return get(mk_generator_key(generator_id))
 
 
-def save_epoch(epoch: Epoch) -> bool:
-    epoch_id: bytes = epoch.get_id()
-    put(mk_epoch_key(epoch_id), serialize(epoch))
+def save_generator(generator: Generator) -> bool:
+    generator_id: bytes = generator.get_id()
+    put(mk_generator_key(generator_id), serialize(generator))
     return True
 
 
 ##################KEYS########################
 
 
-def mk_epoch_key(epoch_id: bytes) -> bytes:
-    return EPOCH_KEY + epoch_id
+def mk_generator_key(generator_id: bytes) -> bytes:
+    return GENERATOR_KEY + generator_id
 
 
 def mk_trait_key(trait_id: bytes) -> bytes:
     return TRAIT_KEY + trait_id
 
 
-def mk_epoch_instance_key(epoch_instance_id: bytes) -> bytes:
-    return EPOCH_INSTANCE_KEY + epoch_instance_id
+def mk_generator_instance_key(generator_instance_id: bytes) -> bytes:
+    return GENERATOR_INSTANCE_KEY + generator_instance_id
 
 
 #################Deps############################

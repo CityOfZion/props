@@ -21,5 +21,5 @@ const timeConstant = process.argv[4] || 5000
 
 main(node,'contracts/dice/props.dice.nef', signer, timeConstant)
 main(node,'contracts/collection/props.collection.nef', signer, timeConstant)
-main(node,'contracts/epoch/props.epoch.nef', signer, timeConstant)
+main(node,'contracts/generator/props.generator.nef', signer, timeConstant)
 main(node,'contracts/puppet/props.puppet.nef', signer, timeConstant)

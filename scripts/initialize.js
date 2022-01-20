@@ -11,8 +11,8 @@ async function main(node, signer, timeConstant) {
     const collection = await new sdk.Collection()
     await collection.init()
 
-    const epoch = await new sdk.Epoch()
-    await epoch.init()
+    const generator = await new sdk.Generator()
+    await generator.init()
 
     console.log('\n' +
         '//////////COLLECTIONS///////////////\n' +
@@ -33,18 +33,18 @@ async function main(node, signer, timeConstant) {
     }
 
     console.log('\n' +
-        '//////////EPOCH///////////////\n' +
-        '//////////EPOCH///////////////\n' +
-        '//////////EPOCH///////////////\n'
+        '//////////GENERATOR///////////////\n' +
+        '//////////GENERATOR///////////////\n' +
+        '//////////GENERATOR///////////////\n'
     )
 
-    console.log('\nDeploying all epochs: ')
-    basePath = 'parameters/epochs'
+    console.log('\nDeploying all generators: ')
+    basePath = 'parameters/generators'
     files = fs.readdirSync(basePath)
 
     for await (let file of files) {
-        console.log("Creating Epoch: " + file)
-        const txids = await epoch.createEpochFromFile(basePath + '/' + file, signer, timeConstant)
+        console.log("Creating Generator: " + file)
+        const txids = await generator.createGeneratorFromFile(basePath + '/' + file, signer, timeConstant)
         await sdk.helpers.sleep(timeConstant)
         for await (txid of txids) {
             let result = await sdk.helpers.txDidComplete(node, txid, true)
@@ -65,8 +65,8 @@ async function main(node, signer, timeConstant) {
     result = await sdk.helpers.txDidComplete(node, txid, true)
     console.log("  response: ", result[0])
 
-    console.log("setting epoch 1 as active")
-    txid = await puppet.setCurrentEpoch(1, signer)
+    console.log("setting generator 1 as active")
+    txid = await puppet.setCurrentGenerator(1, signer)
     await sdk.helpers.sleep(2000)
     result = await sdk.helpers.txDidComplete(node, txid, true)
     console.log('  result: ', result[0])

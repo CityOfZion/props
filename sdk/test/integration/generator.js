@@ -6,15 +6,15 @@ var assert = require('assert');
 describe("Basic System Test Suite", function() {
     this.timeout(0);
     const TIME_CONSTANT = 4000
-    let epoch, collection, network, NODE
+    let generator, collection, network, NODE
 
     beforeEach( async function () {
         this.timeout(0);
         //initialize the contract puppet
         NODE = 'http://localhost:50012'
 
-        epoch = await new sdk.Epoch({node: NODE})
-        await epoch.init()
+        generator = await new sdk.Generator({node: NODE})
+        await generator.init()
 
         collection = await new sdk.Collection({node: NODE})
         await collection.init()
@@ -26,7 +26,7 @@ describe("Basic System Test Suite", function() {
         })
     })
 
-    it("should create a simple epoch from a collection and sample from the distribution", async() => {
+    it("should create a simple generator from a collection and sample from the distribution", async() => {
         const cozWallet = network.wallets[0].wallet
 
         const mintCount = 100
@@ -46,8 +46,8 @@ describe("Basic System Test Suite", function() {
                     }
         })
 
-        const newEpoch = {
-            'label': 'new epoch',
+        const newGenerator = {
+            'label': 'new generator',
             'traits': [
                 {
                     "label": "testTrait",
@@ -63,15 +63,15 @@ describe("Basic System Test Suite", function() {
             ]
         }
 
-        //Create the Epoch
-        console.log("create epoch: ")
-        let res = await epoch.createEpoch(newEpoch, cozWallet)
+        //Create the Generator
+        console.log("create generator: ")
+        let res = await generator.createGenerator(newGenerator, cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
         let eid = await sdk.helpers.txDidComplete(NODE, res)
         eid = eid[0]
 
         console.log("minting")
-        const mints = await mintFromEpoch(eid, mintCount, cozWallet, TIME_CONSTANT, NODE)
+        const mints = await mintFromGenerator(eid, mintCount, cozWallet, TIME_CONSTANT, NODE)
         let t = []
         mints.forEach( (mint) => {
             t = t.concat(mint['testTrait'])
@@ -88,23 +88,23 @@ describe("Basic System Test Suite", function() {
 
     })
 
-    //test to get the epoch and validate fields
+    //test to get the generator and validate fields
 
-    it("should get the total epochs", async() => {
-        const total = await epoch.totalEpochs()
+    it("should get the total generators", async() => {
+        const total = await generator.totalGenerators()
         console.log(total)
         assert(total > 0)
     })
 
-    it("should mint from an epoch", async() => {
+    it("should mint from an generator", async() => {
         const cozWallet = network.wallets[0].wallet
-        const epoch_id = await epoch.totalEpochs()
+        const generator_id = await generator.totalGenerators()
 
         const txids = []
         const mintCount = 1
 
         for (let i = 0; i < mintCount; i++) {
-            const txid = await epoch.mintFromEpoch(epoch_id, cozWallet)
+            const txid = await generator.mintFromGenerator(generator_id, cozWallet)
             txids.push(txid)
         }
         await sdk.helpers.sleep(TIME_CONSTANT)
@@ -127,14 +127,14 @@ describe("Basic System Test Suite", function() {
     })
 
 
-    it("should create an epoch using a collection", async() => {
+    it("should create an generator using a collection", async() => {
         const cozWallet = network.wallets[0].wallet
 
         /*
         const collectionId = await collection.totalCollections()
         const initialCollection = await collection.getCollectionJSON(collectionId)
 
-        const newEpoch = [
+        const newGenerator = [
             {
                 "drop_score": 500,
                 "unique": true,
@@ -149,7 +149,7 @@ describe("Basic System Test Suite", function() {
         j = 0
         initialCollection.values.forEach((value, i) => {
             if (i < 100) {
-                newEpoch[i % 2].traits.push({
+                newGenerator[i % 2].traits.push({
                     "collection_id": collectionId,
                     "index": i
                 })
@@ -158,13 +158,13 @@ describe("Basic System Test Suite", function() {
             }
         })
 
-        const res = await epoch.createEpoch("testEpoch", 3, newEpoch, cozWallet)
+        const res = await generator.createGenerator("testGenerator", 3, newGenerator, cozWallet)
         await sleep(2000)
         await txDidComplete(NODE, res)
         */
-        const epoch_id = await epoch.totalEpochs()
-        const res2 = await epoch.getEpochJSON(epoch_id)
-        console.log(epoch_id)
+        const generator_id = await generator.totalGenerators()
+        const res2 = await generator.getGeneratorJSON(generator_id)
+        console.log(generator_id)
         console.log(res2.traits[0].traitLevels[0])
         /*
         initialCollection.values.forEach( (value, i) => {
@@ -176,21 +176,21 @@ describe("Basic System Test Suite", function() {
     })
 
     //test unique
-    it("should create a new epoch instance and mint from it, verifying uniqueness", async() => {
+    it("should create a new generator instance and mint from it, verifying uniqueness", async() => {
         const cozWallet = network.wallets[0].wallet
-        const epoch_id = await epoch.totalEpochs()
+        const generator_id = await generator.totalGenerators()
 
         const sampleCount = 300
         const masterSet = {}
         const txids = []
         let txid
 
-        txid = await epoch.createInstance(epoch_id, cozWallet)
+        txid = await generator.createInstance(generator_id, cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
         const instanceId = await sdk.helpers.txDidComplete(NODE, txid )
 
         for (let i = 0; i < sampleCount; i++) {
-          txid = await epoch.mintFromInstance(instanceId[0], cozWallet)
+          txid = await generator.mintFromInstance(instanceId[0], cozWallet)
           txids.push(txid)
         }
         await sdk.helpers.sleep(TIME_CONSTANT)
@@ -222,10 +222,10 @@ describe("Basic System Test Suite", function() {
         return res[0]
     }
 
-    async function mintFromEpoch(epochID, count, wallet, timeConstant, NODE) {
+    async function mintFromGenerator(generatorID, count, wallet, timeConstant, NODE) {
         const txids = []
         for (let i = 0; i < count; i++) {
-            const txid = await epoch.mintFromEpoch(epochID, wallet)
+            const txid = await generator.mintFromGenerator(generatorID, wallet)
             txids.push(txid)
         }
         await sdk.helpers.sleep(timeConstant)

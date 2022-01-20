@@ -1,19 +1,19 @@
 import {sc} from "@cityofzion/neon-js";
 import {wallet} from "@cityofzion/neon-core";
-import {EpochType, EventTypeEnum, EventTypeWrapper, TraitLevel, TraitType} from "../interface";
+import {GeneratorType, EventTypeEnum, EventTypeWrapper, TraitLevel, TraitType} from "../interface";
 import {parseToJSON, variableInvoke} from "../helpers";
 import {CollectionPointer} from "../interface/interface";
 
-export class EpochAPI {
+export class GeneratorAPI {
 
-  static async createEpoch(
+  static async createGenerator(
     node: string,
     networkMagic: number,
     contractHash: string,
     label: string,
     signer: wallet.Account
   ): Promise<string> {
-    const method = "create_epoch";
+    const method = "create_generator";
 
     const param = [
       sc.ContractParam.string(label)
@@ -26,13 +26,13 @@ export class EpochAPI {
     node: string,
     networkMagic: number,
     contractHash: string,
-    epochId: number,
+    generatorId: number,
     signer: wallet.Account
   ): Promise<string> {
     const method = "create_instance";
 
     const param = [
-      sc.ContractParam.integer(epochId)
+      sc.ContractParam.integer(generatorId)
     ]
 
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
@@ -42,7 +42,7 @@ export class EpochAPI {
     node: string,
     networkMagic: number,
     contractHash: string,
-    epochId: number,
+    generatorId: number,
     label: string,
     slots: number,
     levels: TraitLevel[],
@@ -77,7 +77,7 @@ export class EpochAPI {
     })
 
     const param = [
-      sc.ContractParam.integer(epochId),
+      sc.ContractParam.integer(generatorId),
       sc.ContractParam.string(label),
       sc.ContractParam.integer(slots),
       sc.ContractParam.array(...traitLevelsFormatted)
@@ -86,19 +86,19 @@ export class EpochAPI {
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
   }
 
-  //getEpoch
+  //getGenerator
 
-  static async getEpochJSON(
+  static async getGeneratorJSON(
     node: string,
     networkMagic: number,
     contractHash: string,
-    epochId: number,
+    generatorId: number,
     signer?: wallet.Account
-  ): Promise<EpochType | string> {
-    const method = "get_epoch_json";
+  ): Promise<GeneratorType | string> {
+    const method = "get_generator_json";
 
     const param = [
-      sc.ContractParam.integer(epochId)
+      sc.ContractParam.integer(generatorId)
     ]
 
     const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
@@ -106,19 +106,19 @@ export class EpochAPI {
       return res
     }
     console.log(JSON.stringify(res[0].value))
-    return parseToJSON(res[0].value) as EpochType
+    return parseToJSON(res[0].value) as GeneratorType
   }
 
-  //getEpochInstance
+  //getGeneratorInstance
 
-  static async getEpochInstanceJSON(
+  static async getGeneratorInstanceJSON(
     node: string,
     networkMagic: number,
     contractHash: string,
     instanceId: number,
     signer?: wallet.Account
   ): Promise<any> {
-    const method = "get_epoch_instance_json";
+    const method = "get_generator_instance_json";
 
     const param = [
       sc.ContractParam.integer(instanceId)
@@ -131,17 +131,17 @@ export class EpochAPI {
     return parseToJSON(res[0].value)
   }
 
-  static async mintFromEpoch(
+  static async mintFromGenerator(
     node: string,
     networkMagic: number,
     contractHash: string,
-    epochId: number,
+    generatorId: number,
     signer: wallet.Account
   ): Promise<string> {
-    const method = "mint_from_epoch";
+    const method = "mint_from_generator";
 
     const param = [
-      sc.ContractParam.integer(epochId)
+      sc.ContractParam.integer(generatorId)
     ]
 
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
@@ -184,13 +184,13 @@ export class EpochAPI {
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
   }
 
-  static async totalEpochs(
+  static async totalGenerators(
     node: string,
     networkMagic: number,
     contractHash: string,
     signer?: wallet.Account
   ): Promise<number | string> {
-    const method = "total_epochs";
+    const method = "total_generators";
 
     const res = await variableInvoke(node, networkMagic, contractHash, method, [], signer)
     if (signer) {
@@ -199,13 +199,13 @@ export class EpochAPI {
     return parseInt(res[0].value as string);
   }
 
-  static async totalEpochInstances(
+  static async totalGeneratorInstances(
     node: string,
     networkMagic: number,
     contractHash: string,
     signer?: wallet.Account
   ): Promise<number | string> {
-    const method = "total_epoch_instances";
+    const method = "total_generator_instances";
 
     const res = await variableInvoke(node, networkMagic, contractHash, method, [], signer)
     if (signer) {

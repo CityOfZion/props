@@ -35,7 +35,7 @@ export interface CollectionType {
   valuesRaw?: any[]
 }
 
-export interface EpochType {
+export interface GeneratorType {
   id?: number,
   author?: string
   label: string,

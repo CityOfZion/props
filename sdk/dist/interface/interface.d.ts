@@ -31,6 +31,14 @@ export interface CollectionType {
     valuesRaw?: any[];
 }
 export interface EpochType {
+    author: string;
+    epochId: number;
+    generatorInstanceId: number;
+    mintFee: number;
+    maxSupply: number;
+    totalSupply: number;
+}
+export interface GeneratorType {
     id?: number;
     author?: string;
     label: string;

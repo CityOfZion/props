@@ -6,6 +6,7 @@ const Neon = require("@cityofzion/neon-core")
 const NODE = 'http://localhost:50012'
 const TIME_CONSTANT = 4000
 const PuppetArmySize = 100
+const EPOCH_TOTAL_SUPPLY = 100
 
 
 //load any wallets and network settings we may want later (helpful if we're local)
@@ -14,30 +15,47 @@ network.wallets.forEach( (walletObj) => {
     walletObj.wallet = new Neon.wallet.Account(walletObj.accounts[0]['private-key'])
 })
 
-async function main() {
+async function main(timeConstant) {
 
 
-    let txid
+    let txid, result
 
     const signer = network.wallets[0].wallet
 
     const puppet = await new sdk.Puppet({node: NODE})
     await puppet.init()
 
+    const generator = await new sdk.Generator({node: NODE})
+    await generator.init()
+
     console.log(`Build me an army worthy of ${signer.address} !!!`)
     console.log(`Minting ${PuppetArmySize} puppets!`)
     console.log('This may take a while, you can watch the action on neo-express.')
 
+
+    console.log(`creating a generator instance with generator 1`)
+    txid = await generator.createInstance(1, signer)
+    await sdk.helpers.sleep(timeConstant)
+    result = await sdk.helpers.txDidComplete(NODE, txid, true)
+    console.log('  result: ', result[0])
+
+    console.log(`creating an epoch with generator instance ${result[0]}`)
+    txid = await puppet.createEpoch(result[0], 100000000, EPOCH_TOTAL_SUPPLY, signer)
+    await sdk.helpers.sleep(timeConstant)
+    result = await sdk.helpers.txDidComplete(NODE, txid)
+    console.log('  result: ', result[0])
+
+
     const txids = []
     for (let i = 0; i < PuppetArmySize; i++) {
-        txid = await puppet.offlineMint(signer.address, signer)
+        txid = await puppet.offlineMint(result[0], signer.address, signer)
         txids.push(txid)
         if (i % (PuppetArmySize / 100) === 0) {
             const totalSupply = await puppet.totalSupply()
             console.log(totalSupply, " PUPPETS!!!")
         }
     }
-    await sdk.helpers.sleep(TIME_CONSTANT)
+    await sdk.helpers.sleep(timeConstant)
 
     const totalSupply = await puppet.totalSupply()
     console.log('Puppet Supply: ', totalSupply)
@@ -74,4 +92,4 @@ async function main() {
     fs.writeFileSync('traits.csv', csv)
     */
 }
-main()
+main(TIME_CONSTANT)

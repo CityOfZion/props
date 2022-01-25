@@ -7,7 +7,7 @@ const api_1 = require("./api");
 const neon_js_1 = require("@cityofzion/neon-js");
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0xf112cb2412173f890d50e6996b3e65c85f85636a'
+    scriptHash: '0x58a217883a7771a730d5fd4feb336536f982ad0d'
 };
 class Puppet {
     constructor(options = {}) {
@@ -30,77 +30,87 @@ class Puppet {
         }
         throw new Error('node scripthash defined');
     }
-    async balanceOf(address) {
-        return api_1.PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address);
+    async balanceOf(address, signer) {
+        return api_1.PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address, signer);
     }
-    async decimals() {
-        return api_1.PuppetAPI.decimals(this.node.url, this.networkMagic, this.scriptHash);
+    async createEpoch(generatorId, mintFee, maxSupply, signer) {
+        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, generatorId, mintFee, maxSupply, signer);
+    }
+    async decimals(signer) {
+        return api_1.PuppetAPI.decimals(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async deploy(signer) {
         return api_1.PuppetAPI.deploy(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
-    async getAttributeMod(attributeValue) {
-        return api_1.PuppetAPI.getAttributeMod(this.node.url, this.networkMagic, this.scriptHash, attributeValue);
+    async getAttributeMod(attributeValue, signer) {
+        return api_1.PuppetAPI.getAttributeMod(this.node.url, this.networkMagic, this.scriptHash, attributeValue, signer);
     }
-    async getPuppetRaw(tokenId) {
-        return api_1.PuppetAPI.getPuppetRaw(this.node.url, this.networkMagic, this.scriptHash, tokenId);
+    async getEpochJSON(epochId, signer) {
+        return api_1.PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId, signer);
     }
-    async ownerOf(tokenId) {
-        return api_1.PuppetAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId);
+    async getPuppetJSON(tokenId, signer) {
+        return api_1.PuppetAPI.getPuppetJSON(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
     }
-    async offlineMint(target, signer) {
-        return api_1.PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, target, signer);
+    async getPuppetRaw(tokenId, signer) {
+        return api_1.PuppetAPI.getPuppetRaw(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
     }
-    async properties(tokenId) {
-        return api_1.PuppetAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId);
+    async ownerOf(tokenId, signer) {
+        return api_1.PuppetAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
     }
-    async purchase(signer) {
+    async offlineMint(epochId, owner, signer) {
+        return api_1.PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, epochId, owner, signer);
+    }
+    async properties(tokenId, signer) {
+        return api_1.PuppetAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
+    }
+    async purchase(epochId, signer) {
         const method = "transfer";
         const GASScriptHash = "0xd2a4cff31913016155e38e474a2c06d08be276cf";
-        const purchasePrice = await api_1.PuppetAPI.getMintFee(this.node.url, this.networkMagic, this.scriptHash);
+        const epoch = await api_1.PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId);
+        const EpochTyped = epoch;
+        if (EpochTyped.totalSupply === EpochTyped.maxSupply) {
+            throw new Error(`Epoch is out of Puppets: ${EpochTyped.totalSupply} / ${EpochTyped.maxSupply}`);
+        }
+        const purchasePrice = EpochTyped.mintFee;
         const params = [
             neon_js_1.sc.ContractParam.hash160(signer.address),
             neon_js_1.sc.ContractParam.hash160(this.scriptHash),
             neon_js_1.sc.ContractParam.integer(purchasePrice),
-            neon_js_1.sc.ContractParam.any()
+            neon_js_1.sc.ContractParam.integer(epochId)
         ];
         try {
-            const res = await api_1.NeoInterface.publishInvoke(this.node.url, this.networkMagic, GASScriptHash, method, params, signer);
-            return res;
+            return await api_1.NeoInterface.publishInvoke(this.node.url, this.networkMagic, GASScriptHash, method, params, signer);
         }
         catch (e) {
             throw new Error("Something went wrong: " + e.message);
         }
     }
-    async setMintFee(fee, signer) {
-        return api_1.PuppetAPI.setMintFee(this.node.url, this.networkMagic, this.scriptHash, fee, signer);
+    async setMintFee(epochId, fee, signer) {
+        return api_1.PuppetAPI.setMintFee(this.node.url, this.networkMagic, this.scriptHash, epochId, fee, signer);
     }
-    async symbol() {
-        return api_1.PuppetAPI.symbol(this.node.url, this.networkMagic, this.scriptHash);
+    async symbol(signer) {
+        return api_1.PuppetAPI.symbol(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
-    async getMintFee() {
-        return api_1.PuppetAPI.getMintFee(this.node.url, this.networkMagic, this.scriptHash);
+    async tokens(signer) {
+        return api_1.PuppetAPI.tokens(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
-    async tokens() {
-        return api_1.PuppetAPI.tokens(this.node.url, this.networkMagic, this.scriptHash);
+    async tokensOf(address, signer) {
+        return api_1.PuppetAPI.tokensOf(this.node.url, this.networkMagic, this.scriptHash, address, signer);
     }
-    async tokensOf(address) {
-        return api_1.PuppetAPI.tokensOf(this.node.url, this.networkMagic, this.scriptHash, address);
+    async totalAccounts(signer) {
+        return api_1.PuppetAPI.totalAccounts(this.node.url, this.networkMagic, this.scriptHash, signer);
+    }
+    async totalEpochs(signer) {
+        return api_1.PuppetAPI.totalEpochs(this.node.url, this.networkMagic, this.scriptHash, signer);
+    }
+    async totalSupply(signer) {
+        return api_1.PuppetAPI.totalSupply(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async transfer(to, tokenId, signer, data) {
         return api_1.PuppetAPI.transfer(this.node.url, this.networkMagic, this.scriptHash, to, tokenId, signer, data);
     }
-    async totalSupply() {
-        return api_1.PuppetAPI.totalSupply(this.node.url, this.networkMagic, this.scriptHash);
-    }
     async update(script, manifest, signer) {
         return api_1.PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, signer);
-    }
-    async setCurrentEpoch(epoch_id, signer) {
-        return api_1.PuppetAPI.setCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash, epoch_id, signer);
-    }
-    async getCurrentEpoch() {
-        return api_1.PuppetAPI.getCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash);
     }
 }
 exports.Puppet = Puppet;

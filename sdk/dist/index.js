@@ -29,5 +29,5 @@ exports.types = __importStar(require("./interface"));
 __exportStar(require("./Collection"), exports);
 __exportStar(require("./Dice"), exports);
 __exportStar(require("./Puppet"), exports);
-__exportStar(require("./Epoch"), exports);
+__exportStar(require("./Generator"), exports);
 //# sourceMappingURL=index.js.map

@@ -14,6 +14,7 @@ from boa3.builtin.type import UInt160
 # METADATA
 # -------------------------------------------
 
+
 @metadata
 def manifest_metadata() -> NeoMetadata:
     """
@@ -23,7 +24,7 @@ def manifest_metadata() -> NeoMetadata:
     meta.author = "COZ, Inc."
     meta.description = "A public NFT prop with base attributes and interactions"
     meta.email = "contact@coz.io"
-    meta.supported_standards= ["NEP-11"]
+    meta.supported_standards = ["NEP-11"]
     meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
 
@@ -38,9 +39,6 @@ TOKEN_SYMBOL = 'PUPPET'
 # Number of decimal places
 TOKEN_DECIMALS = 0
 
-# The initial mint fee for a puppet
-INITIAL_MINT_FEE: int = 100000000 # GAS
-
 # -------------------------------------------
 # Keys
 # -------------------------------------------
@@ -48,14 +46,14 @@ INITIAL_MINT_FEE: int = 100000000 # GAS
 # Stores the total token count
 TOKEN_COUNT: bytes = b'!TOKEN_COUNT'
 
+# Epoch count
+EPOCH_COUNT: bytes = b'EPOCH_COUNT'
+
 # Stores the total account count
 ACCOUNT_COUNT: bytes = b'!ACCOUNT_COUNT'
 
 # Stores the current epoch being minted from
 CURRENT_EPOCH = b'!CURRENT_EPOCH'
-
-# Stores the mint fee
-MINT_FEE: bytes = b'!MINT_FEE'
 
 # Stores whether the contract has been deployed(initialized)
 DEPLOYED = b'!deployed'
@@ -301,13 +299,12 @@ def internal_deploy(owner: UInt160) -> bool:
     put(DEPLOYED, True)
     put(TOKEN_COUNT, 0)
     put(ACCOUNT_COUNT, 1)
-    put(MINT_FEE, INITIAL_MINT_FEE.to_bytes())
 
     super_user_permissions: Dict[str, bool] = {
         'offline_mint': True,
         'contract_upgrade': True,
         'set_mint_fee': True,
-        'set_epoch': True,
+        'create_epoch': True,
         'set_permissions': True
     }
     user: User = User()
@@ -341,9 +338,12 @@ def onNEP17Payment(from_address: UInt160, amount: int, data: Any):
     :param data: any pertinent data that might validate the transaction
     :type data: Any
     """
-    fee: int = get_mint_fee()
+    epoch_id: bytes = cast(bytes, data)
+    epoch: Epoch = get_epoch(epoch_id)
+
+    fee: int = epoch.get_mint_fee()
     if calling_script_hash == GAS and amount == fee:
-        internal_mint(from_address)
+        internal_mint(epoch_id, from_address)
     else:
         abort()
 
@@ -367,9 +367,9 @@ def total_accounts() -> int:
 
 
 @public
-def offline_mint(account: UInt160) -> bytes:
+def offline_mint(epoch_id: bytes, account: UInt160) -> bytes:
     """
-    mints a token
+    mints a token from an epoch
     :param account: the account to mint to
     :return: the token_id of the minted token
     :raise AssertionError: raised if the signer does not have `offline_mint` permission.
@@ -377,7 +377,7 @@ def offline_mint(account: UInt160) -> bytes:
     tx = cast(Transaction, script_container)
     user: User = get_user(tx.sender)
     assert user.get_offline_mint(), "User Permission Denied"
-    return internal_mint(account)
+    return internal_mint(epoch_id, account)
 
 
 @public
@@ -399,9 +399,10 @@ def update(script: bytes, manifest: bytes):
 
 
 @public
-def set_mint_fee(amount: bytes) -> bool:
+def set_mint_fee(epoch_id: bytes, amount: int) -> bool:
     """
     Updates the mint fee for a puppet
+    :param epoch_id: the id of the epoch to set the mint fee for
     :param amount: the GAS cost to charge for the minting of a puppet
     :raise AssertionError: raised if the signer does not have the 'offline_mint' permission
     :return: A boolean indicating success
@@ -409,39 +410,48 @@ def set_mint_fee(amount: bytes) -> bool:
     tx = cast(Transaction, script_container)
     user: User = get_user(tx.sender)
     assert user.get_set_mint_fee(), "User Permission Denied"
-    put(MINT_FEE, amount)
+
+    epoch: Epoch = get_epoch(epoch_id)
+    x: bool = epoch.set_fee(amount)
+    save_epoch(epoch)
+
     return True
 
 
-@public
-def get_mint_fee() -> int:
-    return get(MINT_FEE).to_int()
-
-
-def internal_mint(owner: UInt160) -> bytes:
+def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
     """
     Mint new token - internal
 
+    :param epoch_id: the epoch id to mint from
     :param owner: the address of the account that is minting token
     :type owner: UInt160
     :return: token_id of the token minted
     """
+    mint_epoch: Epoch = get_epoch(epoch_id)
+    assert mint_epoch.can_mint(), "No available puppets to mint in the selected epoch"
+
     token_id: bytes = (totalSupply() + 1).to_bytes()
     new_puppet: Puppet = Puppet()
-    x: bool = new_puppet.generate(owner, token_id)
+    x: bool = new_puppet.generate(owner, token_id, epoch_id)
+
     save_puppet(new_puppet)
     put(TOKEN_COUNT, token_id)
-    user: User = get_user(owner)
 
-    x:bool = user.add_owned_token(token_id)
+    x: int = mint_epoch.increment_supply()
+    save_epoch(mint_epoch)
+
+    user: User = get_user(owner)
+    x: bool = user.add_owned_token(token_id)
     save_user(owner, user)
 
     post_transfer(None, owner, token_id, None)
     return token_id
 
 
-#############################
-#############################
+# #############################
+# ########### User ############
+# #############################
+
 
 ACCOUNT_PREFIX = b'a'
 TOKEN_INDEX_PREFIX = b'i'
@@ -455,7 +465,7 @@ class User:
             'offline_mint': False,
             'contract_upgrade': False,
             'set_mint_fee': False,
-            'set_epoch': False,
+            'create_epoch': False,
             'set_permissions': False
         }
 
@@ -509,8 +519,8 @@ class User:
     def get_set_mint_fee(self) -> bool:
         return self._permissions['set_mint_fee']
 
-    def get_set_epoch(self) -> bool:
-        return self._permissions['set_epoch']
+    def get_create_epoch(self) -> bool:
+        return self._permissions['create_epoch']
 
 
 @public
@@ -583,29 +593,128 @@ def set_user_permissions(user: UInt160, permissions: Dict[str, bool]) -> bool:
     return x
 
 
+# #############################
+# ########## Epoch ############
+# #############################
+# #############################
+
+
+EPOCH_PREFIX = b'e'
+
+
+class Epoch:
+    def __init__(self, generator_instance_id: bytes, mint_fee: int, max_supply: int, author: UInt160):
+        self._author: UInt160 = author
+        self._epoch_id: bytes = (total_epochs() + 1).to_bytes()
+        self._generator_instance_id: bytes = generator_instance_id
+        self._mint_fee: int = mint_fee
+        self._max_supply: int = max_supply
+        self._total_supply: int = 0
+
+    def can_mint(self) -> bool:
+        return self._max_supply > self.get_total_supply()
+
+    def get_id(self) -> bytes:
+        return self._epoch_id
+
+    def get_author(self) -> UInt160:
+        return self._author
+
+    def get_generator_instance_id(self) -> bytes:
+        return self._generator_instance_id
+
+    def get_mint_fee(self) -> int:
+        return self._mint_fee
+
+    def get_max_supply(self) -> int:
+        return self._max_supply
+
+    def get_total_supply(self) -> int:
+        return self._total_supply
+
+    def export(self) -> Dict[str, Any]:
+        exported: Dict[str, Any] = {
+            "author": self._author,
+            "epochId": self._epoch_id,
+            "generatorInstanceId": self._generator_instance_id,
+            "mintFee": self._mint_fee,
+            "maxSupply": self._max_supply,
+            "totalSupply": self.get_total_supply()
+        }
+        return exported
+
+    def increment_supply(self) -> int:
+        self._total_supply = self._total_supply + 1
+        return self._total_supply
+
+    def set_fee(self, new_fee: int) -> bool:
+        self._mint_fee = new_fee
+        return True
+
+
 @public
-def set_current_epoch(epoch_id: bytes) -> bool:
-    """
-    Sets the current epoch_id to mint from
-    :param epoch_id: The epoch_id to target when minting a puppet
-    :return: A boolean indicating success
-    """
+def create_epoch(generator_instance_id: bytes, mint_fee: int, max_supply: int) -> int:
     tx = cast(Transaction, script_container)
-    user: User = get_user(tx.sender)
-    assert user.get_set_epoch(), "User Permission Denied"
-    put(CURRENT_EPOCH, epoch_id)
+    author: UInt160 = tx.sender
+
+    user: User = get_user(author)
+    assert user.get_create_epoch(), "User Permission Denied"
+
+    new_epoch: Epoch = Epoch(generator_instance_id, mint_fee, max_supply, author)
+    epoch_id: bytes = new_epoch.get_id()
+    epoch_id_int: int = epoch_id.to_int()
+
+    save_epoch(new_epoch)
+    put(EPOCH_COUNT, epoch_id)
+    return epoch_id_int
+
+
+@public
+def get_epoch_json(epoch_id: bytes) -> Dict[str, Any]:
+    epoch: Epoch = get_epoch(epoch_id)
+    return epoch.export()
+
+
+@public
+def get_epoch(epoch_id: bytes) -> Epoch:
+    epoch_bytes: bytes = get_epoch_raw(epoch_id)
+    return cast(Epoch, deserialize(epoch_bytes))
+
+
+def get_epoch_raw(epoch_id: bytes) -> bytes:
+    return get(mk_epoch_key(epoch_id))
+
+
+@public
+def total_epochs() -> int:
+    """
+    Gets the total epoch count.  No
+
+    Epoch id is an incrementor so users can iterator from 1 - total_epochs() to dump every epoch on the contract.
+
+    :return: the total token epochs deployed in the system.
+    """
+    total: bytes = get(EPOCH_COUNT)
+    if len(total) == 0:
+        return 0
+    return total.to_int()
+
+
+def save_epoch(epoch: Epoch) -> bool:
+    epoch_id: bytes = epoch.get_id()
+    put(mk_epoch_key(epoch_id), serialize(epoch))
     return True
 
 
-@public
-def get_current_epoch() -> int:
-    return get(CURRENT_EPOCH).to_int()
+def mk_epoch_key(epoch_id: bytes) -> bytes:
+    return EPOCH_PREFIX + epoch_id
 
 
-#############################
-####### Puppet ###########
-#############################
-#############################
+# #############################
+# ########## Puppet ###########
+# #############################
+# #############################
+
 
 TOKEN_PREFIX = b't'
 
@@ -639,7 +748,7 @@ class Puppet:
 
     def __init__(self):
         self._token_id: bytes = b''
-        self._epoch_instance_id: bytes = b''
+        self._epoch_id: bytes = b''
         self._charisma: int = 0
         self._constitution: int = 0
         self._dexterity: int = 0
@@ -664,16 +773,17 @@ class Puppet:
             'owner': self._owner,
             'tokenId': self._token_id,
             'traits': self._traits,
-            'epochInstanceId': self._epoch_instance_id
+            'epochId': self._epoch_id
         }
         return exported
 
-    def generate(self, owner: UInt160, token_id: bytes) -> bool:
+    def generate(self, owner: UInt160, token_id: bytes, epoch_id: bytes) -> bool:
         """
         Generates a puppet's core features
         @return: boolean indicating success
         """
         # generate base attributes
+        target_epoch: Epoch = get_epoch(epoch_id)
 
         initial_roll_collection_id: int = 1
         charisma: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
@@ -698,11 +808,11 @@ class Puppet:
         self._hit_die = hd
 
         # mint traits
-        instance_id: int = get_current_epoch()
-        instance_id_bytes: bytes = instance_id.to_bytes()
-        traits: Dict[str, Any] = Epoch.mint_from_instance(instance_id_bytes)
+        instance_id_bytes: bytes = target_epoch.get_generator_instance_id()
+        traits: Dict[str, Any] = Generator.mint_from_instance(instance_id_bytes)
+
         self._traits = traits
-        self._epoch_instance_id = instance_id_bytes
+        self._epoch_id = epoch_id
 
         # Generate a puppet token_id and set the owner
         self._owner = owner
@@ -762,8 +872,10 @@ class Puppet:
         token_id_bytes: bytes = self._token_id
         token_id_int: int = token_id_bytes.to_int()
         token_id_string: str = itoa(token_id_int, 10)
-        instance_id_bytes: bytes = self._epoch_instance_id
-        instance_id_int: int = instance_id_bytes.to_int()
+
+        epoch_id_bytes: bytes = self._epoch_id
+        epoch_id_int: int = epoch_id_bytes.to_int()
+
         exported: Dict[str, Any] = {
             'armorClass': self.get_armor_class(),
             'attributes': {
@@ -779,7 +891,7 @@ class Puppet:
             'owner': self._owner,
             'tokenId': token_id_int,
             'tokenURI': 'https://props.coz.io/puppets/' + token_id_string,
-            'epochInstanceId': instance_id_int,
+            'epochId': epoch_id_int,
             'traits': self._traits,
         }
         return exported
@@ -897,9 +1009,10 @@ def save_puppet(puppet: Puppet) -> bool:
 def mk_token_key(token_id: bytes) -> bytes:
     return TOKEN_PREFIX + token_id
 
-############INTERFACES###########
-############INTERFACES###########
-############INTERFACES###########
+
+# ############INTERFACES###########
+# ############INTERFACES###########
+# ############INTERFACES###########
 
 
 @contract('0xa80d045ca80e0421aa855c3a000bfbe5dddadced')
@@ -918,10 +1031,9 @@ class Dice:
         pass
 
 
-@contract('0xccff6257a59416028105709bc1e488a36ffeb9b2')
+@contract('0x47f945b1028961b539ecebbce8eaf3ef1aa9c084')
 class Generator:
 
     @staticmethod
     def mint_from_instance(instance_id: bytes) -> Dict[str, Any]:
         pass
-

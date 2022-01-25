@@ -168,7 +168,7 @@ const notification = formatter(n.state)
     }
     if (verbose) {
       console.log(`event: ${n.eventname}`)
-      console.log(`  payload: ${notification}`)
+      console.log(`  payload: ${JSON.stringify(notification)}`)
     }
     return res
   })

@@ -20,68 +20,185 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PuppetAPI = void 0;
-const interface_1 = require("./interface");
 const neon_js_1 = __importStar(require("@cityofzion/neon-js"));
 const neon_core_1 = require("@cityofzion/neon-core");
 const helpers_1 = require("../helpers");
 class PuppetAPI {
-    /**
-     * Returns the token symbol
-     * @param node
-     * @param networkMagic
-     * @param contractHash
-     */
-    static async symbol(node, networkMagic, contractHash) {
-        const method = "symbol";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined) {
-            throw new Error("unrecognized response");
-        }
-        return neon_js_1.default.u.HexString.fromBase64(res[0].value).toAscii();
-    }
-    /**
-     * Returns the decimals of the token
-     * @param node
-     * @param networkMagic
-     * @param contractHash
-     */
-    static async decimals(node, networkMagic, contractHash) {
-        const method = "decimals";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined) {
-            throw new Error("unrecognized response");
-        }
-        return parseInt(res[0].value);
-    }
-    /**
-     * Returns the total supply of the token
-     * @param node
-     * @param networkMagic
-     * @param contractHash
-     */
-    static async totalSupply(node, networkMagic, contractHash) {
-        const method = "totalSupply";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return parseInt(res[0].value);
-    }
     /**
      * Returns the balance of an account
      * @param node
      * @param networkMagic
      * @param contractHash
      * @param address
+     * @param signer
      */
-    static async balanceOf(node, networkMagic, contractHash, address) {
+    static async balanceOf(node, networkMagic, contractHash, address, signer) {
         const method = "balanceOf";
         const params = [neon_js_1.sc.ContractParam.hash160(address)];
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, params);
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
+        }
+        return parseInt(res[0].value);
+    }
+    static async createEpoch(node, networkMagic, contractHash, generatorInstanceId, mintFee, maxSupply, signer) {
+        const method = "create_epoch";
+        const params = [
+            neon_js_1.sc.ContractParam.integer(generatorInstanceId),
+            neon_js_1.sc.ContractParam.integer(mintFee),
+            neon_js_1.sc.ContractParam.integer(maxSupply)
+        ];
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+    }
+    /**
+     * Returns the decimals of the token
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param signer
+     */
+    static async decimals(node, networkMagic, contractHash, signer) {
+        const method = "decimals";
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        if (signer) {
+            return res;
+        }
+        return parseInt(res[0].value);
+    }
+    /**
+     * Initializes the smart contract on first deployment (REQUIRED)
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param signer The signing account, which will become the first admin if upgrade == false
+     */
+    static async deploy(node, networkMagic, contractHash, signer) {
+        const method = "deploy";
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+    }
+    static async getAttributeMod(node, networkMagic, contractHash, attributeValue, signer) {
+        const method = "roll_initial_stat";
+        const params = [
+            neon_js_1.sc.ContractParam.integer(attributeValue)
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
+        }
+        return parseInt(res[0].value);
+    }
+    static async getPuppetJSON(node, networkMagic, contractHash, tokenId, signer) {
+        const method = "get_epoch_json";
+        const param = [neon_js_1.sc.ContractParam.integer(tokenId)];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
+        }
+        return helpers_1.parseToJSON(res[0].value);
+    }
+    static async getPuppetRaw(node, networkMagic, contractHash, tokenId, signer) {
+        const method = "get_puppet_raw";
+        const params = [neon_js_1.sc.ContractParam.string(tokenId)];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
+        }
+        return res[0].value;
+    }
+    /**
+     * Gets the owner account of a tokenId
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param tokenId The tokenId to return the owner of
+     * @param signer
+     */
+    static async ownerOf(node, networkMagic, contractHash, tokenId, signer) {
+        const method = "ownerOf";
+        const params = [neon_js_1.sc.ContractParam.integer(tokenId)];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
+        }
+        const rawValue = neon_js_1.u.base642hex(res[0].value);
+        return new neon_core_1.wallet.Account(neon_js_1.u.reverseHex(rawValue));
+    }
+    static async offlineMint(node, networkMagic, contractHash, epochId, owner, signer) {
+        const method = "offline_mint";
+        const params = [
+            neon_js_1.sc.ContractParam.integer(epochId),
+            neon_js_1.sc.ContractParam.hash160(owner)
+        ];
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+    }
+    /**
+     * Gets the properties of a token
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param tokenId The tokenId of the token being requested
+     * @param signer An optional signer.  Populating this value will publish a transaction and return a txid
+     */
+    static async properties(node, networkMagic, contractHash, tokenId, signer) {
+        const method = "properties";
+        const params = [neon_js_1.sc.ContractParam.integer(tokenId)];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
+        }
+        return helpers_1.parseToJSON(res[0].value);
+    }
+    static async setMintFee(node, networkMagic, contractHash, epochId, fee, signer) {
+        const method = "set_mint_fee";
+        const params = [
+            neon_js_1.sc.ContractParam.integer(epochId),
+            neon_js_1.sc.ContractParam.integer(fee)
+        ];
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+    }
+    /**
+     * Returns the token symbol
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param signer
+     */
+    static async symbol(node, networkMagic, contractHash, signer) {
+        const method = "symbol";
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        if (signer) {
+            return res;
+        }
+        return neon_js_1.default.u.HexString.fromBase64(res[0].value).toAscii();
+    }
+    /**
+     * Gets and array of strings(tokenIds) representing all the tokens associated with the contract
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param signer
+     */
+    static async tokens(node, networkMagic, contractHash, signer) {
+        const method = "tokens";
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        if (signer) {
+            return res;
+        }
         if (res === undefined || res.length === 0) {
             throw new Error("unrecognized response");
         }
-        return parseInt(res[0].value);
+        const iterator = res[0];
+        if (iterator.iterator && iterator.iterator.length > 0 && iterator.iterator[0].value) {
+            return iterator.iterator.map((token) => {
+                const attrs = token.value;
+                let bytes = neon_js_1.u.base642hex(attrs[0].value);
+                return parseInt(neon_js_1.u.reverseHex(bytes), 16);
+            });
+        }
+        if (iterator.iterator && iterator.iterator.length === 0) {
+            return [];
+        }
+        throw new Error("unable to resolve respond format");
     }
     /**
      * Gets an array of strings(tokenId) owned by an address
@@ -89,13 +206,14 @@ class PuppetAPI {
      * @param networkMagic
      * @param contractHash
      * @param address The string formatted address of an account
+     * @param signer
      */
-    static async tokensOf(node, networkMagic, contractHash, address) {
+    static async tokensOf(node, networkMagic, contractHash, address, signer) {
         const method = "tokensOf";
         const params = [neon_js_1.sc.ContractParam.hash160(address)];
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, params);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
         }
         const iterator = res[0];
         if (iterator.iterator && iterator.iterator.length >= 0) {
@@ -106,6 +224,44 @@ class PuppetAPI {
             });
         }
         throw new Error("unable to resolve respond format");
+    }
+    /**
+     * Gets the total number of accounts stored in the contract
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param signer
+     */
+    static async totalAccounts(node, networkMagic, contractHash, signer) {
+        const method = "total_accounts";
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        if (signer) {
+            return res;
+        }
+        return parseInt(res[0].value);
+    }
+    static async totalEpochs(node, networkMagic, contractHash, signer) {
+        const method = "total_epochs";
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        if (signer) {
+            return res;
+        }
+        return parseInt(res[0].value);
+    }
+    /**
+     * Returns the total supply of the token
+     * @param node
+     * @param networkMagic
+     * @param contractHash
+     * @param signer
+     */
+    static async totalSupply(node, networkMagic, contractHash, signer) {
+        const method = "totalSupply";
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        if (signer) {
+            return res;
+        }
+        return parseInt(res[0].value);
     }
     /**
      * Transfers a token to another account
@@ -124,174 +280,7 @@ class PuppetAPI {
             neon_js_1.sc.ContractParam.integer(tokenId),
             data,
         ];
-        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, signer);
-    }
-    /**
-     * Gets the owner account of a tokenId
-     * @param node
-     * @param networkMagic
-     * @param contractHash
-     * @param tokenId The tokenId to return the owner of
-     */
-    static async ownerOf(node, networkMagic, contractHash, tokenId) {
-        const method = "ownerOf";
-        const params = [neon_js_1.sc.ContractParam.integer(tokenId)];
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, params);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        const rawValue = neon_js_1.u.base642hex(res[0].value);
-        return new neon_core_1.wallet.Account(neon_js_1.u.reverseHex(rawValue));
-    }
-    /**
-     * Gets and array of strings(tokenIds) representing all the tokens associated with the contract
-     * @param node
-     * @param networkMagic
-     * @param contractHash
-     */
-    static async tokens(node, networkMagic, contractHash) {
-        const method = "tokens";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        const iterator = res[0];
-        if (iterator.iterator && iterator.iterator.length > 0 && iterator.iterator[0].value) {
-            return iterator.iterator.map((token) => {
-                const attrs = token.value;
-                let bytes = neon_js_1.u.base642hex(attrs[0].value);
-                return parseInt(neon_js_1.u.reverseHex(bytes), 16);
-            });
-        }
-        if (iterator.iterator && iterator.iterator.length === 0) {
-            return [];
-        }
-        throw new Error("unable to resolve respond format");
-    }
-    /**
-     * Gets the properties of a token
-     * @param node
-     * @param networkMagic
-     * @param contractHash
-     * @param tokenId The tokenId of the token being requested
-     */
-    static async properties(node, networkMagic, contractHash, tokenId) {
-        const method = "properties";
-        const params = [neon_js_1.sc.ContractParam.integer(tokenId)];
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, params);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        const puppet = {
-            armorClass: 0,
-            attributes: {
-                charisma: 0,
-                constitution: 0,
-                dexterity: 0,
-                intelligence: 0,
-                strength: 0,
-                wisdom: 0,
-            },
-            hitDie: '',
-            epoch: 0,
-            name: '',
-            owner: new neon_core_1.wallet.Account(),
-            traits: {},
-            tokenId: 0,
-            tokenURI: '',
-        };
-        if (res[0] && res[0].value) {
-            res[0].value.forEach((entry) => {
-                let key = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.key.value));
-                let rawValue;
-                switch (key) {
-                    case "armorClass":
-                        puppet.armorClass = parseInt(entry.value.value);
-                        break;
-                    case "attributes":
-                        let attrs = entry.value.value;
-                        attrs.forEach((attrRaw) => {
-                            let attrKey = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(attrRaw.key.value));
-                            switch (attrKey) {
-                                case "charisma":
-                                    puppet.attributes.charisma = parseInt(attrRaw.value.value);
-                                    break;
-                                case "constitution":
-                                    puppet.attributes.constitution = parseInt(attrRaw.value.value);
-                                    break;
-                                case "dexterity":
-                                    puppet.attributes.dexterity = parseInt(attrRaw.value.value);
-                                    break;
-                                case "intelligence":
-                                    puppet.attributes.intelligence = parseInt(attrRaw.value.value);
-                                    break;
-                                case "strength":
-                                    puppet.attributes.strength = parseInt(attrRaw.value.value);
-                                    break;
-                                case "wisdom":
-                                    puppet.attributes.wisdom = parseInt(attrRaw.value.value);
-                                    break;
-                            }
-                        });
-                        break;
-                    case "hitDie":
-                        puppet.hitDie = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
-                        break;
-                    case "name":
-                        puppet.name = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
-                        break;
-                    case "owner":
-                        rawValue = neon_js_1.u.base642hex(entry.value.value);
-                        puppet.owner = new neon_core_1.wallet.Account(neon_js_1.u.reverseHex(rawValue));
-                        break;
-                    case "traits":
-                        puppet.traits = helpers_1.formatter(entry.value);
-                        break;
-                    case "tokenId":
-                        puppet.tokenId = parseInt(entry.value.value);
-                        break;
-                    case "tokenURI":
-                        puppet.tokenURI = neon_js_1.u.hexstring2str(neon_js_1.u.base642hex(entry.value.value));
-                        break;
-                    case "epoch":
-                        puppet.epoch = parseInt(entry.value.value);
-                        break;
-                    default:
-                        throw new Error('unrecognized property: ' + key);
-                }
-            });
-        }
-        return puppet;
-    }
-    /**
-     * Initializes the smart contract on first deployment (REQUIRED)
-     * @param node
-     * @param networkMagic
-     * @param contractHash
-     * @param data A pass through variable that is currently not used
-     * @param upgrade Indicates whether the deployment is an upgrade
-     * @param account The signing account, which will become the first admin if upgrade == false
-     */
-    static async deploy(node, networkMagic, contractHash, account) {
-        const method = "deploy";
-        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, [], account);
-    }
-    static async offlineMint(node, networkMagic, contractHash, owner, signer) {
-        const method = "offline_mint";
-        const params = [
-            neon_js_1.sc.ContractParam.hash160(owner)
-        ];
-        try {
-            const res = await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, signer);
-            if (res === undefined || res.length === 0) {
-                throw new Error("unrecognized response");
-            }
-            return res;
-        }
-        catch (e) {
-            console.log(e);
-            return;
-        }
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
     }
     static async update(node, networkMagic, contractHash, script, manifest, signer) {
         const method = "update";
@@ -299,76 +288,17 @@ class PuppetAPI {
             neon_js_1.sc.ContractParam.byteArray(script),
             neon_js_1.sc.ContractParam.byteArray(manifest)
         ];
-        try {
-            const res = await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, signer);
-            if (res === undefined || res.length === 0) {
-                throw new Error("unrecognized response");
-            }
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+    }
+    //setUserPermissions
+    static async getEpochJSON(node, networkMagic, contractHash, epochId, signer) {
+        const method = "get_epoch_json";
+        const param = [neon_js_1.sc.ContractParam.integer(epochId)];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
             return res;
         }
-        catch (e) {
-            console.log(e);
-            return;
-        }
-    }
-    static async getPuppetRaw(node, networkMagic, contractHash, tokenId) {
-        const method = "get_puppet_raw";
-        const params = [neon_js_1.sc.ContractParam.string(tokenId)];
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, params);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return res[0].value;
-    }
-    static async getMintFee(node, networkMagic, contractHash) {
-        const method = "get_mint_fee";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return parseInt(res[0].value);
-    }
-    static async setMintFee(node, networkMagic, contractHash, fee, signer) {
-        const method = "set_mint_fee";
-        const params = [
-            neon_js_1.sc.ContractParam.integer(fee)
-        ];
-        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, params, signer);
-    }
-    static async getAttributeMod(node, networkMagic, contractHash, attributeValue) {
-        const method = "roll_initial_stat";
-        const param = [
-            neon_js_1.sc.ContractParam.integer(attributeValue)
-        ];
-        try {
-            const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, param);
-            if (res === undefined || res.length === 0) {
-                throw new Error("unrecognized response");
-            }
-            return res;
-        }
-        catch (e) {
-            console.log(e);
-            return;
-        }
-    }
-    //////////////EPOCHS/////////////
-    //////////////EPOCHS/////////////
-    //////////////EPOCHS/////////////
-    static async setCurrentEpoch(node, networkMagic, contractHash, epochId, account) {
-        const method = "set_current_epoch";
-        const param = [
-            neon_js_1.sc.ContractParam.integer(epochId)
-        ];
-        return await interface_1.NeoInterface.publishInvoke(node, networkMagic, contractHash, method, param, account);
-    }
-    static async getCurrentEpoch(node, networkMagic, contractHash) {
-        const method = "get_current_epoch";
-        const res = await interface_1.NeoInterface.testInvoke(node, networkMagic, contractHash, method, []);
-        if (res === undefined || res.length === 0) {
-            throw new Error("unrecognized response");
-        }
-        return parseInt(res[0].value);
+        return helpers_1.parseToJSON(res[0].value);
     }
 }
 exports.PuppetAPI = PuppetAPI;

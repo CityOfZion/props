@@ -64,13 +64,6 @@ async function main(node, signer, timeConstant) {
     await sdk.helpers.sleep(timeConstant)
     result = await sdk.helpers.txDidComplete(node, txid, true)
     console.log("  response: ", result[0])
-
-    console.log("setting generator 1 as active")
-    txid = await puppet.setCurrentGenerator(1, signer)
-    await sdk.helpers.sleep(2000)
-    result = await sdk.helpers.txDidComplete(node, txid, true)
-    console.log('  result: ', result[0])
-
 }
 
 const network = JSON.parse(fs.readFileSync("default.neo-express").toString());

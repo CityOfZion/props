@@ -105,7 +105,6 @@ export class GeneratorAPI {
     if (signer) {
       return res
     }
-    console.log(JSON.stringify(res[0].value))
     return parseToJSON(res[0].value) as GeneratorType
   }
 

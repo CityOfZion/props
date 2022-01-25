@@ -143,7 +143,7 @@ function parseNotifications(tx, verbose = false) {
         };
         if (verbose) {
             console.log(`event: ${n.eventname}`);
-            console.log(`  payload: ${notification}`);
+            console.log(`  payload: ${JSON.stringify(notification)}`);
         }
         return res;
     });

@@ -2,11 +2,11 @@ import { merge } from 'lodash'
 import {rpc, wallet} from '@cityofzion/neon-core'
 import {PuppetAPI, NeoInterface} from './api'
 import {sc} from "@cityofzion/neon-js";
-import {PropConstructorOptions} from "./interface";
+import {EpochType, PropConstructorOptions, PuppetType} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0xf112cb2412173f890d50e6996b3e65c85f85636a'
+  scriptHash: '0x58a217883a7771a730d5fd4feb336536f982ad0d'
 }
 
 export class Puppet {
@@ -36,51 +36,69 @@ export class Puppet {
     throw new Error('node scripthash defined')
   }
 
-  async balanceOf(address: string): Promise<number> {
-    return PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address)
+  async balanceOf(address: string, signer?: wallet.Account): Promise<number> {
+    return PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address, signer)
   }
 
-  async decimals(): Promise<number> {
-    return PuppetAPI.decimals(this.node.url, this.networkMagic, this.scriptHash)
+  async createEpoch(generatorId: number, mintFee: number, maxSupply: number, signer: wallet.Account): Promise<string> {
+    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, generatorId, mintFee, maxSupply, signer)
   }
 
-  async deploy(signer: wallet.Account): Promise<any> {
+  async decimals(signer?: wallet.Account): Promise<number> {
+    return PuppetAPI.decimals(this.node.url, this.networkMagic, this.scriptHash, signer)
+  }
+
+  async deploy(signer: wallet.Account): Promise<string> {
     return PuppetAPI.deploy(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 
-  async getAttributeMod(attributeValue: number): Promise<any> {
-    return PuppetAPI.getAttributeMod(this.node.url, this.networkMagic, this.scriptHash, attributeValue)
+  async getAttributeMod(attributeValue: number, signer?: wallet.Account): Promise<number | string> {
+    return PuppetAPI.getAttributeMod(this.node.url, this.networkMagic, this.scriptHash, attributeValue, signer)
   }
 
-  async getPuppetRaw(tokenId: string): Promise<string | undefined> {
-    return PuppetAPI.getPuppetRaw(this.node.url, this.networkMagic, this.scriptHash, tokenId)
+  async getEpochJSON(epochId: number, signer?: wallet.Account): Promise<EpochType | string> {
+    return PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId, signer)
   }
 
-  async ownerOf(tokenId: number): Promise<wallet.Account | undefined> {
-    return PuppetAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId)
+  async getPuppetJSON(tokenId: number, signer?: wallet.Account): Promise<PuppetType | string> {
+    return PuppetAPI.getPuppetJSON(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer)
   }
 
-  async offlineMint(target: string, signer: wallet.Account): Promise<string | undefined> {
-    return PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, target, signer)
+  async getPuppetRaw(tokenId: string, signer?: wallet.Account): Promise<string> {
+    return PuppetAPI.getPuppetRaw(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer)
   }
 
-  async properties(tokenId: number): Promise<any> {
-    return PuppetAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId)
+  async ownerOf(tokenId: number, signer?: wallet.Account): Promise<wallet.Account | string> {
+    return PuppetAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer)
   }
 
-  async purchase(signer: wallet.Account): Promise<string | undefined> {
+  async offlineMint(epochId: number, owner: string, signer: wallet.Account): Promise<string> {
+    return PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, epochId, owner, signer)
+  }
+
+  async properties(tokenId: number, signer?: wallet.Account): Promise<PuppetType | string> {
+    return PuppetAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer)
+  }
+
+  async purchase(epochId: number, signer: wallet.Account): Promise<string | undefined> {
     const method = "transfer";
 
     const GASScriptHash = "0xd2a4cff31913016155e38e474a2c06d08be276cf"
-    const purchasePrice = await PuppetAPI.getMintFee(this.node.url, this.networkMagic, this.scriptHash)
+    const epoch = await PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId)
+    const EpochTyped = epoch as unknown as EpochType
+    if (EpochTyped.totalSupply === EpochTyped.maxSupply) {
+      throw new Error(`Epoch is out of Puppets: ${EpochTyped.totalSupply} / ${EpochTyped.maxSupply}`)
+    }
+
+    const purchasePrice = EpochTyped.mintFee
     const params = [
       sc.ContractParam.hash160(signer.address),
       sc.ContractParam.hash160(this.scriptHash),
       sc.ContractParam.integer(purchasePrice),
-      sc.ContractParam.any()
+      sc.ContractParam.integer(epochId)
     ]
     try {
-      const res = await NeoInterface.publishInvoke(
+      return await NeoInterface.publishInvoke(
         this.node.url,
         this.networkMagic,
         GASScriptHash,
@@ -88,49 +106,45 @@ export class Puppet {
         params,
         signer
       );
-      return res
     } catch (e) {
       throw new Error("Something went wrong: " + (e as Error).message)
     }
   }
 
-  async setMintFee(fee: number, signer: wallet.Account): Promise<number> {
-    return PuppetAPI.setMintFee(this.node.url, this.networkMagic, this.scriptHash,fee, signer)
+  async setMintFee(epochId: number, fee: number, signer: wallet.Account): Promise<string> {
+    return PuppetAPI.setMintFee(this.node.url, this.networkMagic, this.scriptHash, epochId, fee, signer)
   }
 
-  async symbol(): Promise<string> {
-    return PuppetAPI.symbol(this.node.url, this.networkMagic, this.scriptHash)
+  async symbol(signer?: wallet.Account): Promise<string> {
+    return PuppetAPI.symbol(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 
-  async getMintFee(): Promise<number> {
-    return PuppetAPI.getMintFee(this.node.url, this.networkMagic, this.scriptHash)
+  async tokens(signer?: wallet.Account): Promise<number[] | string> {
+    return PuppetAPI.tokens(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 
-  async tokens(): Promise<number[]> {
-    return PuppetAPI.tokens(this.node.url, this.networkMagic, this.scriptHash)
+  async tokensOf(address: string, signer?: wallet.Account): Promise<number[] | string> {
+    return PuppetAPI.tokensOf(this.node.url, this.networkMagic, this.scriptHash, address, signer)
   }
 
-  async tokensOf(address: string): Promise<number[]> {
-    return PuppetAPI.tokensOf(this.node.url, this.networkMagic, this.scriptHash, address)
+  async totalAccounts(signer?: wallet.Account): Promise<number | string> {
+    return PuppetAPI.totalAccounts(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 
-  async transfer(to: string, tokenId: number, signer: wallet.Account, data: any ): Promise<boolean | undefined> {
+  async totalEpochs(signer?: wallet.Account): Promise<number | string> {
+    return PuppetAPI.totalEpochs(this.node.url, this.networkMagic, this.scriptHash, signer)
+  }
+
+  async totalSupply(signer?: wallet.Account): Promise<number | string> {
+    return PuppetAPI.totalSupply(this.node.url, this.networkMagic, this.scriptHash, signer)
+  }
+
+  async transfer(to: string, tokenId: number, signer: wallet.Account, data: any): Promise<string> {
     return PuppetAPI.transfer(this.node.url, this.networkMagic, this.scriptHash,to, tokenId, signer, data)
   }
 
-  async totalSupply(): Promise<number> {
-    return PuppetAPI.totalSupply(this.node.url, this.networkMagic, this.scriptHash)
-  }
-
-  async update(script: string, manifest: string, signer: wallet.Account): Promise<boolean> {
+  async update(script: string, manifest: string, signer: wallet.Account): Promise<string> {
     return PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, signer)
   }
 
-  async setCurrentEpoch(epoch_id: number, signer: wallet.Account): Promise<boolean | undefined> {
-    return PuppetAPI.setCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash, epoch_id, signer)
-  }
-
-  async getCurrentEpoch(): Promise<number | undefined> {
-    return PuppetAPI.getCurrentEpoch(this.node.url, this.networkMagic, this.scriptHash)
-  }
 }

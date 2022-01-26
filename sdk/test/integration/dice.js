@@ -43,17 +43,15 @@ describe("Lets roll some Dice!", function() {
             txids.push(res)
         }
         await sdk.helpers.sleep(TIME_CONSTANT)
+
+        const results = []
         for (let txid of txids) {
             let result = await sdk.helpers.txDidComplete(NODE, txid)
-            binVals[result[0]] += 1
+            results.push(result[0])
         }
 
         // chi-squared test for uniformity
-        let chiSquared = 0
-        const expected = runSize/bins
-        for (let i = 0; i< bins; i++) {
-            chiSquared += ((binVals[i] - expected) ** 2) / expected
-        }
+        const chiSquared = sdk.helpers.chiSquared(results)
         assert(chiSquared < 20, chiSquared)
     })
 
@@ -64,7 +62,6 @@ describe("Lets roll some Dice!", function() {
         const runSize = 2000
         const bins = 20
         const die = 'd20'
-        const binVals = new Array(bins).fill(0)
 
         const txids = []
         for (let i = 0; i < runSize; i++) {
@@ -72,16 +69,15 @@ describe("Lets roll some Dice!", function() {
             txids.push(res)
         }
         await sdk.helpers.sleep(TIME_CONSTANT)
+
+        const results = []
         for (let txid of txids) {
             let result = await sdk.helpers.txDidComplete(NODE, txid)
-            binVals[result[0] - 1] += 1
+            results.push(result[0])
         }
+
         // chi-squared test for uniformity
-        let chiSquared = 0
-        const expected = runSize/bins
-        for (let b of binVals) {
-            chiSquared += ((b - expected) ** 2) / expected
-        }
+        const chiSquared = sdk.helpers.chiSquared(results)
         assert(chiSquared < 20, chiSquared)
     })
 })

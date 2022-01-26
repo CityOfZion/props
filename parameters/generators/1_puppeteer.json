@@ -1,5 +1,6 @@
 {
   "label": "Puppeteer",
+  "baseGeneratorFee": 1000000000,
   "traits": [
     {
       "label": "color",

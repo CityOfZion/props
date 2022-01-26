@@ -7,7 +7,7 @@ import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x47f945b1028961b539ecebbce8eaf3ef1aa9c084'
+  scriptHash: '0x232b50fd5c375070886f84717848bfefb652bdbf'
 }
 
 export class Generator {
@@ -39,13 +39,14 @@ export class Generator {
 
   async createGenerator(generator: GeneratorType, signer: wallet.Account, timeConstantMS: number): Promise<string[]> {
     const txids = []
-    let txid = await GeneratorAPI.createGenerator(this.node.url, this.networkMagic, this.scriptHash, generator.label, signer)
+    let txid = await GeneratorAPI.createGenerator(this.node.url, this.networkMagic, this.scriptHash, generator.label, generator.baseGeneratorFee, signer)
     txids.push(txid)
     await sleep(timeConstantMS)
     const res = await txDidComplete(this.node.url, txid, false)
     for await (let trait of generator.traits) {
       txid = await GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, res[0], trait.label, trait.slots, trait.traitLevels, signer)
       txids.push(txid)
+      await sleep(timeConstantMS)
     }
     return txids
   }
@@ -65,10 +66,6 @@ export class Generator {
 
   async createInstance(generatorId: number, signer: wallet.Account): Promise<string> {
     return GeneratorAPI.createInstance(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer)
-  }
-
-  async mintFromGenerator(generatorId: number, signer: wallet.Account): Promise<string> {
-    return GeneratorAPI.mintFromGenerator(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer)
   }
 
   async mintFromInstance(instanceId: number, signer: wallet.Account): Promise<string> {

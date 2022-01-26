@@ -26,52 +26,21 @@ describe("Basic System Test Suite", function() {
         })
     })
 
-    it("should create a simple generator from a collection and sample from the distribution", async() => {
+    it("should create a simple generator from a collection and sample from it", async() => {
         const cozWallet = network.wallets[0].wallet
 
-        const mintCount = 100
+        const mintCount = 1000
         const maxTraits = 5
         const dropRate = 0.5
 
-        let cid = await createCollection(collection, NODE, TIME_CONSTANT, cozWallet)
-        const initialCollection = await collection.getCollectionJSON(cid)
+        const gid = await buildGenerator(dropRate, maxTraits, NODE, TIME_CONSTANT, cozWallet)
 
-        const traits = initialCollection.values.map((value, i) => {
-                return {
-                        "type": 0,
-                        "args": {
-                            "collectionId": cid,
-                            "index": i
-                        }
-                    }
-        })
-
-        const newGenerator = {
-            'label': 'new generator',
-            'traits': [
-                {
-                    "label": "testTrait",
-                    "slots": maxTraits,
-                    "traitLevels": [
-                        {
-                            "dropScore": dropRate * 10000,
-                            "unique": false,
-                            "traits": traits
-                        }
-                    ]
-                }
-            ]
-        }
-
-        //Create the Generator
-        console.log("create generator: ")
-        let res = await generator.createGenerator(newGenerator, cozWallet)
+        let txid = await generator.createInstance(gid, cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
-        let eid = await sdk.helpers.txDidComplete(NODE, res)
-        eid = eid[0]
+        const giid = await sdk.helpers.txDidComplete(NODE, txid)
 
         console.log("minting")
-        const mints = await mintFromGenerator(eid, mintCount, cozWallet, TIME_CONSTANT, NODE)
+        const mints = await mintFromInstance(giid[0], mintCount, cozWallet, TIME_CONSTANT, NODE)
         let t = []
         mints.forEach( (mint) => {
             t = t.concat(mint['testTrait'])
@@ -84,8 +53,7 @@ describe("Basic System Test Suite", function() {
         assert(percentError < 0.05, percentError)
 
         const chiSquared = sdk.helpers.chiSquared(t)
-        console.log(chiSquared)
-
+        assert(chiSquared < 20, `chi-squared: ${chiSquared}`)
     })
 
     //test to get the generator and validate fields
@@ -218,23 +186,66 @@ describe("Basic System Test Suite", function() {
     async function createCollection(collection, NODE, timeConstant, signer) {
         const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
         await sdk.helpers.sleep(timeConstant)
-        const res = await sdk.helpers.txDidComplete(NODE, txid, true)
+        const res = await sdk.helpers.txDidComplete(NODE, txid)
         return res[0]
     }
 
-    async function mintFromGenerator(generatorID, count, wallet, timeConstant, NODE) {
+    async function mintFromInstance(instanceId, count, wallet, timeConstant, NODE) {
         const txids = []
         for (let i = 0; i < count; i++) {
-            const txid = await generator.mintFromGenerator(generatorID, wallet)
+            const txid = await generator.mintFromInstance(instanceId, wallet)
             txids.push(txid)
         }
         await sdk.helpers.sleep(timeConstant)
 
         const res = []
         for (let txid of txids) {
-            const traits = await sdk.helpers.txDidComplete(NODE, txid)
+            const traits = await sdk.helpers.txDidComplete(NODE, txid, true)
             res.push(traits[0])
         }
         return res
+    }
+
+    async function buildGenerator(dropRate, maxTraits, NODE, timeConstant, signer) {
+        const generator = await new sdk.Generator({node: NODE})
+        await generator.init()
+
+        const collection = await new sdk.Collection({node: NODE})
+        await collection.init()
+
+        const cid = await createCollection(collection, NODE, timeConstant, signer)
+
+        const initialCollection = await collection.getCollectionJSON(cid)
+
+        const traits = initialCollection.values.map((value, i) => {
+            return {
+                "type": 0,
+                "maxMint": -1,
+                "args": {
+                    "collectionId": cid,
+                    "index": i
+                }
+            }
+        })
+        const newGenerator = {
+            'label': 'new generator',
+            'baseGeneratorFee': 1000000000,
+            'traits': [
+                {
+                    "label": "testTrait",
+                    "slots": maxTraits,
+                    "traitLevels": [
+                        {
+                            "dropScore": dropRate * 10000,
+                            "traits": traits
+                        }
+                    ]
+                }
+            ]
+        }
+        let res = await generator.createGenerator(newGenerator, signer, timeConstant)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        let eid = await sdk.helpers.txDidComplete(NODE, res[0])
+        return eid[0]
     }
 })

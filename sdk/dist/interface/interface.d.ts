@@ -42,6 +42,7 @@ export interface GeneratorType {
     id?: number;
     author?: string;
     label: string;
+    baseGeneratorFee: number;
     traits: TraitType[];
 }
 export interface TraitType {

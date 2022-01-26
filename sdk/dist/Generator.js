@@ -11,7 +11,7 @@ const helpers_1 = require("./helpers");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x47f945b1028961b539ecebbce8eaf3ef1aa9c084'
+    scriptHash: '0x232b50fd5c375070886f84717848bfefb652bdbf'
 };
 class Generator {
     constructor(options = {}) {
@@ -36,13 +36,14 @@ class Generator {
     }
     async createGenerator(generator, signer, timeConstantMS) {
         const txids = [];
-        let txid = await api_1.GeneratorAPI.createGenerator(this.node.url, this.networkMagic, this.scriptHash, generator.label, signer);
+        let txid = await api_1.GeneratorAPI.createGenerator(this.node.url, this.networkMagic, this.scriptHash, generator.label, generator.baseGeneratorFee, signer);
         txids.push(txid);
         await helpers_1.sleep(timeConstantMS);
         const res = await helpers_1.txDidComplete(this.node.url, txid, false);
         for await (let trait of generator.traits) {
             txid = await api_1.GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, res[0], trait.label, trait.slots, trait.traitLevels, signer);
             txids.push(txid);
+            await helpers_1.sleep(timeConstantMS);
         }
         return txids;
     }
@@ -58,9 +59,6 @@ class Generator {
     }
     async createInstance(generatorId, signer) {
         return api_1.GeneratorAPI.createInstance(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer);
-    }
-    async mintFromGenerator(generatorId, signer) {
-        return api_1.GeneratorAPI.mintFromGenerator(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer);
     }
     async mintFromInstance(instanceId, signer) {
         return api_1.GeneratorAPI.mintFromInstance(this.node.url, this.networkMagic, this.scriptHash, instanceId, signer);

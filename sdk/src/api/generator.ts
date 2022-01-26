@@ -11,12 +11,14 @@ export class GeneratorAPI {
     networkMagic: number,
     contractHash: string,
     label: string,
+    baseGeneratorFee: number,
     signer: wallet.Account
   ): Promise<string> {
     const method = "create_generator";
 
     const param = [
-      sc.ContractParam.string(label)
+      sc.ContractParam.string(label),
+      sc.ContractParam.integer(baseGeneratorFee)
     ]
 
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
@@ -128,22 +130,6 @@ export class GeneratorAPI {
       return res
     }
     return parseToJSON(res[0].value)
-  }
-
-  static async mintFromGenerator(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-    generatorId: number,
-    signer: wallet.Account
-  ): Promise<string> {
-    const method = "mint_from_generator";
-
-    const param = [
-      sc.ContractParam.integer(generatorId)
-    ]
-
-    return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
   }
 
   static async mintFromInstance(

@@ -33,7 +33,7 @@ describe("Collections tests", function() {
             traits.push(generateName())
         }
 
-        const txid = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
+        const txid = await collection.createCollection("a collection with 2000 objects", "string", "", traits, cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
 
         let cid = await sdk.helpers.txDidComplete(NODE, txid, true)
@@ -95,7 +95,6 @@ describe("Collections tests", function() {
 
 
         const runSize = 2000
-        const bins = {}
 
         const cid = await createCollection(collection, NODE,TIME_CONSTANT, cozWallet)
         const collectionLength = await collection.getCollectionLength(cid)
@@ -108,23 +107,13 @@ describe("Collections tests", function() {
 
         await sdk.helpers.sleep(TIME_CONSTANT)
 
+        const results = []
         for (let txid of txids) {
             let result = await sdk.helpers.txDidComplete(NODE, txid)
-            if (bins[result[0]]) {
-                bins[result[0]] += 1
-            } else {
-                bins[result[0]] = 1
-            }
+            results.push(result[0])
         }
-
-        // chi-squared test for uniformity
-        let chiSquared = 0
-        const expected = runSize/collectionLength
-        const keys = Object.keys(bins)
-        for (let i = 0; i< keys.length; i++) {
-            chiSquared += ((bins[keys[i]] - expected) ** 2) / expected
-        }
-        assert(chiSquared < 10)
+        const chiSquared = sdk.helpers.chiSquared(results)
+        assert(chiSquared < 15, `chi-squared: ${chiSquared}`)
 
     })
 

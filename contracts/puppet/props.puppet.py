@@ -52,9 +52,6 @@ EPOCH_COUNT: bytes = b'EPOCH_COUNT'
 # Stores the total account count
 ACCOUNT_COUNT: bytes = b'!ACCOUNT_COUNT'
 
-# Stores the current epoch being minted from
-CURRENT_EPOCH = b'!CURRENT_EPOCH'
-
 # Stores whether the contract has been deployed(initialized)
 DEPLOYED = b'!deployed'
 
@@ -1031,7 +1028,7 @@ class Dice:
         pass
 
 
-@contract('0x47f945b1028961b539ecebbce8eaf3ef1aa9c084')
+@contract('0x232b50fd5c375070886f84717848bfefb652bdbf')
 class Generator:
 
     @staticmethod

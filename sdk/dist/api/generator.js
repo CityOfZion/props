@@ -5,10 +5,11 @@ const neon_js_1 = require("@cityofzion/neon-js");
 const interface_1 = require("../interface");
 const helpers_1 = require("../helpers");
 class GeneratorAPI {
-    static async createGenerator(node, networkMagic, contractHash, label, signer) {
+    static async createGenerator(node, networkMagic, contractHash, label, baseGeneratorFee, signer) {
         const method = "create_generator";
         const param = [
-            neon_js_1.sc.ContractParam.string(label)
+            neon_js_1.sc.ContractParam.string(label),
+            neon_js_1.sc.ContractParam.integer(baseGeneratorFee)
         ];
         return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
     }
@@ -66,13 +67,6 @@ class GeneratorAPI {
             return res;
         }
         return helpers_1.parseToJSON(res[0].value);
-    }
-    static async mintFromGenerator(node, networkMagic, contractHash, generatorId, signer) {
-        const method = "mint_from_generator";
-        const param = [
-            neon_js_1.sc.ContractParam.integer(generatorId)
-        ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
     }
     static async mintFromInstance(node, networkMagic, contractHash, instanceId, signer) {
         const method = "mint_from_instance";

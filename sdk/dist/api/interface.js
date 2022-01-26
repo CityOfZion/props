@@ -51,8 +51,7 @@ class NeoInterface {
         const contract = new neon_js_1.default.experimental.SmartContract(neon_js_1.default.u.HexString.fromHex(scriptHash), {
             networkMagic,
             rpcAddress,
-            account,
-            systemFeeOverride: neon_js_1.u.BigInteger.fromDecimal(10, 8),
+            account
         });
         let result;
         try {

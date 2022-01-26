@@ -2,7 +2,7 @@ from typing import Any, Dict, List, cast
 from boa3.builtin import contract, NeoMetadata, metadata, public, CreateNewEvent
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
-from boa3.builtin.interop.runtime import get_random, script_container, calling_script_hash
+from boa3.builtin.interop.runtime import burn_gas, gas_left, get_random, script_container, calling_script_hash
 from boa3.builtin.type import UInt160
 from boa3.builtin.interop.blockchain import Transaction
 
@@ -47,8 +47,9 @@ TOTAL_GENERATOR_INSTANCES = b'!TOTAL_GENERATOR_INSTANCES'
 
 
 class GeneratorInstance:
-    def __init__(self, generator_id: bytes, author: UInt160):
+    def __init__(self, generator_id: bytes, author: UInt160, base_fee: int):
         self._generator_id: bytes = generator_id
+        self._fee: int = base_fee
         self._instance_id: bytes = (total_generator_instances() + 1).to_bytes()
         self._author: UInt160 = author
         self._authorized_users: [UInt160] = [author]
@@ -59,6 +60,9 @@ class GeneratorInstance:
 
     def get_author(self) -> UInt160:
         return self._author
+
+    def get_fee(self) -> int:
+        return self._fee
 
     def get_generator_id(self) -> bytes:
         return self._generator_id
@@ -84,6 +88,10 @@ class GeneratorInstance:
     def set_authorized_users(self, authorized_users: [UInt160]):
         self._authorized_users = authorized_users
 
+    def set_fee(self, new_fee: int) -> bool:
+        self._fee = new_fee
+        return True
+
     def export(self) -> Dict[str, Any]:
         exported: Dict[str, Any] = {
             "generatorId": self._generator_id,
@@ -101,7 +109,10 @@ def create_instance(generator_id: bytes) -> int:
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
-    new_instance: GeneratorInstance = GeneratorInstance(generator_id, author)
+    target_generator: Generator = get_generator(generator_id)
+    base_fee: int = target_generator.get_base_fee()
+
+    new_instance: GeneratorInstance = GeneratorInstance(generator_id, author, base_fee)
     instance_id: bytes = new_instance.get_id()
     instance_id_int: int = instance_id.to_int()
 
@@ -436,6 +447,7 @@ class Generator:
         self._traits: [bytes] = []
         self._id: bytes = (total_generators() + 1).to_bytes()
         self._author: UInt160 = b''
+        self._base_generator_fee = 0
 
     def export(self) -> Dict[str, Any]:
 
@@ -448,18 +460,23 @@ class Generator:
         exported: Dict[str, Any] = {
             "id": self._id,
             "author": self._author,
+            "baseGeneratorFee": self._base_generator_fee,
             "label": self._label,
             "traits": traits,
         }
         return exported
 
-    def load(self, label: bytes, author: UInt160) -> bool:
+    def load(self, label: bytes, author: UInt160, base_generator_fee: int) -> bool:
         self._label = label
         self._author = author
+        self._base_generator_fee = base_generator_fee
         return True
 
     def get_author(self) -> UInt160:
         return self._author
+
+    def get_base_fee(self) -> int:
+        return self._base_generator_fee
 
     def get_label(self) -> bytes:
         return self._label
@@ -479,6 +496,10 @@ class Generator:
     def mint_traits(self, generator_instance: GeneratorInstance) -> Dict[str, Any]:
         traits: Dict[str, Any] = {}
 
+        # remaining GAS before branching code
+        start_gas: int = gas_left
+
+        # mint some traits
         trait_objects: [bytes] = self._traits
         for trait_id in trait_objects:
             trait_object: Trait = get_trait(trait_id)
@@ -491,6 +512,13 @@ class Generator:
                 traits[label] = trait
             if traits_count == 1:
                 traits[label] = trait[0]
+
+
+        end_gas: int = gas_left
+        compute_cost: int = start_gas - end_gas
+        burn_amount: int = generator_instance.get_fee() - compute_cost
+        burn_gas(burn_amount)
+
         return traits
 
 
@@ -507,17 +535,18 @@ def total_generators() -> int:
 
 
 @public
-def create_generator(label: bytes) -> int:
+def create_generator(label: bytes, base_generator_fee: int) -> int:
     """
     Creates a new generator
     :param label: A byte formatted string defining the generator
+    :param base_generator_fee: The base GAS fee to use this generator
     :return: An integer representing the generator_id
     """
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
     new_generator: Generator = Generator()
-    x: bool = new_generator.load(label, author)
+    x: bool = new_generator.load(label, author, base_generator_fee)
     generator_id: bytes = new_generator.get_id()
     generator_id_int: int = generator_id.to_int()
     save_generator(new_generator)

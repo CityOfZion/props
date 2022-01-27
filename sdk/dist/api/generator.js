@@ -81,7 +81,16 @@ class GeneratorAPI {
             return neon_js_1.sc.ContractParam.hash160(user);
         });
         const param = [
+            neon_js_1.sc.ContractParam.integer(instanceId),
             neon_js_1.sc.ContractParam.array(...usersFormatted)
+        ];
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+    }
+    static async setInstanceFee(node, networkMagic, contractHash, instanceId, fee, signer) {
+        const method = "set_instance_fee";
+        const param = [
+            neon_js_1.sc.ContractParam.integer(instanceId),
+            neon_js_1.sc.ContractParam.integer(fee)
         ];
         return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
     }

@@ -163,7 +163,26 @@ export class GeneratorAPI {
     })
 
     const param = [
+      sc.ContractParam.integer(instanceId),
       sc.ContractParam.array(...usersFormatted)
+    ]
+
+    return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+  }
+
+  static async setInstanceFee(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    instanceId: number,
+    fee: number,
+    signer: wallet.Account
+  ): Promise<string> {
+    const method = "set_instance_fee";
+
+    const param = [
+      sc.ContractParam.integer(instanceId),
+      sc.ContractParam.integer(fee)
     ]
 
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)

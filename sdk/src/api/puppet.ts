@@ -38,6 +38,7 @@ export class PuppetAPI {
     contractHash: string,
     generatorInstanceId: number,
     mintFee: number,
+    sysFee: number,
     maxSupply: number,
     signer: wallet.Account,
   ): Promise<string> {
@@ -45,6 +46,7 @@ export class PuppetAPI {
     const params = [
       sc.ContractParam.integer(generatorInstanceId),
       sc.ContractParam.integer(mintFee),
+      sc.ContractParam.integer(sysFee),
       sc.ContractParam.integer(maxSupply)
     ];
     return await variableInvoke(node, networkMagic, contractHash, method, params, signer)

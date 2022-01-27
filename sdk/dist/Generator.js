@@ -11,7 +11,7 @@ const helpers_1 = require("./helpers");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x232b50fd5c375070886f84717848bfefb652bdbf'
+    scriptHash: '0xf1ce1613827b09219d44850366acdba31a6099d3'
 };
 class Generator {
     constructor(options = {}) {
@@ -65,6 +65,9 @@ class Generator {
     }
     async setInstanceAuthorizedUsers(instanceId, authorizedUsers, signer) {
         return api_1.GeneratorAPI.setInstanceAuthorizedUsers(this.node.url, this.networkMagic, this.scriptHash, instanceId, authorizedUsers, signer);
+    }
+    async setInstanceFee(instanceId, fee, signer) {
+        return api_1.GeneratorAPI.setInstanceFee(this.node.url, this.networkMagic, this.scriptHash, instanceId, fee, signer);
     }
     async totalGenerators(signer) {
         return api_1.GeneratorAPI.totalGenerators(this.node.url, this.networkMagic, this.scriptHash, signer);

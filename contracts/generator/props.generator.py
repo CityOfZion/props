@@ -85,8 +85,9 @@ class GeneratorInstance:
     def is_authorized(self, user: UInt160) -> bool:
         return user in self._authorized_users
 
-    def set_authorized_users(self, authorized_users: [UInt160]):
+    def set_authorized_users(self, authorized_users: [UInt160]) -> bool:
         self._authorized_users = authorized_users
+        return True
 
     def set_fee(self, new_fee: int) -> bool:
         self._fee = new_fee
@@ -146,7 +147,23 @@ def set_instance_authorized_users(instance_id: bytes, authorized_users: [UInt160
     author: UInt160 = generator_instance.get_author()
     assert signer == author, "Transaction signer is not the instance author"
 
-    generator_instance.set_authorized_users(authorized_users)
+    x: bool = generator_instance.set_authorized_users(authorized_users)
+
+    save_generator_instance(generator_instance)
+    return True
+
+
+@public
+def set_instance_fee(instance_id: bytes, fee: int) -> bool:
+    tx = cast(Transaction, script_container)
+    signer: UInt160 = tx.sender
+
+    generator_instance: GeneratorInstance = get_generator_instance(instance_id)
+
+    author: UInt160 = generator_instance.get_author()
+    assert signer == author, "Transaction signer is not the instance author"
+
+    x: bool = generator_instance.set_fee(fee)
 
     save_generator_instance(generator_instance)
     return True

@@ -3,7 +3,7 @@ from boa3.builtin import contract, CreateNewEvent, NeoMetadata, metadata, public
 from boa3.builtin.contract import abort
 from boa3.builtin.interop.blockchain import get_contract, Transaction
 from boa3.builtin.interop.contract import call_contract, update_contract, GAS
-from boa3.builtin.interop.runtime import check_witness, script_container, calling_script_hash
+from boa3.builtin.interop.runtime import burn_gas, gas_left, check_witness, script_container, calling_script_hash
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.storage.findoptions import FindOptions
@@ -68,6 +68,13 @@ on_transfer = CreateNewEvent(
         ('token_id', bytes)
     ],
     'Transfer'
+)
+
+debug = CreateNewEvent(
+    [
+        ('params', list),
+    ],
+    'Debug'
 )
 
 # -------------------------------------------
@@ -424,6 +431,10 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
     :type owner: UInt160
     :return: token_id of the token minted
     """
+
+    # remaining GAS before branching code
+    start_gas: int = gas_left
+
     mint_epoch: Epoch = get_epoch(epoch_id)
     assert mint_epoch.can_mint(), "No available puppets to mint in the selected epoch"
 
@@ -442,6 +453,14 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
     save_user(owner, user)
 
     post_transfer(None, owner, token_id, None)
+
+    end_gas: int = gas_left
+    compute_cost: int = start_gas - end_gas
+    epoch_system_fee: int = mint_epoch.get_sys_fee()
+    burn_amount: int = epoch_system_fee - compute_cost
+
+    burn_gas(burn_amount)
+
     return token_id
 
 
@@ -600,11 +619,12 @@ EPOCH_PREFIX = b'e'
 
 
 class Epoch:
-    def __init__(self, generator_instance_id: bytes, mint_fee: int, max_supply: int, author: UInt160):
+    def __init__(self, generator_instance_id: bytes, mint_fee: int, sys_fee: int, max_supply: int, author: UInt160):
         self._author: UInt160 = author
         self._epoch_id: bytes = (total_epochs() + 1).to_bytes()
         self._generator_instance_id: bytes = generator_instance_id
         self._mint_fee: int = mint_fee
+        self._sys_fee: int = sys_fee
         self._max_supply: int = max_supply
         self._total_supply: int = 0
 
@@ -623,6 +643,9 @@ class Epoch:
     def get_mint_fee(self) -> int:
         return self._mint_fee
 
+    def get_sys_fee(self) -> int:
+        return self._sys_fee
+
     def get_max_supply(self) -> int:
         return self._max_supply
 
@@ -635,6 +658,7 @@ class Epoch:
             "epochId": self._epoch_id,
             "generatorInstanceId": self._generator_instance_id,
             "mintFee": self._mint_fee,
+            "sysFee": self._sys_fee,
             "maxSupply": self._max_supply,
             "totalSupply": self.get_total_supply()
         }
@@ -650,14 +674,14 @@ class Epoch:
 
 
 @public
-def create_epoch(generator_instance_id: bytes, mint_fee: int, max_supply: int) -> int:
+def create_epoch(generator_instance_id: bytes, mint_fee: int, sys_fee: int, max_supply: int) -> int:
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
     user: User = get_user(author)
     assert user.get_create_epoch(), "User Permission Denied"
 
-    new_epoch: Epoch = Epoch(generator_instance_id, mint_fee, max_supply, author)
+    new_epoch: Epoch = Epoch(generator_instance_id, mint_fee, sys_fee, max_supply, author)
     epoch_id: bytes = new_epoch.get_id()
     epoch_id_int: int = epoch_id.to_int()
 
@@ -1028,7 +1052,7 @@ class Dice:
         pass
 
 
-@contract('0x232b50fd5c375070886f84717848bfefb652bdbf')
+@contract('0xf1ce1613827b09219d44850366acdba31a6099d3')
 class Generator:
 
     @staticmethod

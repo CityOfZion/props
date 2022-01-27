@@ -14,6 +14,7 @@ export declare class Generator {
     createInstance(generatorId: number, signer: wallet.Account): Promise<string>;
     mintFromInstance(instanceId: number, signer: wallet.Account): Promise<string>;
     setInstanceAuthorizedUsers(instanceId: number, authorizedUsers: string[], signer: wallet.Account): Promise<string>;
+    setInstanceFee(instanceId: number, fee: number, signer: wallet.Account): Promise<string>;
     totalGenerators(signer?: wallet.Account): Promise<number | string>;
     totalGeneratorInstances(signer?: wallet.Account): Promise<number | string>;
 }

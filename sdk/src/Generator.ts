@@ -7,7 +7,7 @@ import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x232b50fd5c375070886f84717848bfefb652bdbf'
+  scriptHash: '0xf1ce1613827b09219d44850366acdba31a6099d3'
 }
 
 export class Generator {
@@ -74,6 +74,10 @@ export class Generator {
 
   async setInstanceAuthorizedUsers(instanceId: number, authorizedUsers: string[], signer: wallet.Account): Promise<string> {
     return GeneratorAPI.setInstanceAuthorizedUsers(this.node.url, this.networkMagic, this.scriptHash, instanceId, authorizedUsers, signer)
+  }
+
+  async setInstanceFee(instanceId: number, fee: number, signer: wallet.Account): Promise<string> {
+    return GeneratorAPI.setInstanceFee(this.node.url, this.networkMagic, this.scriptHash, instanceId, fee, signer)
   }
 
   async totalGenerators(signer?: wallet.Account): Promise<number | string> {

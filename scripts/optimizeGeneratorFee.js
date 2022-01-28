@@ -18,7 +18,7 @@ async function main(generatorId, timeConstant) {
     const generator = await new sdk.Generator({node: NODE})
     await generator.init()
 
-    let feeRange = [0, 10**9]
+    let feeRange = [0, 10**8]
     let fee
     let res
     while(1) {
@@ -57,7 +57,7 @@ async function testFee(generator, generatorId, fee, timeConstant, node, signer) 
     try {
         //mint using the fee
         const txids = []
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1000; i++) {
             const txid = await generator.mintFromInstance(giid[0], signer)
             txids.push(txid)
         }

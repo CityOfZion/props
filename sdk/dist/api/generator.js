@@ -27,9 +27,11 @@ class GeneratorAPI {
                 //need to also have the type in here
                 switch (traitEvent.type) {
                     case interface_1.EventTypeEnum.CollectionPointer:
-                        const args = traitEvent.args;
-                        //console.log(traitEvent.type, args.collectionId, args.index)
-                        return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(args.collectionId), neon_js_1.sc.ContractParam.integer(args.index)));
+                        const collectionPointer = traitEvent.args;
+                        return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(collectionPointer.collectionId), neon_js_1.sc.ContractParam.integer(collectionPointer.index)));
+                    case interface_1.EventTypeEnum.ContractCall:
+                        const contractCall = traitEvent.args;
+                        return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.hash160(contractCall.scriptHash), neon_js_1.sc.ContractParam.byteArray(contractCall.method), neon_js_1.sc.ContractParam.array(...contractCall.param)));
                     default:
                         throw new Error("unrecognized trait event type");
                 }

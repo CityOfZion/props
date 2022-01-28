@@ -1,8 +1,7 @@
 import {sc} from "@cityofzion/neon-js";
 import {wallet} from "@cityofzion/neon-core";
-import {GeneratorType, EventTypeEnum, EventTypeWrapper, TraitLevel, TraitType} from "../interface";
+import {EventCollectionPointer, EventContractCall, GeneratorType, EventTypeEnum, EventTypeWrapper, TraitLevel, TraitType} from "../interface";
 import {parseToJSON, variableInvoke} from "../helpers";
-import {CollectionPointer} from "../interface/interface";
 
 export class GeneratorAPI {
 
@@ -58,15 +57,26 @@ export class GeneratorAPI {
         //need to also have the type in here
         switch (traitEvent.type) {
           case EventTypeEnum.CollectionPointer:
-            const args: CollectionPointer = traitEvent.args as CollectionPointer
-            //console.log(traitEvent.type, args.collectionId, args.index)
+            const collectionPointer: EventCollectionPointer = traitEvent.args as EventCollectionPointer
             return sc.ContractParam.array(
               sc.ContractParam.integer(traitEvent.type),
               sc.ContractParam.integer(traitEvent.maxMint),
               sc.ContractParam.array(
-                sc.ContractParam.integer(args.collectionId),
-                sc.ContractParam.integer(args.index)
+                sc.ContractParam.integer(collectionPointer.collectionId),
+                sc.ContractParam.integer(collectionPointer.index)
               ))
+          case EventTypeEnum.ContractCall:
+            const contractCall: EventContractCall = traitEvent.args as EventContractCall
+            return sc.ContractParam.array(
+              sc.ContractParam.integer(traitEvent.type),
+              sc.ContractParam.integer(traitEvent.maxMint),
+              sc.ContractParam.array(
+                sc.ContractParam.hash160(contractCall.scriptHash),
+                sc.ContractParam.byteArray(contractCall.method),
+                sc.ContractParam.array(...contractCall.param)
+              )
+            )
+
           default:
             throw new Error("unrecognized trait event type")
         }

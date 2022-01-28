@@ -1,5 +1,6 @@
-from typing import Any, Dict, List, cast
+from typing import Any, Dict, List, cast, Union
 from boa3.builtin import contract, NeoMetadata, metadata, public, CreateNewEvent
+from boa3.builtin.interop.contract import call_contract
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.runtime import burn_gas, gas_left, get_random, script_container, calling_script_hash
@@ -241,19 +242,52 @@ class CollectionPointerEvent:
         return value
 
 
+class ContractCallEvent:
+    def __init__(self, script_hash: UInt160, method: str, param: list):
+        self._scriptHash: UInt160 = script_hash
+        self._method: str = method
+        self._param: list = param
+
+    def export(self) -> Dict[str, int]:
+        exported: Dict[str, int] = {
+            "scriptHash": self._scriptHash,
+            "method": self._method,
+            "param": self._param
+        }
+        return exported
+
+    def get_value(self) -> bytes:
+        value: bytes = call_contract(self._scriptHash, self._method, self._param)
+        return value
+
+
 class EventInterface:
     def __init__(self, event_id: bytes, event_type: int, max_mint: int, args: List):
         self._event_type: int = event_type
         self._id: bytes = event_id
         self._max_mint: int = max_mint
+        self._event: Union[CollectionPointerEvent, ContractCallEvent]
 
         if event_type == 0:
             collection_id: int = cast(int, args[0])
             idx: int = cast(int, args[1])
             self._event = CollectionPointerEvent(collection_id, idx)
 
+        if event_type == 1:
+            script_hash: UInt160 = cast(UInt160, args[0])
+            method: str = cast(str, args[1])
+            param: list = cast(list, args[2])
+            self._event = ContractCallEvent(script_hash, method, param)
+
     def export(self) -> Dict[str, Any]:
-        args: Dict[str, Any] = self._event.export()
+        args: Dict[str, Any] = {}
+        if self._event_type == 0:
+            event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
+            args = event.export()
+        if self._event_type == 1:
+            event: ContractCallEvent = cast(ContractCallEvent, self._event)
+            args = event.export()
+
         exported: Dict[str, Any] = {
             'type': self._event_type,
             'id': self._id,

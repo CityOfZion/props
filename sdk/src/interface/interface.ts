@@ -1,7 +1,9 @@
 import { wallet } from "@cityofzion/neon-core";
+import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
 export enum EventTypeEnum {
-  CollectionPointer = 0
+  CollectionPointer = 0,
+  ContractCall = 1
 }
 
 export interface BaseStats {
@@ -66,13 +68,19 @@ export interface TraitLevel {
 export interface EventTypeWrapper {
   type: EventTypeEnum,
   maxMint: number
-  args: CollectionPointer
+  args: EventCollectionPointer | EventContractCall
 
 }
 
-export interface CollectionPointer {
+export interface EventCollectionPointer {
   collectionId: number,
   index: number
+}
+
+export interface EventContractCall {
+  scriptHash: string
+  method: string
+  param: ContractParamLike[]
 }
 
 export interface PropConstructorOptions {

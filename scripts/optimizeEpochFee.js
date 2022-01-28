@@ -27,7 +27,7 @@ async function main(generatorId, timeConstant) {
     console.log(`Generator Instance: ${generatorInstanceId[0]}`)
 
 
-    let feeRange = [0, 10**9]
+    let feeRange = [0, 10**8]
     let fee, res
     while(1) {
         fee = (feeRange[0] + feeRange[1]) / 2
@@ -60,7 +60,7 @@ async function testFee(puppet, generatorInstanceId, fee, timeConstant, node, sig
     try {
         //mint using the fee
         const txids = []
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1000; i++) {
             txid = await puppet.offlineMint(eid[0], signer.address, signer)
             txids.push(txid)
         }

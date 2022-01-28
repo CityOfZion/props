@@ -6,7 +6,7 @@ import {EpochType, PropConstructorOptions, PuppetType} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x832156d0fd281880b84ff0f852c1f3064aae3fc7'
+  scriptHash: '0x64c533e9d5aaacdcebd70cbf19fe598ef51044d3'
 }
 
 export class Puppet {

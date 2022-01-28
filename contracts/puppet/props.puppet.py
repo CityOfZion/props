@@ -1052,7 +1052,7 @@ class Dice:
         pass
 
 
-@contract('0xf1ce1613827b09219d44850366acdba31a6099d3')
+@contract('0x89e1fb93ccb7c3194c06dc6bed295074772796cb')
 class Generator:
 
     @staticmethod

@@ -3,7 +3,7 @@ from boa3.builtin import contract, CreateNewEvent, NeoMetadata, metadata, public
 from boa3.builtin.contract import abort
 from boa3.builtin.interop.blockchain import get_contract, Transaction
 from boa3.builtin.interop.contract import call_contract, update_contract, GAS
-from boa3.builtin.interop.runtime import burn_gas, gas_left, check_witness, script_container, calling_script_hash
+from boa3.builtin.interop.runtime import get_network, burn_gas, gas_left, check_witness, script_container, calling_script_hash
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.storage.findoptions import FindOptions
@@ -897,6 +897,9 @@ class Puppet:
         epoch_id_bytes: bytes = self._epoch_id
         epoch_id_int: int = epoch_id_bytes.to_int()
 
+        network_magic: int = get_network
+        network_magic_string: str = itoa(network_magic)
+
         exported: Dict[str, Any] = {
             'armorClass': self.get_armor_class(),
             'attributes': {
@@ -911,7 +914,7 @@ class Puppet:
             'name': 'puppet',
             'owner': self._owner,
             'tokenId': token_id_int,
-            'tokenURI': 'https://props.coz.io/puppets/' + token_id_string,
+            'tokenURI': 'https://props.coz.io/tokens/puppets/neo/' + network_magic_string + '/' + token_id_string + '.png',
             'epochId': epoch_id_int,
             'traits': self._traits,
         }

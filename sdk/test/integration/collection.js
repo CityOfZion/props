@@ -27,9 +27,10 @@ describe("Collections tests", function() {
     it("should create a very large collection", async() => {
 
         const cozWallet = network.wallets[0].wallet
+        const collectionLength = 2000
 
         const traits = []
-        for (let i =0; i< 2000; i++){
+        for (let i =0; i< collectionLength; i++){
             traits.push(generateName())
         }
 
@@ -38,6 +39,9 @@ describe("Collections tests", function() {
 
         let cid = await sdk.helpers.txDidComplete(NODE, txid, true)
         cid = cid[0]
+
+        const cLength = await collection.getCollectionLength(cid)
+        assert.equal(collectionLength, cLength)
 
         const res2 = await collection.getCollectionJSON(cid)
 
@@ -97,7 +101,6 @@ describe("Collections tests", function() {
         const runSize = 2000
 
         const cid = await createCollection(collection, NODE,TIME_CONSTANT, cozWallet)
-        const collectionLength = await collection.getCollectionLength(cid)
 
         const txids = []
         for (let i = 0; i < runSize; i++) {
@@ -113,7 +116,7 @@ describe("Collections tests", function() {
             results.push(result[0])
         }
         const chiSquared = sdk.helpers.chiSquared(results)
-        assert(chiSquared < 15, `chi-squared: ${chiSquared}`)
+        assert(chiSquared < 20, `chi-squared: ${chiSquared}`)
 
     })
 
@@ -125,13 +128,7 @@ describe("Collections tests", function() {
         let c
         for (let i = 1; i <= total; i++) {
             c = await collection.getCollectionJSON(i)
-            console.log({
-                id: c.id,
-                author: c.author.address,
-                description: c.description,
-                type: c.type,
-                samples: c.values.slice(0, 5)
-            })
+            assert(c !== undefined)
         }
     })
 })

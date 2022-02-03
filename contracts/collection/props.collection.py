@@ -6,13 +6,6 @@ from boa3.builtin.interop.runtime import script_container
 from boa3.builtin.interop.storage import get, put
 from boa3.builtin.interop.stdlib import serialize, deserialize
 
-"""
-This object is designed to provide 3 services to users:
-1) This object is deployed to the Neo N3 mainnet as a contract for direct interfacing via the public methods.
-2) This object can be imported and interfaced with using the internal methods as a module for other smart contracts.
-3) This object may be imported for use as a decentralized interface for other smart contracts.
-"""
-
 
 @metadata
 def manifest_metadata() -> NeoMetadata:

@@ -12,12 +12,13 @@ from boa3.builtin.interop.blockchain import Transaction
 # DEBUG
 # -------------------------------------------
 
-debug = CreateNewEvent(
+event_new_generator = CreateNewEvent(
     [
-        ('params', list),
+        ('generator_id', bytes),
     ],
-    'Debug'
+    'new_generator'
 )
+
 
 
 # DEBUG_END
@@ -602,6 +603,7 @@ def create_generator(label: bytes, base_generator_fee: int) -> int:
     generator_id_int: int = generator_id.to_int()
     save_generator(new_generator)
     put(TOTAL_GENERATORS, generator_id)
+    event_new_generator(generator_id)
     return generator_id_int
 
 

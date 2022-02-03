@@ -56,97 +56,16 @@ describe("Basic System Test Suite", function() {
         assert(chiSquared < 20, `chi-squared: ${chiSquared}`)
     })
 
-    //test to get the generator and validate fields
-
     it("should get the total generators", async() => {
         const total = await generator.totalGenerators()
         console.log(total)
         assert(total > 0)
     })
 
-    it("should mint from an generator", async() => {
-        const cozWallet = network.wallets[0].wallet
-        const generator_id = await generator.totalGenerators()
-
-        const txids = []
-        const mintCount = 1
-
-        for (let i = 0; i < mintCount; i++) {
-            const txid = await generator.mintFromGenerator(generator_id, cozWallet)
-            txids.push(txid)
-        }
-        await sdk.helpers.sleep(TIME_CONSTANT)
-
-        const res = []
-        for (let txid of txids) {
-            const traits = await sdk.helpers.txDidComplete(NODE, txid)
-            console.log(traits)
-            //res.push(traits[0].color)
-        }
-
-        /*
-        const hist = {}
-        for (const num of res) {
-            hist[num] = hist[num] ? hist[num] + 1 : 1;
-        }
-        console.log(hist)
-
-         */
-    })
-
-
-    it("should create an generator using a collection", async() => {
-        const cozWallet = network.wallets[0].wallet
-
-        /*
-        const collectionId = await collection.totalCollections()
-        const initialCollection = await collection.getCollectionJSON(collectionId)
-
-        const newGenerator = [
-            {
-                "drop_score": 500,
-                "unique": true,
-                "traits": []
-            },
-            {
-                "drop_score": 1000,
-                "unique": true,
-                "traits": []
-            }]
-
-        j = 0
-        initialCollection.values.forEach((value, i) => {
-            if (i < 100) {
-                newGenerator[i % 2].traits.push({
-                    "collection_id": collectionId,
-                    "index": i
-                })
-
-
-            }
-        })
-
-        const res = await generator.createGenerator("testGenerator", 3, newGenerator, cozWallet)
-        await sleep(2000)
-        await txDidComplete(NODE, res)
-        */
-        const generator_id = await generator.totalGenerators()
-        const res2 = await generator.getGeneratorJSON(generator_id)
-        console.log(generator_id)
-        console.log(res2.traits[0].traitLevels[0])
-        /*
-        initialCollection.values.forEach( (value, i) => {
-            console.log(res2)
-            assert.equal(value, initialCollection.values[res2.trait_levels[i%2].traits[(Math.floor(i/2))]['index']])
-        })
-
-         */
-    })
-
-    //test unique
+    // TODO: create a new generator with all unique field, then sample and verify uniqueness
     it("should create a new generator instance and mint from it, verifying uniqueness", async() => {
         const cozWallet = network.wallets[0].wallet
-        const generator_id = await generator.totalGenerators()
+        const generator_id = 1 //assumes generator 1 is the puppeteer generator
 
         const sampleCount = 300
         const masterSet = {}
@@ -179,9 +98,26 @@ describe("Basic System Test Suite", function() {
 
 
     })
-    //test unauthenticated unique
+
+    //test unauthenticated minting
 
     //add second minter
+
+    //test authenticated second user minting
+
+    //test get generator instance
+
+    //test get generator
+
+    //test setting instance fee and purchase
+
+    //test get total generators
+
+    //test epoch total supply
+
+    //test iterator over all generators
+
+    //test iterate over all generator instances
 
     async function createCollection(collection, NODE, timeConstant, signer) {
         const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)

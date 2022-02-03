@@ -52,6 +52,7 @@ describe("Basic System Test Suite", function() {
 
     //test to increment and verify it goes up
 
+    // TODO: mint to this account, then verify the balance increments
     it("should get the balance of an account", async () => {
         const cozWallet = network.wallets[0].wallet
         const balance = await puppet.balanceOf(cozWallet.address)

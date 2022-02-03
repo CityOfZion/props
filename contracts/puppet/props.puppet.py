@@ -914,7 +914,8 @@ class Puppet:
             'name': 'puppet',
             'owner': self._owner,
             'tokenId': token_id_int,
-            'tokenURI': 'https://props.coz.io/tokens/puppets/neo/' + network_magic_string + '/' + token_id_string + '.png',
+            'image': 'https://props.coz.io/tokens/puppets/neo/' + network_magic_string + '/' + token_id_string + '.png',
+            'tokenURI': 'https://props.coz.io/tokens/puppets/neo/' + network_magic_string + '/' + token_id_string,
             'epochId': epoch_id_int,
             'traits': self._traits,
         }

@@ -20,9 +20,6 @@ event_new_generator = CreateNewEvent(
 )
 
 
-
-# DEBUG_END
-
 @metadata
 def manifest_metadata() -> NeoMetadata:
     """
@@ -476,6 +473,18 @@ def save_trait(trait: Trait) -> bool:
     return True
 
 
+@public
+def get_trait_json(trait_id: bytes) -> Dict[str, Any]:
+    """
+    Gets the JSON formatted representation of an trait
+    :param trait_id: the byte formatted trait_id
+    :return: A dictionary representation of a trait
+    """
+    trait: Trait = get_trait(trait_id)
+    return trait.export()
+
+
+@public
 def get_trait(trait_id: bytes) -> Trait:
     trait_bytes: bytes = get_trait_raw(trait_id)
     return cast(Trait, deserialize(trait_bytes))

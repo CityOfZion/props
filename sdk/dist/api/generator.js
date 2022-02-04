@@ -58,6 +58,17 @@ class GeneratorAPI {
         }
         return helpers_1.parseToJSON(res[0].value);
     }
+    static async getTraitJSON(node, networkMagic, contractHash, traitId, signer) {
+        const method = "get_trait_json";
+        const param = [
+            neon_js_1.sc.ContractParam.string(traitId)
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
+        }
+        return helpers_1.parseToJSON(res[0].value);
+    }
     //getGeneratorInstance
     static async getGeneratorInstanceJSON(node, networkMagic, contractHash, instanceId, signer) {
         const method = "get_generator_instance_json";
@@ -68,7 +79,7 @@ class GeneratorAPI {
         if (signer) {
             return res;
         }
-        return helpers_1.parseToJSON(res[0].value);
+        return helpers_1.formatter(res[0]);
     }
     static async mintFromInstance(node, networkMagic, contractHash, instanceId, signer) {
         const method = "mint_from_instance";

@@ -14,8 +14,8 @@
   "scripts": {
     "build": "tsc",
     "docs": "typedoc",
-    "publishDocs": "aws s3 sync ./docs s3://props-coz/prod --acl public-read",
-    "publishDocs:develop": "aws s3 sync ./docs s3://props-coz/dev --acl public-read",
+    "publishDocs": "aws s3 sync ./docs s3://props-coz/prod/docs/sdk/ts --acl public-read",
+    "publishDocs:develop": "aws s3 sync ./docs s3://props-coz/dev/docs/sdk/ts --acl public-read",
     "fmt": "prettier --write ./src/**/*.ts",
     "test": "mocha test --recursive --exit --timeout 10000"
   },

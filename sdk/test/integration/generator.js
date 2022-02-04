@@ -1,5 +1,5 @@
 const sdk = require("../../dist")
-const Neon = require("@cityofzion/neon-core")
+const Neon = require("@cityofzion/neon-js")
 const fs = require("fs")
 var assert = require('assert');
 
@@ -33,7 +33,7 @@ describe("Basic System Test Suite", function() {
         const maxTraits = 5
         const dropRate = 0.5
 
-        const gid = await buildGenerator(dropRate, maxTraits, NODE, TIME_CONSTANT, cozWallet)
+        const gid = await buildGenerator(dropRate, maxTraits, -1, NODE, TIME_CONSTANT, cozWallet)
 
         let txid = await generator.createInstance(gid, cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
@@ -57,15 +57,22 @@ describe("Basic System Test Suite", function() {
     })
 
     it("should get the total generators", async() => {
-        const total = await generator.totalGenerators()
-        console.log(total)
-        assert(total > 0)
+        const cozWallet = network.wallets[0].wallet
+
+        const maxTraits = 5
+        const dropRate = 0.5
+
+        const totalOriginal = await generator.totalGenerators()
+        await buildGenerator(dropRate, maxTraits, -1, NODE, TIME_CONSTANT, cozWallet)
+        const newTotal = await generator.totalGenerators()
+        assert(newTotal === (totalOriginal + 1))
     })
 
-    // TODO: create a new generator with all unique field, then sample and verify uniqueness
     it("should create a new generator instance and mint from it, verifying uniqueness", async() => {
         const cozWallet = network.wallets[0].wallet
-        const generator_id = 1 //assumes generator 1 is the puppeteer generator
+
+
+        const generator_id = await buildGenerator(1, 1, 1, NODE, TIME_CONSTANT, cozWallet)
 
         const sampleCount = 300
         const masterSet = {}
@@ -83,7 +90,6 @@ describe("Basic System Test Suite", function() {
         await sdk.helpers.sleep(TIME_CONSTANT)
         for (txid of txids) {
             const res = await sdk.helpers.txDidComplete(NODE, txid)
-            console.log(res[0])
             Object.keys(res[0]).forEach((key) => {
                 if (masterSet[key]) {
                     masterSet[key].push(res[0][key])
@@ -92,32 +98,130 @@ describe("Basic System Test Suite", function() {
                 }
             })
         }
-
-
-        console.log(masterSet)
-
+        assert(masterSet.testTrait.length === [...new Set(masterSet.testTrait)].length, masterSet.testTrait.length)
 
     })
 
-    //test unauthenticated minting
+    it("should evaluate authenticated instance minting", async() => {
+        const cozWallet = network.wallets[0].wallet
+        const otherWallet = new Neon.wallet.Account()
 
-    //add second minter
+        //transfer GAS to a test wallet
+        console.log(cozWallet.scriptHash)
+        const GAS = "0xd2a4cff31913016155e38e474a2c06d08be276cf"
+        let params = [
+            Neon.sc.ContractParam.hash160(cozWallet.address),
+            Neon.sc.ContractParam.hash160(otherWallet.address),
+            Neon.sc.ContractParam.integer(100 * 10**8),
+            Neon.sc.ContractParam.any('')
+        ]
+        let txid = await sdk.api.NeoInterface.publishInvoke(NODE, generator.networkMagic,
+            "0xd2a4cff31913016155e38e474a2c06d08be276cf",
+                "transfer",
+                params,
+                cozWallet
+            );
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        await sdk.helpers.txDidComplete(NODE,txid, false)
 
-    //test authenticated second user minting
+        //create a new generator and instance
+        const generator_id = await buildGenerator(1, 1, 1, NODE, TIME_CONSTANT, cozWallet)
+        txid = await generator.createInstance(generator_id, cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        const instanceId = await sdk.helpers.txDidComplete(NODE, txid )
 
-    //test get generator instance
+        //test minting from the instance for a user who doesn't have access
+        try {
+            txid = await generator.mintFromInstance(instanceId[0], otherWallet)
+            await sdk.helpers.sleep(TIME_CONSTANT)
+            await sdk.helpers.txDidComplete(NODE, txid)
+            assert.fail("Successful minting by unauthorized user")
+        } catch (e) {}
+
+
+        //add the user as a second authenticated minter
+        txid = await generator.setInstanceAuthorizedUsers(instanceId[0],
+            [
+                cozWallet.address,
+                otherWallet.address
+            ], cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        await sdk.helpers.txDidComplete(NODE, txid)
+
+        //verify that both accounts can mint
+        txid = await generator.mintFromInstance(instanceId[0], otherWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        let res = await sdk.helpers.txDidComplete(NODE, txid)
+        assert(res)
+
+        txid = await generator.mintFromInstance(instanceId[0], cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        res = await sdk.helpers.txDidComplete(NODE, txid)
+        assert(res)
+
+    })
+
+    it("should evaluate the ability to get generator instances and increment the total count", async() => {
+        const cozWallet = network.wallets[0].wallet
+
+        const totalInstances = await generator.totalGeneratorInstances()
+        for (let i = 0; i < totalInstances; i++) {
+            let instance = await generator.getGeneratorInstanceJSON(i + 1)
+            let instanceKeys = Object.keys(instance)
+
+            const expectedKeys = [
+                'generatorId',
+                'instanceId',
+                'author',
+                'authorizedUsers',
+                'objectStorage'
+            ]
+            expectedKeys.forEach(key => assert(instanceKeys.indexOf(key) !== -1))
+        }
+
+        const txid = await generator.createInstance(1, cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        await sdk.helpers.txDidComplete(NODE, txid, false)
+        const newTotalInstances = await generator.totalGeneratorInstances()
+        assert(newTotalInstances === (totalInstances + 1))
+    })
+
+    it("should evaluate the ability to get generators and increment the total count", async() => {
+        const cozWallet = network.wallets[0].wallet
+
+        const total = await generator.totalGenerators()
+        for (let i = 0; i < total; i++) {
+            console.log(total, i+1)
+            let g = await generator.getGeneratorJSON(i + 1)
+            let generatorKeys = Object.keys(g)
+            console.log(generatorKeys)
+            const expectedKeys = [
+                'generatorId',
+                'instanceId',
+                'author',
+                'authorizedUsers',
+                'objectStorage'
+            ]
+            expectedKeys.forEach(key => assert(instanceKeys.indexOf(key) !== -1))
+        }
+        /*
+
+        const txid = await generator.createInstance(1, cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        await sdk.helpers.txDidComplete(NODE, txid, false)
+        const newTotalInstances = await generator.totalGeneratorInstances()
+        assert(newTotalInstances === (totalInstances + 1))
+
+         */
+    })
 
     //test get generator
 
-    //test setting instance fee and purchase
-
-    //test get total generators
-
-    //test epoch total supply
-
     //test iterator over all generators
 
-    //test iterate over all generator instances
+    //test setting instance fee (owner and non-owner)
+
+    //create trait as non-owner
 
     async function createCollection(collection, NODE, timeConstant, signer) {
         const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
@@ -142,7 +246,7 @@ describe("Basic System Test Suite", function() {
         return res
     }
 
-    async function buildGenerator(dropRate, maxTraits, NODE, timeConstant, signer) {
+    async function buildGenerator(dropRate, maxTraits, maxMint, NODE, timeConstant, signer) {
         const generator = await new sdk.Generator({node: NODE})
         await generator.init()
 
@@ -156,7 +260,7 @@ describe("Basic System Test Suite", function() {
         const traits = initialCollection.values.map((value, i) => {
             return {
                 "type": 0,
-                "maxMint": -1,
+                "maxMint": maxMint,
                 "args": {
                     "collectionId": cid,
                     "index": i

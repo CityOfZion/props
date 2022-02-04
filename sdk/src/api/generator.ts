@@ -1,7 +1,7 @@
 import {sc} from "@cityofzion/neon-js";
 import {wallet} from "@cityofzion/neon-core";
 import {EventCollectionPointer, EventContractCall, GeneratorType, EventTypeEnum, EventTypeWrapper, TraitLevel, TraitType} from "../interface";
-import {parseToJSON, variableInvoke} from "../helpers";
+import {formatter, parseToJSON, variableInvoke} from "../helpers";
 
 export class GeneratorAPI {
 
@@ -120,6 +120,26 @@ export class GeneratorAPI {
     return parseToJSON(res[0].value) as GeneratorType
   }
 
+  static async getTraitJSON(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    traitId: string,
+    signer?: wallet.Account
+  ): Promise<TraitType | string> {
+    const method = "get_trait_json";
+
+    const param = [
+      sc.ContractParam.string(traitId)
+    ]
+
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+    return parseToJSON(res[0].value) as TraitType
+  }
+
   //getGeneratorInstance
 
   static async getGeneratorInstanceJSON(
@@ -139,7 +159,7 @@ export class GeneratorAPI {
     if (signer) {
       return res
     }
-    return parseToJSON(res[0].value)
+    return formatter(res[0])
   }
 
   static async mintFromInstance(

@@ -54,7 +54,6 @@ export class GeneratorAPI {
     const traitLevelsFormatted = levels.map((traitLevel: TraitLevel ) => {
       const traitPointers = traitLevel.traits.map((traitEvent: EventTypeWrapper ) => {
 
-        //need to also have the type in here
         switch (traitEvent.type) {
           case EventTypeEnum.CollectionPointer:
             const collectionPointer: EventCollectionPointer = traitEvent.args as EventCollectionPointer
@@ -117,7 +116,7 @@ export class GeneratorAPI {
     if (signer) {
       return res
     }
-    return parseToJSON(res[0].value) as GeneratorType
+    return formatter(res[0]) as GeneratorType
   }
 
   static async getTraitJSON(

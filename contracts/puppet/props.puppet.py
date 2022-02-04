@@ -739,7 +739,6 @@ def mk_epoch_key(epoch_id: bytes) -> bytes:
 
 TOKEN_PREFIX = b't'
 
-
 # A mapping for attribute modifiers which can be indexed by attribute "value"
 ATTRIBUTE_MODIFIERS: List[int] = [
     -6,  # impossible to have a 0 map
@@ -763,7 +762,6 @@ ATTRIBUTE_MODIFIERS: List[int] = [
 
 # A set of options for a puppet hit die
 HIT_DIE_OPTIONS: List[str] = ["d6", "d8", "d10", "d12"]
-
 
 class Puppet:
 
@@ -1056,7 +1054,7 @@ class Dice:
         pass
 
 
-@contract('0x89e1fb93ccb7c3194c06dc6bed295074772796cb')
+@contract('0x9b52586859a18d0d413f656cbc74495773395b79')
 class Generator:
 
     @staticmethod

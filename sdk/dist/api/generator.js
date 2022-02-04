@@ -24,7 +24,6 @@ class GeneratorAPI {
         const method = "create_trait";
         const traitLevelsFormatted = levels.map((traitLevel) => {
             const traitPointers = traitLevel.traits.map((traitEvent) => {
-                //need to also have the type in here
                 switch (traitEvent.type) {
                     case interface_1.EventTypeEnum.CollectionPointer:
                         const collectionPointer = traitEvent.args;
@@ -56,7 +55,7 @@ class GeneratorAPI {
         if (signer) {
             return res;
         }
-        return helpers_1.parseToJSON(res[0].value);
+        return helpers_1.formatter(res[0]);
     }
     static async getTraitJSON(node, networkMagic, contractHash, traitId, signer) {
         const method = "get_trait_json";

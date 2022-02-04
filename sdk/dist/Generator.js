@@ -11,7 +11,7 @@ const helpers_1 = require("./helpers");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x542e6f46c3a390dd9226704ba5e7198e5d65495a'
+    scriptHash: '0x31b01e3bb1c5a7135455106d0616d60ef21724b6'
 };
 class Generator {
     constructor(options = {}) {
@@ -41,6 +41,7 @@ class Generator {
         await helpers_1.sleep(timeConstantMS);
         const res = await helpers_1.txDidComplete(this.node.url, txid, false);
         for await (let trait of generator.traits) {
+            trait = trait;
             txid = await api_1.GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, res[0], trait.label, trait.slots, trait.traitLevels, signer);
             txids.push(txid);
             await helpers_1.sleep(timeConstantMS);
@@ -51,8 +52,19 @@ class Generator {
         const localGenerator = JSON.parse(fs_1.default.readFileSync(path).toString());
         return this.createGenerator(localGenerator, signer, timeConstantMS);
     }
+    async createTrait(generatorId, trait, signer) {
+        return api_1.GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, generatorId, trait.label, trait.slots, trait.traitLevels, signer);
+    }
     async getGeneratorJSON(generatorId, signer) {
-        return api_1.GeneratorAPI.getGeneratorJSON(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer);
+        const generator = await api_1.GeneratorAPI.getGeneratorJSON(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer);
+        const gType = generator;
+        const traits = [];
+        for (let i = 0; i < gType.traits.length; i++) {
+            let trait = await api_1.GeneratorAPI.getTraitJSON(this.node.url, this.networkMagic, this.scriptHash, gType.traits[i]);
+            traits.push(trait);
+        }
+        gType.traits = traits;
+        return gType;
     }
     async getGeneratorInstanceJSON(instanceId, signer) {
         return api_1.GeneratorAPI.getGeneratorInstanceJSON(this.node.url, this.networkMagic, this.scriptHash, instanceId, signer);

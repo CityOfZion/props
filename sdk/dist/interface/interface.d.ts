@@ -45,7 +45,7 @@ export interface GeneratorType {
     author?: string;
     label: string;
     baseGeneratorFee: number;
-    traits: TraitType[];
+    traits: TraitType[] | string[];
 }
 export interface TraitType {
     label: string;

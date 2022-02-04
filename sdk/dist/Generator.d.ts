@@ -1,5 +1,5 @@
 import { rpc, wallet } from '@cityofzion/neon-core';
-import { GeneratorType, PropConstructorOptions } from "./interface";
+import { GeneratorType, PropConstructorOptions, TraitType } from "./interface";
 export declare class Generator {
     private options;
     private networkMagic;
@@ -9,6 +9,7 @@ export declare class Generator {
     get scriptHash(): string;
     createGenerator(generator: GeneratorType, signer: wallet.Account, timeConstantMS: number): Promise<string[]>;
     createGeneratorFromFile(path: string, signer: wallet.Account, timeConstantMS: number): Promise<string[]>;
+    createTrait(generatorId: number, trait: TraitType, signer: wallet.Account): Promise<string>;
     getGeneratorJSON(generatorId: number, signer?: wallet.Account): Promise<GeneratorType | string>;
     getGeneratorInstanceJSON(instanceId: number, signer?: wallet.Account): Promise<any>;
     createInstance(generatorId: number, signer: wallet.Account): Promise<string>;

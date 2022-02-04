@@ -12,11 +12,11 @@ from boa3.builtin.interop.blockchain import Transaction
 # DEBUG
 # -------------------------------------------
 
-event_new_generator = CreateNewEvent(
+on_mint_generator = CreateNewEvent(
     [
         ('generator_id', bytes),
     ],
-    'new_generator'
+    'NewGenerator'
 )
 
 
@@ -315,6 +315,11 @@ class EventInterface:
             result: bytes = event.get_value()
             return result
 
+        if self._event_type == 1:
+            event: ContractCallEvent = cast(ContractCallEvent, self._event)
+            result: bytes = event.get_value()
+            return result
+
         raise Exception("Invalid Event Type")
         return b'' #compiler errors without this
 
@@ -508,22 +513,16 @@ class Generator:
         self._traits: [bytes] = []
         self._id: bytes = (total_generators() + 1).to_bytes()
         self._author: UInt160 = b''
-        self._base_generator_fee = 0
+        self._base_generator_fee: int = 0
 
     def export(self) -> Dict[str, Any]:
-
-        traits: List[Dict] = []
-        for trait_id in self._traits:
-            trait: Trait = get_trait(trait_id)
-            trait_json: Dict[str, Any] = trait.export()
-            traits.append(trait_json)
 
         exported: Dict[str, Any] = {
             "id": self._id,
             "author": self._author,
             "baseGeneratorFee": self._base_generator_fee,
             "label": self._label,
-            "traits": traits,
+            "traits": self._traits,
         }
         return exported
 
@@ -612,7 +611,7 @@ def create_generator(label: bytes, base_generator_fee: int) -> int:
     generator_id_int: int = generator_id.to_int()
     save_generator(new_generator)
     put(TOTAL_GENERATORS, generator_id)
-    event_new_generator(generator_id)
+    on_mint_generator(generator_id)
     return generator_id_int
 
 

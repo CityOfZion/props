@@ -1,13 +1,13 @@
 import { merge } from 'lodash'
 import {rpc, wallet} from '@cityofzion/neon-core'
 import {GeneratorAPI} from './api'
-import {GeneratorType, PropConstructorOptions} from "./interface";
+import {GeneratorType, PropConstructorOptions, TraitType} from "./interface";
 import {sleep, txDidComplete} from "./helpers";
 import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x542e6f46c3a390dd9226704ba5e7198e5d65495a'
+  scriptHash: '0x31b01e3bb1c5a7135455106d0616d60ef21724b6'
 }
 
 export class Generator {
@@ -44,6 +44,7 @@ export class Generator {
     await sleep(timeConstantMS)
     const res = await txDidComplete(this.node.url, txid, false)
     for await (let trait of generator.traits) {
+      trait = trait as TraitType
       txid = await GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, res[0], trait.label, trait.slots, trait.traitLevels, signer)
       txids.push(txid)
       await sleep(timeConstantMS)
@@ -56,8 +57,21 @@ export class Generator {
     return this.createGenerator(localGenerator, signer, timeConstantMS)
   }
 
+  async createTrait(generatorId: number, trait: TraitType, signer: wallet.Account): Promise<string> {
+    return GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, generatorId, trait.label, trait.slots, trait.traitLevels, signer)
+  }
+
   async getGeneratorJSON(generatorId: number, signer?: wallet.Account): Promise<GeneratorType | string> {
-    return GeneratorAPI.getGeneratorJSON(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer)
+    const generator = await GeneratorAPI.getGeneratorJSON(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer)
+    const gType = generator as GeneratorType
+
+    const traits: TraitType[] = []
+    for (let i = 0; i < gType.traits.length; i++) {
+      let trait = await GeneratorAPI.getTraitJSON(this.node.url, this.networkMagic, this.scriptHash, gType.traits[i] as string)
+      traits.push(trait as TraitType)
+    }
+    gType.traits = traits
+    return gType
   }
 
   async getGeneratorInstanceJSON(instanceId: number, signer?: wallet.Account): Promise<any> {

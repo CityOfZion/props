@@ -71,7 +71,7 @@ export class GeneratorAPI {
               sc.ContractParam.integer(traitEvent.maxMint),
               sc.ContractParam.array(
                 sc.ContractParam.hash160(contractCall.scriptHash),
-                sc.ContractParam.byteArray(contractCall.method),
+                sc.ContractParam.string(contractCall.method),
                 sc.ContractParam.array(...contractCall.param)
               )
             )

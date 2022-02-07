@@ -311,13 +311,13 @@ class EventInterface:
         x: bool = generator_instance.set_scoped_storage(self._id, instance_storage)
 
         if self._event_type == 0:
-            event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
-            result: bytes = event.get_value()
+            collection_event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
+            result: bytes = collection_event.get_value()
             return result
 
         if self._event_type == 1:
-            event: ContractCallEvent = cast(ContractCallEvent, self._event)
-            result: bytes = event.get_value()
+            call_event: ContractCallEvent = cast(ContractCallEvent, self._event)
+            result: bytes = call_event.get_value()
             return result
 
         raise Exception("Invalid Event Type")

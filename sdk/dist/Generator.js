@@ -11,7 +11,7 @@ const helpers_1 = require("./helpers");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x31b01e3bb1c5a7135455106d0616d60ef21724b6'
+    scriptHash: '0xf052188a392749434408123c99678a9bf2ba7c82'
 };
 class Generator {
     constructor(options = {}) {

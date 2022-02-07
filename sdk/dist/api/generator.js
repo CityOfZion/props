@@ -30,7 +30,7 @@ class GeneratorAPI {
                         return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(collectionPointer.collectionId), neon_js_1.sc.ContractParam.integer(collectionPointer.index)));
                     case interface_1.EventTypeEnum.ContractCall:
                         const contractCall = traitEvent.args;
-                        return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.hash160(contractCall.scriptHash), neon_js_1.sc.ContractParam.byteArray(contractCall.method), neon_js_1.sc.ContractParam.array(...contractCall.param)));
+                        return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.hash160(contractCall.scriptHash), neon_js_1.sc.ContractParam.string(contractCall.method), neon_js_1.sc.ContractParam.array(...contractCall.param)));
                     default:
                         throw new Error("unrecognized trait event type");
                 }

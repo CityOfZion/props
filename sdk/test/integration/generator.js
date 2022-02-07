@@ -358,8 +358,7 @@ describe("Basic System Test Suite", function() {
                 }
             })
         }
-        console.log(masterSet)
-        assert(masterSet.testTrait.length === [...new Set(masterSet.testTrait)].length, masterSet.testTrait.length)
+        assert(masterSet.testTrait.length === initialCollection.values.length, masterSet.testTrait.length)
     })
 
     async function createCollection(collection, NODE, timeConstant, signer) {

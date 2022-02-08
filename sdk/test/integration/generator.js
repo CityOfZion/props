@@ -5,7 +5,7 @@ var assert = require('assert');
 
 describe("Basic System Test Suite", function() {
     this.timeout(0);
-    const TIME_CONSTANT = 4000
+    const TIME_CONSTANT = 2000
     let generator, collection, network, NODE
 
     beforeEach( async function () {
@@ -325,6 +325,7 @@ describe("Basic System Test Suite", function() {
                     "traitLevels": [
                         {
                             "dropScore": 10000,
+                            "mintMode": 0,
                             "traits": traits
                         }
                     ]
@@ -358,7 +359,85 @@ describe("Basic System Test Suite", function() {
                 }
             })
         }
-        assert(masterSet.testTrait.length === initialCollection.values.length, masterSet.testTrait.length)
+        assert(masterSet.testTrait.length === initialCollection.values.length, masterSet.testTrait)
+    })
+
+    it("should mint with mode 1; resulting in a complete generator mint without empties", async() => {
+        const cozWallet = network.wallets[0].wallet
+
+        const txids = []
+
+        const collection = await new sdk.Collection({node: NODE})
+        await collection.init()
+        const cid = await createCollection(collection, NODE, TIME_CONSTANT, cozWallet)
+        const initialCollection = await collection.getCollectionJSON(cid)
+
+        const traits = initialCollection.values.map((value, i) => {
+            return {
+                "type": 1,
+                "maxMint": 1,
+                "args": {
+                    "scriptHash": collection.scriptHash,
+                    "method": 'get_collection_element',
+                    "param": [
+                        Neon.sc.ContractParam.integer(cid),
+                        Neon.sc.ContractParam.integer(i)
+                    ]
+                }
+            }
+        })
+        const newGenerator = {
+            'label': 'new generator',
+            'baseGeneratorFee': 100000000,
+            'traits': [
+                {
+                    "label": "testTrait",
+                    "slots": 1,
+                    "traitLevels": [
+                        {
+                            "dropScore": 10000,
+                            "mintMode": 1,
+                            "traits": traits
+                        }
+                    ]
+                }
+            ]
+        }
+        const sampleCount = initialCollection.values.length
+        let res = await generator.createGenerator(newGenerator, cozWallet, TIME_CONSTANT)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        let gid = await sdk.helpers.txDidComplete(NODE, res[0])
+
+        //create a generator instance
+        let txid = await generator.createInstance(gid[0], cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        const instanceId = await sdk.helpers.txDidComplete(NODE, txid)
+
+        for (let i = 0; i < sampleCount; i++) {
+            txid = await generator.mintFromInstance(instanceId[0], cozWallet)
+            txids.push(txid)
+        }
+
+        const masterSet = {}
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        for (txid of txids) {
+            const res = await sdk.helpers.txDidComplete(NODE, txid)
+            Object.keys(res[0]).forEach((key) => {
+                if (masterSet[key]) {
+                    masterSet[key].push(res[0][key])
+                } else {
+                    masterSet[key] = [res[0][key]]
+                }
+            })
+        }
+        assert(masterSet.testTrait.length === initialCollection.values.length, `${masterSet.testTrait.length} != ${initialCollection.values.length}`)
+    })
+
+    it("generate", () => {
+        const newWallet = new Neon.wallet.Account()
+        console.log(`Address: ${newWallet.privateKey}`)
+        console.log(`Public Key: ${newWallet.publicKey}`)
+        console.log(`Private Key: ${newWallet.privateKey}`)
     })
 
     async function createCollection(collection, NODE, timeConstant, signer) {
@@ -415,6 +494,7 @@ describe("Basic System Test Suite", function() {
                     "traitLevels": [
                         {
                             "dropScore": dropRate * 10000,
+                            "mintMode": 0,
                             "traits": traits
                         }
                     ]

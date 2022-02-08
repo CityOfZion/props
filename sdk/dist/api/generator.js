@@ -35,7 +35,7 @@ class GeneratorAPI {
                         throw new Error("unrecognized trait event type");
                 }
             });
-            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitLevel.dropScore), neon_js_1.sc.ContractParam.array(...traitPointers));
+            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitLevel.dropScore), neon_js_1.sc.ContractParam.integer(traitLevel.mintMode), neon_js_1.sc.ContractParam.array(...traitPointers));
         });
         const param = [
             neon_js_1.sc.ContractParam.integer(generatorId),

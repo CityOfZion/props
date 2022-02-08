@@ -7,7 +7,7 @@ import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0xf052188a392749434408123c99678a9bf2ba7c82'
+  scriptHash: '0xed9808c2304fc1a26ad2cf1d18967fc78f8fdf85'
 }
 
 export class Generator {

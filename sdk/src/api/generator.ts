@@ -83,6 +83,7 @@ export class GeneratorAPI {
 
       return sc.ContractParam.array(
         sc.ContractParam.integer(traitLevel.dropScore),
+        sc.ContractParam.integer(traitLevel.mintMode),
         sc.ContractParam.array(...traitPointers)
       )
     })

@@ -62,6 +62,7 @@ export interface TraitType {
 
 export interface TraitLevel {
   dropScore: number,
+  mintMode: number,
   traits: EventTypeWrapper[]
 }
 

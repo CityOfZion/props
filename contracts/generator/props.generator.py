@@ -280,11 +280,11 @@ class EventInterface:
     def export(self) -> Dict[str, Any]:
         args: Dict[str, Any] = {}
         if self._event_type == 0:
-            event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
-            args = event.export()
+            collection_event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
+            args = collection_event.export()
         if self._event_type == 1:
-            event: ContractCallEvent = cast(ContractCallEvent, self._event)
-            args = event.export()
+            call_event: ContractCallEvent = cast(ContractCallEvent, self._event)
+            args = call_event.export()
 
         exported: Dict[str, Any] = {
             'type': self._event_type,
@@ -294,21 +294,38 @@ class EventInterface:
         }
         return exported
 
-    def select(self, generator_instance: GeneratorInstance) -> bytes:
+    def get_instance_storage(self, generator_instance: GeneratorInstance) -> Dict[str, Any]:
+        return generator_instance.get_scoped_storage(self._id)
 
-        instance_storage: Dict[str, Any] = generator_instance.get_scoped_storage(self._id)
+    def get_max_mint(self) -> int:
+        return self._max_mint
+
+    def get_mint_count(self, generator_instance: GeneratorInstance) -> int:
+        instance_storage: Dict[str, Any] = self.get_instance_storage(generator_instance)
 
         mint_count: int = 0
-        if 'a' in instance_storage.keys():
-            mint_count = cast(int, instance_storage['a'])
+        if 'mintCount' in instance_storage.keys():
+            mint_count = cast(int, instance_storage['mintCount'])
+        return mint_count
+
+    def put_instance_storage(self, generator_instance: GeneratorInstance, instance_storage: Dict[str, Any]) -> bool:
+        return generator_instance.set_scoped_storage(self._id, instance_storage)
+
+    def select(self, generator_instance: GeneratorInstance) -> bytes:
+
+        instance_storage: Dict[str, Any] = self.get_instance_storage(generator_instance)
+
+        mint_count: int = 0
+        if 'mintCount' in instance_storage.keys():
+            mint_count = cast(int, instance_storage['mintCount'])
         mint_count += 1
 
         # check if max mint has been exceeded
         if self._max_mint != -1 and mint_count > self._max_mint:
             return b''
 
-        instance_storage['a'] = mint_count
-        x: bool = generator_instance.set_scoped_storage(self._id, instance_storage)
+        instance_storage['mintCount'] = mint_count
+        x: bool = self.put_instance_storage(generator_instance, instance_storage)
 
         if self._event_type == 0:
             collection_event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
@@ -331,9 +348,10 @@ class EventInterface:
 
 class TraitLevel:
 
-    def __init__(self, trait_level_id: bytes, drop_score: bytes, events: List):
+    def __init__(self, trait_level_id: bytes, drop_score: bytes, mint_mode: int, events: List):
         self._id: bytes = trait_level_id
         self._drop_score: int = drop_score.to_int()
+        self._mint_mode: int = mint_mode
 
         traits: [EventInterface] = []
         for i in range(len(events)):
@@ -371,16 +389,44 @@ class TraitLevel:
         return available_traits > 0
 
     def mint(self, entropy: bytes, generator_instance: GeneratorInstance) -> bytes:
-        max_index: int = len(self._traits)
+        traits: [EventInterface] = self._traits
+        max_index: int = len(traits)
+        mint_mode: int = self._mint_mode
 
         #empty trait level
         if max_index == 0:
             return b''
 
-        entropy_int: int = entropy.to_int()
-        idx: int = (max_index * entropy_int) // 256
-        event: EventInterface = self._traits[idx]
-        return event.select(generator_instance)
+        # mints randomly from options, considerate of maxMint) | Default
+        if mint_mode == 0:
+            entropy_int: int = entropy.to_int()
+            idx: int = (max_index * entropy_int) // 256
+            event: EventInterface = traits[idx]
+            return event.select(generator_instance)
+
+        # mints randomly from options, considerate of maxMint | Will always mint if options are available
+        if mint_mode == 1:
+            remaining: [int] = []
+            for i in range(max_index):
+                target_event: EventInterface = traits[i]
+                mint_count: int = target_event.get_mint_count(generator_instance)
+                max_mint: int = target_event.get_max_mint()
+                remaining.append(max_mint - mint_count)
+
+            rank: int = Dice.rand_between(0, sum(remaining) - 1)
+
+            cdf: int = 0
+            result: bytes = b''
+            for j in range(max_index):
+                cdf += remaining[j]
+                if rank < cdf:
+                    selected_event: EventInterface = self._traits[j]
+                    result: bytes = selected_event.select(generator_instance)
+                    break
+            return result
+
+        raise Exception("Invalid Mint Mode")
+        return b'' #compiler errors without this
 
 
 class Trait:
@@ -393,9 +439,10 @@ class Trait:
         for i in range(len(trait_levels)):
             trait_list: List = cast(List, trait_levels[i])
             drop_score: bytes = cast(bytes, trait_list[0])
-            traits: List = cast(List, trait_list[1])
+            mint_mode: int = cast(int, trait_list[1])
+            traits: List = cast(List, trait_list[2])
             trait_level_id: bytes = append_key_stack(self._id, i.to_bytes())
-            t: TraitLevel = TraitLevel(trait_level_id, drop_score, traits)
+            t: TraitLevel = TraitLevel(trait_level_id, drop_score, mint_mode, traits)
             new_trait_levels.append(t)
 
         self._trait_levels: [TraitLevel] = new_trait_levels

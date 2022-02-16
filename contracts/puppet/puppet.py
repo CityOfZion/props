@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union, cast
+from typing import Any, Dict, List, Union, cast, Optional
 from boa3.builtin import contract, CreateNewEvent, NeoMetadata, metadata, public
 from boa3.builtin.contract import abort
 from boa3.builtin.interop.blockchain import get_contract, Transaction
@@ -828,7 +828,7 @@ class Puppet:
 
         # mint traits
         instance_id_bytes: bytes = target_epoch.get_generator_instance_id()
-        traits: Dict[str, Any] = Generator.mint_from_instance(instance_id_bytes)
+        traits: Dict[str, Any] = Generator.mint_from_instance(instance_id_bytes, epoch_id)
 
         self._traits = traits
         self._epoch_id = epoch_id
@@ -1038,7 +1038,7 @@ def mk_token_key(token_id: bytes) -> bytes:
 # ############INTERFACES###########
 
 
-@contract('0xa80d045ca80e0421aa855c3a000bfbe5dddadced')
+@contract('0x2fa1371df4892630ba182f73107ff2c50dd2ad8b')
 class Collection:
 
     @staticmethod
@@ -1046,7 +1046,7 @@ class Collection:
         pass
 
 
-@contract('0x68021f61e872098627da52dc82ca793575c83826')
+@contract('0xbb01a4973fe466282757d5e55e6433b080691cab')
 class Dice:
 
     @staticmethod
@@ -1054,9 +1054,9 @@ class Dice:
         pass
 
 
-@contract('0x9b52586859a18d0d413f656cbc74495773395b79')
+@contract('0x64450738aa1632b000f15e39de6b39a2f8dedf18')
 class Generator:
 
     @staticmethod
-    def mint_from_instance(instance_id: bytes) -> Dict[str, Any]:
+    def mint_from_instance(instance_id: bytes, code: Optional[bytes]) -> Dict[str, Any]:
         pass

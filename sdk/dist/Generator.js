@@ -11,7 +11,7 @@ const helpers_1 = require("./helpers");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0xed9808c2304fc1a26ad2cf1d18967fc78f8fdf85'
+    scriptHash: '0x64450738aa1632b000f15e39de6b39a2f8dedf18'
 };
 class Generator {
     constructor(options = {}) {
@@ -75,8 +75,14 @@ class Generator {
     async mintFromInstance(instanceId, signer) {
         return api_1.GeneratorAPI.mintFromInstance(this.node.url, this.networkMagic, this.scriptHash, instanceId, signer);
     }
+    async setInstanceAccessMode(instanceId, accessMode, signer) {
+        return api_1.GeneratorAPI.setInstanceAccessMode(this.node.url, this.networkMagic, this.scriptHash, instanceId, accessMode, signer);
+    }
     async setInstanceAuthorizedUsers(instanceId, authorizedUsers, signer) {
         return api_1.GeneratorAPI.setInstanceAuthorizedUsers(this.node.url, this.networkMagic, this.scriptHash, instanceId, authorizedUsers, signer);
+    }
+    async setInstanceAuthorizedContracts(instanceId, authorizedContracts, signer) {
+        return api_1.GeneratorAPI.setInstanceAuthorizedContracts(this.node.url, this.networkMagic, this.scriptHash, instanceId, authorizedContracts, signer);
     }
     async setInstanceFee(instanceId, fee, signer) {
         return api_1.GeneratorAPI.setInstanceFee(this.node.url, this.networkMagic, this.scriptHash, instanceId, fee, signer);

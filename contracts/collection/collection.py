@@ -287,7 +287,7 @@ def mk_collection_key(collection_id: bytes) -> bytes:
     return COLLECTION_KEY + collection_id
 
 
-@contract('0x68021f61e872098627da52dc82ca793575c83826')
+@contract('0xbb01a4973fe466282757d5e55e6433b080691cab')
 class Dice:
 
     @staticmethod

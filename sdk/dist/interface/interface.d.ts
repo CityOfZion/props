@@ -4,6 +4,11 @@ export declare enum EventTypeEnum {
     CollectionPointer = 0,
     ContractCall = 1
 }
+export declare enum InstanceAccessMode {
+    ContractWhitelist = 0,
+    ContractWhiteListRestricted1 = 1,
+    Global = 2
+}
 export interface BaseStats {
     charisma: number;
     constitution: number;
@@ -46,6 +51,10 @@ export interface GeneratorType {
     label: string;
     baseGeneratorFee: number;
     traits: TraitType[] | string[];
+}
+export interface InstanceAuthorizedContracts {
+    scriptHash: string;
+    code: number;
 }
 export interface TraitType {
     label: string;

@@ -6,13 +6,9 @@ import {CollectionAPI} from "./api";
 import fs from 'fs'
 import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
-// TODO: add other types to `CreateCollection`
-// TODO: add other types for `GetCollectionElement`
-// TODO: add other types for `getCollectionValues`
-
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0xa80d045ca80e0421aa855c3a000bfbe5dddadced'
+  scriptHash: '0x2fa1371df4892630ba182f73107ff2c50dd2ad8b'
 }
 
 /**

@@ -7,7 +7,7 @@ const api_1 = require("./api");
 const neon_js_1 = require("@cityofzion/neon-js");
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0xd1a64e934cdb08baf79b17ae70c71b81e0a8258a'
+    scriptHash: '0xab60f23e79013eedc497cbf3963a15e4ad38e728'
 };
 class Puppet {
     constructor(options = {}) {

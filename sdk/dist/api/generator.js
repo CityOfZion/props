@@ -83,7 +83,16 @@ class GeneratorAPI {
     static async mintFromInstance(node, networkMagic, contractHash, instanceId, signer) {
         const method = "mint_from_instance";
         const param = [
-            neon_js_1.sc.ContractParam.integer(instanceId)
+            neon_js_1.sc.ContractParam.integer(instanceId),
+            neon_js_1.sc.ContractParam.string('')
+        ];
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+    }
+    static async setInstanceAccessMode(node, networkMagic, contractHash, instanceId, accessMode, signer) {
+        const method = "set_instance_access_mode";
+        const param = [
+            neon_js_1.sc.ContractParam.integer(instanceId),
+            neon_js_1.sc.ContractParam.integer(accessMode)
         ];
         return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
     }
@@ -95,6 +104,17 @@ class GeneratorAPI {
         const param = [
             neon_js_1.sc.ContractParam.integer(instanceId),
             neon_js_1.sc.ContractParam.array(...usersFormatted)
+        ];
+        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+    }
+    static async setInstanceAuthorizedContracts(node, networkMagic, contractHash, instanceId, authorizedContracts, signer) {
+        const method = "set_instance_authorized_contracts";
+        const contractsFormatted = authorizedContracts.map((contract) => {
+            return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.hash160(contract.scriptHash), neon_js_1.sc.ContractParam.integer(contract.code));
+        });
+        const param = [
+            neon_js_1.sc.ContractParam.integer(instanceId),
+            neon_js_1.sc.ContractParam.array(...contractsFormatted)
         ];
         return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
     }

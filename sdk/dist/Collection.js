@@ -9,12 +9,9 @@ const neon_core_1 = require("@cityofzion/neon-core");
 const neon_js_1 = require("@cityofzion/neon-js");
 const api_1 = require("./api");
 const fs_1 = __importDefault(require("fs"));
-// TODO: add other types to `CreateCollection`
-// TODO: add other types for `GetCollectionElement`
-// TODO: add other types for `getCollectionValues`
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0xa80d045ca80e0421aa855c3a000bfbe5dddadced'
+    scriptHash: '0x2fa1371df4892630ba182f73107ff2c50dd2ad8b'
 };
 /**
  * The Collection prop is designed to store static-immutable data for reference in other projects. Storing static data

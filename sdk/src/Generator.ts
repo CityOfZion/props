@@ -1,13 +1,19 @@
 import { merge } from 'lodash'
 import {rpc, wallet} from '@cityofzion/neon-core'
 import {GeneratorAPI} from './api'
-import {GeneratorType, PropConstructorOptions, TraitType} from "./interface";
+import {
+  GeneratorType,
+  InstanceAccessMode,
+  InstanceAuthorizedContracts,
+  PropConstructorOptions,
+  TraitType
+} from "./interface";
 import {sleep, txDidComplete} from "./helpers";
 import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0xed9808c2304fc1a26ad2cf1d18967fc78f8fdf85'
+  scriptHash: '0x64450738aa1632b000f15e39de6b39a2f8dedf18'
 }
 
 export class Generator {
@@ -86,8 +92,16 @@ export class Generator {
     return GeneratorAPI.mintFromInstance(this.node.url, this.networkMagic, this.scriptHash, instanceId, signer)
   }
 
+  async setInstanceAccessMode(instanceId: number, accessMode: InstanceAccessMode, signer: wallet.Account): Promise<string> {
+    return GeneratorAPI.setInstanceAccessMode(this.node.url, this.networkMagic, this.scriptHash, instanceId, accessMode, signer)
+  }
+
   async setInstanceAuthorizedUsers(instanceId: number, authorizedUsers: string[], signer: wallet.Account): Promise<string> {
     return GeneratorAPI.setInstanceAuthorizedUsers(this.node.url, this.networkMagic, this.scriptHash, instanceId, authorizedUsers, signer)
+  }
+
+  async setInstanceAuthorizedContracts(instanceId: number, authorizedContracts: InstanceAuthorizedContracts[], signer: wallet.Account): Promise<string> {
+    return GeneratorAPI.setInstanceAuthorizedContracts(this.node.url, this.networkMagic, this.scriptHash, instanceId, authorizedContracts, signer)
   }
 
   async setInstanceFee(instanceId: number, fee: number, signer: wallet.Account): Promise<string> {

@@ -5,7 +5,7 @@ import {PropConstructorOptions} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x68021f61e872098627da52dc82ca793575c83826'
+  scriptHash: '0xbb01a4973fe466282757d5e55e6433b080691cab'
 }
 
 /**

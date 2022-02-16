@@ -37,18 +37,32 @@ async function main(timeConstant) {
     txid = await generator.createInstance(1, signer)
     await sdk.helpers.sleep(timeConstant)
     result = await sdk.helpers.txDidComplete(NODE, txid, true)
-    console.log('  result: ', result[0])
+    const generatorInstanceId = result[0]
+    console.log('  Generator Instance ID: ', generatorInstanceId)
 
-    console.log(`creating an epoch with generator instance ${result[0]}`)
+    console.log(`creating an epoch with generator instance ${generatorInstanceId}`)
     txid = await puppet.createEpoch(result[0], 1 * 10**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
+    await sdk.helpers.sleep(timeConstant)
+    result = await sdk.helpers.txDidComplete(NODE, txid)
+    const epochId = result[0]
+    console.log('  epoch ID: ', epochId)
+
+    console.log(`set mint permissions for the generator`)
+
+    const authorizedContracts = [
+        {
+            'scriptHash': '0xab60f23e79013eedc497cbf3963a15e4ad38e728',
+            'code': epochId
+        }
+    ]
+    txid = await generator.setInstanceAuthorizedContracts(generatorInstanceId, authorizedContracts, signer)
     await sdk.helpers.sleep(timeConstant)
     result = await sdk.helpers.txDidComplete(NODE, txid)
     console.log('  result: ', result[0])
 
-
     const txids = []
     for (let i = 0; i < PuppetArmySize; i++) {
-        txid = await puppet.offlineMint(result[0], signer.address, signer)
+        txid = await puppet.offlineMint(epochId, signer.address, signer)
         txids.push(txid)
         if (i % (PuppetArmySize / 100) === 0) {
             const totalSupply = await puppet.totalSupply()

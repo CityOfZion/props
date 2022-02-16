@@ -5,11 +5,11 @@ Currently, setup is handled using node.
 
 1) `neoxp run -s 1`
 2) `npm install` from project root
-3) `neoxp transfer 10000 GAS genesis coz`
 4) ```
    neoxp policy set FeePerByte 100 genesis
    neoxp policy set ExecFeeFactor 3 genesis
    neoxp policy set StoragePrice 10000 genesis
+   neoxp transfer 10000 GAS genesis coz
    ```
 3) `npm run deploy` to deploy the contracts
 4) `npm run initialize` to load static data into the contracts

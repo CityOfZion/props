@@ -3,21 +3,9 @@ from boa3.builtin import contract, NeoMetadata, metadata, public, CreateNewEvent
 from boa3.builtin.interop.contract import call_contract
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
-from boa3.builtin.interop.runtime import burn_gas, gas_left, get_random, script_container, calling_script_hash
+from boa3.builtin.interop.runtime import burn_gas, gas_left, get_random, script_container, calling_script_hash, entry_script_hash
 from boa3.builtin.type import UInt160
 from boa3.builtin.interop.blockchain import Transaction
-
-# DEBUG_START
-# -------------------------------------------
-# DEBUG
-# -------------------------------------------
-
-on_mint_generator = CreateNewEvent(
-    [
-        ('generator_id', bytes),
-    ],
-    'NewGenerator'
-)
 
 
 @metadata
@@ -33,6 +21,17 @@ def manifest_metadata() -> NeoMetadata:
     meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
 
+# ######################################
+# ######Events and Constants############
+# ######################################
+
+
+on_mint_generator = CreateNewEvent(
+    [
+        ('generator_id', bytes),
+    ],
+    'NewGenerator'
+)
 
 GENERATOR_KEY = b'e'
 GENERATOR_INSTANCE_KEY = b'i'
@@ -40,17 +39,39 @@ TRAIT_KEY = b't'
 TOTAL_GENERATORS = b'!TOTAL_GENERATORS'
 TOTAL_GENERATOR_INSTANCES = b'!TOTAL_GENERATOR_INSTANCES'
 
-#######################################
-##########GENERATOR Instance###############
-#######################################
+
+# ######################################
+# ##############Generators##############
+# ######################################
+
+
+class AccessControllerContract:
+    def __init__(self, script_hash: UInt160, code: bytes):
+        self._script_hash: UInt160 = script_hash
+        self._code: bytes = code
+
+    def get_code(self) -> bytes:
+        return self._code
+
+    def get_script_hash(self) -> UInt160:
+        return self._script_hash
+
+    def export(self) -> Dict[str, Any]:
+        exported: Dict[str, Any] = {
+            "scriptHash": self._script_hash,
+            "code": self._code
+        }
+        return exported
 
 
 class GeneratorInstance:
-    def __init__(self, generator_id: bytes, author: UInt160, base_fee: int):
+    def __init__(self, generator_id: bytes, author: UInt160, access_mode: int, base_fee: int):
         self._generator_id: bytes = generator_id
         self._fee: int = base_fee
         self._instance_id: bytes = (total_generator_instances() + 1).to_bytes()
         self._author: UInt160 = author
+        self._access_mode: int = access_mode
+        self._authorized_contracts: [AccessControllerContract] = []
         self._authorized_users: [UInt160] = [author]
         self._storage_keys = []
 
@@ -81,11 +102,38 @@ class GeneratorInstance:
         put(key, serialized_payload)
         return True
 
-    def is_authorized(self, user: UInt160) -> bool:
-        return user in self._authorized_users
+    def is_authorized(self, user: UInt160, code: bytes) -> bool:
+        authorized: bool = False
+
+        if entry_script_hash == calling_script_hash:
+            if self._access_mode == 2 or (user in self._authorized_users):
+                authorized = True
+        else:
+            code_bytes: bytes = cast(bytes, code)
+            for authorized_contract in self._authorized_contracts:
+                authorized_hash: UInt160 = authorized_contract.get_script_hash()
+                authorized_code: bytes = authorized_contract.get_code()
+
+                contract_is_whitelisted: bool = (authorized_hash == calling_script_hash)
+                caller_has_code: bool = (authorized_code == code_bytes)
+                if contract_is_whitelisted and caller_has_code:
+                    if self._access_mode == 0:
+                        authorized = True
+                    if self._access_mode == 1 and (user in self._authorized_users):
+                        authorized = True
+                    break
+        return authorized
+
+    def set_access_mode(self, access_mode: int) -> bool:
+        self._access_mode = access_mode
+        return True
 
     def set_authorized_users(self, authorized_users: [UInt160]) -> bool:
         self._authorized_users = authorized_users
+        return True
+
+    def set_authorized_contracts(self, authorized_contracts: [AccessControllerContract]) -> bool:
+        self._authorized_contracts = authorized_contracts
         return True
 
     def set_fee(self, new_fee: int) -> bool:
@@ -93,11 +141,19 @@ class GeneratorInstance:
         return True
 
     def export(self) -> Dict[str, Any]:
+
+        contracts: List[Dict] = []
+        for c in self._authorized_contracts:
+            contract_json: Dict[str, Any] = c.export()
+            contracts.append(contract_json)
+
         exported: Dict[str, Any] = {
             "generatorId": self._generator_id,
             "instanceId": self._instance_id,
             "author": self._author,
             "authorizedUsers": self._authorized_users,
+            "authorizedContracts": contracts,
+            "accessMode": self._access_mode,
             "objectStorage": {}
         }
         return exported
@@ -112,7 +168,7 @@ def create_instance(generator_id: bytes) -> int:
     target_generator: Generator = get_generator(generator_id)
     base_fee: int = target_generator.get_base_fee()
 
-    new_instance: GeneratorInstance = GeneratorInstance(generator_id, author, base_fee)
+    new_instance: GeneratorInstance = GeneratorInstance(generator_id, author, 1, base_fee)
     instance_id: bytes = new_instance.get_id()
     instance_id_int: int = instance_id.to_int()
 
@@ -122,12 +178,13 @@ def create_instance(generator_id: bytes) -> int:
 
 
 @public
-def mint_from_instance(instance_id: bytes) -> Dict[str, Any]:
+def mint_from_instance(instance_id: bytes, code: bytes) -> Dict[str, Any]:
     tx = cast(Transaction, script_container)
     signer: UInt160 = tx.sender
 
     generator_instance: GeneratorInstance = get_generator_instance(instance_id)
-    assert generator_instance.is_authorized(signer), "Transaction signer is not authorized"
+
+    assert generator_instance.is_authorized(signer, code), 'Unauthorized access to generator instance'
 
     generator_id: bytes = generator_instance.get_generator_id()
     generator: Generator = get_generator(generator_id)
@@ -147,6 +204,47 @@ def set_instance_authorized_users(instance_id: bytes, authorized_users: [UInt160
     assert signer == author, "Transaction signer is not the instance author"
 
     x: bool = generator_instance.set_authorized_users(authorized_users)
+
+    save_generator_instance(generator_instance)
+    return True
+
+
+@public
+def set_instance_authorized_contracts(instance_id: bytes, authorized_contracts: List) -> bool:
+    tx = cast(Transaction, script_container)
+    signer: UInt160 = tx.sender
+
+    generator_instance: GeneratorInstance = get_generator_instance(instance_id)
+
+    author: UInt160 = generator_instance.get_author()
+    assert signer == author, "Transaction signer is not the instance author"
+
+    contracts: [AccessControllerContract] = []
+    for authorized_contract in authorized_contracts:
+        contract_payload: List = cast(List, authorized_contract)
+        script_hash: UInt160 = cast(UInt160, contract_payload[0])
+        code: bytes = cast(bytes, contract_payload[1])
+
+        new_contract: AccessControllerContract = AccessControllerContract(script_hash, code)
+        contracts.append(new_contract)
+
+    x: bool = generator_instance.set_authorized_contracts(contracts)
+
+    save_generator_instance(generator_instance)
+    return True
+
+
+@public
+def set_instance_access_mode(instance_id: bytes, access_mode: int) -> bool:
+    tx = cast(Transaction, script_container)
+    signer: UInt160 = tx.sender
+
+    generator_instance: GeneratorInstance = get_generator_instance(instance_id)
+
+    author: UInt160 = generator_instance.get_author()
+    assert signer == author, "Transaction signer is not the instance author"
+
+    x: bool = generator_instance.set_access_mode(access_mode)
 
     save_generator_instance(generator_instance)
     return True
@@ -217,9 +315,9 @@ def save_generator_instance(generator_instance: GeneratorInstance) -> bool:
     return True
 
 
-#######################################
-#################Event#################
-#######################################
+# ######################################
+# ################Event#################
+# ######################################
 
 
 class CollectionPointerEvent:
@@ -338,12 +436,12 @@ class EventInterface:
             return result
 
         raise Exception("Invalid Event Type")
-        return b'' #compiler errors without this
+        return b''
 
 
-#######################################
-#################Trait#################
-#######################################
+# ######################################
+# ################Trait#################
+# ######################################
 
 
 class TraitLevel:
@@ -393,7 +491,7 @@ class TraitLevel:
         max_index: int = len(traits)
         mint_mode: int = self._mint_mode
 
-        #empty trait level
+        # empty trait level
         if max_index == 0:
             return b''
 
@@ -426,7 +524,7 @@ class TraitLevel:
             return result
 
         raise Exception("Invalid Mint Mode")
-        return b'' #compiler errors without this
+        return b''
 
 
 class Trait:
@@ -549,9 +647,9 @@ def get_trait_raw(trait_id: bytes) -> bytes:
 def append_key_stack(current: bytes, new_key: bytes) -> bytes:
     return current + b'_' + new_key
 
-#######################################
-#################GENERATOR#################
-#######################################
+# ######################################
+# ################GENERATOR#################
+# ######################################
 
 
 class Generator:
@@ -610,7 +708,7 @@ class Generator:
         trait_objects: [bytes] = self._traits
         for trait_id in trait_objects:
             trait_object: Trait = get_trait(trait_id)
-            label_bytes: bytes = trait_object.get_label() #this is a cast and may be breaking
+            label_bytes: bytes = trait_object.get_label()
             label: str = label_bytes.to_str()
 
             trait: [bytes] = trait_object.mint(generator_instance)
@@ -619,7 +717,6 @@ class Generator:
                 traits[label] = trait
             if traits_count == 1:
                 traits[label] = trait[0]
-
 
         end_gas: int = gas_left
         compute_cost: int = start_gas - end_gas
@@ -699,7 +796,7 @@ def save_generator(generator: Generator) -> bool:
     return True
 
 
-##################KEYS########################
+# #################KEYS########################
 
 
 def mk_generator_key(generator_id: bytes) -> bytes:
@@ -714,10 +811,10 @@ def mk_generator_instance_key(generator_instance_id: bytes) -> bytes:
     return GENERATOR_INSTANCE_KEY + generator_instance_id
 
 
-#################Deps############################
+# ################Deps############################
 
 
-@contract('0xa80d045ca80e0421aa855c3a000bfbe5dddadced')
+@contract('0x2fa1371df4892630ba182f73107ff2c50dd2ad8b')
 class Collection:
 
     @staticmethod
@@ -733,7 +830,7 @@ class Collection:
         pass
 
 
-@contract('0x68021f61e872098627da52dc82ca793575c83826')
+@contract('0xbb01a4973fe466282757d5e55e6433b080691cab')
 class Dice:
 
     @staticmethod
@@ -743,4 +840,3 @@ class Dice:
     @staticmethod
     def map_bytes_onto_range(start: int, end: int, entropy: bytes) -> int:
         pass
-

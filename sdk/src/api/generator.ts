@@ -1,6 +1,16 @@
 import {sc} from "@cityofzion/neon-js";
 import {wallet} from "@cityofzion/neon-core";
-import {EventCollectionPointer, EventContractCall, GeneratorType, EventTypeEnum, EventTypeWrapper, TraitLevel, TraitType} from "../interface";
+import {
+  EventCollectionPointer,
+  EventContractCall,
+  GeneratorType,
+  EventTypeEnum,
+  EventTypeWrapper,
+  TraitLevel,
+  TraitType,
+  InstanceAuthorizedContracts,
+  InstanceAccessMode
+} from "../interface";
 import {formatter, parseToJSON, variableInvoke} from "../helpers";
 
 export class GeneratorAPI {
@@ -172,7 +182,26 @@ export class GeneratorAPI {
     const method = "mint_from_instance";
 
     const param = [
-      sc.ContractParam.integer(instanceId)
+      sc.ContractParam.integer(instanceId),
+      sc.ContractParam.string('')
+    ]
+
+    return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+  }
+
+  static async setInstanceAccessMode(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    instanceId: number,
+    accessMode: InstanceAccessMode,
+    signer: wallet.Account
+  ): Promise<string> {
+    const method = "set_instance_access_mode";
+
+    const param = [
+      sc.ContractParam.integer(instanceId),
+      sc.ContractParam.integer(accessMode)
     ]
 
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
@@ -195,6 +224,31 @@ export class GeneratorAPI {
     const param = [
       sc.ContractParam.integer(instanceId),
       sc.ContractParam.array(...usersFormatted)
+    ]
+
+    return await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+  }
+
+  static async setInstanceAuthorizedContracts(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    instanceId: number,
+    authorizedContracts: InstanceAuthorizedContracts[],
+    signer: wallet.Account
+  ): Promise<string> {
+    const method = "set_instance_authorized_contracts";
+
+    const contractsFormatted = authorizedContracts.map((contract ) => {
+      return sc.ContractParam.array(
+        sc.ContractParam.hash160(contract.scriptHash),
+        sc.ContractParam.integer(contract.code)
+      )
+    })
+
+    const param = [
+      sc.ContractParam.integer(instanceId),
+      sc.ContractParam.array(...contractsFormatted)
     ]
 
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)

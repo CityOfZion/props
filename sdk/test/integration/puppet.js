@@ -61,9 +61,10 @@ describe("Basic System Test Suite", function() {
 
     //test to mint a token to the address and verify balance of changes
 
-    it("should create an epoch from a collection set it as active", async() => {
+    it("should create an epoch from generator instance and set it as active", async() => {
         const cozWallet = network.wallets[0].wallet
 
+        /*
         const collectionId = await collection.totalCollections()
         const initialCollection = await collection.getCollectionJSON(collectionId)
 
@@ -90,6 +91,7 @@ describe("Basic System Test Suite", function() {
             }
         })
         const maxTraits = 5
+        */
 
         //Create the Epoch
         console.log("create epoch: ")
@@ -281,3 +283,71 @@ describe("Basic System Test Suite", function() {
     })
 
 })
+
+
+async function createCollection(collection, NODE, timeConstant, signer) {
+    const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
+    await sdk.helpers.sleep(timeConstant)
+    const res = await sdk.helpers.txDidComplete(NODE, txid)
+    return res[0]
+}
+
+async function mintFromInstance(instanceId, count, wallet, timeConstant, NODE) {
+    const txids = []
+    for (let i = 0; i < count; i++) {
+        const txid = await generator.mintFromInstance(instanceId, wallet)
+        txids.push(txid)
+    }
+    await sdk.helpers.sleep(timeConstant)
+
+    const res = []
+    for (let txid of txids) {
+        const traits = await sdk.helpers.txDidComplete(NODE, txid, true)
+        res.push(traits[0])
+    }
+    return res
+}
+
+async function buildGenerator(dropRate, maxTraits, maxMint, NODE, timeConstant, signer) {
+    const generator = await new sdk.Generator({node: NODE})
+    await generator.init()
+
+    const collection = await new sdk.Collection({node: NODE})
+    await collection.init()
+
+    const cid = await createCollection(collection, NODE, timeConstant, signer)
+
+    const initialCollection = await collection.getCollectionJSON(cid)
+
+    const traits = initialCollection.values.map((value, i) => {
+        return {
+            "type": 0,
+            "maxMint": maxMint,
+            "args": {
+                "collectionId": cid,
+                "index": i
+            }
+        }
+    })
+    const newGenerator = {
+        'label': 'new generator',
+        'baseGeneratorFee': 1000000000,
+        'traits': [
+            {
+                "label": "testTrait",
+                "slots": maxTraits,
+                "traitLevels": [
+                    {
+                        "dropScore": dropRate * 10000,
+                        "mintMode": 0,
+                        "traits": traits
+                    }
+                ]
+            }
+        ]
+    }
+    let res = await generator.createGenerator(newGenerator, signer, timeConstant)
+    await sdk.helpers.sleep(TIME_CONSTANT)
+    let eid = await sdk.helpers.txDidComplete(NODE, res[0])
+    return eid[0]
+}

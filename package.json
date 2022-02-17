@@ -6,6 +6,8 @@
   "scripts": {
     "deploy": "node scripts/deploy.js",
     "initialize": "node scripts/initialize.js",
+    "setup": "node scripts/setup.js",
+    "configure": "npm run setup && npm run deploy && npm run initialize",
     "mintPuppets": "node scripts/mint_puppets.js"
   },
   "repository": {

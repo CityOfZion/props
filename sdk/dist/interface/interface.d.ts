@@ -2,11 +2,12 @@ import { wallet } from "@cityofzion/neon-core";
 import { ContractParamLike } from "@cityofzion/neon-core/lib/sc";
 export declare enum EventTypeEnum {
     CollectionPointer = 0,
-    ContractCall = 1
+    ContractCall = 1,
+    Value = 2
 }
 export declare enum InstanceAccessMode {
     ContractWhitelist = 0,
-    ContractWhiteListRestricted1 = 1,
+    ContractWhiteListRestricted = 1,
     Global = 2
 }
 export interface BaseStats {

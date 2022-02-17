@@ -3,7 +3,8 @@ import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
 export enum EventTypeEnum {
   CollectionPointer = 0,
-  ContractCall = 1
+  ContractCall = 1,
+  Value = 2
 }
 
 export enum InstanceAccessMode {

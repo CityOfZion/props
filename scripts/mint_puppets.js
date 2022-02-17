@@ -51,7 +51,7 @@ async function main(timeConstant) {
 
     const authorizedContracts = [
         {
-            'scriptHash': '0xab60f23e79013eedc497cbf3963a15e4ad38e728',
+            'scriptHash': '0x7dce2daec302e4c4aec98b85861178d420f59206',
             'code': epochId
         }
     ]

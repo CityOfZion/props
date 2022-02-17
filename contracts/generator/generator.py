@@ -325,8 +325,8 @@ class CollectionPointerEvent:
         self.collection_id: int = collection_id
         self.idx: int = idx
 
-    def export(self) -> Dict[str, int]:
-        exported: Dict[str, int] = {
+    def export(self) -> Dict[str, Any]:
+        exported: Dict[str, Any] = {
             "collection_id": self.collection_id,
             "index": self.idx
         }
@@ -344,8 +344,8 @@ class ContractCallEvent:
         self._method: str = method
         self._param: list = param
 
-    def export(self) -> Dict[str, int]:
-        exported: Dict[str, int] = {
+    def export(self) -> Dict[str, Any]:
+        exported: Dict[str, Any] = {
             "scriptHash": self._scriptHash,
             "method": self._method,
             "param": self._param
@@ -357,12 +357,26 @@ class ContractCallEvent:
         return value
 
 
+class ValueEvent:
+    def __init__(self, value: bytes):
+        self._value = value
+
+    def export(self) -> Dict[str, Any]:
+        exported: Dict[str, Any] = {
+            "value": self._value
+        }
+        return exported
+
+    def get_value(self) -> bytes:
+        return self._value
+
+
 class EventInterface:
     def __init__(self, event_id: bytes, event_type: int, max_mint: int, args: List):
         self._event_type: int = event_type
         self._id: bytes = event_id
         self._max_mint: int = max_mint
-        self._event: Union[CollectionPointerEvent, ContractCallEvent]
+        self._event: Union[CollectionPointerEvent, ContractCallEvent, ValueEvent]
 
         if event_type == 0:
             collection_id: int = cast(int, args[0])
@@ -375,6 +389,10 @@ class EventInterface:
             param: list = cast(list, args[2])
             self._event = ContractCallEvent(script_hash, method, param)
 
+        if event_type == 2:
+            value: bytes = cast(bytes, args[0])
+            self._event = ValueEvent(value)
+
     def export(self) -> Dict[str, Any]:
         args: Dict[str, Any] = {}
         if self._event_type == 0:
@@ -383,6 +401,10 @@ class EventInterface:
         if self._event_type == 1:
             call_event: ContractCallEvent = cast(ContractCallEvent, self._event)
             args = call_event.export()
+
+        if self._event_type == 2:
+            value_event: ValueEvent = cast(ValueEvent, self._event)
+            args = value_event.export()
 
         exported: Dict[str, Any] = {
             'type': self._event_type,
@@ -433,6 +455,11 @@ class EventInterface:
         if self._event_type == 1:
             call_event: ContractCallEvent = cast(ContractCallEvent, self._event)
             result: bytes = call_event.get_value()
+            return result
+
+        if self._event_type == 2:
+            value_event: ValueEvent = cast(ValueEvent, self._event)
+            result: bytes = value_event.get_value()
             return result
 
         raise Exception("Invalid Event Type")

@@ -371,12 +371,28 @@ class ValueEvent:
         return self._value
 
 
+class CollectionSampleFromEvent:
+    def __init__(self, collection_id: int):
+        self.collection_id: int = collection_id
+
+    def export(self) -> Dict[str, Any]:
+        exported: Dict[str, Any] = {
+            "collection_id": self.collection_id,
+        }
+        return exported
+
+    def get_value(self) -> bytes:
+        cid: int = self.collection_id
+        value: bytes = Collection.sample_from_collection(cid)
+        return value
+
+
 class EventInterface:
     def __init__(self, event_id: bytes, event_type: int, max_mint: int, args: List):
         self._event_type: int = event_type
         self._id: bytes = event_id
         self._max_mint: int = max_mint
-        self._event: Union[CollectionPointerEvent, ContractCallEvent, ValueEvent]
+        self._event: Union[CollectionPointerEvent, ContractCallEvent, ValueEvent, CollectionSampleFromEvent]
 
         if event_type == 0:
             collection_id: int = cast(int, args[0])
@@ -393,11 +409,16 @@ class EventInterface:
             value: bytes = cast(bytes, args[0])
             self._event = ValueEvent(value)
 
+        if event_type == 3:
+            collection_id: int = cast(int, args[0])
+            self._event = CollectionSampleFromEvent(collection_id)
+
     def export(self) -> Dict[str, Any]:
         args: Dict[str, Any] = {}
         if self._event_type == 0:
             collection_event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
             args = collection_event.export()
+
         if self._event_type == 1:
             call_event: ContractCallEvent = cast(ContractCallEvent, self._event)
             args = call_event.export()
@@ -405,6 +426,10 @@ class EventInterface:
         if self._event_type == 2:
             value_event: ValueEvent = cast(ValueEvent, self._event)
             args = value_event.export()
+
+        if self._event_type == 3:
+            sample_event: CollectionSampleFromEvent = cast(CollectionSampleFromEvent, self._event)
+            args = sample_event.export()
 
         exported: Dict[str, Any] = {
             'type': self._event_type,
@@ -460,6 +485,11 @@ class EventInterface:
         if self._event_type == 2:
             value_event: ValueEvent = cast(ValueEvent, self._event)
             result: bytes = value_event.get_value()
+            return result
+
+        if self._event_type == 3:
+            sample_event: CollectionSampleFromEvent = cast(CollectionSampleFromEvent, self._event)
+            result: bytes = sample_event.get_value()
             return result
 
         raise Exception("Invalid Event Type")

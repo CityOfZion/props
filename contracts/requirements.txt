@@ -11,7 +11,7 @@ idna==3.3
 imagesize==1.2.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
-neo3-boa==0.10.1
+neo3-boa==0.11.0
 packaging==21.2
 pycodestyle==2.5.0
 Pygments==2.10.0

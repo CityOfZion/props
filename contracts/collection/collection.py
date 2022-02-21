@@ -17,7 +17,6 @@ def manifest_metadata() -> NeoMetadata:
     meta.description = "A public smart contract for storing immutable collections of stuff"
     meta.email = "contact@coz.io"
     meta.supported_standards = []
-    meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
 
 
@@ -27,12 +26,6 @@ new_collection = CreateNewEvent(
     ],
     'new_collection'
 )
-
-
-"""
-PUBLIC API LAYER METHODS:
-These methods are publicly exposed on the deployed smart contract.  An SDK is available as part of the props project.
-"""
 
 
 @public
@@ -120,15 +113,6 @@ def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
     values: [bytes] = collection.get_values()
     idx: int = Dice.map_bytes_onto_range(0, len(values) - 1, entropy)
     return values[idx]
-    #collection_raw: bytes = get_collection_raw_internal(collection_id)
-    #debug(['got the collection', collection_raw])
-    #collection: Collection = cast(Collection, collection_raw)
-    #collection_values: [bytes] = collection.get_values()
-    #debug(['values: ', collection_values])
-    #collection_values: [bytes] = collection.get_values()
-    #debug(['value 0: ', collection_values[0]])
-    #idx: int = Dice.map_bytes_onto_range(0, len(collection_values) - 1, entropy)
-    #return collection_values[idx]
 
 
 @public

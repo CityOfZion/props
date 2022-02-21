@@ -1,0 +1,91 @@
+{
+    "name": "dice",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "rand_between",
+                "offset": 0,
+                "parameters": [
+                    {
+                        "name": "start",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "end",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "map_bytes_onto_range",
+                "offset": 8,
+                "parameters": [
+                    {
+                        "name": "start",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "end",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "entropy",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "roll_die",
+                "offset": 17,
+                "parameters": [
+                    {
+                        "name": "die",
+                        "type": "String"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "roll_dice_with_entropy",
+                "offset": 24,
+                "parameters": [
+                    {
+                        "name": "die",
+                        "type": "String"
+                    },
+                    {
+                        "name": "precision",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "entropy",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            }
+        ],
+        "events": []
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Author": "COZ, Inc.",
+        "Email": "contact@coz.io",
+        "Description": "A public smart contract with some random methods."
+    }
+}

@@ -29,19 +29,19 @@ new_collection = CreateNewEvent(
 
 
 @public
-def create_collection(description: bytes, collection_type: bytes, extra: bytes,  values: [bytes]) -> int:
+def create_collection(description: bytes, collection_type: bytes, extra: bytes,  vals: [bytes]) -> int:
     """
     Creates a new collection
     :param description: A brief string formatted description of the collection
     :param collection_type: A string formatted type definition.  Where possible, use naming the Neo type naming syntax
     :param extra: An option payload for supplemental data
-    :param values: The array of values in the collection
+    :param vals: The array of values in the collection
     :return: The collection id
     """
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
-    collection_id: bytes = create_collection_internal(author, description, collection_type, extra, values)
+    collection_id: bytes = create_collection_internal(author, description, collection_type, extra, vals)
     new_collection(collection_id)
     return collection_id.to_int()
 
@@ -110,9 +110,9 @@ def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
     :return: The bytes at the sample location
     """
     collection: Collection = get_collection_internal(collection_id)
-    values: [bytes] = collection.get_values()
-    idx: int = Dice.map_bytes_onto_range(0, len(values) - 1, entropy)
-    return values[idx]
+    vals: [bytes] = collection.get_values()
+    idx: int = Dice.map_bytes_onto_range(0, len(vals) - 1, entropy)
+    return vals[idx]
 
 
 @public

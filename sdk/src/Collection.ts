@@ -8,7 +8,7 @@ import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0xf273a0a8c8734a81076b4eaa3c8c5ef93d8d9c3e'
+  scriptHash: '0x6839fe56057183b67c17ad0b450ab524b08ccf8b'
 }
 
 /**

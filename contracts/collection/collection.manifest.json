@@ -29,7 +29,7 @@
             },
             {
                 "name": "get_collection_json",
-                "offset": 60,
+                "offset": 58,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -41,7 +41,7 @@
             },
             {
                 "name": "get_collection",
-                "offset": 70,
+                "offset": 68,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -53,7 +53,7 @@
             },
             {
                 "name": "get_collection_element",
-                "offset": 80,
+                "offset": 78,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -69,7 +69,7 @@
             },
             {
                 "name": "get_collection_length",
-                "offset": 98,
+                "offset": 96,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -81,7 +81,7 @@
             },
             {
                 "name": "get_collection_values",
-                "offset": 108,
+                "offset": 106,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -93,7 +93,7 @@
             },
             {
                 "name": "map_bytes_onto_collection",
-                "offset": 127,
+                "offset": 125,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -109,7 +109,7 @@
             },
             {
                 "name": "sample_from_collection",
-                "offset": 215,
+                "offset": 213,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -121,14 +121,14 @@
             },
             {
                 "name": "total_collections",
-                "offset": 294,
+                "offset": 292,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "_initialize",
-                "offset": 593,
+                "offset": 591,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false
@@ -136,7 +136,7 @@
         ],
         "events": [
             {
-                "name": "new_collection",
+                "name": "NewGenerator",
                 "parameters": [
                     {
                         "name": "collection_id",

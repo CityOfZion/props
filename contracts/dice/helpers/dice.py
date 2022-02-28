@@ -1,10 +1,11 @@
 from boa3.builtin.interop.runtime import get_random
 from boa3.builtin.interop.stdlib import atoi
 
-#############################
-#######Dice##################
-#############################
-#############################
+
+# ############################
+# ######Dice##################
+# ############################
+# ############################
 
 
 def rand_between_internal(start: int, end: int) -> int:
@@ -64,7 +65,7 @@ def roll_dice_with_entropy_internal(die: str, precision: int, entropy: bytes) ->
     rolls: [int] = []
     roll: int
     for i in range(entropy_length // precision):
-        e: bytes = entropy[i * precision : (i + 1) * precision]
+        e: bytes = entropy[i * precision: (i + 1) * precision]
         roll = map_bytes_onto_range_internal(1, dice_sides, e)
         rolls.append(roll)
     return rolls

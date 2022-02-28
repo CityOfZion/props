@@ -85,7 +85,7 @@
     "supportedstandards": [],
     "extra": {
         "Author": "COZ, Inc.",
-        "Email": "contact@coz.io",
-        "Description": "A public smart contract with some random methods."
+        "Description": "A public smart contract full of magic number rocks.",
+        "Email": "contact@coz.io"
     }
 }

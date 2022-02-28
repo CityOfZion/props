@@ -25,7 +25,6 @@ def manifest_metadata() -> NeoMetadata:
     meta.description = "A public NFT prop with base attributes and interactions"
     meta.email = "contact@coz.io"
     meta.supported_standards = ["NEP-11"]
-    meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
 
 
@@ -68,13 +67,6 @@ on_transfer = CreateNewEvent(
         ('token_id', bytes)
     ],
     'Transfer'
-)
-
-debug = CreateNewEvent(
-    [
-        ('params', list),
-    ],
-    'Debug'
 )
 
 # -------------------------------------------
@@ -912,8 +904,8 @@ class Puppet:
             'name': 'puppet',
             'owner': self._owner,
             'tokenId': token_id_int,
-            'image': 'https://props.coz.io/tokens/puppets/neo/' + network_magic_string + '/' + token_id_string + '.png',
-            'tokenURI': 'https://props.coz.io/tokens/puppets/neo/' + network_magic_string + '/' + token_id_string,
+            'image': 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_string + '.png',
+            'tokenURI': 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_string,
             'epochId': epoch_id_int,
             'traits': self._traits,
         }
@@ -1038,7 +1030,7 @@ def mk_token_key(token_id: bytes) -> bytes:
 # ############INTERFACES###########
 
 
-@contract('0x2fa1371df4892630ba182f73107ff2c50dd2ad8b')
+@contract('0x6839fe56057183b67c17ad0b450ab524b08ccf8b')
 class Collection:
 
     @staticmethod
@@ -1046,7 +1038,7 @@ class Collection:
         pass
 
 
-@contract('0xbb01a4973fe466282757d5e55e6433b080691cab')
+@contract('0xe47950357c960c4905abc43ac7a7a8e3cf25af9f')
 class Dice:
 
     @staticmethod
@@ -1054,7 +1046,7 @@ class Dice:
         pass
 
 
-@contract('0x7eaf8259ee53c1d87f368d4fdb5979e57d37a750')
+@contract('0x7db03ced5d466a956e8b53f5f8ff6634382e2143')
 class Generator:
 
     @staticmethod

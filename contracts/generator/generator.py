@@ -18,7 +18,6 @@ def manifest_metadata() -> NeoMetadata:
     meta.description = "A public smart contract for handling probabilistic events"
     meta.email = "contact@coz.io"
     meta.supported_standards = []
-    meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
 
 # ######################################
@@ -871,7 +870,7 @@ def mk_generator_instance_key(generator_instance_id: bytes) -> bytes:
 # ################Deps############################
 
 
-@contract('0x2fa1371df4892630ba182f73107ff2c50dd2ad8b')
+@contract('0x6839fe56057183b67c17ad0b450ab524b08ccf8b')
 class Collection:
 
     @staticmethod
@@ -887,7 +886,7 @@ class Collection:
         pass
 
 
-@contract('0xbb01a4973fe466282757d5e55e6433b080691cab')
+@contract('0xe47950357c960c4905abc43ac7a7a8e3cf25af9f')
 class Dice:
 
     @staticmethod

@@ -10,11 +10,11 @@ def manifest_metadata() -> NeoMetadata:
     """
     meta = NeoMetadata()
     meta.author = "COZ, Inc."
-    meta.description = "A public smart contract with some random methods."
+    meta.description = "A public smart contract full of magic number rocks."
     meta.email = "contact@coz.io"
     meta.supported_standards = []
-    meta.permissions = [{"contract": "*", "methods": "*"}]
     return meta
+
 
 @public
 def rand_between(start: int, end: int) -> int:

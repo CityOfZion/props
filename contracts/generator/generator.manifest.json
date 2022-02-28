@@ -33,7 +33,7 @@
             },
             {
                 "name": "set_instance_authorized_users",
-                "offset": 147,
+                "offset": 199,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -49,7 +49,7 @@
             },
             {
                 "name": "set_instance_authorized_contracts",
-                "offset": 203,
+                "offset": 311,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -65,7 +65,7 @@
             },
             {
                 "name": "set_instance_access_mode",
-                "offset": 351,
+                "offset": 515,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -81,7 +81,7 @@
             },
             {
                 "name": "set_instance_fee",
-                "offset": 404,
+                "offset": 627,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -97,7 +97,7 @@
             },
             {
                 "name": "get_generator_instance_json",
-                "offset": 457,
+                "offset": 736,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -109,7 +109,7 @@
             },
             {
                 "name": "get_generator_instance",
-                "offset": 471,
+                "offset": 750,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -121,14 +121,14 @@
             },
             {
                 "name": "total_generator_instances",
-                "offset": 554,
+                "offset": 833,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "create_trait",
-                "offset": 662,
+                "offset": 941,
                 "parameters": [
                     {
                         "name": "generator_id",
@@ -152,7 +152,7 @@
             },
             {
                 "name": "get_trait_json",
-                "offset": 845,
+                "offset": 1181,
                 "parameters": [
                     {
                         "name": "trait_id",
@@ -164,7 +164,7 @@
             },
             {
                 "name": "get_trait",
-                "offset": 859,
+                "offset": 1195,
                 "parameters": [
                     {
                         "name": "trait_id",
@@ -176,14 +176,14 @@
             },
             {
                 "name": "total_generators",
-                "offset": 957,
+                "offset": 1293,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "create_generator",
-                "offset": 993,
+                "offset": 1329,
                 "parameters": [
                     {
                         "name": "label",
@@ -199,7 +199,7 @@
             },
             {
                 "name": "get_generator_json",
-                "offset": 1093,
+                "offset": 1429,
                 "parameters": [
                     {
                         "name": "generator_id",
@@ -211,7 +211,7 @@
             },
             {
                 "name": "get_generator",
-                "offset": 1107,
+                "offset": 1443,
                 "parameters": [
                     {
                         "name": "generator_id",
@@ -223,7 +223,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 1283,
+                "offset": 1619,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false
@@ -252,7 +252,7 @@
     "supportedstandards": [],
     "extra": {
         "Author": "COZ, Inc.",
-        "Email": "contact@coz.io",
-        "Description": "A public smart contract for handling probabilistic events"
+        "Description": "A public smart contract for handling probabilistic events",
+        "Email": "contact@coz.io"
     }
 }

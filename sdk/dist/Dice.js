@@ -6,7 +6,7 @@ const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("./api");
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0xbb01a4973fe466282757d5e55e6433b080691cab'
+    scriptHash: '0xe47950357c960c4905abc43ac7a7a8e3cf25af9f'
 };
 /**
  * The dice prop normalizes a lot of behaviors associated with random number generation to improve usability within

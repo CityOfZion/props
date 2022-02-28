@@ -38,7 +38,7 @@
             },
             {
                 "name": "tokensOf",
-                "offset": 66,
+                "offset": 101,
                 "parameters": [
                     {
                         "name": "owner",
@@ -50,7 +50,7 @@
             },
             {
                 "name": "transfer",
-                "offset": 92,
+                "offset": 162,
                 "parameters": [
                     {
                         "name": "to",
@@ -70,7 +70,7 @@
             },
             {
                 "name": "ownerOf",
-                "offset": 322,
+                "offset": 424,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -82,14 +82,14 @@
             },
             {
                 "name": "tokens",
-                "offset": 341,
+                "offset": 443,
                 "parameters": [],
                 "returntype": "InteropInterface",
                 "safe": false
             },
             {
                 "name": "properties",
-                "offset": 362,
+                "offset": 464,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -101,14 +101,14 @@
             },
             {
                 "name": "deploy",
-                "offset": 379,
+                "offset": 513,
                 "parameters": [],
                 "returntype": "Boolean",
                 "safe": false
             },
             {
                 "name": "onNEP11Payment",
-                "offset": 598,
+                "offset": 732,
                 "parameters": [
                     {
                         "name": "from_address",
@@ -132,7 +132,7 @@
             },
             {
                 "name": "onNEP17Payment",
-                "offset": 603,
+                "offset": 737,
                 "parameters": [
                     {
                         "name": "from_address",
@@ -152,14 +152,14 @@
             },
             {
                 "name": "total_accounts",
-                "offset": 668,
+                "offset": 802,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "offline_mint",
-                "offset": 704,
+                "offset": 838,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -175,7 +175,7 @@
             },
             {
                 "name": "update",
-                "offset": 745,
+                "offset": 912,
                 "parameters": [
                     {
                         "name": "script",
@@ -191,7 +191,7 @@
             },
             {
                 "name": "set_mint_fee",
-                "offset": 823,
+                "offset": 1023,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -207,7 +207,7 @@
             },
             {
                 "name": "get_user_json",
-                "offset": 1035,
+                "offset": 1329,
                 "parameters": [
                     {
                         "name": "address",
@@ -219,7 +219,7 @@
             },
             {
                 "name": "get_user",
-                "offset": 1049,
+                "offset": 1343,
                 "parameters": [
                     {
                         "name": "address",
@@ -231,7 +231,7 @@
             },
             {
                 "name": "set_user_permissions",
-                "offset": 1269,
+                "offset": 1563,
                 "parameters": [
                     {
                         "name": "user",
@@ -247,7 +247,7 @@
             },
             {
                 "name": "create_epoch",
-                "offset": 1327,
+                "offset": 1654,
                 "parameters": [
                     {
                         "name": "generator_instance_id",
@@ -271,7 +271,7 @@
             },
             {
                 "name": "get_epoch_json",
-                "offset": 1414,
+                "offset": 1774,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -283,7 +283,7 @@
             },
             {
                 "name": "get_epoch",
-                "offset": 1428,
+                "offset": 1788,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -295,14 +295,14 @@
             },
             {
                 "name": "total_epochs",
-                "offset": 1508,
+                "offset": 1868,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "get_attribute_mod",
-                "offset": 1623,
+                "offset": 1983,
                 "parameters": [
                     {
                         "name": "attribute_value",
@@ -314,7 +314,7 @@
             },
             {
                 "name": "get_puppet",
-                "offset": 1655,
+                "offset": 2015,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -326,7 +326,7 @@
             },
             {
                 "name": "get_puppet_json",
-                "offset": 1709,
+                "offset": 2069,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -338,7 +338,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 1828,
+                "offset": 2188,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false
@@ -365,15 +365,6 @@
                         "type": "ByteArray"
                     }
                 ]
-            },
-            {
-                "name": "Debug",
-                "parameters": [
-                    {
-                        "name": "params",
-                        "type": "Array"
-                    }
-                ]
             }
         ]
     },
@@ -390,7 +381,7 @@
     ],
     "extra": {
         "Author": "COZ, Inc.",
-        "Email": "contact@coz.io",
-        "Description": "A public NFT prop with base attributes and interactions"
+        "Description": "A public NFT prop with base attributes and interactions",
+        "Email": "contact@coz.io"
     }
 }

@@ -21,7 +21,7 @@
             },
             {
                 "name": "map_bytes_onto_range",
-                "offset": 8,
+                "offset": 11,
                 "parameters": [
                     {
                         "name": "start",
@@ -41,7 +41,7 @@
             },
             {
                 "name": "roll_die",
-                "offset": 17,
+                "offset": 23,
                 "parameters": [
                     {
                         "name": "die",
@@ -53,7 +53,7 @@
             },
             {
                 "name": "roll_dice_with_entropy",
-                "offset": 24,
+                "offset": 33,
                 "parameters": [
                     {
                         "name": "die",
@@ -69,6 +69,49 @@
                     }
                 ],
                 "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 45,
+                "parameters": [
+                    {
+                        "name": "script",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_deploy",
+                "offset": 646,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_initialize",
+                "offset": 684,
+                "parameters": [],
+                "returntype": "Void",
                 "safe": false
             }
         ],

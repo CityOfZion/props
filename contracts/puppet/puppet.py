@@ -51,9 +51,6 @@ EPOCH_COUNT: bytes = b'EPOCH_COUNT'
 # Stores the total account count
 ACCOUNT_COUNT: bytes = b'!ACCOUNT_COUNT'
 
-# Stores whether the contract has been deployed(initialized)
-DEPLOYED = b'!deployed'
-
 # -------------------------------------------
 # Events
 # -------------------------------------------
@@ -189,13 +186,13 @@ def transfer(to: UInt160, token_id: bytes, data: Any) -> bool:
 
     if token_owner != to:
 
-        x: bool = owner_user.remove_owned_token(formatted_token_id)
-        x = to_user.add_owned_token(formatted_token_id)
+        owner_user.remove_owned_token(formatted_token_id)
+        to_user.add_owned_token(formatted_token_id)
 
         save_user(token_owner, owner_user)
         save_user(to, to_user)
 
-        x = puppet.set_owner(to)
+        puppet.set_owner(to)
         save_puppet(puppet)
 
     post_transfer(token_owner, to, token_id, data)
@@ -272,41 +269,31 @@ def properties(token_id: bytes) -> Dict[str, Any]:
 
 
 @public
-def deploy() -> bool:
-    """
-    The contract's initial entry point, on deployment. This method configures the initial admin account.
-    """
-    if get(DEPLOYED).to_bool():
-        return False
-
-    tx = cast(Transaction, script_container)
-    owner: UInt160 = tx.sender
-
-    internal_deploy(owner)
-    return True
-
-
-def internal_deploy(owner: UInt160) -> bool:
+def _deploy(data: Any, update: bool):
     """
     Executes the deploy event by creating the initial contract state and admin account
     :param owner: The initial admin of of the smart contract
     :return: a boolean indicating success
     """
-    put(DEPLOYED, True)
-    put(TOKEN_COUNT, 0)
-    put(ACCOUNT_COUNT, 1)
 
-    super_user_permissions: Dict[str, bool] = {
-        'offline_mint': True,
-        'contract_upgrade': True,
-        'set_mint_fee': True,
-        'create_epoch': True,
-        'set_permissions': True
-    }
-    user: User = User()
-    x: bool = user.set_permissions(super_user_permissions)
-    save_user(owner, user)
-    return True
+    if not update:
+        put(TOKEN_COUNT, 0)
+        put(ACCOUNT_COUNT, 1)
+
+        super_user_permissions: Dict[str, bool] = {
+            'offline_mint': True,
+            'contract_upgrade': True,
+            'set_mint_fee': True,
+            'create_epoch': True,
+            'set_permissions': True
+        }
+
+        tx = cast(Transaction, script_container)
+        owner: UInt160 = tx.sender
+
+        user: User = User()
+        user.set_permissions(super_user_permissions)
+        save_user(owner, user)
 
 
 @public
@@ -408,7 +395,7 @@ def set_mint_fee(epoch_id: bytes, amount: int) -> bool:
     assert user.get_set_mint_fee(), "User Permission Denied"
 
     epoch: Epoch = get_epoch(epoch_id)
-    x: bool = epoch.set_fee(amount)
+    epoch.set_fee(amount)
     save_epoch(epoch)
 
     return True
@@ -432,16 +419,16 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
 
     token_id: bytes = (totalSupply() + 1).to_bytes()
     new_puppet: Puppet = Puppet()
-    x: bool = new_puppet.generate(owner, token_id, epoch_id)
+    new_puppet.generate(owner, token_id, epoch_id)
 
     save_puppet(new_puppet)
     put(TOKEN_COUNT, token_id)
 
-    x: int = mint_epoch.increment_supply()
+    mint_epoch.increment_supply()
     save_epoch(mint_epoch)
 
     user: User = get_user(owner)
-    x: bool = user.add_owned_token(token_id)
+    user.add_owned_token(token_id)
     save_user(owner, user)
 
     post_transfer(None, owner, token_id, None)
@@ -596,9 +583,9 @@ def set_user_permissions(user: UInt160, permissions: Dict[str, bool]) -> bool:
     assert invoking_user.get_set_permissions(), "User Permission Denied"
 
     impacted_user: User = get_user(user)
-    x: bool = impacted_user.set_permissions(permissions)
+    impacted_user.set_permissions(permissions)
     save_user(user, impacted_user)
-    return x
+    return True
 
 
 # #############################
@@ -1030,7 +1017,7 @@ def mk_token_key(token_id: bytes) -> bytes:
 # ############INTERFACES###########
 
 
-@contract('0x6839fe56057183b67c17ad0b450ab524b08ccf8b')
+@contract('0x160f1c183db71ddeb8836a248f80a20aeacf5579')
 class Collection:
 
     @staticmethod
@@ -1038,7 +1025,7 @@ class Collection:
         pass
 
 
-@contract('0xe47950357c960c4905abc43ac7a7a8e3cf25af9f')
+@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
 class Dice:
 
     @staticmethod
@@ -1046,7 +1033,7 @@ class Dice:
         pass
 
 
-@contract('0x7db03ced5d466a956e8b53f5f8ff6634382e2143')
+@contract('0x00034612547c19fd30bda92b32de87c46502a09a')
 class Generator:
 
     @staticmethod

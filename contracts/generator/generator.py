@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, cast, Union
 from boa3.builtin import contract, NeoMetadata, metadata, public, CreateNewEvent
-from boa3.builtin.interop.contract import call_contract
+from boa3.builtin.interop.contract import call_contract, update_contract
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.runtime import burn_gas, gas_left, get_random, script_container, calling_script_hash, entry_script_hash
@@ -34,6 +34,7 @@ on_mint_generator = CreateNewEvent(
 
 GENERATOR_KEY = b'e'
 GENERATOR_INSTANCE_KEY = b'i'
+OWNER_KEY = b'OWNER'
 TRAIT_KEY = b't'
 TOTAL_GENERATORS = b'!TOTAL_GENERATORS'
 TOTAL_GENERATOR_INSTANCES = b'!TOTAL_GENERATOR_INSTANCES'
@@ -852,6 +853,34 @@ def save_generator(generator: Generator) -> bool:
     return True
 
 
+@public
+def update(script: bytes, manifest: bytes, data: Any):
+    """
+    Updates the smart contract script
+    :param script: The new script to update to
+    :param manifest: The new manifest to update to
+    :param data: additional data field
+    :return:
+    :raise AssertionError: raised if the user lacks the "update" permission
+    """
+    tx = cast(Transaction, script_container)
+    signer: UInt160 = tx.sender
+
+    owner: UInt160 = get(OWNER_KEY)
+
+    assert owner == signer, "User Permission Denied"
+
+    update_contract(script, manifest, data)
+
+
+@public
+def _deploy(data: Any, update: bool):
+    if not update:
+        tx = cast(Transaction, script_container)
+        signer: UInt160 = tx.sender
+        put(OWNER_KEY, signer)
+
+
 # #################KEYS########################
 
 
@@ -870,7 +899,7 @@ def mk_generator_instance_key(generator_instance_id: bytes) -> bytes:
 # ################Deps############################
 
 
-@contract('0x6839fe56057183b67c17ad0b450ab524b08ccf8b')
+@contract('0x160f1c183db71ddeb8836a248f80a20aeacf5579')
 class Collection:
 
     @staticmethod
@@ -886,7 +915,7 @@ class Collection:
         pass
 
 
-@contract('0xe47950357c960c4905abc43ac7a7a8e3cf25af9f')
+@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
 class Dice:
 
     @staticmethod

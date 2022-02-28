@@ -1,6 +1,15 @@
+from typing import Any, cast
+from boa3.builtin.type import UInt160
+from boa3.builtin.interop.blockchain import Transaction
+from boa3.builtin.interop.runtime import script_container
 from boa3.builtin import NeoMetadata, metadata, public
+from boa3.builtin.interop.contract import update_contract
+from boa3.builtin.interop.storage import get, put
 from helpers.dice import roll_die_internal, roll_dice_with_entropy_internal, \
     rand_between_internal, map_bytes_onto_range_internal
+
+
+OWNER_KEY = b'OWNER'
 
 
 @metadata
@@ -62,3 +71,31 @@ def roll_dice_with_entropy(die: str, precision: int, entropy: bytes) -> [int]:
     :return: an integer array representing the dice rolls
     """
     return roll_dice_with_entropy_internal(die, precision, entropy)
+
+
+@public
+def update(script: bytes, manifest: bytes, data: Any):
+    """
+    Updates the smart contract script
+    :param script: The new script to update to
+    :param manifest: The new manifest to update to
+    :param data: additional data field
+    :return:
+    :raise AssertionError: raised if the user lacks the "update" permission
+    """
+    tx = cast(Transaction, script_container)
+    signer: UInt160 = tx.sender
+
+    owner: UInt160 = get(OWNER_KEY)
+
+    assert owner == signer, "User Permission Denied"
+
+    update_contract(script, manifest, data)
+
+
+@public
+def _deploy(data: Any, update: bool):
+    if not update:
+        tx = cast(Transaction, script_container)
+        signer: UInt160 = tx.sender
+        put(OWNER_KEY, signer)

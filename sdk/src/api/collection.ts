@@ -255,4 +255,27 @@ export class CollectionAPI {
     return parseInt(res[0].value as string);
   }
 
+  static async update(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    script: string,
+    manifest: string,
+    data: any,
+    signer: wallet.Account
+  ): Promise<string> {
+    const method = "update";
+    const params = [
+      sc.ContractParam.byteArray(script),
+      sc.ContractParam.string(manifest),
+      sc.ContractParam.any(data)
+    ];
+
+    const res = await variableInvoke(node, networkMagic, contractHash, method, params, signer)
+    if (signer) {
+      return res
+    }
+    return formatter(res);
+  }
+
 }

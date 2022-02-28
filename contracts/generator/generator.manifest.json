@@ -222,8 +222,44 @@
                 "safe": false
             },
             {
+                "name": "update",
+                "offset": 1598,
+                "parameters": [
+                    {
+                        "name": "script",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_deploy",
+                "offset": 1749,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
                 "name": "_initialize",
-                "offset": 1619,
+                "offset": 1787,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

@@ -100,15 +100,24 @@
                 "safe": false
             },
             {
-                "name": "deploy",
-                "offset": 513,
-                "parameters": [],
-                "returntype": "Boolean",
+                "name": "_deploy",
+                "offset": 1966,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
                 "safe": false
             },
             {
                 "name": "onNEP11Payment",
-                "offset": 732,
+                "offset": 513,
                 "parameters": [
                     {
                         "name": "from_address",
@@ -132,7 +141,7 @@
             },
             {
                 "name": "onNEP17Payment",
-                "offset": 737,
+                "offset": 518,
                 "parameters": [
                     {
                         "name": "from_address",
@@ -152,14 +161,14 @@
             },
             {
                 "name": "total_accounts",
-                "offset": 802,
+                "offset": 583,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "offline_mint",
-                "offset": 838,
+                "offset": 619,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -175,7 +184,7 @@
             },
             {
                 "name": "update",
-                "offset": 912,
+                "offset": 693,
                 "parameters": [
                     {
                         "name": "script",
@@ -191,7 +200,7 @@
             },
             {
                 "name": "set_mint_fee",
-                "offset": 1023,
+                "offset": 804,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -207,7 +216,7 @@
             },
             {
                 "name": "get_user_json",
-                "offset": 1329,
+                "offset": 1108,
                 "parameters": [
                     {
                         "name": "address",
@@ -219,7 +228,7 @@
             },
             {
                 "name": "get_user",
-                "offset": 1343,
+                "offset": 1122,
                 "parameters": [
                     {
                         "name": "address",
@@ -231,7 +240,7 @@
             },
             {
                 "name": "set_user_permissions",
-                "offset": 1563,
+                "offset": 1341,
                 "parameters": [
                     {
                         "name": "user",
@@ -247,7 +256,7 @@
             },
             {
                 "name": "create_epoch",
-                "offset": 1654,
+                "offset": 1432,
                 "parameters": [
                     {
                         "name": "generator_instance_id",
@@ -271,7 +280,7 @@
             },
             {
                 "name": "get_epoch_json",
-                "offset": 1774,
+                "offset": 1552,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -283,7 +292,7 @@
             },
             {
                 "name": "get_epoch",
-                "offset": 1788,
+                "offset": 1566,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -295,14 +304,14 @@
             },
             {
                 "name": "total_epochs",
-                "offset": 1868,
+                "offset": 1646,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "get_attribute_mod",
-                "offset": 1983,
+                "offset": 1761,
                 "parameters": [
                     {
                         "name": "attribute_value",
@@ -314,7 +323,7 @@
             },
             {
                 "name": "get_puppet",
-                "offset": 2015,
+                "offset": 1793,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -326,7 +335,7 @@
             },
             {
                 "name": "get_puppet_json",
-                "offset": 2069,
+                "offset": 1847,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -338,7 +347,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 2188,
+                "offset": 2144,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

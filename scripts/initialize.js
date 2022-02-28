@@ -52,18 +52,6 @@ async function main(node, signer, timeConstant) {
         }
     }
 
-    console.log('\n' +
-        '//////////PUPPET///////////////\n' +
-        '//////////PUPPET///////////////\n' +
-        '//////////PUPPET///////////////\n'
-    )
-
-    console.log('create the initial admin account: ')
-    txid = await puppet.deploy(signer)
-    console.log('  txid: ', txid)
-    await sdk.helpers.sleep(timeConstant)
-    result = await sdk.helpers.txDidComplete(node, txid, true)
-    console.log("  response: ", result[0])
 }
 
 const network = JSON.parse(fs.readFileSync("default.neo-express").toString());

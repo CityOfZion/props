@@ -11,7 +11,7 @@ const api_1 = require("./api");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0x6839fe56057183b67c17ad0b450ab524b08ccf8b'
+    scriptHash: '0x160f1c183db71ddeb8836a248f80a20aeacf5579'
 };
 /**
  * The Collection prop is designed to store static-immutable data for reference in other projects. Storing static data
@@ -208,6 +208,9 @@ class Collection {
      */
     async totalCollections(signer) {
         return api_1.CollectionAPI.totalCollections(this.node.url, this.networkMagic, this.scriptHash, signer);
+    }
+    async update(script, manifest, signer) {
+        return api_1.CollectionAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, '', signer);
     }
 }
 exports.Collection = Collection;

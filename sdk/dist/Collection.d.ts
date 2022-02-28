@@ -153,4 +153,5 @@ export declare class Collection {
      * @returns The total number of collections stored in the contract. **OR** a txid if the signer parameter is populated.
      */
     totalCollections(signer?: wallet.Account): Promise<number | undefined>;
+    update(script: string, manifest: string, signer: wallet.Account): Promise<string | undefined>;
 }

@@ -8,7 +8,7 @@ import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x6839fe56057183b67c17ad0b450ab524b08ccf8b'
+  scriptHash: '0x160f1c183db71ddeb8836a248f80a20aeacf5579'
 }
 
 /**
@@ -221,6 +221,10 @@ export class Collection {
    */
   async totalCollections(signer?: wallet.Account): Promise<number | undefined> {
     return CollectionAPI.totalCollections(this.node.url, this.networkMagic, this.scriptHash, signer)
+  }
+
+  async update(script: string, manifest: string, signer: wallet.Account): Promise<string | undefined> {
+    return CollectionAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, '', signer)
   }
 
 }

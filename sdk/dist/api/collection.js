@@ -167,6 +167,19 @@ class CollectionAPI {
         }
         return parseInt(res[0].value);
     }
+    static async update(node, networkMagic, contractHash, script, manifest, data, signer) {
+        const method = "update";
+        const params = [
+            neon_js_1.sc.ContractParam.byteArray(script),
+            neon_js_1.sc.ContractParam.string(manifest),
+            neon_js_1.sc.ContractParam.any(data)
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
+        }
+        return helpers_1.formatter(res);
+    }
 }
 exports.CollectionAPI = CollectionAPI;
 //# sourceMappingURL=collection.js.map

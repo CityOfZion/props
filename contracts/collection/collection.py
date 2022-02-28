@@ -3,10 +3,14 @@ from boa3.builtin.type import UInt160
 from boa3.builtin import CreateNewEvent, NeoMetadata, metadata, public, contract
 from boa3.builtin.interop.blockchain import Transaction
 from boa3.builtin.interop.runtime import script_container
+from boa3.builtin.interop.contract import update_contract
 from boa3.builtin.interop.storage import get, put
-from boa3.builtin.interop.stdlib import serialize, deserialize
 from helpers.collection import Collection, create_collection_internal, get_collection_json_internal, \
     get_collection_internal, total_collections_internal
+
+
+OWNER_KEY = b'OWNER'
+
 
 @metadata
 def manifest_metadata() -> NeoMetadata:
@@ -139,7 +143,35 @@ def total_collections() -> int:
     return total_collections_internal()
 
 
-@contract('0xe47950357c960c4905abc43ac7a7a8e3cf25af9f')
+@public
+def update(script: bytes, manifest: bytes, data: Any):
+    """
+    Updates the smart contract script
+    :param script: The new script to update to
+    :param manifest: The new manifest to update to
+    :param data: additional data field
+    :return:
+    :raise AssertionError: raised if the user lacks the "update" permission
+    """
+    tx = cast(Transaction, script_container)
+    signer: UInt160 = tx.sender
+
+    owner: UInt160 = get(OWNER_KEY)
+
+    assert owner == signer, "User Permission Denied"
+
+    update_contract(script, manifest, data)
+
+
+@public
+def _deploy(data: Any, update: bool):
+    if not update:
+        tx = cast(Transaction, script_container)
+        signer: UInt160 = tx.sender
+        put(OWNER_KEY, signer)
+
+
+@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
 class Dice:
 
     @staticmethod

@@ -147,7 +147,7 @@ export class GeneratorAPI {
     if (signer) {
       return res
     }
-    return formatter(res[0].value) as TraitType
+    return formatter(res[0]) as TraitType
   }
 
   //getGeneratorInstance

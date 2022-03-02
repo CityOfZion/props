@@ -28,9 +28,9 @@ class GeneratorAPI {
                     case interface_1.EventTypeEnum.CollectionPointer:
                         const collectionPointer = traitEvent.args;
                         return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(collectionPointer.collectionId), neon_js_1.sc.ContractParam.integer(collectionPointer.index)));
-                    case interface_1.EventTypeEnum.ContractCall:
-                        const contractCall = traitEvent.args;
-                        return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.hash160(contractCall.scriptHash), neon_js_1.sc.ContractParam.string(contractCall.method), neon_js_1.sc.ContractParam.array(...contractCall.param)));
+                    case interface_1.EventTypeEnum.InstanceCall:
+                        const instanceCall = traitEvent.args;
+                        return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.integer(traitEvent.type), neon_js_1.sc.ContractParam.integer(traitEvent.maxMint), neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.hash160(instanceCall.scriptHash), neon_js_1.sc.ContractParam.string(instanceCall.method), neon_js_1.sc.ContractParam.array(...instanceCall.param)));
                     default:
                         throw new Error("unrecognized trait event type");
                 }
@@ -66,7 +66,7 @@ class GeneratorAPI {
         if (signer) {
             return res;
         }
-        return helpers_1.parseToJSON(res[0].value);
+        return helpers_1.formatter(res[0].value);
     }
     //getGeneratorInstance
     static async getGeneratorInstanceJSON(node, networkMagic, contractHash, instanceId, signer) {
@@ -83,8 +83,8 @@ class GeneratorAPI {
     static async mintFromInstance(node, networkMagic, contractHash, instanceId, signer) {
         const method = "mint_from_instance";
         const param = [
-            neon_js_1.sc.ContractParam.integer(instanceId),
-            neon_js_1.sc.ContractParam.string('')
+            neon_js_1.sc.ContractParam.string(''),
+            neon_js_1.sc.ContractParam.integer(instanceId)
         ];
         return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
     }

@@ -29,7 +29,7 @@
             },
             {
                 "name": "get_collection_json",
-                "offset": 58,
+                "offset": 59,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -41,7 +41,7 @@
             },
             {
                 "name": "get_collection",
-                "offset": 68,
+                "offset": 69,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -53,7 +53,7 @@
             },
             {
                 "name": "get_collection_element",
-                "offset": 78,
+                "offset": 79,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -69,7 +69,7 @@
             },
             {
                 "name": "get_collection_length",
-                "offset": 96,
+                "offset": 97,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -81,7 +81,7 @@
             },
             {
                 "name": "get_collection_values",
-                "offset": 106,
+                "offset": 107,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -93,7 +93,7 @@
             },
             {
                 "name": "map_bytes_onto_collection",
-                "offset": 125,
+                "offset": 126,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -109,7 +109,7 @@
             },
             {
                 "name": "sample_from_collection",
-                "offset": 213,
+                "offset": 214,
                 "parameters": [
                     {
                         "name": "collection_id",
@@ -121,14 +121,14 @@
             },
             {
                 "name": "total_collections",
-                "offset": 292,
+                "offset": 293,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "update",
-                "offset": 298,
+                "offset": 299,
                 "parameters": [
                     {
                         "name": "script",
@@ -148,7 +148,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 715,
+                "offset": 716,
                 "parameters": [
                     {
                         "name": "data",
@@ -164,7 +164,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 753,
+                "offset": 754,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false
@@ -172,7 +172,7 @@
         ],
         "events": [
             {
-                "name": "NewGenerator",
+                "name": "NewCollection",
                 "parameters": [
                     {
                         "name": "collection_id",

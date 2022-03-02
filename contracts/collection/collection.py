@@ -29,7 +29,7 @@ new_collection = CreateNewEvent(
     [
         ('collection_id', bytes),
     ],
-    'NewGenerator'
+    'NewCollection'
 )
 
 

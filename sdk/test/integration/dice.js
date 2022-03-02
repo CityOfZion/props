@@ -6,7 +6,7 @@ const process = require('process')
 
 var assert = require('assert');
 
-describe("Lets roll some Dice!", function() {
+describe("Basic Dice Test Suite", function() {
     this.timeout(60000);
     let TIME_CONSTANT = 4000
     let dice, network, NODE

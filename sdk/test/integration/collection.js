@@ -3,7 +3,7 @@ const Neon = require("@cityofzion/neon-core")
 const fs = require("fs")
 var assert = require('assert');
 
-describe("Collections tests", function() {
+describe("Basic Collection Test Suite", function() {
     this.timeout(60000);
     const TIME_CONSTANT = 4000
     let collection, network, NODE

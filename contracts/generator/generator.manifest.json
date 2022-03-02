@@ -20,11 +20,11 @@
                 "offset": 86,
                 "parameters": [
                     {
-                        "name": "instance_id",
+                        "name": "from_code",
                         "type": "ByteArray"
                     },
                     {
-                        "name": "code",
+                        "name": "to_instance_id",
                         "type": "ByteArray"
                     }
                 ],

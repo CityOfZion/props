@@ -2,7 +2,7 @@ import {sc} from "@cityofzion/neon-js";
 import {wallet} from "@cityofzion/neon-core";
 import {
   EventCollectionPointer,
-  EventContractCall,
+  EventInstanceCall,
   GeneratorType,
   EventTypeEnum,
   EventTypeWrapper,
@@ -74,15 +74,15 @@ export class GeneratorAPI {
                 sc.ContractParam.integer(collectionPointer.collectionId),
                 sc.ContractParam.integer(collectionPointer.index)
               ))
-          case EventTypeEnum.ContractCall:
-            const contractCall: EventContractCall = traitEvent.args as EventContractCall
+          case EventTypeEnum.InstanceCall:
+            const instanceCall: EventInstanceCall = traitEvent.args as EventInstanceCall
             return sc.ContractParam.array(
               sc.ContractParam.integer(traitEvent.type),
               sc.ContractParam.integer(traitEvent.maxMint),
               sc.ContractParam.array(
-                sc.ContractParam.hash160(contractCall.scriptHash),
-                sc.ContractParam.string(contractCall.method),
-                sc.ContractParam.array(...contractCall.param)
+                sc.ContractParam.hash160(instanceCall.scriptHash),
+                sc.ContractParam.string(instanceCall.method),
+                sc.ContractParam.array(...instanceCall.param)
               )
             )
 
@@ -147,7 +147,7 @@ export class GeneratorAPI {
     if (signer) {
       return res
     }
-    return parseToJSON(res[0].value) as TraitType
+    return formatter(res[0].value) as TraitType
   }
 
   //getGeneratorInstance
@@ -182,8 +182,8 @@ export class GeneratorAPI {
     const method = "mint_from_instance";
 
     const param = [
-      sc.ContractParam.integer(instanceId),
-      sc.ContractParam.string('')
+      sc.ContractParam.string(''),
+      sc.ContractParam.integer(instanceId)
     ]
 
     return await variableInvoke(node, networkMagic, contractHash, method, param, signer)

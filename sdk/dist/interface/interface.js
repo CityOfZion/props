@@ -4,7 +4,7 @@ exports.InstanceAccessMode = exports.EventTypeEnum = void 0;
 var EventTypeEnum;
 (function (EventTypeEnum) {
     EventTypeEnum[EventTypeEnum["CollectionPointer"] = 0] = "CollectionPointer";
-    EventTypeEnum[EventTypeEnum["ContractCall"] = 1] = "ContractCall";
+    EventTypeEnum[EventTypeEnum["InstanceCall"] = 1] = "InstanceCall";
     EventTypeEnum[EventTypeEnum["Value"] = 2] = "Value";
     EventTypeEnum[EventTypeEnum["CollectionSampleFrom"] = 3] = "CollectionSampleFrom";
 })(EventTypeEnum = exports.EventTypeEnum || (exports.EventTypeEnum = {}));

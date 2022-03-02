@@ -13,7 +13,7 @@ import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x00034612547c19fd30bda92b32de87c46502a09a'
+  scriptHash: '0xd9a1fa61f48db26507ed746dd3019709e210e812'
 }
 
 export class Generator {

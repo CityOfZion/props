@@ -3,7 +3,7 @@ const Neon = require("@cityofzion/neon-core")
 const fs = require("fs")
 var assert = require('assert');
 
-describe("Basic System Test Suite", function() {
+describe("Basic Puppet Test Suite", function() {
     this.timeout(60000);
     let puppet, collection, network, NODE
 

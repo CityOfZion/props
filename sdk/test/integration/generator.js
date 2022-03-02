@@ -3,7 +3,7 @@ const Neon = require("@cityofzion/neon-js")
 const fs = require("fs")
 var assert = require('assert');
 
-describe("Basic System Test Suite", function() {
+describe("Basic Generator Test Suite", function() {
     this.timeout(0);
     const TIME_CONSTANT = 2000
     let generator, collection, network, NODE
@@ -29,7 +29,7 @@ describe("Basic System Test Suite", function() {
     it("should create a simple generator from a collection and sample from it", async() => {
         const cozWallet = network.wallets[0].wallet
 
-        const mintCount = 1000
+        const mintCount = 2000
         const maxTraits = 5
         const dropRate = 0.5
 
@@ -289,39 +289,43 @@ describe("Basic System Test Suite", function() {
         } catch (e) {}
     })
 
-    it("should mint through a contract call", async() => {
+    it("should recursively mint from a generator using another generator with multiple slots", async() => {
         const cozWallet = network.wallets[0].wallet
 
 
-        const sampleCount = 300
+        const sampleCount = 1
         const txids = []
 
-        const collection = await new sdk.Collection({node: NODE})
-        await collection.init()
-        const cid = await createCollection(collection, NODE, TIME_CONSTANT, cozWallet)
-        const initialCollection = await collection.getCollectionJSON(cid)
+        // create the base generator and instance it
+        console.log("creating base generator and instance")
+        const baseGID = await buildGenerator(1, 2, -1, NODE, TIME_CONSTANT, cozWallet)
+        let txid = await generator.createInstance(baseGID, cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        let baseInstanceId = await sdk.helpers.txDidComplete(NODE, txid)
+        console.log(`  Base Generator: GID: ${baseGID} | InstanceId: ${baseInstanceId[0]}`)
 
-        const traits = initialCollection.values.map((value, i) => {
-            return {
+
+        console.log("creating root generator and instance")
+        const traits = [
+            {
                 "type": 1,
-                "maxMint": 1,
+                "maxMint": -1,
                 "args": {
-                    "scriptHash": collection.scriptHash,
-                    "method": 'get_collection_element',
+                    "scriptHash": generator.scriptHash,
+                    "method": 'mint_from_instance',
                     "param": [
-                        Neon.sc.ContractParam.integer(cid),
-                        Neon.sc.ContractParam.integer(i)
+                        Neon.sc.ContractParam.integer(baseInstanceId[0])
                     ]
                 }
             }
-        })
+        ]
         const newGenerator = {
             'label': 'new generator',
-            'baseGeneratorFee': 100000000,
+            'baseGeneratorFee': 8000000000,
             'traits': [
                 {
-                    "label": "testTrait",
-                    "slots": 1,
+                    "label": "rootTrait",
+                    "slots": 3,
                     "traitLevels": [
                         {
                             "dropScore": 10000,
@@ -338,28 +342,37 @@ describe("Basic System Test Suite", function() {
         let gid = await sdk.helpers.txDidComplete(NODE, res[0])
 
         //create a generator instance
-        let txid = await generator.createInstance(gid[0], cozWallet)
+        txid = await generator.createInstance(gid[0], cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
-        const instanceId = await sdk.helpers.txDidComplete(NODE, txid)
+        let rootInstanceId = await sdk.helpers.txDidComplete(NODE, txid)
+        console.log(`  Root Generator: GID: ${gid[0]} | InstanceId: ${rootInstanceId[0]}`)
 
+        //whitelist the root generator instance on the base generator instance
+        console.log("whitelisting the root generator instance on the base generator instance")
+        const authorizedContracts = [
+            {
+                'scriptHash': generator.scriptHash,
+                'code': rootInstanceId[0]
+            }
+        ]
+        console.log(authorizedContracts)
+        txid = await generator.setInstanceAuthorizedContracts(baseInstanceId[0], authorizedContracts, cozWallet)
+        await sdk.helpers.sleep(TIME_CONSTANT)
+        await sdk.helpers.txDidComplete(NODE, txid)
+        console.log("minting")
         for (let i = 0; i < sampleCount; i++) {
-            txid = await generator.mintFromInstance(instanceId[0], cozWallet)
+            txid = await generator.mintFromInstance(rootInstanceId[0], cozWallet)
             txids.push(txid)
         }
 
-        const masterSet = {}
         await sdk.helpers.sleep(TIME_CONSTANT)
         for (txid of txids) {
-            const res = await sdk.helpers.txDidComplete(NODE, txid)
-            Object.keys(res[0]).forEach((key) => {
-                if (masterSet[key]) {
-                    masterSet[key].push(res[0][key])
-                } else {
-                    masterSet[key] = [res[0][key]]
-                }
+            const res = await sdk.helpers.txDidComplete(NODE, txid, true)
+            assert(res[0].rootTrait.length === 3)
+            res[0].rootTrait.forEach( (trait) => {
+                assert(trait.testTrait.length === 2)
             })
         }
-        assert(masterSet.testTrait.length === initialCollection.values.length, masterSet.testTrait)
     })
 
     it("should mint with mode 1; resulting in a complete generator mint without empties", async() => {
@@ -374,15 +387,11 @@ describe("Basic System Test Suite", function() {
 
         const traits = initialCollection.values.map((value, i) => {
             return {
-                "type": 1,
+                "type": 0,
                 "maxMint": 1,
                 "args": {
-                    "scriptHash": collection.scriptHash,
-                    "method": 'get_collection_element',
-                    "param": [
-                        Neon.sc.ContractParam.integer(cid),
-                        Neon.sc.ContractParam.integer(i)
-                    ]
+                    "collectionId": cid,
+                    "index": i
                 }
             }
         })
@@ -433,13 +442,6 @@ describe("Basic System Test Suite", function() {
         assert(masterSet.testTrait.length === initialCollection.values.length, `${masterSet.testTrait.length} != ${initialCollection.values.length}`)
     })
 
-    it("generate", () => {
-        const newWallet = new Neon.wallet.Account()
-        console.log(`Address: ${newWallet.privateKey}`)
-        console.log(`Public Key: ${newWallet.publicKey}`)
-        console.log(`Private Key: ${newWallet.privateKey}`)
-    })
-
     async function createCollection(collection, NODE, timeConstant, signer) {
         const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
         await sdk.helpers.sleep(timeConstant)
@@ -457,7 +459,7 @@ describe("Basic System Test Suite", function() {
 
         const res = []
         for (let txid of txids) {
-            const traits = await sdk.helpers.txDidComplete(NODE, txid, true)
+            const traits = await sdk.helpers.txDidComplete(NODE, txid, false)
             res.push(traits[0])
         }
         return res

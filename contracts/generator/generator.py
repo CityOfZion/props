@@ -46,12 +46,12 @@ TOTAL_GENERATOR_INSTANCES = b'!TOTAL_GENERATOR_INSTANCES'
 
 
 class AccessControllerContract:
-    def __init__(self, script_hash: UInt160, code: bytes):
+    def __init__(self, script_hash: UInt160, from_code: bytes):
         self._script_hash: UInt160 = script_hash
-        self._code: bytes = code
+        self._from_code: bytes = from_code
 
-    def get_code(self) -> bytes:
-        return self._code
+    def get_from_code(self) -> bytes:
+        return self._from_code
 
     def get_script_hash(self) -> UInt160:
         return self._script_hash
@@ -59,7 +59,7 @@ class AccessControllerContract:
     def export(self) -> Dict[str, Any]:
         exported: Dict[str, Any] = {
             "scriptHash": self._script_hash,
-            "code": self._code
+            "from_code": self._from_code
         }
         return exported
 
@@ -102,20 +102,20 @@ class GeneratorInstance:
         put(key, serialized_payload)
         return True
 
-    def is_authorized(self, user: UInt160, code: bytes) -> bool:
+    def is_authorized(self, user: UInt160, from_code: bytes) -> bool:
         authorized: bool = False
 
         if entry_script_hash == calling_script_hash:
             if self._access_mode == 2 or (user in self._authorized_users):
                 authorized = True
         else:
-            code_bytes: bytes = cast(bytes, code)
+            from_code_bytes: bytes = cast(bytes, from_code)
             for authorized_contract in self._authorized_contracts:
                 authorized_hash: UInt160 = authorized_contract.get_script_hash()
-                authorized_code: bytes = authorized_contract.get_code()
+                authorized_from_code: bytes = authorized_contract.get_from_code()
 
                 contract_is_whitelisted: bool = (authorized_hash == calling_script_hash)
-                caller_has_code: bool = (authorized_code == code_bytes)
+                caller_has_code: bool = (authorized_from_code == from_code_bytes)
                 if contract_is_whitelisted and caller_has_code:
                     if self._access_mode == 0:
                         authorized = True
@@ -178,13 +178,13 @@ def create_instance(generator_id: bytes) -> int:
 
 
 @public
-def mint_from_instance(instance_id: bytes, code: bytes) -> Dict[str, Any]:
+def mint_from_instance(from_code: bytes, to_instance_id: bytes) -> Dict[str, Any]:
     tx = cast(Transaction, script_container)
     signer: UInt160 = tx.sender
 
-    generator_instance: GeneratorInstance = get_generator_instance(instance_id)
+    generator_instance: GeneratorInstance = get_generator_instance(to_instance_id)
 
-    assert generator_instance.is_authorized(signer, code), 'Unauthorized access to generator instance'
+    assert generator_instance.is_authorized(signer, from_code), 'Unauthorized access to generator instance'
 
     generator_id: bytes = generator_instance.get_generator_id()
     generator: Generator = get_generator(generator_id)
@@ -223,9 +223,9 @@ def set_instance_authorized_contracts(instance_id: bytes, authorized_contracts: 
     for authorized_contract in authorized_contracts:
         contract_payload: List = cast(List, authorized_contract)
         script_hash: UInt160 = cast(UInt160, contract_payload[0])
-        code: bytes = cast(bytes, contract_payload[1])
+        from_code: bytes = cast(bytes, contract_payload[1])
 
-        new_contract: AccessControllerContract = AccessControllerContract(script_hash, code)
+        new_contract: AccessControllerContract = AccessControllerContract(script_hash, from_code)
         contracts.append(new_contract)
 
     x: bool = generator_instance.set_authorized_contracts(contracts)
@@ -332,13 +332,13 @@ class CollectionPointerEvent:
         }
         return exported
 
-    def get_value(self) -> bytes:
+    def get_value(self, generator_instance: GeneratorInstance) -> bytes:
         cid: int = self.collection_id
         value: bytes = Collection.get_collection_element(cid.to_bytes(), self.idx)
         return value
 
 
-class ContractCallEvent:
+class InstanceCallEvent:
     def __init__(self, script_hash: UInt160, method: str, param: list):
         self._scriptHash: UInt160 = script_hash
         self._method: str = method
@@ -352,8 +352,11 @@ class ContractCallEvent:
         }
         return exported
 
-    def get_value(self) -> bytes:
-        value: bytes = call_contract(self._scriptHash, self._method, self._param)
+    def get_value(self, generator_instance: GeneratorInstance) -> bytes:
+        params: List = List.copy(self._param)
+        instance_id: bytes = generator_instance.get_id()
+        params.insert(0, instance_id.to_int())
+        value: bytes = call_contract(self._scriptHash, self._method, params)
         return value
 
 
@@ -367,7 +370,7 @@ class ValueEvent:
         }
         return exported
 
-    def get_value(self) -> bytes:
+    def get_value(self, generator_instance: GeneratorInstance) -> bytes:
         return self._value
 
 
@@ -381,7 +384,7 @@ class CollectionSampleFromEvent:
         }
         return exported
 
-    def get_value(self) -> bytes:
+    def get_value(self, generator_instance: GeneratorInstance) -> bytes:
         cid: int = self.collection_id
         value: bytes = Collection.sample_from_collection(cid)
         return value
@@ -392,7 +395,7 @@ class EventInterface:
         self._event_type: int = event_type
         self._id: bytes = event_id
         self._max_mint: int = max_mint
-        self._event: Union[CollectionPointerEvent, ContractCallEvent, ValueEvent, CollectionSampleFromEvent]
+        self._event: Union[CollectionPointerEvent, InstanceCallEvent, ValueEvent, CollectionSampleFromEvent]
 
         if event_type == 0:
             collection_id: int = cast(int, args[0])
@@ -403,7 +406,7 @@ class EventInterface:
             script_hash: UInt160 = cast(UInt160, args[0])
             method: str = cast(str, args[1])
             param: list = cast(list, args[2])
-            self._event = ContractCallEvent(script_hash, method, param)
+            self._event = InstanceCallEvent(script_hash, method, param)
 
         if event_type == 2:
             value: bytes = cast(bytes, args[0])
@@ -420,7 +423,7 @@ class EventInterface:
             args = collection_event.export()
 
         if self._event_type == 1:
-            call_event: ContractCallEvent = cast(ContractCallEvent, self._event)
+            call_event: InstanceCallEvent = cast(InstanceCallEvent, self._event)
             args = call_event.export()
 
         if self._event_type == 2:
@@ -474,22 +477,22 @@ class EventInterface:
 
         if self._event_type == 0:
             collection_event: CollectionPointerEvent = cast(CollectionPointerEvent, self._event)
-            result: bytes = collection_event.get_value()
+            result: bytes = collection_event.get_value(generator_instance)
             return result
 
         if self._event_type == 1:
-            call_event: ContractCallEvent = cast(ContractCallEvent, self._event)
-            result: bytes = call_event.get_value()
+            call_event: InstanceCallEvent = cast(InstanceCallEvent, self._event)
+            result: bytes = call_event.get_value(generator_instance)
             return result
 
         if self._event_type == 2:
             value_event: ValueEvent = cast(ValueEvent, self._event)
-            result: bytes = value_event.get_value()
+            result: bytes = value_event.get_value(generator_instance)
             return result
 
         if self._event_type == 3:
             sample_event: CollectionSampleFromEvent = cast(CollectionSampleFromEvent, self._event)
-            result: bytes = sample_event.get_value()
+            result: bytes = sample_event.get_value(generator_instance)
             return result
 
         raise Exception("Invalid Event Type")
@@ -899,7 +902,7 @@ def mk_generator_instance_key(generator_instance_id: bytes) -> bytes:
 # ################Deps############################
 
 
-@contract('0x160f1c183db71ddeb8836a248f80a20aeacf5579')
+@contract('0x3b5c2a785510b712ee16074702b585c61e0054ba')
 class Collection:
 
     @staticmethod

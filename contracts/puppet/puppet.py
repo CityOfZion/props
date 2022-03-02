@@ -807,7 +807,7 @@ class Puppet:
 
         # mint traits
         instance_id_bytes: bytes = target_epoch.get_generator_instance_id()
-        traits: Dict[str, Any] = Generator.mint_from_instance(instance_id_bytes, epoch_id)
+        traits: Dict[str, Any] = Generator.mint_from_instance(epoch_id, instance_id_bytes)
 
         self._traits = traits
         self._epoch_id = epoch_id
@@ -1017,7 +1017,7 @@ def mk_token_key(token_id: bytes) -> bytes:
 # ############INTERFACES###########
 
 
-@contract('0x160f1c183db71ddeb8836a248f80a20aeacf5579')
+@contract('0x3b5c2a785510b712ee16074702b585c61e0054ba')
 class Collection:
 
     @staticmethod
@@ -1033,9 +1033,9 @@ class Dice:
         pass
 
 
-@contract('0x00034612547c19fd30bda92b32de87c46502a09a')
+@contract('0xd9a1fa61f48db26507ed746dd3019709e210e812')
 class Generator:
 
     @staticmethod
-    def mint_from_instance(instance_id: bytes, code: Optional[bytes]) -> Dict[str, Any]:
+    def mint_from_instance(from_code: bytes, to_instance_id: bytes) -> Dict[str, Any]:
         pass

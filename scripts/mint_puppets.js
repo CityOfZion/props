@@ -5,7 +5,7 @@ const Neon = require("@cityofzion/neon-core")
 
 const NODE = 'http://localhost:50012'
 const TIME_CONSTANT = 4000
-const PuppetArmySize = 100
+const PuppetArmySize = 10
 const EPOCH_TOTAL_SUPPLY = 100
 
 
@@ -79,7 +79,7 @@ async function main(timeConstant) {
     }
 
     for (let i = 1; i <= totalSupply; i++) {
-        let p = await puppet.properties(i)
+        let p = await puppet.properties(i.toString())
         console.log(p)
     }
 

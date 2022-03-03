@@ -28,7 +28,7 @@ export declare class PuppetAPI {
      */
     static deploy(node: string, networkMagic: number, contractHash: string, signer: wallet.Account): Promise<string>;
     static getAttributeMod(node: string, networkMagic: number, contractHash: string, attributeValue: number, signer?: wallet.Account): Promise<number | string>;
-    static getPuppetJSON(node: string, networkMagic: number, contractHash: string, tokenId: number, signer?: wallet.Account): Promise<PuppetType | string>;
+    static getPuppetJSON(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<PuppetType | string>;
     static getPuppetRaw(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<string>;
     /**
      * Gets the owner account of a tokenId
@@ -38,7 +38,7 @@ export declare class PuppetAPI {
      * @param tokenId The tokenId to return the owner of
      * @param signer
      */
-    static ownerOf(node: string, networkMagic: number, contractHash: string, tokenId: number, signer?: wallet.Account): Promise<wallet.Account | string>;
+    static ownerOf(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<wallet.Account | string>;
     static offlineMint(node: string, networkMagic: number, contractHash: string, epochId: number, owner: string, signer: wallet.Account): Promise<string>;
     /**
      * Gets the properties of a token
@@ -48,7 +48,7 @@ export declare class PuppetAPI {
      * @param tokenId The tokenId of the token being requested
      * @param signer An optional signer.  Populating this value will publish a transaction and return a txid
      */
-    static properties(node: string, networkMagic: number, contractHash: string, tokenId: number, signer?: wallet.Account): Promise<PuppetType | string>;
+    static properties(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<PuppetType | string>;
     static setMintFee(node: string, networkMagic: number, contractHash: string, epochId: number, fee: number, signer: wallet.Account): Promise<string>;
     /**
      * Returns the token symbol
@@ -74,7 +74,7 @@ export declare class PuppetAPI {
      * @param address The string formatted address of an account
      * @param signer
      */
-    static tokensOf(node: string, networkMagic: number, contractHash: string, address: string, signer?: wallet.Account): Promise<number[] | string>;
+    static tokensOf(node: string, networkMagic: number, contractHash: string, address: string, signer?: wallet.Account): Promise<string[] | string>;
     /**
      * Gets the total number of accounts stored in the contract
      * @param node
@@ -102,7 +102,7 @@ export declare class PuppetAPI {
      * @param signer
      * @param data
      */
-    static transfer(node: string, networkMagic: number, contractHash: string, toAddress: string, tokenId: number, signer: wallet.Account, data?: any): Promise<string>;
-    static update(node: string, networkMagic: number, contractHash: string, script: string, manifest: string, signer: wallet.Account): Promise<string>;
+    static transfer(node: string, networkMagic: number, contractHash: string, toAddress: string, tokenId: string, signer: wallet.Account, data?: any): Promise<string>;
+    static update(node: string, networkMagic: number, contractHash: string, script: string, manifest: string, data: any, signer: wallet.Account): Promise<string>;
     static getEpochJSON(node: string, networkMagic: number, contractHash: string, epochId: number, signer?: wallet.Account): Promise<EpochType | string>;
 }

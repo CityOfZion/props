@@ -7,7 +7,7 @@ const api_1 = require("./api");
 const neon_js_1 = require("@cityofzion/neon-js");
 const DEFAULT_OPTIONS = {
     node: 'http://localhost:50012',
-    scriptHash: '0xd7e9402ac48e21e4f95ca3eccb0b702ec5a70163'
+    scriptHash: '0xfc25f6cbafb8933daebb04ff333c6a3041588d18'
 };
 class Puppet {
     constructor(options = {}) {
@@ -110,7 +110,7 @@ class Puppet {
         return api_1.PuppetAPI.transfer(this.node.url, this.networkMagic, this.scriptHash, to, tokenId, signer, data);
     }
     async update(script, manifest, signer) {
-        return api_1.PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, signer);
+        return api_1.PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, '', signer);
     }
 }
 exports.Puppet = Puppet;

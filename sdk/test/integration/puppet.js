@@ -25,16 +25,6 @@ describe("Basic Puppet Test Suite", function() {
         })
     })
 
-    it ("should initialize the contract", async() => {
-
-        const NODE = 'http://localhost:50012'
-
-        const cozWallet = network.wallets[0].wallet
-        const res = await puppet.deploy(cozWallet)
-        await sdk.helpers.sleep(2000)
-        await sdk.helpers.txDidComplete(NODE, res, true)
-    })
-
     it("should get the token symbol", async () => {
         const symbol = await puppet.symbol()
         assert.equal(symbol, 'PUPPET')

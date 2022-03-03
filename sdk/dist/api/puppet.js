@@ -90,7 +90,7 @@ class PuppetAPI {
     }
     static async getPuppetJSON(node, networkMagic, contractHash, tokenId, signer) {
         const method = "get_epoch_json";
-        const param = [neon_js_1.sc.ContractParam.integer(tokenId)];
+        const param = [neon_js_1.sc.ContractParam.string(tokenId)];
         const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
@@ -116,7 +116,7 @@ class PuppetAPI {
      */
     static async ownerOf(node, networkMagic, contractHash, tokenId, signer) {
         const method = "ownerOf";
-        const params = [neon_js_1.sc.ContractParam.integer(tokenId)];
+        const params = [neon_js_1.sc.ContractParam.string(tokenId)];
         const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
@@ -142,12 +142,12 @@ class PuppetAPI {
      */
     static async properties(node, networkMagic, contractHash, tokenId, signer) {
         const method = "properties";
-        const params = [neon_js_1.sc.ContractParam.integer(tokenId)];
+        const params = [neon_js_1.sc.ContractParam.string(tokenId)];
         const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.parseToJSON(res[0].value);
+        return helpers_1.formatter(res[0]);
     }
     static async setMintFee(node, networkMagic, contractHash, epochId, fee, signer) {
         const method = "set_mint_fee";
@@ -220,8 +220,7 @@ class PuppetAPI {
         if (iterator.iterator && iterator.iterator.length >= 0) {
             return iterator.iterator.map((token) => {
                 const attrs = token.value;
-                let bytes = neon_js_1.u.base642hex(attrs[1].value);
-                return parseInt(neon_js_1.u.reverseHex(bytes), 16);
+                return helpers_1.formatter(attrs[1]);
             });
         }
         throw new Error("unable to resolve respond format");
@@ -278,18 +277,23 @@ class PuppetAPI {
         const method = "transfer";
         const params = [
             neon_js_1.sc.ContractParam.hash160(toAddress),
-            neon_js_1.sc.ContractParam.integer(tokenId),
+            neon_js_1.sc.ContractParam.string(tokenId),
             data,
         ];
         return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
     }
-    static async update(node, networkMagic, contractHash, script, manifest, signer) {
+    static async update(node, networkMagic, contractHash, script, manifest, data, signer) {
         const method = "update";
         const params = [
             neon_js_1.sc.ContractParam.byteArray(script),
-            neon_js_1.sc.ContractParam.byteArray(manifest)
+            neon_js_1.sc.ContractParam.string(manifest),
+            neon_js_1.sc.ContractParam.any(data)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
+        }
+        return helpers_1.formatter(res);
     }
     //setUserPermissions
     static async getEpochJSON(node, networkMagic, contractHash, epochId, signer) {

@@ -364,7 +364,7 @@ def offline_mint(epoch_id: bytes, account: UInt160) -> bytes:
 
 
 @public
-def update(script: bytes, manifest: bytes):
+def update(script: bytes, manifest: bytes, data: Any):
     """
     Upgrade the contract.
 
@@ -378,7 +378,7 @@ def update(script: bytes, manifest: bytes):
     user: User = get_user(tx.sender)
     assert user.get_contract_upgrade(), "User Permission Denied"
 
-    update_contract(script, manifest)
+    update_contract(script, manifest, data)
 
 
 @public
@@ -417,21 +417,22 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
     mint_epoch: Epoch = get_epoch(epoch_id)
     assert mint_epoch.can_mint(), "No available puppets to mint in the selected epoch"
 
-    token_id: bytes = (totalSupply() + 1).to_bytes()
+    token_id_int: int = (totalSupply() + 1)
+    token_id_string: bytes = itoa(token_id_int)
     new_puppet: Puppet = Puppet()
-    new_puppet.generate(owner, token_id, epoch_id)
+    new_puppet.generate(owner, token_id_string, epoch_id)
 
     save_puppet(new_puppet)
-    put(TOKEN_COUNT, token_id)
+    put(TOKEN_COUNT, token_id_int)
 
     mint_epoch.increment_supply()
     save_epoch(mint_epoch)
 
     user: User = get_user(owner)
-    user.add_owned_token(token_id)
+    user.add_owned_token(token_id_string)
     save_user(owner, user)
 
-    post_transfer(None, owner, token_id, None)
+    post_transfer(None, owner, token_id_string, None)
 
     end_gas: int = gas_left
     compute_cost: int = start_gas - end_gas
@@ -440,7 +441,7 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
 
     burn_gas(burn_amount)
 
-    return token_id
+    return token_id_string
 
 
 # #############################
@@ -868,8 +869,6 @@ class Puppet:
         @return:
         """
         token_id_bytes: bytes = self._token_id
-        token_id_int: int = token_id_bytes.to_int()
-        token_id_string: str = itoa(token_id_int, 10)
 
         epoch_id_bytes: bytes = self._epoch_id
         epoch_id_int: int = epoch_id_bytes.to_int()
@@ -890,9 +889,9 @@ class Puppet:
             'hitDie': self._hit_die,
             'name': 'puppet',
             'owner': self._owner,
-            'tokenId': token_id_int,
-            'image': 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_string + '.png',
-            'tokenURI': 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_string,
+            'tokenId': token_id_bytes,
+            'image': 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str() + '.png',
+            'tokenURI': 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
             'epochId': epoch_id_int,
             'traits': self._traits,
         }

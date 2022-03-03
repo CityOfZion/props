@@ -6,7 +6,7 @@ import {EpochType, PropConstructorOptions, PuppetType} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0xd7e9402ac48e21e4f95ca3eccb0b702ec5a70163'
+  scriptHash: '0xfc25f6cbafb8933daebb04ff333c6a3041588d18'
 }
 
 export class Puppet {
@@ -60,7 +60,7 @@ export class Puppet {
     return PuppetAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId, signer)
   }
 
-  async getPuppetJSON(tokenId: number, signer?: wallet.Account): Promise<PuppetType | string> {
+  async getPuppetJSON(tokenId: string, signer?: wallet.Account): Promise<PuppetType | string> {
     return PuppetAPI.getPuppetJSON(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer)
   }
 
@@ -68,7 +68,7 @@ export class Puppet {
     return PuppetAPI.getPuppetRaw(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer)
   }
 
-  async ownerOf(tokenId: number, signer?: wallet.Account): Promise<wallet.Account | string> {
+  async ownerOf(tokenId: string, signer?: wallet.Account): Promise<wallet.Account | string> {
     return PuppetAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer)
   }
 
@@ -76,7 +76,7 @@ export class Puppet {
     return PuppetAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, epochId, owner, signer)
   }
 
-  async properties(tokenId: number, signer?: wallet.Account): Promise<PuppetType | string> {
+  async properties(tokenId: string, signer?: wallet.Account): Promise<PuppetType | string> {
     return PuppetAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer)
   }
 
@@ -123,7 +123,7 @@ export class Puppet {
     return PuppetAPI.tokens(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 
-  async tokensOf(address: string, signer?: wallet.Account): Promise<number[] | string> {
+  async tokensOf(address: string, signer?: wallet.Account): Promise<string[] | string> {
     return PuppetAPI.tokensOf(this.node.url, this.networkMagic, this.scriptHash, address, signer)
   }
 
@@ -139,12 +139,12 @@ export class Puppet {
     return PuppetAPI.totalSupply(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 
-  async transfer(to: string, tokenId: number, signer: wallet.Account, data: any): Promise<string> {
+  async transfer(to: string, tokenId: string, signer: wallet.Account, data: any): Promise<string> {
     return PuppetAPI.transfer(this.node.url, this.networkMagic, this.scriptHash,to, tokenId, signer, data)
   }
 
   async update(script: string, manifest: string, signer: wallet.Account): Promise<string> {
-    return PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, signer)
+    return PuppetAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, '', signer)
   }
 
 }

@@ -66,7 +66,7 @@ class GeneratorAPI {
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0].value);
+        return helpers_1.formatter(res[0]);
     }
     //getGeneratorInstance
     static async getGeneratorInstanceJSON(node, networkMagic, contractHash, instanceId, signer) {

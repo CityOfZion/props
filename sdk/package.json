@@ -1,6 +1,6 @@
 {
   "name": "@cityofzion/props",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "an sdk for interfacing with props to use in decentralized applications",
   "main": "dist/index",
   "types": "dist/index",
@@ -14,8 +14,6 @@
   "scripts": {
     "build": "tsc",
     "docs": "typedoc",
-    "publish": "aws s3 sync ./docs s3://props-coz/prod/d/sdk/ts --acl public-read",
-    "publish:develop": "aws s3 sync ./docs s3://props-coz/dev/d/sdk/ts --acl public-read",
     "fmt": "prettier --write ./src/**/*.ts",
     "test": "mocha test --recursive --exit --timeout 10000"
   },

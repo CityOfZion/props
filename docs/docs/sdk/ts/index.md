@@ -1,7 +1,6 @@
 ---
 id: "index"
 title: "@cityofzion/props"
-#slug: "/../sdk/docs/"
 sidebar_label: "Readme"
 sidebar_position: 0
 custom_edit_url: null
@@ -24,12 +23,12 @@ custom_edit_url: null
 For a more complete set of
 project documentation, visit the [**project documentation**](https://props.coz.io/d/index.html).
 
-For SDK specific documentation, visit our [**sdk documentation**](https://props.coz.io/d/sdk/ts/index.html)
+For SDK specific documentation, visit our [**sdk documentation**](https://props.coz.io/d/docs/sdk/ts/index.html)
 
 ## ScriptHashes:
 
 ### N3 Privatenet (like neo-express):
-Scripthashes are baked into the sdk, but can be referenced within each class ([example](https://props.coz.io/d/sdk/ts/classes/Collection.html#scriptHash))
+Scripthashes are baked into the sdk, but can be referenced within each class ([example](/docs/sdk/ts/classes/Collection#scripthash))
 
 ### N3 Testnet:
 * **dice:** `0x4380f2c1de98bb267d3ea821897ec571a04fe3e0`
@@ -62,7 +61,7 @@ await puppet.init()
 ```
 * **Note:** For a local neo-express deployment, the class can be initialized without a configuration object ( e.g. `new sdk.Collection()`)*
 
-Other contract interfaces are initialized using the same pattern.  Refer to the [SDK documentation](https://props.coz.io/d/sdk/ts/modules.html)
+Other contract interfaces are initialized using the same pattern.  Refer to the [SDK documentation](https://props.coz.io/d/docs/sdk/ts/modules.html)
 for a list of available interfaces.
 
 From here, you can quickly interface with the smart contract deployed on the target network.

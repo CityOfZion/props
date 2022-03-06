@@ -43,7 +43,7 @@ console.log(total) // outputs the total collection count in the contract
 
 #### Defined in
 
-[Collection.ts:42](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L42)
+[Collection.ts:42](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L42)
 
 ## Properties
 
@@ -53,7 +53,7 @@ console.log(total) // outputs the total collection count in the contract
 
 #### Defined in
 
-[Collection.ts:40](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L40)
+[Collection.ts:40](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L40)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:39](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L39)
+[Collection.ts:39](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L39)
 
 ## Accessors
 
@@ -79,7 +79,7 @@ The the node that the instance is connected to.
 
 #### Defined in
 
-[Collection.ts:57](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L57)
+[Collection.ts:57](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L57)
 
 ___
 
@@ -95,7 +95,7 @@ The contract script hash that is being interfaced with.
 
 #### Defined in
 
-[Collection.ts:67](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L67)
+[Collection.ts:67](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L67)
 
 ## Methods
 
@@ -123,7 +123,7 @@ A transaction ID.  Refer to [helpers.txDidComplete](../namespaces/helpers.md#txd
 
 #### Defined in
 
-[Collection.ts:86](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L86)
+[Collection.ts:86](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L86)
 
 ___
 
@@ -148,7 +148,7 @@ A transaction ID. Refer to {@link helper.txDidComplete} for parsing.
 
 #### Defined in
 
-[Collection.ts:98](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L98)
+[Collection.ts:98](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L98)
 
 ___
 
@@ -174,7 +174,7 @@ The bytestring representation of the collection. **OR** a txid if the signer par
 
 #### Defined in
 
-[Collection.ts:134](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L134)
+[Collection.ts:134](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L134)
 
 ___
 
@@ -200,7 +200,7 @@ The value of the collection element **OR** a txid if the signer parameter is pop
 
 #### Defined in
 
-[Collection.ts:148](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L148)
+[Collection.ts:148](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L148)
 
 ___
 
@@ -225,7 +225,7 @@ The requested collection **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Collection.ts:120](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L120)
+[Collection.ts:120](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L120)
 
 ___
 
@@ -250,7 +250,7 @@ The length of the collection **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Collection.ts:161](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L161)
+[Collection.ts:161](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L161)
 
 ___
 
@@ -275,7 +275,7 @@ The values in the collection **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Collection.ts:174](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L174)
+[Collection.ts:174](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L174)
 
 ___
 
@@ -291,7 +291,7 @@ Gets the magic number for the network and configures the class instance.
 
 #### Defined in
 
-[Collection.ts:49](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L49)
+[Collection.ts:49](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L49)
 
 ___
 
@@ -323,7 +323,7 @@ The element from the mapping **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Collection.ts:194](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L194)
+[Collection.ts:194](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L194)
 
 ___
 
@@ -350,7 +350,7 @@ testing.
 
 #### Defined in
 
-[Collection.ts:209](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L209)
+[Collection.ts:209](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L209)
 
 ___
 
@@ -375,7 +375,7 @@ The total number of collections stored in the contract. **OR** a txid if the sig
 
 #### Defined in
 
-[Collection.ts:222](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L222)
+[Collection.ts:222](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L222)
 
 ___
 
@@ -397,4 +397,4 @@ ___
 
 #### Defined in
 
-[Collection.ts:226](https://github.com/CityOfZion/isengard/blob/78e7dfb/sdk/src/Collection.ts#L226)
+[Collection.ts:226](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Collection.ts#L226)

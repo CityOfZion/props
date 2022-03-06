@@ -15,6 +15,7 @@ const config = {
   favicon: 'img/favicon.ico',
   organizationName: 'COZ, Inc.', // Usually your GitHub org/user name.
   projectName: 'props', // Usually your repo name.
+  /*
   plugins: [
     [
       'docusaurus-plugin-typedoc',
@@ -30,6 +31,8 @@ const config = {
       },
     ],
   ],
+
+   */
   presets: [
     [
       'classic',

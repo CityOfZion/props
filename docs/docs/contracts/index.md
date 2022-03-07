@@ -1,5 +1,23 @@
+---
+id: "index"
+title: ""
+slug: "/contracts/"
+sidebar_position: 0
+custom_edit_url: null
+---
 
-# Overview
+<p align="center">
+  <img
+    src="https://raw.githubusercontent.com/CityOfZion/wallet-connect-sdk/develop/.github/resources/images/coz.png"
+    width="200px;"></img>
+</p>
+
+<h1 align="center">props</h1>
+
+<p align="center">
+  General Purpose Smart Contracts
+  <br/> Made with ❤ by <b>COZ.IO</b>
+</p>
 
 
 ## Development Environment

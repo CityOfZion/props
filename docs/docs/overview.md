@@ -2,6 +2,19 @@
 sidebar_position: 1
 ---
 
+<p align="center">
+  <img
+    src="https://raw.githubusercontent.com/CityOfZion/wallet-connect-sdk/develop/.github/resources/images/coz.png"
+    width="200px;"></img>
+</p>
+
+<h1 align="center">props</h1>
+
+<p align="center">
+  General purpose smart contracts and developer framework for Neo N3
+  <br/> Made with ❤ by <b>COZ.IO</b>
+</p>
+
 # Overview
 
 In an effort to enhance the developer experience of the Neo N3 platform, COZ has developed the props project.  This project is the first of many which
@@ -18,7 +31,7 @@ this particular contract provide multiple great examples of how the other props 
 new developers who are interesting in NFT development.
 
 While the `Puppet` NFTs are designed with `metaverse` applications in-mind, we make no assertions which limit their
-utility in other product spaces.  The contracts and their tokens are permissionless.  Use them how you see fit.
+utility in other product spaces.  The contracts and their tokens are permissionless.  **Use them how you see fit.**
 
 ## Quickstart
 
@@ -42,7 +55,7 @@ get the project: `git clone git@github.com:CityOfZion/props.git`
 4. `npm run deploy` to deploy the contracts
 5. `npm run initialize` to load static data into the contracts
 6. `npm run mintPuppets` to mint a bunch of puppets to the coz account.
-7. start developing; You can reference the sdk tests for usage.  To reset the network refer to [Running a Local Private Network](/d/docs/contracts/#running-a-local-private-network).
+7. start developing; You can reference the sdk tests for usage.  To reset the network refer to [Running a Local Private Network](https://props.coz.io/d/docs/contracts/#running-a-local-private-network).
 
 ## Project Structure
 The props project can be found [here](https://github.com/CityOfZion/props) and includes everything required to develop
@@ -53,7 +66,7 @@ This directory contains all of the smart contracts encompassed by the props proj
 source ([boa](https://github.com/CityOfZion/neo3-boa)) and compiled version of the contracts.
 Contract developers should consider simply adding a new directory for their contract as a way to get started quickly.
 For more information about contract development in the props ecosystem, refer to the contract development
-documentation [here](/d/docs/contracts/overview)
+documentation [here](/d/docs/contracts)
 
 ### sdk
 In addition to the smart contracts, this project includes a complete, well documented SDK which outlines best practices for

@@ -8,9 +8,10 @@
 
 <p align="center">
   Typescript SDK for the props ecosystem on Neo N3
-  <br/> Made with love by <b>COZ.IO</b>
+  <br/> Made with ❤ by <b>COZ.IO</b>
 </p>
 
+To install the package: `npm install @cityofzion/props --save`
 
 ## Documentation
 For a more complete set of
@@ -31,12 +32,8 @@ await collection.init()
 console.log(collection.scriptHash)
 ```
 
-
 ### N3 Testnet/Mainnet:
 Refer to the relevant contract in the [contracts](http://props.coz.io/d/docs/contracts/) documentation.
-
-### N3 Mainnet:
-TBD
 
 ## Quickstart:
 

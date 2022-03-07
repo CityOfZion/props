@@ -7,9 +7,16 @@
 <h1 align="center">props</h1>
 
 <p align="center">
-  Typescript SDK for the props ecosystem on Neo N3
-  <br/> Made with :heart: by <b>COZ.IO</b>
+  General purpose smart contracts and developer framework for Neo N3
+  <br/> Made with ❤ by <b>COZ.IO</b>
 </p>
+
+## Documentation
+For a more complete set of
+project documentation, visit the [**project documentation**](https://props.coz.io/d).
+
+For SDK specific documentation, visit our [**sdk documentation**](https://props.coz.io/d/docs/sdk/ts/)
+
 
 # Overview
 
@@ -28,6 +35,30 @@ new developers who are interesting in NFT development.
 
 While the `Puppet` NFTs are designed with `metaverse` applications in-mind, we make no assertions which limit their
 utility in other product spaces.  The contracts and their tokens are permissionless.  Use them how you see fit.
+
+## Quickstart
+
+### Quickstart Dependencies:
+* Neo-Express (This can be installed from [here](https://github.com/neo-project/neo-express) or as part of the toolkit [here](https://github.com/neo-project/neo-debugger))
+* node v14/16
+
+### Setup
+get the project: `git clone git@github.com:CityOfZion/props.git`
+
+1. `neoxp run -s 1` from project root
+2. `npm install` from project root *(in a second terminal from here on)*
+3.
+   ```
+   neoxp policy set FeePerByte 100 genesis
+   neoxp policy set ExecFeeFactor 3 genesis
+   neoxp policy set StoragePrice 10000 genesis
+   neoxp transfer 10000 GAS genesis coz
+   ```
+
+4. `npm run deploy` to deploy the contracts
+5. `npm run initialize` to load static data into the contracts
+6. `npm run mintPuppets` to mint a bunch of puppets to the coz account.
+7. start developing; You can reference the sdk tests for usage.  To reset the network refer to [Running a Local Private Network](https://props.coz.io/d/docs/contracts/#running-a-local-private-network).
 
 ## Project Structure
 The props project can be found [here](https://github.com/CityOfZion/props) and includes everything required to develop

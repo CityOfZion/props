@@ -599,8 +599,9 @@ EPOCH_PREFIX = b'e'
 
 
 class Epoch:
-    def __init__(self, generator_instance_id: bytes, mint_fee: int, sys_fee: int, max_supply: int, author: UInt160):
+    def __init__(self, label: bytes, generator_instance_id: bytes, mint_fee: int, sys_fee: int, max_supply: int, author: UInt160):
         self._author: UInt160 = author
+        self._label: bytes = label
         self._epoch_id: bytes = (total_epochs() + 1).to_bytes()
         self._generator_instance_id: bytes = generator_instance_id
         self._mint_fee: int = mint_fee
@@ -620,6 +621,9 @@ class Epoch:
     def get_generator_instance_id(self) -> bytes:
         return self._generator_instance_id
 
+    def get_label(self) -> bytes:
+        return self._label
+
     def get_mint_fee(self) -> int:
         return self._mint_fee
 
@@ -635,6 +639,7 @@ class Epoch:
     def export(self) -> Dict[str, Any]:
         exported: Dict[str, Any] = {
             "author": self._author,
+            "label": self._label,
             "epochId": self._epoch_id,
             "generatorInstanceId": self._generator_instance_id,
             "mintFee": self._mint_fee,
@@ -654,14 +659,14 @@ class Epoch:
 
 
 @public
-def create_epoch(generator_instance_id: bytes, mint_fee: int, sys_fee: int, max_supply: int) -> int:
+def create_epoch(label: bytes, generator_instance_id: bytes, mint_fee: int, sys_fee: int, max_supply: int) -> int:
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
     user: User = get_user(author)
     assert user.get_create_epoch(), "User Permission Denied"
 
-    new_epoch: Epoch = Epoch(generator_instance_id, mint_fee, sys_fee, max_supply, author)
+    new_epoch: Epoch = Epoch(label, generator_instance_id, mint_fee, sys_fee, max_supply, author)
     epoch_id: bytes = new_epoch.get_id()
     epoch_id_int: int = epoch_id.to_int()
 
@@ -872,6 +877,9 @@ class Puppet:
 
         epoch_id_bytes: bytes = self._epoch_id
         epoch_id_int: int = epoch_id_bytes.to_int()
+        epoch: Epoch = get_epoch(epoch_id_bytes)
+        epoch_label: bytes = epoch.get_label()
+
 
         network_magic: int = get_network
         network_magic_string: str = itoa(network_magic)
@@ -886,13 +894,14 @@ class Puppet:
                 'strength': self.get_strength(),
                 'wisdom': self.get_wisdom(),
             },
+            'description': 'Puppet NFT #' + token_id_bytes.to_str() + ' from the ' + epoch_label.to_str() + ' epoch.',
+            'epochId': epoch_id_int,
             'hitDie': self._hit_die,
+            'image': 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str() + '.png',
             'name': 'puppet',
             'owner': self._owner,
             'tokenId': token_id_bytes,
-            'image': 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str() + '.png',
             'tokenURI': 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
-            'epochId': epoch_id_int,
             'traits': self._traits,
         }
         return exported

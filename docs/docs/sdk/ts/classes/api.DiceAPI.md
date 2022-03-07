@@ -37,7 +37,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[api/dice.ts:68](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/api/dice.ts#L68)
+[api/dice.ts:68](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/api/dice.ts#L68)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[api/dice.ts:48](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/api/dice.ts#L48)
+[api/dice.ts:48](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/api/dice.ts#L48)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[api/dice.ts:26](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/api/dice.ts#L26)
+[api/dice.ts:26](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/api/dice.ts#L26)
 
 ___
 
@@ -112,4 +112,4 @@ ___
 
 #### Defined in
 
-[api/dice.ts:8](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/api/dice.ts#L8)
+[api/dice.ts:8](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/api/dice.ts#L8)

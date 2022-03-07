@@ -42,7 +42,7 @@ for a truly random number.
 
 #### Defined in
 
-[Dice.ts:39](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L39)
+[Dice.ts:39](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L39)
 
 ## Properties
 
@@ -52,7 +52,7 @@ for a truly random number.
 
 #### Defined in
 
-[Dice.ts:37](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L37)
+[Dice.ts:37](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L37)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[Dice.ts:36](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L36)
+[Dice.ts:36](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L36)
 
 ## Accessors
 
@@ -78,7 +78,7 @@ The the node that the instance is connected to.
 
 #### Defined in
 
-[Dice.ts:54](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L54)
+[Dice.ts:54](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L54)
 
 ___
 
@@ -94,7 +94,7 @@ The contract script hash that is being interfaced with.
 
 #### Defined in
 
-[Dice.ts:64](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L64)
+[Dice.ts:64](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L64)
 
 ## Methods
 
@@ -110,7 +110,7 @@ Gets the magic number for the network and configures the class instance.
 
 #### Defined in
 
-[Dice.ts:46](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L46)
+[Dice.ts:46](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L46)
 
 ___
 
@@ -139,7 +139,7 @@ The resulting number from the mapping. **OR** a txid if the signer parameter is 
 
 #### Defined in
 
-[Dice.ts:101](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L101)
+[Dice.ts:101](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L101)
 
 ___
 
@@ -168,7 +168,7 @@ The pseudo-random number. **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Dice.ts:84](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L84)
+[Dice.ts:84](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L84)
 
 ___
 
@@ -195,7 +195,7 @@ An array of dice rolls. **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Dice.ts:135](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L135)
+[Dice.ts:135](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L135)
 
 ___
 
@@ -223,4 +223,4 @@ The result of the die roll **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Dice.ts:118](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Dice.ts#L118)
+[Dice.ts:118](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Dice.ts#L118)

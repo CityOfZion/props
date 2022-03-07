@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Puppet.ts:16](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L16)
+[Puppet.ts:16](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L16)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Puppet.ts:14](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L14)
+[Puppet.ts:14](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L14)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:13](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L13)
+[Puppet.ts:13](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L13)
 
 ## Accessors
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:25](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L25)
+[Puppet.ts:25](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L25)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:32](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L32)
+[Puppet.ts:32](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L32)
 
 ## Methods
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:39](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L39)
+[Puppet.ts:39](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L39)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:43](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L43)
+[Puppet.ts:43](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L43)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:47](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L47)
+[Puppet.ts:47](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L47)
 
 ___
 
@@ -153,7 +153,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:51](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L51)
+[Puppet.ts:51](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L51)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:55](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L55)
+[Puppet.ts:55](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L55)
 
 ___
 
@@ -195,7 +195,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:59](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L59)
+[Puppet.ts:59](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L59)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:63](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L63)
+[Puppet.ts:63](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L63)
 
 ___
 
@@ -237,7 +237,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:67](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L67)
+[Puppet.ts:67](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L67)
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:20](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L20)
+[Puppet.ts:20](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L20)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:75](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L75)
+[Puppet.ts:75](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L75)
 
 ___
 
@@ -294,7 +294,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:71](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L71)
+[Puppet.ts:71](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L71)
 
 ___
 
@@ -315,7 +315,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:79](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L79)
+[Puppet.ts:79](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L79)
 
 ___
 
@@ -336,7 +336,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:83](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L83)
+[Puppet.ts:83](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L83)
 
 ___
 
@@ -358,7 +358,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:114](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L114)
+[Puppet.ts:114](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L114)
 
 ___
 
@@ -378,7 +378,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:118](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L118)
+[Puppet.ts:118](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L118)
 
 ___
 
@@ -398,7 +398,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:122](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L122)
+[Puppet.ts:122](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L122)
 
 ___
 
@@ -419,7 +419,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:126](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L126)
+[Puppet.ts:126](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L126)
 
 ___
 
@@ -439,7 +439,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:130](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L130)
+[Puppet.ts:130](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L130)
 
 ___
 
@@ -459,7 +459,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:134](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L134)
+[Puppet.ts:134](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L134)
 
 ___
 
@@ -479,7 +479,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:138](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L138)
+[Puppet.ts:138](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L138)
 
 ___
 
@@ -502,7 +502,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:142](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L142)
+[Puppet.ts:142](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L142)
 
 ___
 
@@ -524,4 +524,4 @@ ___
 
 #### Defined in
 
-[Puppet.ts:146](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/Puppet.ts#L146)
+[Puppet.ts:146](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/Puppet.ts#L146)

@@ -15,7 +15,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[interface/interface.ts:67](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/interface/interface.ts#L67)
+[interface/interface.ts:67](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/interface/interface.ts#L67)
 
 ___
 
@@ -25,4 +25,4 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:66](https://github.com/CityOfZion/isengard/blob/3adaf39/sdk/src/interface/interface.ts#L66)
+[interface/interface.ts:66](https://github.com/CityOfZion/isengard/blob/5015463/sdk/src/interface/interface.ts#L66)

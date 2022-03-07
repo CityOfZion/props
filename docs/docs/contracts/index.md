@@ -1,6 +1,3 @@
----
-sidebar_position: 1
----
 
 # Overview
 
@@ -80,7 +77,7 @@ If you plan to do development locally, we recommending using this configuration 
 
    `neoxp reset --force`
 
-   Then execute the `run` command again.
+   Then execute the `neoxp run -s 1` command again.
 
 
 ## Deploying contracts:

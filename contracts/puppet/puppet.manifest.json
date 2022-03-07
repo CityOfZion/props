@@ -101,7 +101,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 2007,
+                "offset": 2008,
                 "parameters": [
                     {
                         "name": "data",
@@ -263,6 +263,10 @@
                 "offset": 1473,
                 "parameters": [
                     {
+                        "name": "label",
+                        "type": "ByteArray"
+                    },
+                    {
                         "name": "generator_instance_id",
                         "type": "ByteArray"
                     },
@@ -284,7 +288,7 @@
             },
             {
                 "name": "get_epoch_json",
-                "offset": 1593,
+                "offset": 1594,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -296,7 +300,7 @@
             },
             {
                 "name": "get_epoch",
-                "offset": 1607,
+                "offset": 1608,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -308,14 +312,14 @@
             },
             {
                 "name": "total_epochs",
-                "offset": 1687,
+                "offset": 1688,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "get_attribute_mod",
-                "offset": 1802,
+                "offset": 1803,
                 "parameters": [
                     {
                         "name": "attribute_value",
@@ -327,7 +331,7 @@
             },
             {
                 "name": "get_puppet",
-                "offset": 1834,
+                "offset": 1835,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -339,7 +343,7 @@
             },
             {
                 "name": "get_puppet_json",
-                "offset": 1888,
+                "offset": 1889,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -351,7 +355,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 2185,
+                "offset": 2186,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

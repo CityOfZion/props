@@ -8,27 +8,32 @@
 
 <p align="center">
   Typescript SDK for the props ecosystem on Neo N3
-  <br/> Made by <b>COZ.IO</b>
+  <br/> Made with love by <b>COZ.IO</b>
 </p>
 
 
 ## Documentation
 For a more complete set of
-project documentation, visit the [**project documentation**](https://props.coz.io/d/index.html).
+project documentation, visit the [**project documentation**](https://props.coz.io/d).
 
-For SDK specific documentation, visit our [**sdk documentation**](https://props.coz.io/d/docs/sdk/ts/index.html)
+For SDK specific documentation, visit our [**sdk documentation**](https://props.coz.io/d/docs/sdk/ts/)
 
 ## ScriptHashes:
 
 ### N3 Privatenet (like neo-express):
-Scripthashes are baked into the sdk, but can be referenced within each class ([example](https://props.coz.io/d/docs/sdk/ts/classes/Collection.html#scriptHash))
+Scripthashes are baked into the sdk, but can be referenced within each class ([example](https://props.coz.io/d/docs/sdk/ts/classes/Collection#scripthash))
+
+```typescript
+import Collection from '@cityofzion/props'
+
+collection: Collection = new Collection()
+await collection.init()
+console.log(collection.scriptHash)
+```
 
 
-### N3 Testnet:
-* **dice:** `0x4380f2c1de98bb267d3ea821897ec571a04fe3e0`
-* **collection:** `0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e`
-* **generator:** `0xdda8055789f0eb3c1d092c714a68ba3e631586c7`
-* **puppet:** `0x97857c01d64f846b5fe2eca2d09d2d73928b3f43`
+### N3 Testnet/Mainnet:
+Refer to the relevant contract in the [contracts](http://props.coz.io/d/docs/contracts/) documentation.
 
 ### N3 Mainnet:
 TBD
@@ -43,7 +48,7 @@ Each contract interface is represented by a class.  To interface with a contract
 
 ```ts
 import Puppet, helpers from '@cityofzion/props'
-import Neon from '@cityofzion/neon-js'
+import {wallet} from '@cityofzion/neon-core'
 
 const node = //refer to dora.coz.io/monitor for a list of nodes.
 const scriptHash = //refer to the scriptHashes section above
@@ -55,7 +60,7 @@ await puppet.init()
 ```
 * **Note:** For a local neo-express deployment, the class can be initialized without a configuration object ( e.g. `new sdk.Collection()`)*
 
-Other contract interfaces are initialized using the same pattern.  Refer to the [SDK documentation](https://props.coz.io/d/docs/sdk/ts/modules.html)
+Other contract interfaces are initialized using the same pattern.  Refer to the [SDK documentation](https://props.coz.io/d/docs/sdk/ts/modules#classes)
 for a list of available interfaces.
 
 From here, you can quickly interface with the smart contract deployed on the target network.
@@ -70,11 +75,11 @@ All props classes use a variable invoke mechanism.  This means the that method w
 optionally be relayed to the network by providing a user wallet as an optional parameter.  When populating this optional field, the response will be a transaction id.
 
 ```ts
-const myAwesomeCOZWallet = new Neon.wallet.Account() //remember that you will need some GAS in the wallet in order to pay the transaction fee
+const myAwesomeCOZWallet = new wallet.Account() //remember that you will need some GAS in the wallet in order to pay the transaction fee
 const txid = await puppet.symbol(myAwesomeCOZWallet) //relays the transaction to the network and returns the transaction id
 
 await helpers.sleep(5000) //wait for the transaction to publish to a block.  This time will be dependent on the network you are connected to (try 30000 for testnet and mainnet)
 
-const res = await sdk.helpers.txDidComplete(node, txid, true) //read the logs and parse the result
+const res = await helpers.txDidComplete(node, txid, true) //read the logs and parse the result
 console.log(res)
 ```

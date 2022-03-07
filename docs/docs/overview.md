@@ -5,7 +5,7 @@ sidebar_position: 1
 # Overview
 
 In an effort to enhance the developer experience of the Neo N3 platform, COZ has developed the props project.  This project is the first of many which
-will significantly enhance the ease of use and scalability of both smart contracts and off-chain integrations within our ecosystem.
+will significantly improve the ease of use and scalability of both smart contracts and off-chain integrations within our ecosystem.
 
 The props project has 3 primary goals:
 1. Produce a Smart Contract package ecosystem which provides developers with the tools they need to deliver complex on-chain routines to their users out-of-the-box.
@@ -19,6 +19,30 @@ new developers who are interesting in NFT development.
 
 While the `Puppet` NFTs are designed with `metaverse` applications in-mind, we make no assertions which limit their
 utility in other product spaces.  The contracts and their tokens are permissionless.  Use them how you see fit.
+
+## Quickstart
+
+### Quickstart Dependencies:
+* Neo-Express (This can be installed from [here](https://github.com/neo-project/neo-express) or as part of the toolkit [here](https://github.com/neo-project/neo-debugger))
+* node v14/16
+
+### Setup
+get the project: `git clone git@github.com:CityOfZion/props.git`
+
+1. `neoxp run -s 1` from project root
+2. `npm install` from project root *(in a second terminal from here on)*
+3.
+   ```
+   neoxp policy set FeePerByte 100 genesis
+   neoxp policy set ExecFeeFactor 3 genesis
+   neoxp policy set StoragePrice 10000 genesis
+   neoxp transfer 10000 GAS genesis coz
+   ```
+
+4. `npm run deploy` to deploy the contracts
+5. `npm run initialize` to load static data into the contracts
+6. `npm run mintPuppets` to mint a bunch of puppets to the coz account.
+7. start developing; You can reference the sdk tests for usage.  To reset the network refer to [Running a Local Private Network](/d/docs/contracts/#running-a-local-private-network).
 
 ## Project Structure
 The props project can be found [here](https://github.com/CityOfZion/props) and includes everything required to develop
@@ -36,7 +60,7 @@ In addition to the smart contracts, this project includes a complete, well docum
 integrating with smart contracts in the Neo N3 ecosystem from off-chain applications.  The SDK includes many design patterns and parsing examples as well as
 a complete integration with the pre-packaged `props` smart contracts. **Complete SDK documentation is linked in the header of this site.**
 Developers who are interested in interfacing with smart contracts off-chain can simply build off the included SDK, expanding it to meet their needs.
-Refer to [here](/d/docs/sdk/overview) for more complete information about how to use the SDK to interface with the existing props or to expand its
+Refer to [here](/d/docs/sdk/ts/) for more complete information about how to use the SDK to interface with the existing props or to expand its
 features to meet your needs.
 
 ### parameters

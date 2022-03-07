@@ -3,7 +3,7 @@ import Neon, { sc, u } from "@cityofzion/neon-js";
 import { wallet } from "@cityofzion/neon-core";
 import {StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
 import {EpochType, PuppetType} from "../interface";
-import {formatter, parseToJSON, variableInvoke} from "../helpers";
+import {formatter, variableInvoke} from "../helpers";
 
 export class PuppetAPI {
 
@@ -296,9 +296,7 @@ export class PuppetAPI {
     if (iterator.iterator && iterator.iterator.length > 0 && iterator.iterator[0].value) {
       return iterator.iterator.map( (token: StackItemJson) => {
         const attrs: StackItemJson[] = token.value as StackItemJson[]
-        let bytes = u.base642hex((attrs[0].value as string))
-        return parseInt(u.reverseHex(bytes),16)
-
+        return formatter(attrs[0])
       })
     }
     if (iterator.iterator && iterator.iterator.length === 0) {
@@ -473,7 +471,7 @@ export class PuppetAPI {
       return res
     }
 
-    return parseToJSON(res[0].value) as EpochType
+    return formatter(res) as EpochType
   }
 
 }

@@ -11,7 +11,7 @@ import {
   InstanceAuthorizedContracts,
   InstanceAccessMode
 } from "../interface";
-import {formatter, parseToJSON, variableInvoke} from "../helpers";
+import {formatter, variableInvoke} from "../helpers";
 
 export class GeneratorAPI {
 

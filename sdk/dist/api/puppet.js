@@ -202,8 +202,7 @@ class PuppetAPI {
         if (iterator.iterator && iterator.iterator.length > 0 && iterator.iterator[0].value) {
             return iterator.iterator.map((token) => {
                 const attrs = token.value;
-                let bytes = neon_js_1.u.base642hex(attrs[0].value);
-                return parseInt(neon_js_1.u.reverseHex(bytes), 16);
+                return helpers_1.formatter(attrs[0]);
             });
         }
         if (iterator.iterator && iterator.iterator.length === 0) {
@@ -313,7 +312,7 @@ class PuppetAPI {
         if (signer) {
             return res;
         }
-        return helpers_1.parseToJSON(res[0].value);
+        return helpers_1.formatter(res);
     }
 }
 exports.PuppetAPI = PuppetAPI;

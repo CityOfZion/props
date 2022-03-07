@@ -3,40 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.chiSquared = exports.txDidComplete = exports.getEvents = exports.deployContract = exports.variableInvoke = exports.sleep = exports.formatter = exports.parseToJSON = void 0;
+exports.chiSquared = exports.txDidComplete = exports.getEvents = exports.deployContract = exports.variableInvoke = exports.sleep = exports.formatter = void 0;
 const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("../api");
 const fs_1 = __importDefault(require("fs"));
 const neon_js_1 = require("@cityofzion/neon-js");
-function parseToJSON(entries) {
-    const object = {};
-    let key;
-    let value;
-    entries.forEach((entry) => {
-        key = formatter(entry.key);
-        switch (entry.value.type) {
-            case "Map":
-                value = parseToJSON(entry.value.value);
-                break;
-            case "Array":
-                value = entry.value.value.map((e) => {
-                    return parseToJSON(e.value);
-                });
-                break;
-            default:
-                if (key === 'token_id') {
-                    value = formatter(entry.value, true);
-                }
-                else {
-                    value = formatter(entry.value);
-                }
-                break;
-        }
-        object[key] = value;
-    });
-    return object;
-}
-exports.parseToJSON = parseToJSON;
 function formatter(field, num = false) {
     switch (field.type) {
         case "ByteString":

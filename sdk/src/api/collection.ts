@@ -224,11 +224,13 @@ export class CollectionAPI {
     networkMagic: number,
     contractHash: string,
     collectionId: number,
+    samples: number,
     signer?: wallet.Account
   ): Promise<string> {
     const method = "sample_from_collection"
     const param = [
       sc.ContractParam.integer(collectionId),
+      sc.ContractParam.integer(samples)
     ]
     const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
     if (signer) {

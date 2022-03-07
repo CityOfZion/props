@@ -10,7 +10,7 @@ export declare class CollectionAPI {
     static getCollectionLength(node: string, networkMagic: number, contractHash: string, collectionId: number, signer?: wallet.Account): Promise<number>;
     static getCollectionValues(node: string, networkMagic: number, contractHash: string, collectionId: number, signer?: wallet.Account): Promise<string[] | any>;
     static mapBytesOntoCollection(node: string, networkMagic: number, contractHash: string, collectionId: number, entropy: string, signer?: wallet.Account): Promise<string>;
-    static sampleFromCollection(node: string, networkMagic: number, contractHash: string, collectionId: number, signer?: wallet.Account): Promise<string>;
+    static sampleFromCollection(node: string, networkMagic: number, contractHash: string, collectionId: number, samples: number, signer?: wallet.Account): Promise<string>;
     static totalCollections(node: string, networkMagic: number, contractHash: string, signer?: wallet.Account): Promise<number>;
     static update(node: string, networkMagic: number, contractHash: string, script: string, manifest: string, data: any, signer: wallet.Account): Promise<string>;
 }

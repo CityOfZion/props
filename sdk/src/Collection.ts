@@ -8,7 +8,7 @@ import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x3b5c2a785510b712ee16074702b585c61e0054ba'
+  scriptHash: '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70'
 }
 
 /**
@@ -199,6 +199,7 @@ export class Collection {
    * Samples a uniform random value from the collection using a Contract.Call to the {@link Dice} contract.
    *
    * @param collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
+   * @param samples The number of samples to return
    * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
    * running the invocation as a test invoke.
    *
@@ -206,8 +207,8 @@ export class Collection {
    * **Note:** This method will not randomly generate unless the transaction is published so use the signer field for
    * testing.
    */
-  async sampleFromCollection(collectionId: number, signer?: wallet.Account): Promise<string> {
-    return CollectionAPI.sampleFromCollection(this.node.url, this.networkMagic, this.scriptHash, collectionId, signer)
+  async sampleFromCollection(collectionId: number, samples: number, signer?: wallet.Account): Promise<string> {
+    return CollectionAPI.sampleFromCollection(this.node.url, this.networkMagic, this.scriptHash, collectionId, samples, signer)
   }
 
   /**

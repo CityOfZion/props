@@ -145,10 +145,11 @@ class CollectionAPI {
         }
         return neon_js_1.u.base642hex(res[0].value);
     }
-    static async sampleFromCollection(node, networkMagic, contractHash, collectionId, signer) {
+    static async sampleFromCollection(node, networkMagic, contractHash, collectionId, samples, signer) {
         const method = "sample_from_collection";
         const param = [
             neon_js_1.sc.ContractParam.integer(collectionId),
+            neon_js_1.sc.ContractParam.integer(samples)
         ];
         const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
         if (signer) {

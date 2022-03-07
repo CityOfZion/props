@@ -6,7 +6,7 @@ import {EpochType, PropConstructorOptions, PuppetType} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   node: 'http://localhost:50012',
-  scriptHash: '0x758e2d336cf3c137600a8da9b96a900bcb9d36f7'
+  scriptHash: '0x4d53c814c8c09f14f210876348293cf2c260ad9d'
 }
 
 export class Puppet {
@@ -40,8 +40,8 @@ export class Puppet {
     return PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address, signer)
   }
 
-  async createEpoch(generatorId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string> {
-    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, generatorId, mintFee, sysFee, maxSupply, signer)
+  async createEpoch(label: string, generatorId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string> {
+    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorId, mintFee, sysFee, maxSupply, signer)
   }
 
   async decimals(signer?: wallet.Account): Promise<number> {

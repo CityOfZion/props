@@ -41,7 +41,7 @@ async function main(timeConstant) {
     console.log('  Generator Instance ID: ', generatorInstanceId)
 
     console.log(`creating an epoch with generator instance ${generatorInstanceId}`)
-    txid = await puppet.createEpoch(result[0], 1 * 10**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
+    txid = await puppet.createEpoch("Puppeteer", result[0], 1 * 10**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
     await sdk.helpers.sleep(timeConstant)
     result = await sdk.helpers.txDidComplete(NODE, txid)
     const epochId = result[0]
@@ -82,27 +82,5 @@ async function main(timeConstant) {
         let p = await puppet.properties(i.toString())
         console.log(p)
     }
-
-
-
-    /*
-    const data = [['color', 'personality', 'archetype', 'trade', 'title', 'origin', 'element', 'domain', 'prestige']]
-
-    for (let i = 1; i <= totalSupply; i++) {
-        if (i%100 ===0) {
-            console.log(`${i/totalSupply * 100}% complete` )
-        }
-        let p = await puppet.properties(i)
-        const l = Array(data[0].length).fill('')
-        Object.keys(p.traits).forEach( (key) => [
-            l[data[0].indexOf(key)] = p.traits[key]
-        ])
-        data.push(l)
-        //console.log(JSON.stringify(p.traits, null, 2))
-    }
-    const csv = data.map( (row) => row.join(',')).join('\n')
-
-    fs.writeFileSync('traits.csv', csv)
-    */
 }
 main(TIME_CONSTANT)

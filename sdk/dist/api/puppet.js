@@ -41,9 +41,10 @@ class PuppetAPI {
         }
         return parseInt(res[0].value);
     }
-    static async createEpoch(node, networkMagic, contractHash, generatorInstanceId, mintFee, sysFee, maxSupply, signer) {
+    static async createEpoch(node, networkMagic, contractHash, label, generatorInstanceId, mintFee, sysFee, maxSupply, signer) {
         const method = "create_epoch";
         const params = [
+            neon_js_1.sc.ContractParam.string(label),
             neon_js_1.sc.ContractParam.integer(generatorInstanceId),
             neon_js_1.sc.ContractParam.integer(mintFee),
             neon_js_1.sc.ContractParam.integer(sysFee),
@@ -89,13 +90,22 @@ class PuppetAPI {
         return parseInt(res[0].value);
     }
     static async getPuppetJSON(node, networkMagic, contractHash, tokenId, signer) {
-        const method = "get_epoch_json";
+        const method = "get_puppet_json";
         const param = [neon_js_1.sc.ContractParam.string(tokenId)];
         const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.parseToJSON(res[0].value);
+        return helpers_1.formatter(res[0]);
+    }
+    static async getPuppetJSONFlat(node, networkMagic, contractHash, tokenId, signer) {
+        const method = "get_puppet_json_flat";
+        const params = [neon_js_1.sc.ContractParam.string(tokenId)];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        if (signer) {
+            return res;
+        }
+        return helpers_1.formatter(res[0]);
     }
     static async getPuppetRaw(node, networkMagic, contractHash, tokenId, signer) {
         const method = "get_puppet_raw";

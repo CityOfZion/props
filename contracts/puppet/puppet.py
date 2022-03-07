@@ -262,7 +262,7 @@ def properties(token_id: bytes) -> Dict[str, Any]:
     :return: a serialized NVM object containing the properties for the given NFT.
     :raise AssertionError: raised if `token_id` is not a valid NFT, or if no metadata available.
     """
-    puppet_json = get_puppet_json(token_id)
+    puppet_json = get_puppet_json_flat(token_id)
     assert len(puppet_json) != 0, 'Puppet does not exist'
 
     return puppet_json
@@ -906,6 +906,80 @@ class Puppet:
         }
         return exported
 
+    def get_state_flat(self) -> Dict[str, Any]:
+        """
+        Gets the state of the puppet and returns the data in a flat format.
+        :return: the puppet in a flat format
+        """
+        token_id_bytes: bytes = self._token_id
+
+        epoch_id_bytes: bytes = self._epoch_id
+        epoch_id_int: int = epoch_id_bytes.to_int()
+        epoch: Epoch = get_epoch(epoch_id_bytes)
+        epoch_label: bytes = epoch.get_label()
+
+        network_magic: int = get_network
+        network_magic_string: str = itoa(network_magic)
+
+        puppet_attrs: List[Any] = [
+            {
+                "trait_type": "epochId",
+                "value": epoch_id_int
+            },
+            {
+                "trait_type": "hitDie",
+                "value": self._hit_die
+            },
+            {
+                "trait_type": "armorClass",
+                "value": self.get_armor_class()
+            },
+            {
+                "trait_type": "attributes.charisma",
+                "value": self.get_charisma()
+            },
+            {
+                "trait_type": "attributes.constitution",
+                "value": self.get_constitution()
+            },
+            {
+                "trait_type": "attributes.dexterity",
+                "value": self.get_dexterity()
+            },
+            {
+                "trait_type": "attributes.intelligence",
+                "value": self.get_intelligence()
+            },
+            {
+                "trait_type": "attributes.strength",
+                "value": self.get_strength()
+            },
+            {
+                "trait_type": "attributes.wisdom",
+                "value": self.get_wisdom()
+            }
+        ]
+
+        traits: Dict[str, Any] = self._traits
+        for trait in traits.keys():
+            puppet_attrs.append(
+                {
+                    'trait_type': 'traits.' + trait,
+                    'value': traits[trait]
+                }
+            )
+
+        exported: Dict[str, Any] = {
+            "name": 'puppet',
+            "image": 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str() + '.png',
+            "tokenURI": 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
+            "owner": self._owner,
+            "tokenId": token_id_bytes.to_str(),
+            "description": 'Puppet NFT #' + token_id_bytes.to_str() + ' from the ' + epoch_label.to_str() + ' epoch.',
+            "attributes": puppet_attrs
+        }
+        return exported
+
     def get_strength(self) -> int:
         """
         Getter for the strength base attribute
@@ -994,6 +1068,12 @@ def get_puppet_json(token_id: bytes) -> Dict[str, Any]:
     """
     puppet: Puppet = get_puppet(token_id)
     return puppet.get_state()
+
+
+@public
+def get_puppet_json_flat(token_id: bytes) -> Dict[str, Any]:
+    puppet: Puppet = get_puppet(token_id)
+    return puppet.get_state_flat()
 
 
 def get_puppet_raw(token_id: bytes) -> bytes:

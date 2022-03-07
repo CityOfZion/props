@@ -36,6 +36,7 @@ export class PuppetAPI {
     node: string,
     networkMagic: number,
     contractHash: string,
+    label: string,
     generatorInstanceId: number,
     mintFee: number,
     sysFee: number,
@@ -44,6 +45,7 @@ export class PuppetAPI {
   ): Promise<string> {
     const method = "create_epoch";
     const params = [
+      sc.ContractParam.string(label),
       sc.ContractParam.integer(generatorInstanceId),
       sc.ContractParam.integer(mintFee),
       sc.ContractParam.integer(sysFee),
@@ -117,7 +119,7 @@ export class PuppetAPI {
     tokenId: string,
     signer?: wallet.Account
   ): Promise<PuppetType | string> {
-    const method = "get_epoch_json";
+    const method = "get_puppet_json";
     const param = [sc.ContractParam.string(tokenId)];
 
     const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
@@ -125,7 +127,23 @@ export class PuppetAPI {
       return res
     }
 
-    return parseToJSON(res[0].value) as PuppetType
+    return formatter(res[0]) as PuppetType
+  }
+
+  static async getPuppetJSONFlat(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    tokenId: string,
+    signer?: wallet.Account
+  ): Promise<PuppetType | string> {
+    const method = "get_puppet_json_flat";
+    const params = [sc.ContractParam.string(tokenId)];
+    const res = await variableInvoke(node, networkMagic, contractHash, method, params, signer)
+    if (signer) {
+      return res
+    }
+    return formatter(res[0])
   }
 
   static async getPuppetRaw(

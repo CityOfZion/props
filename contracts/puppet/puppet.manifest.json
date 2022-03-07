@@ -101,7 +101,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 2008,
+                "offset": 2022,
                 "parameters": [
                     {
                         "name": "data",
@@ -354,8 +354,20 @@
                 "safe": false
             },
             {
+                "name": "get_puppet_json_flat",
+                "offset": 1903,
+                "parameters": [
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
                 "name": "_initialize",
-                "offset": 2186,
+                "offset": 2200,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

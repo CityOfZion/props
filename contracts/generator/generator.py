@@ -386,8 +386,8 @@ class CollectionSampleFromEvent:
 
     def get_value(self, generator_instance: GeneratorInstance) -> bytes:
         cid: int = self.collection_id
-        value: bytes = Collection.sample_from_collection(cid)
-        return value
+        value: [bytes] = Collection.sample_from_collection(cid, 1)
+        return value[0]
 
 
 class EventInterface:
@@ -618,7 +618,7 @@ class Trait:
 
         traits: [bytes] = []
         for i in range(slots):
-            roll: int = Dice.rand_between(0, 9999)
+            roll: int = Dice.rand_between(0, 999999)
             for trait_level in trait_levels:
                 if trait_level.dropped(roll):
                     new_trait: bytes = trait_level.mint(slot_entropy[i].to_bytes(), generator_instance)
@@ -902,7 +902,7 @@ def mk_generator_instance_key(generator_instance_id: bytes) -> bytes:
 # ################Deps############################
 
 
-@contract('0x3b5c2a785510b712ee16074702b585c61e0054ba')
+@contract('0x23e27f3aeb76a65e573f5ee8842c35d42e643b70')
 class Collection:
 
     @staticmethod
@@ -910,7 +910,7 @@ class Collection:
         pass
 
     @staticmethod
-    def sample_from_collection(collection_id: int) -> bytes:
+    def sample_from_collection(collection_id: int, samples: int) -> List[bytes]:
         pass
 
     @staticmethod

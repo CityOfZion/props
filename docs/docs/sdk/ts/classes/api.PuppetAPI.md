@@ -37,13 +37,13 @@ Returns the balance of an account
 
 #### Defined in
 
-[api/puppet.ts:18](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L18)
+[api/puppet.ts:18](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L18)
 
 ___
 
 ### createEpoch
 
-▸ `Static` **createEpoch**(`node`, `networkMagic`, `contractHash`, `generatorInstanceId`, `mintFee`, `sysFee`, `maxSupply`, `signer`): `Promise`<`string`\>
+▸ `Static` **createEpoch**(`node`, `networkMagic`, `contractHash`, `label`, `generatorInstanceId`, `mintFee`, `sysFee`, `maxSupply`, `signer`): `Promise`<`string`\>
 
 #### Parameters
 
@@ -52,6 +52,7 @@ ___
 | `node` | `string` |
 | `networkMagic` | `number` |
 | `contractHash` | `string` |
+| `label` | `string` |
 | `generatorInstanceId` | `number` |
 | `mintFee` | `number` |
 | `sysFee` | `number` |
@@ -64,7 +65,7 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:35](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L35)
+[api/puppet.ts:35](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L35)
 
 ___
 
@@ -89,7 +90,7 @@ Returns the decimals of the token
 
 #### Defined in
 
-[api/puppet.ts:62](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L62)
+[api/puppet.ts:64](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L64)
 
 ___
 
@@ -114,7 +115,7 @@ Initializes the smart contract on first deployment (REQUIRED)
 
 #### Defined in
 
-[api/puppet.ts:84](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L84)
+[api/puppet.ts:86](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L86)
 
 ___
 
@@ -138,7 +139,7 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:95](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L95)
+[api/puppet.ts:97](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L97)
 
 ___
 
@@ -162,7 +163,7 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:443](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L443)
+[api/puppet.ts:461](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L461)
 
 ___
 
@@ -186,7 +187,31 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:113](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L113)
+[api/puppet.ts:115](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L115)
+
+___
+
+### getPuppetJSONFlat
+
+▸ `Static` **getPuppetJSONFlat**(`node`, `networkMagic`, `contractHash`, `tokenId`, `signer?`): `Promise`<`string` \| [`PuppetType`](../interfaces/types.PuppetType.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `node` | `string` |
+| `networkMagic` | `number` |
+| `contractHash` | `string` |
+| `tokenId` | `string` |
+| `signer?` | `Account` |
+
+#### Returns
+
+`Promise`<`string` \| [`PuppetType`](../interfaces/types.PuppetType.md)\>
+
+#### Defined in
+
+[api/puppet.ts:133](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L133)
 
 ___
 
@@ -210,7 +235,7 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:131](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L131)
+[api/puppet.ts:149](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L149)
 
 ___
 
@@ -235,7 +260,7 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:174](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L174)
+[api/puppet.ts:192](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L192)
 
 ___
 
@@ -261,7 +286,7 @@ Gets the owner account of a tokenId
 
 #### Defined in
 
-[api/puppet.ts:156](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L156)
+[api/puppet.ts:174](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L174)
 
 ___
 
@@ -287,7 +312,7 @@ Gets the properties of a token
 
 #### Defined in
 
-[api/puppet.ts:199](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L199)
+[api/puppet.ts:217](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L217)
 
 ___
 
@@ -312,7 +337,7 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:215](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L215)
+[api/puppet.ts:233](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L233)
 
 ___
 
@@ -337,7 +362,7 @@ Returns the token symbol
 
 #### Defined in
 
-[api/puppet.ts:239](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L239)
+[api/puppet.ts:257](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L257)
 
 ___
 
@@ -362,7 +387,7 @@ Gets and array of strings(tokenIds) representing all the tokens associated with 
 
 #### Defined in
 
-[api/puppet.ts:261](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L261)
+[api/puppet.ts:279](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L279)
 
 ___
 
@@ -388,7 +413,7 @@ Gets an array of strings(tokenId) owned by an address
 
 #### Defined in
 
-[api/puppet.ts:301](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L301)
+[api/puppet.ts:319](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L319)
 
 ___
 
@@ -413,7 +438,7 @@ Gets the total number of accounts stored in the contract
 
 #### Defined in
 
-[api/puppet.ts:336](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L336)
+[api/puppet.ts:354](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L354)
 
 ___
 
@@ -436,7 +461,7 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:351](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L351)
+[api/puppet.ts:369](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L369)
 
 ___
 
@@ -461,7 +486,7 @@ Returns the total supply of the token
 
 #### Defined in
 
-[api/puppet.ts:373](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L373)
+[api/puppet.ts:391](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L391)
 
 ___
 
@@ -489,7 +514,7 @@ Transfers a token to another account
 
 #### Defined in
 
-[api/puppet.ts:398](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L398)
+[api/puppet.ts:416](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L416)
 
 ___
 
@@ -515,4 +540,4 @@ ___
 
 #### Defined in
 
-[api/puppet.ts:417](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/api/puppet.ts#L417)
+[api/puppet.ts:435](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/api/puppet.ts#L435)

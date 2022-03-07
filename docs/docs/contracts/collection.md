@@ -7,7 +7,7 @@ The collection contract is designed to store and provision immutable arrays of t
 the need to quickly sample from a range of data (like a discrete probability distribution).
 
 ### Where Am I:
-* **PrivateNet:** `0x3b5c2a785510b712ee16074702b585c61e0054ba`
+* **PrivateNet:** `0x23e27f3aeb76a65e573f5ee8842c35d42e643b70`
 * **Testnet:** [`0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e`](https://dora.coz.io/contract/neo3/testnet_rc4/0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e)
 * **Mainnet:** TBD
 

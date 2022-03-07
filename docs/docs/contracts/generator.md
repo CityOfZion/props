@@ -7,7 +7,7 @@ The generator contract is designed to provide probabilistic event features.  It 
 procedural object generation to probabilistic event execution.
 
 ### Where Am I:
-* **PrivateNet:** `0xd9a1fa61f48db26507ed746dd3019709e210e812`
+* **PrivateNet:** `0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab`
 * **Testnet:** [`0xdda8055789f0eb3c1d092c714a68ba3e631586c7`](https://dora.coz.io/contract/neo3/testnet_rc4/0xdda8055789f0eb3c1d092c714a68ba3e631586c7)
 * **Mainnet:** TBD
 

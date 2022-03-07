@@ -114,21 +114,25 @@
                     {
                         "name": "collection_id",
                         "type": "ByteArray"
+                    },
+                    {
+                        "name": "samples",
+                        "type": "Integer"
                     }
                 ],
-                "returntype": "ByteArray",
+                "returntype": "Array",
                 "safe": false
             },
             {
                 "name": "total_collections",
-                "offset": 293,
+                "offset": 404,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "update",
-                "offset": 299,
+                "offset": 410,
                 "parameters": [
                     {
                         "name": "script",
@@ -148,7 +152,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 716,
+                "offset": 827,
                 "parameters": [
                     {
                         "name": "data",
@@ -164,7 +168,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 754,
+                "offset": 865,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

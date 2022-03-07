@@ -748,6 +748,7 @@ ATTRIBUTE_MODIFIERS: List[int] = [
 # A set of options for a puppet hit die
 HIT_DIE_OPTIONS: List[str] = ["d6", "d8", "d10", "d12"]
 
+
 class Puppet:
 
     def __init__(self):
@@ -790,23 +791,14 @@ class Puppet:
         target_epoch: Epoch = get_epoch(epoch_id)
 
         initial_roll_collection_id: int = 1
-        charisma: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
-        self._charisma = charisma
+        attrs: [bytes] = Collection.sample_from_collection(initial_roll_collection_id, 6)
 
-        constitution: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
-        self._constitution = constitution
-
-        dexterity: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
-        self._dexterity = dexterity
-
-        intelligence: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
-        self._intelligence = intelligence
-
-        strength: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
-        self._strength = strength
-
-        wisdom: int = Collection.sample_from_collection(initial_roll_collection_id).to_int()
-        self._wisdom = wisdom
+        self._charisma = attrs[0].to_int()
+        self._constitution = attrs[1].to_int()
+        self._dexterity = attrs[2].to_int()
+        self._intelligence = attrs[3].to_int()
+        self._strength = attrs[4].to_int()
+        self._wisdom = attrs[5].to_int()
 
         hd: str = get_hit_die(Dice.rand_between(0, 3))
         self._hit_die = hd
@@ -1105,11 +1097,11 @@ def mk_token_key(token_id: bytes) -> bytes:
 # ############INTERFACES###########
 
 
-@contract('0x3b5c2a785510b712ee16074702b585c61e0054ba')
+@contract('0x23e27f3aeb76a65e573f5ee8842c35d42e643b70')
 class Collection:
 
     @staticmethod
-    def sample_from_collection(collection_id: int) -> bytes:
+    def sample_from_collection(collection_id: int, samples: int) -> List[bytes]:
         pass
 
 
@@ -1121,7 +1113,7 @@ class Dice:
         pass
 
 
-@contract('0xd9a1fa61f48db26507ed746dd3019709e210e812')
+@contract('0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab')
 class Generator:
 
     @staticmethod

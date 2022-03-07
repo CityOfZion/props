@@ -121,17 +121,21 @@ def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
 
 
 @public
-def sample_from_collection(collection_id: bytes) -> bytes:
+def sample_from_collection(collection_id: bytes, samples: int) -> [bytes]:
     """
-    Gets the value for a uniform-random index of a colection
+    Gets values from a uniform-random sampled index of a colection
     :param collection_id: The collection_id of the collection to sample from
+    :param samples: the number of samples to return
     :return: The value at the sampled index
     """
     collection: Collection = get_collection_internal(collection_id)
     collection_values: [bytes] = collection.get_values()
 
-    idx: int = Dice.rand_between(0, len(collection_values) - 1)
-    return collection_values[idx]
+    result: [bytes] = []
+    for x in range(samples):
+        idx: int = Dice.rand_between(0, len(collection_values) - 1)
+        result.append(collection_values[idx])
+    return result
 
 
 @public

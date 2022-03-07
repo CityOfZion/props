@@ -15,7 +15,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[interface/interface.ts:85](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/interface/interface.ts#L85)
+[interface/interface.ts:85](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L85)
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:84](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/interface/interface.ts#L84)
+[interface/interface.ts:84](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L84)
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:83](https://github.com/CityOfZion/isengard/blob/deac852/sdk/src/interface/interface.ts#L83)
+[interface/interface.ts:83](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L83)

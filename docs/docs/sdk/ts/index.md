@@ -44,9 +44,6 @@ console.log(collection.scriptHash)
 ### N3 Testnet/Mainnet:
 Refer to the relevant contract in the [contracts](http://props.coz.io/d/docs/contracts/) documentation.
 
-### N3 Mainnet:
-TBD
-
 ## Quickstart:
 
 #### Setup:

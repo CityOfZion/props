@@ -7,7 +7,7 @@
       "slots": 1,
       "traitLevels": [
         {
-          "dropScore": 5000,
+          "dropScore": 500000,
           "mintMode": 0,
           "traits": [
             {
@@ -53,7 +53,7 @@
           ]
         },
         {
-          "dropScore": 8000,
+          "dropScore": 800000,
           "mintMode": 0,
           "traits": [
             {
@@ -91,7 +91,7 @@
           ]
         },
         {
-          "dropScore": 9500,
+          "dropScore": 950000,
           "mintMode": 0,
           "traits": [
             {
@@ -121,7 +121,7 @@
           ]
         },
         {
-          "dropScore": 9950,
+          "dropScore": 995000,
           "mintMode": 0,
           "traits": [
             {
@@ -143,7 +143,7 @@
           ]
         },
         {
-          "dropScore": 10000,
+          "dropScore": 1000000,
           "mintMode": 0,
           "traits": [
             {
@@ -163,7 +163,7 @@
       "slots": 1,
       "traitLevels": [
         {
-          "dropScore": 4000,
+          "dropScore": 400000,
           "mintMode": 0,
           "traits": [
             {
@@ -233,7 +233,7 @@
           ]
         },
         {
-          "dropScore": 6400,
+          "dropScore": 640000,
           "mintMode": 0,
           "traits": [
             {
@@ -303,7 +303,7 @@
           ]
         },
         {
-          "dropScore": 8500,
+          "dropScore": 850000,
           "mintMode": 0,
           "traits": [
             {
@@ -373,7 +373,7 @@
           ]
         },
         {
-          "dropScore": 9900,
+          "dropScore": 990000,
           "mintMode": 0,
           "traits": [
             {
@@ -443,7 +443,7 @@
           ]
         },
         {
-          "dropScore": 10000,
+          "dropScore": 1000000,
           "mintMode": 0,
           "traits": [
             {
@@ -471,7 +471,7 @@
       "slots": 1,
       "traitLevels": [
         {
-          "dropScore": 5000,
+          "dropScore": 500000,
           "mintMode": 0,
           "traits": [
             {
@@ -501,7 +501,7 @@
           ]
         },
         {
-          "dropScore": 8000,
+          "dropScore": 800000,
           "mintMode": 0,
           "traits": [
             {
@@ -531,7 +531,7 @@
           ]
         },
         {
-          "dropScore": 9500,
+          "dropScore": 950000,
           "mintMode": 0,
           "traits": [
             {
@@ -561,7 +561,7 @@
           ]
         },
         {
-          "dropScore": 10000,
+          "dropScore": 1000000,
           "mintMode": 0,
           "traits": [
             {
@@ -597,12 +597,12 @@
       "slots": 1,
       "traitLevels":[
         {
-          "dropScore": 3000,
+          "dropScore": 300000,
           "mintMode": 0,
           "traits": []
         },
         {
-          "dropScore": 6000,
+          "dropScore": 600000,
           "mintMode": 0,
           "traits": [
             {
@@ -664,7 +664,7 @@
           ]
         },
         {
-          "dropScore": 8000,
+          "dropScore": 800000,
           "mintMode": 0,
           "traits": [
             {
@@ -726,7 +726,7 @@
           ]
         },
         {
-          "dropScore": 9000,
+          "dropScore": 900000,
           "mintMode": 0,
           "traits": [
             {
@@ -788,7 +788,7 @@
           ]
         },
         {
-          "dropScore": 9950,
+          "dropScore": 995000,
           "mintMode": 0,
           "traits": [
             {
@@ -850,7 +850,7 @@
           ]
         },
         {
-          "dropScore": 10000,
+          "dropScore": 1000000,
           "mintMode": 0,
           "traits": [
             {
@@ -870,12 +870,12 @@
       "slots": 1,
       "traitLevels": [
         {
-          "dropScore": 7000,
+          "dropScore": 700000,
           "mintMode": 0,
           "traits": []
         },
         {
-          "dropScore": 8000,
+          "dropScore": 800000,
           "mintMode": 0,
           "traits": [
             {
@@ -905,7 +905,7 @@
           ]
         },
         {
-          "dropScore": 8500,
+          "dropScore": 850000,
           "mintMode": 0,
           "traits": [
             {
@@ -935,7 +935,7 @@
           ]
         },
         {
-          "dropScore": 8750,
+          "dropScore": 875000,
           "mintMode": 0,
           "traits": [
             {
@@ -965,7 +965,7 @@
           ]
         },
         {
-          "dropScore": 8900,
+          "dropScore": 890000,
           "mintMode": 0,
           "traits": [
             {
@@ -995,7 +995,7 @@
           ]
         },
         {
-          "dropScore": 8910,
+          "dropScore": 891000,
           "mintMode": 0,
           "traits": [
             {
@@ -1015,12 +1015,12 @@
       "slots": 1,
       "traitLevels": [
         {
-          "dropScore": 3000,
+          "dropScore": 300000,
           "mintMode": 0,
           "traits": []
         },
         {
-          "dropScore": 7000,
+          "dropScore": 700000,
           "mintMode": 0,
           "traits": [
             {
@@ -1058,7 +1058,7 @@
           ]
         },
         {
-          "dropScore": 9000,
+          "dropScore": 900000,
           "mintMode": 0,
           "traits": [
             {
@@ -1096,7 +1096,7 @@
           ]
         },
         {
-          "dropScore": 9500,
+          "dropScore": 950000,
           "mintMode": 0,
           "traits": [
             {
@@ -1126,7 +1126,7 @@
           ]
         },
         {
-          "dropScore": 9750,
+          "dropScore": 975000,
           "mintMode": 0,
           "traits": [
             {
@@ -1148,7 +1148,7 @@
           ]
         },
         {
-          "dropScore": 9800,
+          "dropScore": 980000,
           "mintMode": 0,
           "traits": [
             {
@@ -1168,12 +1168,12 @@
       "slots": 1,
       "traitLevels":[
         {
-          "dropScore": 5000,
+          "dropScore": 500000,
           "mintMode": 0,
           "traits": []
         },
         {
-          "dropScore": 8700,
+          "dropScore": 870000,
           "mintMode": 0,
           "traits": [
             {
@@ -1211,7 +1211,7 @@
           ]
         },
         {
-          "dropScore": 9900,
+          "dropScore": 990000,
           "mintMode": 0,
           "traits": [
             {
@@ -1249,7 +1249,7 @@
           ]
         },
         {
-          "dropScore": 10000,
+          "dropScore": 1000000,
           "mintMode": 0,
           "traits": [
             {
@@ -1269,12 +1269,12 @@
       "slots": 1,
       "traitLevels":[
         {
-          "dropScore": 9500,
+          "dropScore": 950000,
           "mintMode": 0,
           "traits": []
         },
         {
-          "dropScore": 10000,
+          "dropScore": 1000000,
           "mintMode": 0,
           "traits": [
             {
@@ -1334,12 +1334,12 @@
       "slots": 1,
       "traitLevels":[
         {
-          "dropScore": 9500,
+          "dropScore": 950000,
           "mintMode": 0,
           "traits": []
         },
         {
-          "dropScore": 9700,
+          "dropScore": 970000,
           "mintMode": 0,
           "traits": [
             {
@@ -1361,7 +1361,7 @@
           ]
         },
         {
-          "dropScore": 9900,
+          "dropScore": 990000,
           "mintMode": 0,
           "traits": [
             {
@@ -1399,7 +1399,7 @@
           ]
         },
         {
-          "dropScore": 9970,
+          "dropScore": 997000,
           "mintMode": 0,
           "traits": [
             {
@@ -1437,7 +1437,7 @@
           ]
         },
         {
-          "dropScore": 10000,
+          "dropScore": 1000000,
           "mintMode": 0,
           "traits": [
             {

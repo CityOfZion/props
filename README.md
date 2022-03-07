@@ -34,7 +34,7 @@ this particular contract provide multiple great examples of how the other props 
 new developers who are interesting in NFT development.
 
 While the `Puppet` NFTs are designed with `metaverse` applications in-mind, we make no assertions which limit their
-utility in other product spaces.  The contracts and their tokens are permissionless.  Use them how you see fit.
+utility in other product spaces.  The contracts and their tokens are permissionless.  **Use them how you see fit.**
 
 ## Quickstart
 

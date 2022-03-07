@@ -74,7 +74,7 @@ documentation [here](https://props.coz.io/d/docs/contracts/)
 ### sdk
 In addition to the smart contracts, this project includes a complete, well documented SDK which outlines best practices for
 integrating with smart contracts in the Neo N3 ecosystem from off-chain applications.  The SDK includes many design patterns and parsing examples as well as
-a complete integration with the pre-packaged `props` smart contracts. **Complete SDK documentation is linked in the header of this site.**
+a complete integration with the pre-packaged `props` smart contracts. **Complete SDK documentation is available [here](https://props.coz.io/d/docs/sdk/ts/)**
 Developers who are interested in interfacing with smart contracts off-chain can simply build off the included SDK, expanding it to meet their needs.
 Refer to [here](https://props.coz.io/d/docs/sdk/ts/) for more complete information about how to use the SDK to interface with the existing props or to expand its
 features to meet your needs.

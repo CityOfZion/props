@@ -83,6 +83,7 @@ export interface EventInstanceCall {
     param: ContractParamLike[];
 }
 export interface PropConstructorOptions {
+    network?: string;
     node?: string;
     scriptHash?: string;
 }

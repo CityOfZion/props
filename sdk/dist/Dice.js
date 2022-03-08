@@ -5,8 +5,7 @@ const lodash_1 = require("lodash");
 const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("./api");
 const DEFAULT_OPTIONS = {
-    node: 'http://localhost:50012',
-    scriptHash: '0x16d6a0be0506b26e0826dd352724cda0defa7131'
+    network: 'localnet'
 };
 /**
  * The dice prop normalizes a lot of behaviors associated with random number generation to improve usability within
@@ -35,6 +34,19 @@ class Dice {
     constructor(options = {}) {
         this.networkMagic = -1;
         this.options = lodash_1.merge({}, DEFAULT_OPTIONS, options);
+        switch (this.options.network) {
+            case 'localnet':
+                this.options.node = 'http://localhost:50012';
+                this.options.scriptHash = '0x16d6a0be0506b26e0826dd352724cda0defa7131';
+                break;
+            case 'testnet':
+                this.options.node = 'https://testnet1.neo.coz.io:443';
+                this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0';
+                break;
+            case 'mainnet':
+                this.options.node = 'https://mainnet1.neo.coz.io:443';
+                this.options.scriptHash = ''; //not implemented
+        }
     }
     /**
      * Gets the magic number for the network and configures the class instance.

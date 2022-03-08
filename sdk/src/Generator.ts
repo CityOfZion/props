@@ -12,8 +12,7 @@ import {sleep, txDidComplete} from "./helpers";
 import fs from "fs";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
-  node: 'http://localhost:50012',
-  scriptHash: '0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab'
+  network: 'localnet'
 }
 
 export class Generator {
@@ -22,6 +21,20 @@ export class Generator {
 
   constructor(options: PropConstructorOptions = {}) {
     this.options = merge({}, DEFAULT_OPTIONS, options)
+
+    switch(this.options.network) {
+      case 'localnet':
+        this.options.node = 'http://localhost:50012'
+        this.options.scriptHash = '0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab'
+        break
+      case 'testnet':
+        this.options.node = 'https://testnet1.neo.coz.io:443'
+        this.options.scriptHash = '0xdda8055789f0eb3c1d092c714a68ba3e631586c7'
+        break
+      case 'mainnet':
+        this.options.node = 'https://mainnet1.neo.coz.io:443'
+        this.options.scriptHash = '' //not implemented
+    }
   }
 
   async init() {

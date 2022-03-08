@@ -4,8 +4,7 @@ import {DiceAPI} from './api'
 import {PropConstructorOptions} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
-  node: 'http://localhost:50012',
-  scriptHash: '0x16d6a0be0506b26e0826dd352724cda0defa7131'
+  network: 'localnet'
 }
 
 /**
@@ -38,6 +37,20 @@ export class Dice {
 
   constructor(options: PropConstructorOptions = {}) {
     this.options = merge({}, DEFAULT_OPTIONS, options)
+
+    switch(this.options.network) {
+      case 'localnet':
+        this.options.node = 'http://localhost:50012'
+        this.options.scriptHash = '0x16d6a0be0506b26e0826dd352724cda0defa7131'
+        break
+      case 'testnet':
+        this.options.node = 'https://testnet1.neo.coz.io:443'
+        this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
+        break
+      case 'mainnet':
+        this.options.node = 'https://mainnet1.neo.coz.io:443'
+        this.options.scriptHash = '' //not implemented
+    }
   }
 
   /**

@@ -7,8 +7,7 @@ import fs from 'fs'
 import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
-  node: 'http://localhost:50012',
-  scriptHash: '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70'
+  network: 'localnet'
 }
 
 /**
@@ -41,6 +40,20 @@ export class Collection {
 
   constructor(options: PropConstructorOptions = {}) {
     this.options = merge({}, DEFAULT_OPTIONS, options)
+
+    switch(this.options.network) {
+      case 'localnet':
+        this.options.node = 'http://localhost:50012'
+        this.options.scriptHash = '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70'
+        break
+      case 'testnet':
+        this.options.node = 'https://testnet1.neo.coz.io:443'
+        this.options.scriptHash = '0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e'
+        break
+      case 'mainnet':
+        this.options.node = 'https://mainnet1.neo.coz.io:443'
+        this.options.scriptHash = '' //not implemented
+    }
   }
 
   /**

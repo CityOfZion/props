@@ -98,6 +98,7 @@ export interface EventInstanceCall {
 }
 
 export interface PropConstructorOptions {
+  network?: string
   node?: string
   scriptHash?: string
 }

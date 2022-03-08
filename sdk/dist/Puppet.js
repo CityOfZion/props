@@ -6,13 +6,25 @@ const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("./api");
 const neon_js_1 = require("@cityofzion/neon-js");
 const DEFAULT_OPTIONS = {
-    node: 'http://localhost:50012',
-    scriptHash: '0xc41e54181647c739bef3c4353a5a18ca1186ddbd'
+    network: 'localnet',
 };
 class Puppet {
     constructor(options = {}) {
         this.networkMagic = -1;
         this.options = lodash_1.merge({}, DEFAULT_OPTIONS, options);
+        switch (this.options.network) {
+            case 'localnet':
+                this.options.node = 'http://localhost:50012';
+                this.options.scriptHash = '0xc41e54181647c739bef3c4353a5a18ca1186ddbd';
+                break;
+            case 'testnet':
+                this.options.node = 'https://testnet1.neo.coz.io:443';
+                this.options.scriptHash = '0x97857c01d64f846b5fe2eca2d09d2d73928b3f43';
+                break;
+            case 'mainnet':
+                this.options.node = 'https://mainnet1.neo.coz.io:443';
+                this.options.scriptHash = ''; //not implemented
+        }
     }
     async init() {
         const getVersionRes = await this.node.getVersion();

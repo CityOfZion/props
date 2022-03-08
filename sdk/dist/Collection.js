@@ -10,8 +10,7 @@ const neon_js_1 = require("@cityofzion/neon-js");
 const api_1 = require("./api");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
-    node: 'http://localhost:50012',
-    scriptHash: '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70'
+    network: 'localnet'
 };
 /**
  * The Collection prop is designed to store static-immutable data for reference in other projects. Storing static data
@@ -41,6 +40,19 @@ class Collection {
     constructor(options = {}) {
         this.networkMagic = -1;
         this.options = lodash_1.merge({}, DEFAULT_OPTIONS, options);
+        switch (this.options.network) {
+            case 'localnet':
+                this.options.node = 'http://localhost:50012';
+                this.options.scriptHash = '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70';
+                break;
+            case 'testnet':
+                this.options.node = 'https://testnet1.neo.coz.io:443';
+                this.options.scriptHash = '0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e';
+                break;
+            case 'mainnet':
+                this.options.node = 'https://mainnet1.neo.coz.io:443';
+                this.options.scriptHash = ''; //not implemented
+        }
     }
     /**
      * Gets the magic number for the network and configures the class instance.

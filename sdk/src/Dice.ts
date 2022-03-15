@@ -1,10 +1,10 @@
-import { merge } from 'lodash'
+import {merge} from 'lodash'
 import {rpc, wallet} from '@cityofzion/neon-core'
 import {DiceAPI} from './api'
-import {PropConstructorOptions} from "./interface";
+import {NetworkOption, PropConstructorOptions} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
-  network: 'localnet'
+  network: NetworkOption.LocalNet
 }
 
 /**
@@ -39,15 +39,15 @@ export class Dice {
     this.options = merge({}, DEFAULT_OPTIONS, options)
 
     switch(this.options.network) {
-      case 'localnet':
+      case NetworkOption.LocalNet:
         this.options.node = 'http://localhost:50012'
         this.options.scriptHash = '0x16d6a0be0506b26e0826dd352724cda0defa7131'
         break
-      case 'testnet':
+      case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
         break
-      case 'mainnet':
+      case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
         this.options.scriptHash = '' //not implemented
     }

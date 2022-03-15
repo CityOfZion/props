@@ -10,13 +10,18 @@ describe("Basic Generator Test Suite", function() {
 
     beforeEach( async function () {
         this.timeout(0);
-        //initialize the contract puppet
-        NODE = 'http://localhost:50012'
 
-        generator = await new sdk.Generator({node: NODE})
+
+        const targetNetwork = sdk.types.NetworkOption.LocalNet
+
+        generator = await new sdk.Generator({
+            network: targetNetwork
+        })
         await generator.init()
 
-        collection = await new sdk.Collection({node: NODE})
+        collection = await new sdk.Collection({
+            network: targetNetwork
+        })
         await collection.init()
 
         //load any wallets and network settings we may want later (helpful if we're local)
@@ -442,14 +447,14 @@ describe("Basic Generator Test Suite", function() {
         assert(masterSet.testTrait.length === initialCollection.values.length, `${masterSet.testTrait.length} != ${initialCollection.values.length}`)
     })
 
-    async function createCollection(collection, NODE, timeConstant, signer) {
+    async function createCollection(collection, timeConstant, signer) {
         const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
         await sdk.helpers.sleep(timeConstant)
-        const res = await sdk.helpers.txDidComplete(NODE, txid)
+        const res = await sdk.helpers.txDidComplete(collection.node.url, txid)
         return res[0]
     }
 
-    async function mintFromInstance(instanceId, count, wallet, timeConstant, NODE) {
+    async function mintFromInstance(instanceId, count, wallet, timeConstant) {
         const txids = []
         for (let i = 0; i < count; i++) {
             const txid = await generator.mintFromInstance(instanceId, wallet)
@@ -459,20 +464,24 @@ describe("Basic Generator Test Suite", function() {
 
         const res = []
         for (let txid of txids) {
-            const traits = await sdk.helpers.txDidComplete(NODE, txid, false)
+            const traits = await sdk.helpers.txDidComplete(generator.node.url, txid, false)
             res.push(traits[0])
         }
         return res
     }
 
-    async function buildGenerator(dropRate, maxTraits, maxMint, NODE, timeConstant, signer) {
-        const generator = await new sdk.Generator({node: NODE})
+    async function buildGenerator(dropRate, maxTraits, maxMint, network, timeConstant, signer) {
+        const generator = await new sdk.Generator({
+            network
+        })
         await generator.init()
 
-        const collection = await new sdk.Collection({node: NODE})
+        const collection = await new sdk.Collection({
+            network
+        })
         await collection.init()
 
-        const cid = await createCollection(collection, NODE, timeConstant, signer)
+        const cid = await createCollection(collection, timeConstant, signer)
 
         const initialCollection = await collection.getCollectionJSON(cid)
 
@@ -505,7 +514,7 @@ describe("Basic Generator Test Suite", function() {
         }
         let res = await generator.createGenerator(newGenerator, signer, timeConstant)
         await sdk.helpers.sleep(TIME_CONSTANT)
-        let eid = await sdk.helpers.txDidComplete(NODE, res[0])
+        let eid = await sdk.helpers.txDidComplete(generator.node.url, res[0])
         return eid[0]
     }
 })

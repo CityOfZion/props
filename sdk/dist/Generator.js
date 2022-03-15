@@ -7,25 +7,26 @@ exports.Generator = void 0;
 const lodash_1 = require("lodash");
 const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("./api");
+const interface_1 = require("./interface");
 const helpers_1 = require("./helpers");
 const fs_1 = __importDefault(require("fs"));
 const DEFAULT_OPTIONS = {
-    network: 'localnet'
+    network: interface_1.NetworkOption.LocalNet
 };
 class Generator {
     constructor(options = {}) {
         this.networkMagic = -1;
         this.options = lodash_1.merge({}, DEFAULT_OPTIONS, options);
         switch (this.options.network) {
-            case 'localnet':
+            case interface_1.NetworkOption.LocalNet:
                 this.options.node = 'http://localhost:50012';
                 this.options.scriptHash = '0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab';
                 break;
-            case 'testnet':
+            case interface_1.NetworkOption.TestNet:
                 this.options.node = 'https://testnet1.neo.coz.io:443';
                 this.options.scriptHash = '0xdda8055789f0eb3c1d092c714a68ba3e631586c7';
                 break;
-            case 'mainnet':
+            case interface_1.NetworkOption.MainNet:
                 this.options.node = 'https://mainnet1.neo.coz.io:443';
                 this.options.scriptHash = ''; //not implemented
         }

@@ -6,16 +6,17 @@ var assert = require('assert');
 describe("Basic Collection Test Suite", function() {
     this.timeout(60000);
     const TIME_CONSTANT = 4000
-    let collection, network, NODE
+    let collection, network
 
     beforeEach( async function () {
         //initialize the contract puppet
-        
-        NODE = 'http://localhost:50012'
-        
-        collection = await new sdk.Collection({node: NODE})
-        await collection.init()
 
+        const targetNetwork = sdk.types.NetworkOption.LocalNet
+
+        collection = await new sdk.Collection({
+            network: targetNetwork
+        })
+        await collection.init()
 
         //load any wallets and network settings we may want later (helpful if we're local)
         network = JSON.parse(fs.readFileSync("../default.neo-express").toString());
@@ -37,7 +38,7 @@ describe("Basic Collection Test Suite", function() {
         const txid = await collection.createCollection("a collection with 2000 objects", "string", "", traits, cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
 
-        let cid = await sdk.helpers.txDidComplete(NODE, txid, true)
+        let cid = await sdk.helpers.txDidComplete(collection.node.url, txid, true)
         cid = cid[0]
 
         const cLength = await collection.getCollectionLength(cid)
@@ -61,7 +62,7 @@ describe("Basic Collection Test Suite", function() {
 
         const res = await collection.createCollection("a small collection", "string", "", traits, cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
-        let cid = await sdk.helpers.txDidComplete(NODE, res, true)
+        let cid = await sdk.helpers.txDidComplete(collection.node.url, res, true)
         cid = cid[0]
 
         const collectionLength = await collection.getCollectionLength(cid)
@@ -81,7 +82,7 @@ describe("Basic Collection Test Suite", function() {
 
         const cozWallet = network.wallets[0].wallet
 
-        const cid = await createCollection(collection, NODE, TIME_CONSTANT, cozWallet)
+        const cid = await createCollection(collection, TIME_CONSTANT, cozWallet)
         const localCollection = JSON.parse(fs.readFileSync('../parameters/collections/3_traits.colors.json').toString())
         const collectionValues = await collection.getCollectionValues(cid)
 
@@ -93,6 +94,32 @@ describe("Basic Collection Test Suite", function() {
 
     })
 
+    it("should uniformly sample from the range of values in a collection using the multiple sample feature", async() => {
+
+        const cozWallet = network.wallets[0].wallet
+
+        const runSize = 400
+
+        const cid = await createCollection(collection, TIME_CONSTANT, cozWallet)
+
+        const txids = []
+        for (let i = 0; i < runSize; i++) {
+            const res = await collection.sampleFromCollection(cid, 5, cozWallet)
+            txids.push(res)
+        }
+
+        await sdk.helpers.sleep(TIME_CONSTANT)
+
+        let results = []
+        for (let txid of txids) {
+            let result = await sdk.helpers.txDidComplete(collection.node.url, txid)
+            results = results.concat(result[0])
+        }
+        const chiSquared = sdk.helpers.chiSquared(results)
+        assert(chiSquared < 30, `chi-squared: ${chiSquared}`)
+
+    })
+
     it("should uniformly sample from the range of values in a collection", async() => {
 
         const cozWallet = network.wallets[0].wallet
@@ -100,11 +127,11 @@ describe("Basic Collection Test Suite", function() {
 
         const runSize = 2000
 
-        const cid = await createCollection(collection, NODE,TIME_CONSTANT, cozWallet)
+        const cid = await createCollection(collection, TIME_CONSTANT, cozWallet)
 
         const txids = []
         for (let i = 0; i < runSize; i++) {
-            const res = await collection.sampleFromCollection(cid, cozWallet)
+            const res = await collection.sampleFromCollection(cid, 1, cozWallet)
             txids.push(res)
         }
 
@@ -112,11 +139,11 @@ describe("Basic Collection Test Suite", function() {
 
         const results = []
         for (let txid of txids) {
-            let result = await sdk.helpers.txDidComplete(NODE, txid)
+            let result = await sdk.helpers.txDidComplete(collection.node.url, txid)
             results.push(result[0])
         }
         const chiSquared = sdk.helpers.chiSquared(results)
-        assert(chiSquared < 20, `chi-squared: ${chiSquared}`)
+        assert(chiSquared < 30, `chi-squared: ${chiSquared}`)
 
     })
 
@@ -133,10 +160,10 @@ describe("Basic Collection Test Suite", function() {
     })
 })
 
-async function createCollection(collection, NODE, timeConstant, signer) {
+async function createCollection(collection, timeConstant, signer) {
   const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
   await sdk.helpers.sleep(timeConstant)
-  const res = await sdk.helpers.txDidComplete(NODE, txid, true)
+  const res = await sdk.helpers.txDidComplete(collection.node.url, txid, true)
   return res[0]
 }
 

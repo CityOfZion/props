@@ -9,15 +9,17 @@ var assert = require('assert');
 describe("Basic Dice Test Suite", function() {
     this.timeout(60000);
     let TIME_CONSTANT = 4000
-    let dice, network, NODE
+    let dice, network
 
     beforeEach( async function () {
         this.timeout(0);
         //initialize the contract puppet
 
-        NODE = 'http://localhost:50012'
+        const targetNetwork = sdk.types.NetworkOption.LocalNet
 
-        dice = await new sdk.Dice({node: NODE})
+        dice = await new sdk.Dice({
+            network: targetNetwork
+        })
         await dice.init()
 
 
@@ -34,8 +36,6 @@ describe("Basic Dice Test Suite", function() {
 
         const runSize = 2000
         const bins = 20
-        const binVals = new Array(bins).fill(0)
-
 
         const txids = []
         for (let i = 0; i < runSize; i++) {
@@ -46,13 +46,13 @@ describe("Basic Dice Test Suite", function() {
 
         const results = []
         for (let txid of txids) {
-            let result = await sdk.helpers.txDidComplete(NODE, txid)
+            let result = await sdk.helpers.txDidComplete(dice.node.url, txid)
             results.push(result[0])
         }
 
         // chi-squared test for uniformity
         const chiSquared = sdk.helpers.chiSquared(results)
-        assert(chiSquared < 20, chiSquared)
+        assert(chiSquared < 30, chiSquared)
     })
 
     it('should roll some fair dice using rollDie', async function() {
@@ -72,7 +72,7 @@ describe("Basic Dice Test Suite", function() {
 
         const results = []
         for (let txid of txids) {
-            let result = await sdk.helpers.txDidComplete(NODE, txid)
+            let result = await sdk.helpers.txDidComplete(dice.node.url, txid)
             results.push(result[0])
         }
 

@@ -22,12 +22,16 @@ For SDK specific documentation, visit our [**sdk documentation**](https://props.
 ## ScriptHashes:
 
 ### N3 Privatenet (like neo-express):
-Scripthashes are baked into the sdk, but can be referenced within each class ([example](https://props.coz.io/d/docs/sdk/ts/classes/Collection#scripthash))
+Scripthashes are baked into the sdk, but can be referenced within each class ([example](https://props.coz.io/d/docs/sdk/ts/classes/Collection#scripthash)).
+We also include a configuration enum at `types.NetworkOption` to make network configuration easy. In most cases, we recommend using this approach.
+A complete list of configuration options can be found [here](https://props.coz.io/d/docs/sdk/ts/interfaces/types.PropConstructorOptions)
 
 ```typescript
-import Collection from '@cityofzion/props'
+import Collection, types from '@cityofzion/props'
 
-collection: Collection = new Collection()
+collection: Collection = new Collection({
+  'network': types.NetworkOption.LocalNet
+})
 await collection.init()
 console.log(collection.scriptHash)
 ```
@@ -50,8 +54,7 @@ import {wallet} from '@cityofzion/neon-core'
 const node = //refer to dora.coz.io/monitor for a list of nodes.
 const scriptHash = //refer to the scriptHashes section above
 puppet = await new Puppet({
-  node,
-  scriptHash
+  'network': types.NetworkOption.LocalNet
 })
 await puppet.init()
 ```

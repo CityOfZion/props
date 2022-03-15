@@ -14,6 +14,12 @@ export enum InstanceAccessMode {
   Global = 2
 }
 
+export enum NetworkOption {
+  LocalNet = 0,
+  TestNet = 1,
+  MainNet = 2
+}
+
 export interface BaseStats {
   charisma: number
   constitution: number
@@ -98,7 +104,7 @@ export interface EventInstanceCall {
 }
 
 export interface PropConstructorOptions {
-  network?: string
+  network?: NetworkOption
   node?: string
   scriptHash?: string
 }

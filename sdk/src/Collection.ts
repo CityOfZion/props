@@ -1,13 +1,13 @@
-import { merge } from 'lodash'
+import {merge} from 'lodash'
 import {rpc, wallet} from '@cityofzion/neon-core'
 import {sc} from "@cityofzion/neon-js";
-import {CollectionType, PropConstructorOptions} from "./interface";
+import {CollectionType, NetworkOption, PropConstructorOptions} from "./interface";
 import {CollectionAPI} from "./api";
 import fs from 'fs'
 import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
-  network: 'localnet'
+  network: NetworkOption.LocalNet
 }
 
 /**
@@ -42,15 +42,15 @@ export class Collection {
     this.options = merge({}, DEFAULT_OPTIONS, options)
 
     switch(this.options.network) {
-      case 'localnet':
+      case NetworkOption.LocalNet:
         this.options.node = 'http://localhost:50012'
         this.options.scriptHash = '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70'
         break
-      case 'testnet':
+      case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e'
         break
-      case 'mainnet':
+      case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
         this.options.scriptHash = '' //not implemented
     }

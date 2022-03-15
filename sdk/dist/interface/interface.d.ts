@@ -11,6 +11,11 @@ export declare enum InstanceAccessMode {
     ContractWhiteListRestricted = 1,
     Global = 2
 }
+export declare enum NetworkOption {
+    LocalNet = 0,
+    TestNet = 1,
+    MainNet = 2
+}
 export interface BaseStats {
     charisma: number;
     constitution: number;
@@ -83,7 +88,7 @@ export interface EventInstanceCall {
     param: ContractParamLike[];
 }
 export interface PropConstructorOptions {
-    network?: string;
+    network?: NetworkOption;
     node?: string;
     scriptHash?: string;
 }

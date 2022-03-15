@@ -2,10 +2,10 @@ import { merge } from 'lodash'
 import {rpc, wallet} from '@cityofzion/neon-core'
 import {PuppetAPI, NeoInterface} from './api'
 import {sc} from "@cityofzion/neon-js";
-import {EpochType, PropConstructorOptions, PuppetType} from "./interface";
+import {EpochType, NetworkOption, PropConstructorOptions, PuppetType} from "./interface";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
-  network: 'localnet',
+  network: NetworkOption.LocalNet
 }
 
 export class Puppet {
@@ -16,15 +16,15 @@ export class Puppet {
     this.options = merge({}, DEFAULT_OPTIONS, options)
 
     switch(this.options.network) {
-      case 'localnet':
+      case NetworkOption.LocalNet:
         this.options.node = 'http://localhost:50012'
         this.options.scriptHash = '0xc41e54181647c739bef3c4353a5a18ca1186ddbd'
         break
-      case 'testnet':
+      case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0x97857c01d64f846b5fe2eca2d09d2d73928b3f43'
         break
-      case 'mainnet':
+      case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
         this.options.scriptHash = '' //not implemented
     }

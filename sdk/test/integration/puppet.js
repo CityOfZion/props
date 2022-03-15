@@ -10,12 +10,17 @@ describe("Basic Puppet Test Suite", function() {
     beforeEach( async function () {
         this.timeout(0);
         //initialize the contract puppet
-        NODE = 'http://localhost:50012'
 
-        puppet = await new sdk.Puppet({node: NODE})
+        const targetNetwork = sdk.types.NetworkOption.LocalNet
+
+        puppet = await new sdk.Puppet({
+            network: targetNetwork
+        })
         await puppet.init()
 
-        collection = await new sdk.Collection({node: NODE})
+        collection = await new sdk.Collection({
+            network: targetNetwork
+        })
         await collection.init()
 
         //load any wallets and network settings we may want later (helpful if we're local)
@@ -49,12 +54,9 @@ describe("Basic Puppet Test Suite", function() {
         assert(balance >= 0)
     })
 
-    //test to mint a token to the address and verify balance of changes
-
     it("should create an epoch from generator instance and set it as active", async() => {
         const cozWallet = network.wallets[0].wallet
 
-        /*
         const collectionId = await collection.totalCollections()
         const initialCollection = await collection.getCollectionJSON(collectionId)
 
@@ -81,7 +83,7 @@ describe("Basic Puppet Test Suite", function() {
             }
         })
         const maxTraits = 5
-        */
+
 
         //Create the Epoch
         console.log("create epoch: ")
@@ -104,7 +106,7 @@ describe("Basic Puppet Test Suite", function() {
 
     it("should mint a token to the root account", async function() {
         this.timeout(0)
-        const NODE = 'http://localhost:50012'
+
         const cozWallet = network.wallets[0].wallet
         const tokensOld = await puppet.tokensOf(cozWallet.address)
 
@@ -178,8 +180,7 @@ describe("Basic Puppet Test Suite", function() {
         const mintFee = 100000000
         const res = await puppet.setMintFee(mintFee, cozWallet)
         await sdk.helpers.sleep(2000)
-        console.log(NODE, res)
-        await sdk.helpers.txDidComplete(NODE, res)
+        await sdk.helpers.txDidComplete(puppet.node.url, res)
 
         const realizedMintFee = await puppet.getMintFee()
         assert.equal(mintFee, realizedMintFee)
@@ -195,7 +196,7 @@ describe("Basic Puppet Test Suite", function() {
 
         let res = await puppet.purchase(cozWallet)
         await sdk.helpers.sleep(2000)
-        await sdk.helpers.txDidComplete(NODE, res)
+        await sdk.helpers.txDidComplete(puppet.node.url, res)
 
         // verify that the token was purchased
         const newTotalSupply = await puppet.totalSupply()
@@ -206,7 +207,7 @@ describe("Basic Puppet Test Suite", function() {
         res = await puppet.setMintFee(5 * initialMintFee, cozWallet)
         console.log('set mint fee: ', res)
         await sdk.helpers.sleep(2000)
-        await sdk.helpers.txDidComplete(NODE, res)
+        await sdk.helpers.txDidComplete(puppet.node.url, res)
 
         // verify the update persisted
         const newMintFee = await puppet.getMintFee()
@@ -216,7 +217,7 @@ describe("Basic Puppet Test Suite", function() {
         // buy a new token and verify
         res = await puppet.purchase(cozWallet)
         await sdk.helpers.sleep(2000)
-        await sdk.helpers.txDidComplete(NODE, res)
+        await sdk.helpers.txDidComplete(puppet.node.url, res)
 
         const finalTotalSupply = await puppet.totalSupply()
         assert(newTotalSupply < finalTotalSupply)
@@ -224,7 +225,7 @@ describe("Basic Puppet Test Suite", function() {
         // reset
         res = await puppet.setMintFee(initialMintFee, cozWallet)
         await sdk.helpers.sleep(2000)
-        await sdk.helpers.txDidComplete(NODE, res)
+        await sdk.helpers.txDidComplete(puppet.node.url, res)
     })
 
     it("should get the total epochs", async() => {
@@ -262,7 +263,7 @@ describe("Basic Puppet Test Suite", function() {
 
         const res = await puppet.createEpoch("testEpoch", 3, newEpoch, cozWallet)
         await sdk.helpers.sleep(2000)
-        await sdk.helpers.txDidComplete(NODE, res)
+        await sdk.helpers.txDidComplete(puppet.node.url, res)
 
         const epoch_id = await puppet.totalEpochs()
         const res2 = await puppet.getEpochJSON(epoch_id)
@@ -275,14 +276,14 @@ describe("Basic Puppet Test Suite", function() {
 })
 
 
-async function createCollection(collection, NODE, timeConstant, signer) {
+async function createCollection(collection, timeConstant, signer) {
     const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json', signer)
     await sdk.helpers.sleep(timeConstant)
-    const res = await sdk.helpers.txDidComplete(NODE, txid)
+    const res = await sdk.helpers.txDidComplete(collection.node.url, txid)
     return res[0]
 }
 
-async function mintFromInstance(instanceId, count, wallet, timeConstant, NODE) {
+async function mintFromInstance(instanceId, count, wallet, timeConstant) {
     const txids = []
     for (let i = 0; i < count; i++) {
         const txid = await generator.mintFromInstance(instanceId, wallet)
@@ -292,7 +293,7 @@ async function mintFromInstance(instanceId, count, wallet, timeConstant, NODE) {
 
     const res = []
     for (let txid of txids) {
-        const traits = await sdk.helpers.txDidComplete(NODE, txid, true)
+        const traits = await sdk.helpers.txDidComplete(generator.node.url, txid, true)
         res.push(traits[0])
     }
     return res

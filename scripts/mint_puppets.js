@@ -41,7 +41,7 @@ async function main(timeConstant) {
     console.log('  Generator Instance ID: ', generatorInstanceId)
 
     console.log(`creating an epoch with generator instance ${generatorInstanceId}`)
-    txid = await puppet.createEpoch("Puppeteer", result[0], 1 * 10**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
+    txid = await puppet.createEpoch("Puppeteer", result[0], 1 * 1000**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
     await sdk.helpers.sleep(timeConstant)
     result = await sdk.helpers.txDidComplete(NODE, txid)
     const epochId = result[0]
@@ -71,12 +71,12 @@ async function main(timeConstant) {
     }
     await sdk.helpers.sleep(timeConstant)
 
-    const totalSupply = await puppet.totalSupply()
-    console.log('Puppet Supply: ', totalSupply)
-
     for (let id of txids) {
         await sdk.helpers.txDidComplete(NODE, id, true)
     }
+
+    const totalSupply = await puppet.totalSupply()
+    console.log('Puppet Supply: ', totalSupply)
 
     for (let i = 1; i <= totalSupply; i++) {
         let p = await puppet.properties(i.toString())

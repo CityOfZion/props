@@ -35,17 +35,11 @@ const DEFAULT_OPTIONS: PropConstructorOptions = {
  * ```
  */
 export class Collection {
-  private options: PropConstructorOptions
+  private options: PropConstructorOptions = DEFAULT_OPTIONS
   private networkMagic: number = -1
 
   constructor(options: PropConstructorOptions = {}) {
-    this.options = merge({}, DEFAULT_OPTIONS, options)
-
-    switch(this.options.network) {
-      case NetworkOption.LocalNet:
-        this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70'
-        break
+    switch(options.network) {
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e'
@@ -53,7 +47,13 @@ export class Collection {
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
         this.options.scriptHash = '' //not implemented
+        break
+      default:
+        this.options.node = 'http://localhost:50012'
+        this.options.scriptHash = '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70'
+        break
     }
+    this.options = merge({}, this.options, options)
   }
 
   /**

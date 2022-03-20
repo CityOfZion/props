@@ -15,13 +15,9 @@ const DEFAULT_OPTIONS = {
 };
 class Generator {
     constructor(options = {}) {
+        this.options = DEFAULT_OPTIONS;
         this.networkMagic = -1;
-        this.options = lodash_1.merge({}, DEFAULT_OPTIONS, options);
         switch (this.options.network) {
-            case interface_1.NetworkOption.LocalNet:
-                this.options.node = 'http://localhost:50012';
-                this.options.scriptHash = '0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab';
-                break;
             case interface_1.NetworkOption.TestNet:
                 this.options.node = 'https://testnet1.neo.coz.io:443';
                 this.options.scriptHash = '0xdda8055789f0eb3c1d092c714a68ba3e631586c7';
@@ -29,7 +25,13 @@ class Generator {
             case interface_1.NetworkOption.MainNet:
                 this.options.node = 'https://mainnet1.neo.coz.io:443';
                 this.options.scriptHash = ''; //not implemented
+                break;
+            default:
+                this.options.node = 'http://localhost:50012';
+                this.options.scriptHash = '0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab';
+                break;
         }
+        this.options = lodash_1.merge({}, this.options, options);
     }
     async init() {
         const getVersionRes = await this.node.getVersion();

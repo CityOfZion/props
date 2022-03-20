@@ -16,17 +16,11 @@ const DEFAULT_OPTIONS: PropConstructorOptions = {
 }
 
 export class Generator {
-  private options: PropConstructorOptions
+  private options: PropConstructorOptions = DEFAULT_OPTIONS
   private networkMagic: number = -1
 
   constructor(options: PropConstructorOptions = {}) {
-    this.options = merge({}, DEFAULT_OPTIONS, options)
-
     switch(this.options.network) {
-      case NetworkOption.LocalNet:
-        this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab'
-        break
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0xdda8055789f0eb3c1d092c714a68ba3e631586c7'
@@ -34,7 +28,13 @@ export class Generator {
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
         this.options.scriptHash = '' //not implemented
+        break
+      default:
+        this.options.node = 'http://localhost:50012'
+        this.options.scriptHash = '0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab'
+        break
     }
+    this.options = merge({}, this.options, options)
   }
 
   async init() {

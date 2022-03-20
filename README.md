@@ -51,7 +51,7 @@ get the project: `git clone git@github.com:CityOfZion/props.git`
    ```
    neoxp policy set FeePerByte 100 genesis
    neoxp policy set ExecFeeFactor 3 genesis
-   neoxp policy set StoragePrice 10000 genesis
+   neoxp policy setnpm run ini StoragePrice 10000 genesis
    neoxp transfer 10000 GAS genesis coz
    ```
 

@@ -32,10 +32,12 @@ export interface BaseStats {
 export interface PuppetType {
   armorClass: number
   attributes: BaseStats
+  description: string
   epoch: number
   hitDie: string
   name: string
   owner: wallet.Account
+  seed: string
   traits: {}
   tokenId: number
   tokenURI: string

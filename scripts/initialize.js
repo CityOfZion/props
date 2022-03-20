@@ -5,7 +5,7 @@ const Neon = require("@cityofzion/neon-core")
 async function main(node, signer, timeConstant) {
     let result, txid
 
-    const puppet = await new sdk.Puppet({node})
+    const puppet = await new sdk.Puppet()
     await puppet.init()
 
     const collection = await new sdk.Collection()
@@ -51,7 +51,6 @@ async function main(node, signer, timeConstant) {
             console.log("  id: ", result[0], '\n')
         }
     }
-
 }
 
 const network = JSON.parse(fs.readFileSync("default.neo-express").toString());

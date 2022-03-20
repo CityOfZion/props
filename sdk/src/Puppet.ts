@@ -9,17 +9,11 @@ const DEFAULT_OPTIONS: PropConstructorOptions = {
 }
 
 export class Puppet {
-  private options: PropConstructorOptions
+  private options: PropConstructorOptions = DEFAULT_OPTIONS
   private networkMagic: number = -1
 
   constructor(options: PropConstructorOptions = {}) {
-    this.options = merge({}, DEFAULT_OPTIONS, options)
-
     switch(this.options.network) {
-      case NetworkOption.LocalNet:
-        this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0xc41e54181647c739bef3c4353a5a18ca1186ddbd'
-        break
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0x97857c01d64f846b5fe2eca2d09d2d73928b3f43'
@@ -27,7 +21,13 @@ export class Puppet {
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
         this.options.scriptHash = '' //not implemented
+        break
+      default:
+        this.options.node = 'http://localhost:50012'
+        this.options.scriptHash = '0xcd6e430eb87c4d33b5753717f2937dae6053eed5'
+        break
     }
+    this.options = merge({}, this.options, options)
   }
 
   async init() {

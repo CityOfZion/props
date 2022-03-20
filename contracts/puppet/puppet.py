@@ -3,7 +3,7 @@ from boa3.builtin import contract, CreateNewEvent, NeoMetadata, metadata, public
 from boa3.builtin.contract import abort
 from boa3.builtin.interop.blockchain import get_contract, Transaction
 from boa3.builtin.interop.contract import call_contract, update_contract, GAS
-from boa3.builtin.interop.runtime import get_network, burn_gas, gas_left, check_witness, script_container, calling_script_hash
+from boa3.builtin.interop.runtime import get_random, get_network, burn_gas, gas_left, check_witness, script_container, calling_script_hash
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.storage.findoptions import FindOptions
@@ -21,10 +21,10 @@ def manifest_metadata() -> NeoMetadata:
     Defines this smart contract's metadata information
     """
     meta = NeoMetadata()
-    meta.author = "COZ, Inc."
-    meta.description = "A public NFT prop with base attributes and interactions"
-    meta.email = "contact@coz.io"
-    meta.supported_standards = ["NEP-11"]
+    meta.author = 'COZ, Inc.'
+    meta.description = 'A public NFT prop with base attributes and interactions'
+    meta.email = 'contact@coz.io'
+    meta.supported_standards = ['NEP-11']
     return meta
 
 
@@ -125,7 +125,7 @@ def balanceOf(owner: UInt160) -> int:
     :return: the total amount of tokens owned by the specified address.
     :raise AssertionError: raised if `owner` length is not 20.
     """
-    assert len(owner) == 20, "Incorrect `owner` length"
+    assert len(owner) == 20, 'Incorrect `owner` length'
     user: User = get_user(owner)
     return user.get_balance_of()
 
@@ -142,7 +142,7 @@ def tokensOf(owner: UInt160) -> Iterator:
     :return: an iterator that contains all of the token ids owned by the specified address.
     :raise AssertionError: raised if `owner` length is not 20.
     """
-    assert len(owner) == 20, "Incorrect `owner` length"
+    assert len(owner) == 20, 'Incorrect `owner` length'
     user: User = get_user(owner)
     return user.get_owned_tokens()
 
@@ -173,7 +173,7 @@ def transfer(to: UInt160, token_id: bytes, data: Any) -> bool:
     :raise AssertionError: raised if `to` length is not 20 or if `token_id` is not a valid 
     NFT
     """
-    assert len(to) == 20, "Incorrect `to` length"
+    assert len(to) == 20, 'Incorrect `to` length'
 
     puppet: Puppet = get_puppet(token_id)
     token_owner: UInt160 = puppet.get_owner()
@@ -359,7 +359,7 @@ def offline_mint(epoch_id: bytes, account: UInt160) -> bytes:
     """
     tx = cast(Transaction, script_container)
     user: User = get_user(tx.sender)
-    assert user.get_offline_mint(), "User Permission Denied"
+    assert user.get_offline_mint(), 'User Permission Denied'
     return internal_mint(epoch_id, account)
 
 
@@ -376,7 +376,7 @@ def update(script: bytes, manifest: bytes, data: Any):
     """
     tx = cast(Transaction, script_container)
     user: User = get_user(tx.sender)
-    assert user.get_contract_upgrade(), "User Permission Denied"
+    assert user.get_contract_upgrade(), 'User Permission Denied'
 
     update_contract(script, manifest, data)
 
@@ -415,7 +415,10 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
     start_gas: int = gas_left
 
     mint_epoch: Epoch = get_epoch(epoch_id)
-    assert mint_epoch.can_mint(), "No available puppets to mint in the selected epoch"
+    assert mint_epoch.can_mint(), 'No available puppets to mint in the selected epoch'
+
+    mint_epoch.increment_supply()
+    save_epoch(mint_epoch)
 
     token_id_int: int = (totalSupply() + 1)
     token_id_string: bytes = itoa(token_id_int)
@@ -424,9 +427,6 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
 
     save_puppet(new_puppet)
     put(TOKEN_COUNT, token_id_int)
-
-    mint_epoch.increment_supply()
-    save_epoch(mint_epoch)
 
     user: User = get_user(owner)
     user.add_owned_token(token_id_string)
@@ -581,7 +581,7 @@ def set_user_permissions(user: UInt160, permissions: Dict[str, bool]) -> bool:
     """
     tx = cast(Transaction, script_container)
     invoking_user: User = get_user(tx.sender)
-    assert invoking_user.get_set_permissions(), "User Permission Denied"
+    assert invoking_user.get_set_permissions(), 'User Permission Denied'
 
     impacted_user: User = get_user(user)
     impacted_user.set_permissions(permissions)
@@ -638,14 +638,14 @@ class Epoch:
 
     def export(self) -> Dict[str, Any]:
         exported: Dict[str, Any] = {
-            "author": self._author,
-            "label": self._label,
-            "epochId": self._epoch_id,
-            "generatorInstanceId": self._generator_instance_id,
-            "mintFee": self._mint_fee,
-            "sysFee": self._sys_fee,
-            "maxSupply": self._max_supply,
-            "totalSupply": self.get_total_supply()
+            'author': self._author,
+            'label': self._label,
+            'epochId': self._epoch_id,
+            'generatorInstanceId': self._generator_instance_id,
+            'mintFee': self._mint_fee,
+            'sysFee': self._sys_fee,
+            'maxSupply': self._max_supply,
+            'totalSupply': self.get_total_supply()
         }
         return exported
 
@@ -664,7 +664,7 @@ def create_epoch(label: bytes, generator_instance_id: bytes, mint_fee: int, sys_
     author: UInt160 = tx.sender
 
     user: User = get_user(author)
-    assert user.get_create_epoch(), "User Permission Denied"
+    assert user.get_create_epoch(), 'User Permission Denied'
 
     new_epoch: Epoch = Epoch(label, generator_instance_id, mint_fee, sys_fee, max_supply, author)
     epoch_id: bytes = new_epoch.get_id()
@@ -724,7 +724,7 @@ def mk_epoch_key(epoch_id: bytes) -> bytes:
 
 TOKEN_PREFIX = b't'
 
-# A mapping for attribute modifiers which can be indexed by attribute "value"
+# A mapping for attribute modifiers which can be indexed by attribute 'value'
 ATTRIBUTE_MODIFIERS: List[int] = [
     -6,  # impossible to have a 0 map
     -5,  # 1
@@ -746,13 +746,14 @@ ATTRIBUTE_MODIFIERS: List[int] = [
 ]
 
 # A set of options for a puppet hit die
-HIT_DIE_OPTIONS: List[str] = ["d6", "d8", "d10", "d12"]
+HIT_DIE_OPTIONS: List[str] = ['d6', 'd8', 'd10', 'd12']
 
 
 class Puppet:
 
     def __init__(self):
         self._token_id: bytes = b''
+        self._epoch_token_id: int = 0
         self._epoch_id: bytes = b''
         self._charisma: int = 0
         self._constitution: int = 0
@@ -760,9 +761,10 @@ class Puppet:
         self._intelligence: int = 0
         self._strength: int = 0
         self._wisdom: int = 0
-        self._hit_die: str = "d4"
+        self._hit_die: str = 'd4'
         self._traits: Dict[str, Any] = {}
         self._owner: UInt160 = UInt160()
+        self._seed: bytes = b''
 
     def export(self) -> Dict[str, Any]:
         exported: Dict[str, Any] = {
@@ -778,7 +780,8 @@ class Puppet:
             'owner': self._owner,
             'tokenId': self._token_id,
             'traits': self._traits,
-            'epochId': self._epoch_id
+            'epochId': self._epoch_id,
+            'epochTokenId': self._epoch_token_id
         }
         return exported
 
@@ -813,6 +816,12 @@ class Puppet:
         # Generate a puppet token_id and set the owner
         self._owner = owner
         self._token_id = token_id
+        self._epoch_token_id = target_epoch.get_total_supply()
+
+        # Generate a seed for external use and future scalability
+        entropy: bytes = get_random().to_bytes()
+        pruned_entropy: bytes = entropy[0:16]
+        self._seed = pruned_entropy
 
         return True
 
@@ -866,12 +875,13 @@ class Puppet:
         @return:
         """
         token_id_bytes: bytes = self._token_id
-
+        epoch_token_id_int: int = self._epoch_token_id
         epoch_id_bytes: bytes = self._epoch_id
+
         epoch_id_int: int = epoch_id_bytes.to_int()
         epoch: Epoch = get_epoch(epoch_id_bytes)
         epoch_label: bytes = epoch.get_label()
-
+        epoch_max_supply: int = epoch.get_max_supply()
 
         network_magic: int = get_network
         network_magic_string: str = itoa(network_magic)
@@ -886,12 +896,15 @@ class Puppet:
                 'strength': self.get_strength(),
                 'wisdom': self.get_wisdom(),
             },
-            'description': 'Puppet NFT #' + token_id_bytes.to_str() + ' from the ' + epoch_label.to_str() + ' epoch.',
+            'description': 'Puppet NFT #' + token_id_bytes.to_str() + '. ' + itoa(epoch_token_id_int) + ' of ' +
+                           itoa(epoch_max_supply) + ' from the ' + epoch_label.to_str() +
+                           '(' + itoa(epoch_id_int) + ') epoch.',
             'epochId': epoch_id_int,
             'hitDie': self._hit_die,
             'image': 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str() + '.png',
             'name': 'puppet',
             'owner': self._owner,
+            'seed': self._seed,
             'tokenId': token_id_bytes,
             'tokenURI': 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
             'traits': self._traits,
@@ -904,51 +917,53 @@ class Puppet:
         :return: the puppet in a flat format
         """
         token_id_bytes: bytes = self._token_id
-
+        epoch_token_id_int: int = self._epoch_token_id
         epoch_id_bytes: bytes = self._epoch_id
+
         epoch_id_int: int = epoch_id_bytes.to_int()
         epoch: Epoch = get_epoch(epoch_id_bytes)
         epoch_label: bytes = epoch.get_label()
+        epoch_max_supply: int = epoch.get_max_supply()
 
         network_magic: int = get_network
         network_magic_string: str = itoa(network_magic)
 
         puppet_attrs: List[Any] = [
             {
-                "trait_type": "epochId",
-                "value": epoch_id_int
+                'trait_type': 'epochId',
+                'value': epoch_id_int
             },
             {
-                "trait_type": "hitDie",
-                "value": self._hit_die
+                'trait_type': 'hitDie',
+                'value': self._hit_die
             },
             {
-                "trait_type": "armorClass",
-                "value": self.get_armor_class()
+                'trait_type': 'armorClass',
+                'value': self.get_armor_class()
             },
             {
-                "trait_type": "attributes.charisma",
-                "value": self.get_charisma()
+                'trait_type': 'attributes.charisma',
+                'value': self.get_charisma()
             },
             {
-                "trait_type": "attributes.constitution",
-                "value": self.get_constitution()
+                'trait_type': 'attributes.constitution',
+                'value': self.get_constitution()
             },
             {
-                "trait_type": "attributes.dexterity",
-                "value": self.get_dexterity()
+                'trait_type': 'attributes.dexterity',
+                'value': self.get_dexterity()
             },
             {
-                "trait_type": "attributes.intelligence",
-                "value": self.get_intelligence()
+                'trait_type': 'attributes.intelligence',
+                'value': self.get_intelligence()
             },
             {
-                "trait_type": "attributes.strength",
-                "value": self.get_strength()
+                'trait_type': 'attributes.strength',
+                'value': self.get_strength()
             },
             {
-                "trait_type": "attributes.wisdom",
-                "value": self.get_wisdom()
+                'trait_type': 'attributes.wisdom',
+                'value': self.get_wisdom()
             }
         ]
 
@@ -962,13 +977,16 @@ class Puppet:
             )
 
         exported: Dict[str, Any] = {
-            "name": 'puppet',
-            "image": 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str() + '.png',
-            "tokenURI": 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
-            "owner": self._owner,
-            "tokenId": token_id_bytes.to_str(),
-            "description": 'Puppet NFT #' + token_id_bytes.to_str() + ' from the ' + epoch_label.to_str() + ' epoch.',
-            "attributes": puppet_attrs
+            'name': 'puppet',
+            'image': 'https://props.coz.io/img/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str() + '.png',
+            'tokenURI': 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
+            'owner': self._owner,
+            'seed': self._seed,
+            'tokenId': token_id_bytes.to_str(),
+            'description': 'Puppet NFT #' + token_id_bytes.to_str() + '. ' + itoa(epoch_token_id_int) + ' of ' +
+                           itoa(epoch_max_supply) + ' from the ' + epoch_label.to_str() +
+                           '(' + itoa(epoch_id_int) + ') epoch.',
+            'attributes': puppet_attrs
         }
         return exported
 

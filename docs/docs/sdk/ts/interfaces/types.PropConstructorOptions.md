@@ -9,13 +9,23 @@ custom_edit_url: null
 
 ## Properties
 
+### network
+
+• `Optional` **network**: [`NetworkOption`](../enums/types.NetworkOption.md)
+
+#### Defined in
+
+[interface/interface.ts:113](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L113)
+
+___
+
 ### node
 
 • `Optional` **node**: `string`
 
 #### Defined in
 
-[interface/interface.ts:101](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L101)
+[interface/interface.ts:114](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L114)
 
 ___
 
@@ -25,4 +35,4 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:102](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L102)
+[interface/interface.ts:115](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L115)

@@ -21,7 +21,7 @@ const DEFAULT_OPTIONS = {
  *
  * To use this class:
  * ```typescript
- * import {Dice} from "../../dist"
+ * import {Dice} from "../../dist" //import {Dice} from "@cityofzion/props
  *
  * const dice: Dice = new Dice()
  * await dice.init() // interfaces with the node to resolve network magic
@@ -35,14 +35,14 @@ class Dice {
     constructor(options = {}) {
         this.options = DEFAULT_OPTIONS;
         this.networkMagic = -1;
-        switch (this.options.network) {
+        switch (options.network) {
             case interface_1.NetworkOption.TestNet:
                 this.options.node = 'https://testnet1.neo.coz.io:443';
                 this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0';
                 break;
             case interface_1.NetworkOption.MainNet:
                 this.options.node = 'https://mainnet1.neo.coz.io:443';
-                this.options.scriptHash = ''; //not implemented
+                this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0';
                 break;
             case interface_1.NetworkOption.LocalNet:
                 this.options.node = 'http://localhost:50012';

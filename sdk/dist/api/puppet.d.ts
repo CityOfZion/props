@@ -10,7 +10,7 @@ export declare class PuppetAPI {
      * @param signer
      */
     static balanceOf(node: string, networkMagic: number, contractHash: string, address: string, signer?: wallet.Account): Promise<number>;
-    static createEpoch(node: string, networkMagic: number, contractHash: string, label: string, generatorInstanceId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string>;
+    static createEpoch(node: string, networkMagic: number, contractHash: string, label: string, generatorInstanceId: number, initialRollCollectionId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string>;
     /**
      * Returns the decimals of the token
      * @param node

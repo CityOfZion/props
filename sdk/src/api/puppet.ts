@@ -38,6 +38,7 @@ export class PuppetAPI {
     contractHash: string,
     label: string,
     generatorInstanceId: number,
+    initialRollCollectionId: number,
     mintFee: number,
     sysFee: number,
     maxSupply: number,
@@ -47,6 +48,7 @@ export class PuppetAPI {
     const params = [
       sc.ContractParam.string(label),
       sc.ContractParam.integer(generatorInstanceId),
+      sc.ContractParam.integer(initialRollCollectionId),
       sc.ContractParam.integer(mintFee),
       sc.ContractParam.integer(sysFee),
       sc.ContractParam.integer(maxSupply)

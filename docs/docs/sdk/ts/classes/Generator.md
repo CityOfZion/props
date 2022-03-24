@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Generator.ts:23](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L23)
+[Generator.ts:22](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L22)
 
 ## Properties
 
@@ -30,17 +30,17 @@ custom_edit_url: null
 
 #### Defined in
 
-[Generator.ts:21](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L21)
+[Generator.ts:20](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L20)
 
 ___
 
 ### options
 
-• `Private` **options**: [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md)
+• `Private` **options**: [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md) = `DEFAULT_OPTIONS`
 
 #### Defined in
 
-[Generator.ts:20](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L20)
+[Generator.ts:19](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L19)
 
 ## Accessors
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:32](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L32)
+[Generator.ts:45](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L45)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:39](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L39)
+[Generator.ts:52](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L52)
 
 ## Methods
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:46](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L46)
+[Generator.ts:59](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L59)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:61](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L61)
+[Generator.ts:74](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L74)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:87](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L87)
+[Generator.ts:100](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L100)
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:66](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L66)
+[Generator.ts:79](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L79)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:83](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L83)
+[Generator.ts:96](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L96)
 
 ___
 
@@ -197,7 +197,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:70](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L70)
+[Generator.ts:83](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L83)
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:27](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L27)
+[Generator.ts:40](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L40)
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:91](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L91)
+[Generator.ts:104](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L104)
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:95](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L95)
+[Generator.ts:108](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L108)
 
 ___
 
@@ -276,7 +276,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:103](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L103)
+[Generator.ts:116](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L116)
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:99](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L99)
+[Generator.ts:112](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L112)
 
 ___
 
@@ -320,7 +320,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:107](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L107)
+[Generator.ts:120](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L120)
 
 ___
 
@@ -340,7 +340,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:115](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L115)
+[Generator.ts:128](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L128)
 
 ___
 
@@ -360,4 +360,4 @@ ___
 
 #### Defined in
 
-[Generator.ts:111](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Generator.ts#L111)
+[Generator.ts:124](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Generator.ts#L124)

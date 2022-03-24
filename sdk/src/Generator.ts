@@ -20,14 +20,14 @@ export class Generator {
   private networkMagic: number = -1
 
   constructor(options: PropConstructorOptions = {}) {
-    switch(this.options.network) {
+    switch(options.network) {
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0xdda8055789f0eb3c1d092c714a68ba3e631586c7'
         break
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = '' //not implemented
+        this.options.scriptHash = '0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9'
         break
       default:
         this.options.node = 'http://localhost:50012'

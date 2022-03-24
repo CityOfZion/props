@@ -7,9 +7,9 @@ The collection contract is designed to store and provision immutable arrays of t
 the need to quickly sample from a range of data (like a discrete probability distribution).
 
 ### Where Am I:
-* **PrivateNet:** `0x23e27f3aeb76a65e573f5ee8842c35d42e643b70`
+* **PrivateNet:** [Current Location](https://github.com/CityOfZion/props/blob/develop/sdk/src/Collection.ts#L50)
 * **Testnet:** [`0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e`](https://dora.coz.io/contract/neo3/testnet_rc4/0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e)
-* **Mainnet:** TBD
+* **Mainnet:** ['0xf05651bc505fd5c7d36593f6e8409932342f9085'](https://dora.coz.io/contract/neo3/mainnet/0xf05651bc505fd5c7d36593f6e8409932342f9085)
 
 ### Using the collection contract:
 To use the collection contract, begin by adding the interface to your smart contract.  Below, we provide an example.  Make sure to also include the methods you would like to use. For `SCRIPT_HASH`, refer to the [Where am I?](#where-am-i) section.

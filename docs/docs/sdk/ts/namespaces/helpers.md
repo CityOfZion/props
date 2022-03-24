@@ -24,7 +24,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[helpers/helpers.ts:177](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/helpers/helpers.ts#L177)
+[helpers/helpers.ts:142](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/helpers/helpers.ts#L142)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[helpers/helpers.ts:103](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/helpers/helpers.ts#L103)
+[helpers/helpers.ts:68](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/helpers/helpers.ts#L68)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[helpers/helpers.ts:38](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/helpers/helpers.ts#L38)
+[helpers/helpers.ts:6](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/helpers/helpers.ts#L6)
 
 ___
 
@@ -89,27 +89,7 @@ ___
 
 #### Defined in
 
-[helpers/helpers.ts:135](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/helpers/helpers.ts#L135)
-
-___
-
-### parseToJSON
-
-▸ **parseToJSON**(`entries`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `entries` | `any`[] |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[helpers/helpers.ts:6](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/helpers/helpers.ts#L6)
+[helpers/helpers.ts:100](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/helpers/helpers.ts#L100)
 
 ___
 
@@ -129,7 +109,7 @@ ___
 
 #### Defined in
 
-[helpers/helpers.ts:69](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/helpers/helpers.ts#L69)
+[helpers/helpers.ts:34](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/helpers/helpers.ts#L34)
 
 ___
 
@@ -151,7 +131,7 @@ ___
 
 #### Defined in
 
-[helpers/helpers.ts:141](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/helpers/helpers.ts#L141)
+[helpers/helpers.ts:106](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/helpers/helpers.ts#L106)
 
 ___
 
@@ -176,4 +156,4 @@ ___
 
 #### Defined in
 
-[helpers/helpers.ts:73](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/helpers/helpers.ts#L73)
+[helpers/helpers.ts:38](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/helpers/helpers.ts#L38)

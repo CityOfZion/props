@@ -2,16 +2,22 @@ const sdk = require('../sdk/dist')
 const fs = require('fs')
 const Neon = require("@cityofzion/neon-core")
 
-async function main(node, signer, timeConstant) {
+async function main(network, signer, timeConstant) {
     let result, txid
 
-    const puppet = await new sdk.Puppet()
+    const puppet = await new sdk.Puppet({
+            network
+        })
     await puppet.init()
 
-    const collection = await new sdk.Collection()
+    const collection = await new sdk.Collection({
+        network
+    })
     await collection.init()
 
-    const generator = await new sdk.Generator()
+    const generator = await new sdk.Generator({
+        network
+    })
     await generator.init()
 
     console.log('\n' +
@@ -28,7 +34,7 @@ async function main(node, signer, timeConstant) {
         txid = await collection.createFromFile(basePath + '/' + file, signer)
         console.log("  txid: ", txid)
         await sdk.helpers.sleep(timeConstant)
-        result = await sdk.helpers.txDidComplete(node, txid, true)
+        result = await sdk.helpers.txDidComplete(collection.node.url, txid, true)
         console.log("  collection_id: ", result[0], '\n')
     }
 
@@ -47,16 +53,29 @@ async function main(node, signer, timeConstant) {
         const txids = await generator.createGeneratorFromFile(basePath + '/' + file, signer, timeConstant)
         await sdk.helpers.sleep(timeConstant)
         for await (txid of txids) {
-            let result = await sdk.helpers.txDidComplete(node, txid, true)
+            let result = await sdk.helpers.txDidComplete(generator.node.url, txid, true)
             console.log("  id: ", result[0], '\n')
         }
     }
 }
 
-const network = JSON.parse(fs.readFileSync("default.neo-express").toString());
-const node = process.argv[2] || 'http://localhost:50012'
-const pkey = process.argv[3] || network.wallets[0].accounts[0]['private-key']
+const networkFile = JSON.parse(fs.readFileSync("default.neo-express").toString());
+
+//const node = process.argv[2] || 'http://localhost:50012'
+let target = process.argv[2]
+switch (target){
+    case 'TestNet':
+      target = sdk.types.NetworkOption.TestNet
+      break
+    case 'MainNet':
+      target = sdk.types.NetworkOption.MainNet
+      break
+    default:
+      target = sdk.types.NetworkOption.LocalNet
+}
+
+const pkey = process.argv[3] || networkFile.wallets[0].accounts[0]['private-key']
 const signer = new Neon.wallet.Account(pkey)
 const timeConstant = process.argv[4] || 5000
 
-main(node, signer, timeConstant)
+main(target, signer, timeConstant)

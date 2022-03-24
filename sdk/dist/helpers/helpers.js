@@ -15,9 +15,6 @@ function formatter(field, num = false) {
             if (num) {
                 return parseInt(neon_core_1.u.reverseHex(rawValue), 16);
             }
-            //if (rawValue.length === 40) {
-            //  return new wallet.Account(u.reverseHex(rawValue))
-            //}
             return neon_core_1.u.hexstring2str(rawValue);
         case "Integer":
             return parseInt(field.value);

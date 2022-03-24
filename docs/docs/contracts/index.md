@@ -12,7 +12,7 @@ custom_edit_url: null
     width="200px;"></img>
 </p>
 
-<h1 align="center">props</h1>
+<h1 align="center">PROPS</h1>
 
 <p align="center">
   General Purpose Smart Contracts
@@ -29,7 +29,7 @@ As such, the following dependencies are assumed:
 * node v14/16
 
 ## Quickstart
-If you're here to get started quickly with the existing props, simply run the following:
+If you're here to get started quickly with the existing PROPS, simply run the following:
 
 1. From project root, `npm install`
 2. Configure a private network the environment:
@@ -73,7 +73,7 @@ neo3-boa {{path to .py file}}
 ```
 
 ## Running a Local Private Network
-The props project includes a neo-express config file [here](https://github.com/CityOfZion/props/blob/develop/default.neo-express). That is designed to be used for local developement environments.
+The PROPS project includes a neo-express config file [here](https://github.com/CityOfZion/props/blob/develop/default.neo-express). That is designed to be used for local developement environments.
 If you plan to do development locally, we recommending using this configuration since it is heavily referenced in the project.
 
 1. To spin up a local network, navigate to project root and execute:
@@ -108,29 +108,33 @@ If you plan to do development locally, we recommending using this configuration 
 
    `npm run deploy`
 
-   This helper script, located [here](https://github.com/CityOfZion/props/blob/develop/scripts/deploy.js) will handle the deployment of all of our contracts to the privatenet.
+   This helper script, located [here](https://github.com/CityOfZion/props/blob/develop/scripts/deploy.js) will handle
+   the deployment of every contract in the contracts directory(recursively) by default.
 
-   To add additional smart contracts, simply add another entry to the deployment script that points to the .nef file produced when you compile.
+   To deploy from a different location, provide the relative path as the first argument: `npm run deploy {{PATH}}`
 
-   This script can also be used to deploy to `public testnet` and `public mainnet` by providing runtime args as follows:
+   This script also includes a number of other helpful parameters:
 
-   `npm run deploy {{NODE}} {{PRIVATE_KEY}} {{TIME_CONSTANT}}`
+   `npm run deploy {{PATH}} {{NODE}} {{PRIVATE_KEY}} {{TIME_CONSTANT}}`
 
       ```
       where:
-      * **node:** the url of a node on your target network
+      * **PATH** the relative path to recursively deploy contracts from
+      * **NODE:** the url of a node on your target network
       * **PRIVATE_KEY:** a private key you want to use to sign the transaction (must have GAS)
       * **TIME_CONSTANT:** the network time constant, for testnet/mainnet, we recommend `30000`
       ```
-   **NOTE:** When deploying to testnet/mainnet, make sure to comment out the deployment lines for the other contracts in the script or you will burn GAS by deploying unnecessary code.*
+   **NOTE:** When deploying to testnet/mainnet, make sure to to be explicit in your pathing or you will burn GAS by deploying unnecessary code.*
 
-## Initializing the props:
+## Initializing the PROPS:
 
-  A number of the props projects have stateful components.  These are not mandatory for use, but include a number of features which are designed to enable high level applications.  To initialize these constants, run:
+  A number of the PROPS projects have stateful components.  These are not mandatory for use, but include a number of features which are designed to enable high level applications.  To initialize these constants, run:
 
   `npm run initialize`
 
   This script will load the various assets into the smart contracts.
 
-  **Note:** The initialize script uses supports the same input parameters as the deploy script and can be used as a reference for preloading your contracts with data.
+  It also accepts a number of inputs:
+  `npm run deploy {{NODE}} {{PRIVATE_KEY}} {{TIME_CONSTANT}}`
+
 

@@ -41,11 +41,12 @@ class PuppetAPI {
         }
         return parseInt(res[0].value);
     }
-    static async createEpoch(node, networkMagic, contractHash, label, generatorInstanceId, mintFee, sysFee, maxSupply, signer) {
+    static async createEpoch(node, networkMagic, contractHash, label, generatorInstanceId, initialRollCollectionId, mintFee, sysFee, maxSupply, signer) {
         const method = "create_epoch";
         const params = [
             neon_js_1.sc.ContractParam.string(label),
             neon_js_1.sc.ContractParam.integer(generatorInstanceId),
+            neon_js_1.sc.ContractParam.integer(initialRollCollectionId),
             neon_js_1.sc.ContractParam.integer(mintFee),
             neon_js_1.sc.ContractParam.integer(sysFee),
             neon_js_1.sc.ContractParam.integer(maxSupply)

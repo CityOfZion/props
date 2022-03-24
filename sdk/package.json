@@ -1,6 +1,6 @@
 {
   "name": "@cityofzion/props",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "an sdk for interfacing with props to use in decentralized applications",
   "main": "dist/index",
   "types": "dist/index",

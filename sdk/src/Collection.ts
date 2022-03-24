@@ -25,7 +25,7 @@ const DEFAULT_OPTIONS: PropConstructorOptions = {
  *
  * To use this class:
  * ```typescript
- * import {Collection} from "../../dist"
+ * import {Collection} from "../../dist" //import {Collection} from "@cityofzion/props
  *
  * const collection: Collection = new Collection()
  * await collection.init() // interfaces with the node to resolve network magic
@@ -46,7 +46,7 @@ export class Collection {
         break
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = '' //not implemented
+        this.options.scriptHash = '0xf05651bc505fd5c7d36593f6e8409932342f9085'
         break
       default:
         this.options.node = 'http://localhost:50012'

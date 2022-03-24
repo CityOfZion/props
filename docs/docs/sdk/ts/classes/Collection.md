@@ -20,7 +20,7 @@ will publish the invocation and return the txid instead of the method response.
 
 To use this class:
 ```typescript
-import {Collection} from "../../dist"
+import {Collection} from "../../dist" //import {Collection} from "@cityofzion/props
 
 const collection: Collection = new Collection()
 await collection.init() // interfaces with the node to resolve network magic
@@ -43,7 +43,7 @@ console.log(total) // outputs the total collection count in the contract
 
 #### Defined in
 
-[Collection.ts:42](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L42)
+[Collection.ts:41](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L41)
 
 ## Properties
 
@@ -53,17 +53,17 @@ console.log(total) // outputs the total collection count in the contract
 
 #### Defined in
 
-[Collection.ts:40](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L40)
+[Collection.ts:39](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L39)
 
 ___
 
 ### options
 
-• `Private` **options**: [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md)
+• `Private` **options**: [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md) = `DEFAULT_OPTIONS`
 
 #### Defined in
 
-[Collection.ts:39](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L39)
+[Collection.ts:38](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L38)
 
 ## Accessors
 
@@ -79,7 +79,7 @@ The the node that the instance is connected to.
 
 #### Defined in
 
-[Collection.ts:57](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L57)
+[Collection.ts:70](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L70)
 
 ___
 
@@ -95,7 +95,7 @@ The contract script hash that is being interfaced with.
 
 #### Defined in
 
-[Collection.ts:67](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L67)
+[Collection.ts:80](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L80)
 
 ## Methods
 
@@ -123,7 +123,7 @@ A transaction ID.  Refer to [helpers.txDidComplete](../namespaces/helpers.md#txd
 
 #### Defined in
 
-[Collection.ts:86](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L86)
+[Collection.ts:99](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L99)
 
 ___
 
@@ -148,7 +148,7 @@ A transaction ID. Refer to {@link helper.txDidComplete} for parsing.
 
 #### Defined in
 
-[Collection.ts:98](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L98)
+[Collection.ts:111](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L111)
 
 ___
 
@@ -174,7 +174,7 @@ The bytestring representation of the collection. **OR** a txid if the signer par
 
 #### Defined in
 
-[Collection.ts:134](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L134)
+[Collection.ts:147](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L147)
 
 ___
 
@@ -200,7 +200,7 @@ The value of the collection element **OR** a txid if the signer parameter is pop
 
 #### Defined in
 
-[Collection.ts:148](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L148)
+[Collection.ts:161](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L161)
 
 ___
 
@@ -225,7 +225,7 @@ The requested collection **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Collection.ts:120](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L120)
+[Collection.ts:133](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L133)
 
 ___
 
@@ -250,7 +250,7 @@ The length of the collection **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Collection.ts:161](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L161)
+[Collection.ts:174](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L174)
 
 ___
 
@@ -275,7 +275,7 @@ The values in the collection **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Collection.ts:174](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L174)
+[Collection.ts:187](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L187)
 
 ___
 
@@ -291,7 +291,7 @@ Gets the magic number for the network and configures the class instance.
 
 #### Defined in
 
-[Collection.ts:49](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L49)
+[Collection.ts:62](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L62)
 
 ___
 
@@ -323,7 +323,7 @@ The element from the mapping **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Collection.ts:194](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L194)
+[Collection.ts:207](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L207)
 
 ___
 
@@ -351,7 +351,7 @@ testing.
 
 #### Defined in
 
-[Collection.ts:210](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L210)
+[Collection.ts:223](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L223)
 
 ___
 
@@ -376,7 +376,7 @@ The total number of collections stored in the contract. **OR** a txid if the sig
 
 #### Defined in
 
-[Collection.ts:223](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L223)
+[Collection.ts:236](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L236)
 
 ___
 
@@ -398,4 +398,4 @@ ___
 
 #### Defined in
 
-[Collection.ts:227](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Collection.ts#L227)
+[Collection.ts:240](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Collection.ts#L240)

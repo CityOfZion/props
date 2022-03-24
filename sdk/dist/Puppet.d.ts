@@ -8,7 +8,7 @@ export declare class Puppet {
     get node(): rpc.RPCClient;
     get scriptHash(): string;
     balanceOf(address: string, signer?: wallet.Account): Promise<number>;
-    createEpoch(label: string, generatorId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string>;
+    createEpoch(label: string, generatorId: number, initialRollCollectionId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string>;
     decimals(signer?: wallet.Account): Promise<number>;
     deploy(signer: wallet.Account): Promise<string>;
     getAttributeMod(attributeValue: number, signer?: wallet.Account): Promise<number | string>;

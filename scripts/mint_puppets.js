@@ -2,10 +2,7 @@ const sdk = require('../sdk/dist')
 const fs = require('fs')
 const Neon = require("@cityofzion/neon-core")
 
-
-const NODE = 'http://localhost:50012'
-const TIME_CONSTANT = 4000
-const PuppetArmySize = 10
+const PuppetArmySize = 50
 const EPOCH_TOTAL_SUPPLY = 100
 
 
@@ -15,17 +12,19 @@ network.wallets.forEach( (walletObj) => {
     walletObj.wallet = new Neon.wallet.Account(walletObj.accounts[0]['private-key'])
 })
 
-async function main(timeConstant) {
+async function main(target, signer, timeConstant) {
 
 
     let txid, result
 
-    const signer = network.wallets[0].wallet
-
-    const puppet = await new sdk.Puppet({node: NODE})
+    const puppet = await new sdk.Puppet({
+        network
+    })
     await puppet.init()
 
-    const generator = await new sdk.Generator({node: NODE})
+    const generator = await new sdk.Generator({
+        network
+    })
     await generator.init()
 
     console.log(`Build me an army worthy of ${signer.address} !!!`)
@@ -36,14 +35,14 @@ async function main(timeConstant) {
     console.log(`creating a generator instance with generator 1`)
     txid = await generator.createInstance(1, signer)
     await sdk.helpers.sleep(timeConstant)
-    result = await sdk.helpers.txDidComplete(NODE, txid, true)
+    result = await sdk.helpers.txDidComplete(puppet.node.url, txid, true)
     const generatorInstanceId = result[0]
     console.log('  Generator Instance ID: ', generatorInstanceId)
 
     console.log(`creating an epoch with generator instance ${generatorInstanceId}`)
-    txid = await puppet.createEpoch("Puppeteer", result[0], 1 * 1000**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
+    txid = await puppet.createEpoch("Puppeteer", result[0], 1,  10 * 10**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
     await sdk.helpers.sleep(timeConstant)
-    result = await sdk.helpers.txDidComplete(NODE, txid)
+    result = await sdk.helpers.txDidComplete(puppet.node.url, txid)
     const epochId = result[0]
     console.log('  epoch ID: ', epochId)
 
@@ -57,7 +56,7 @@ async function main(timeConstant) {
     ]
     txid = await generator.setInstanceAuthorizedContracts(generatorInstanceId, authorizedContracts, signer)
     await sdk.helpers.sleep(timeConstant)
-    result = await sdk.helpers.txDidComplete(NODE, txid)
+    result = await sdk.helpers.txDidComplete(puppet.node.url, txid)
     console.log('  result: ', result[0])
 
     const txids = []
@@ -72,7 +71,7 @@ async function main(timeConstant) {
     await sdk.helpers.sleep(timeConstant)
 
     for (let id of txids) {
-        await sdk.helpers.txDidComplete(NODE, id, true)
+        await sdk.helpers.txDidComplete(puppet.node.url, id, true)
     }
 
     const totalSupply = await puppet.totalSupply()
@@ -83,4 +82,23 @@ async function main(timeConstant) {
         console.log(p)
     }
 }
-main(TIME_CONSTANT)
+
+const networkFile = JSON.parse(fs.readFileSync("default.neo-express").toString());
+
+let target = process.argv[2]
+switch (target){
+    case 'TestNet':
+        target = sdk.types.NetworkOption.TestNet
+        break
+    case 'MainNet':
+        target = sdk.types.NetworkOption.MainNet
+        break
+    default:
+        target = sdk.types.NetworkOption.LocalNet
+}
+
+const pkey = process.argv[3] || networkFile.wallets[0].accounts[0]['private-key']
+const signer = new Neon.wallet.Account(pkey)
+const timeConstant = process.argv[4] || 5000
+
+main(target, signer, timeConstant)

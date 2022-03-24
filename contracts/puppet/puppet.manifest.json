@@ -101,7 +101,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 2022,
+                "offset": 2023,
                 "parameters": [
                     {
                         "name": "data",
@@ -271,6 +271,10 @@
                         "type": "ByteArray"
                     },
                     {
+                        "name": "initial_roll_collection_id",
+                        "type": "ByteArray"
+                    },
+                    {
                         "name": "mint_fee",
                         "type": "Integer"
                     },
@@ -288,7 +292,7 @@
             },
             {
                 "name": "get_epoch_json",
-                "offset": 1594,
+                "offset": 1595,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -300,7 +304,7 @@
             },
             {
                 "name": "get_epoch",
-                "offset": 1608,
+                "offset": 1609,
                 "parameters": [
                     {
                         "name": "epoch_id",
@@ -312,14 +316,14 @@
             },
             {
                 "name": "total_epochs",
-                "offset": 1688,
+                "offset": 1689,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "get_attribute_mod",
-                "offset": 1803,
+                "offset": 1804,
                 "parameters": [
                     {
                         "name": "attribute_value",
@@ -331,7 +335,7 @@
             },
             {
                 "name": "get_puppet",
-                "offset": 1835,
+                "offset": 1836,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -343,7 +347,7 @@
             },
             {
                 "name": "get_puppet_json",
-                "offset": 1889,
+                "offset": 1890,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -355,7 +359,7 @@
             },
             {
                 "name": "get_puppet_json_flat",
-                "offset": 1903,
+                "offset": 1904,
                 "parameters": [
                     {
                         "name": "token_id",
@@ -367,7 +371,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 2200,
+                "offset": 2201,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

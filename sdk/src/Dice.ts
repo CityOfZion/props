@@ -20,7 +20,7 @@ const DEFAULT_OPTIONS: PropConstructorOptions = {
  *
  * To use this class:
  * ```typescript
- * import {Dice} from "../../dist"
+ * import {Dice} from "../../dist" //import {Dice} from "@cityofzion/props
  *
  * const dice: Dice = new Dice()
  * await dice.init() // interfaces with the node to resolve network magic
@@ -36,14 +36,14 @@ export class Dice {
   private networkMagic: number = -1
 
   constructor(options: PropConstructorOptions = {}) {
-    switch(this.options.network) {
+    switch(options.network) {
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
         break
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = '' //not implemented
+        this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
         break
       case NetworkOption.LocalNet:
         this.options.node = 'http://localhost:50012'

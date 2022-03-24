@@ -599,11 +599,12 @@ EPOCH_PREFIX = b'e'
 
 
 class Epoch:
-    def __init__(self, label: bytes, generator_instance_id: bytes, mint_fee: int, sys_fee: int, max_supply: int, author: UInt160):
+    def __init__(self, label: bytes, generator_instance_id: bytes, initial_roll_collection_id: bytes, mint_fee: int, sys_fee: int, max_supply: int, author: UInt160):
         self._author: UInt160 = author
         self._label: bytes = label
         self._epoch_id: bytes = (total_epochs() + 1).to_bytes()
         self._generator_instance_id: bytes = generator_instance_id
+        self._initial_roll_collection_id: bytes = initial_roll_collection_id
         self._mint_fee: int = mint_fee
         self._sys_fee: int = sys_fee
         self._max_supply: int = max_supply
@@ -620,6 +621,9 @@ class Epoch:
 
     def get_generator_instance_id(self) -> bytes:
         return self._generator_instance_id
+
+    def get_initial_roll_collection_id(self) -> bytes:
+        return self._initial_roll_collection_id
 
     def get_label(self) -> bytes:
         return self._label
@@ -642,6 +646,7 @@ class Epoch:
             'label': self._label,
             'epochId': self._epoch_id,
             'generatorInstanceId': self._generator_instance_id,
+            'initialRollCollectionId': self._initial_roll_collection_id,
             'mintFee': self._mint_fee,
             'sysFee': self._sys_fee,
             'maxSupply': self._max_supply,
@@ -659,14 +664,14 @@ class Epoch:
 
 
 @public
-def create_epoch(label: bytes, generator_instance_id: bytes, mint_fee: int, sys_fee: int, max_supply: int) -> int:
+def create_epoch(label: bytes, generator_instance_id: bytes,  initial_roll_collection_id: bytes, mint_fee: int, sys_fee: int, max_supply: int) -> int:
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
     user: User = get_user(author)
     assert user.get_create_epoch(), 'User Permission Denied'
 
-    new_epoch: Epoch = Epoch(label, generator_instance_id, mint_fee, sys_fee, max_supply, author)
+    new_epoch: Epoch = Epoch(label, generator_instance_id, initial_roll_collection_id, mint_fee, sys_fee, max_supply, author)
     epoch_id: bytes = new_epoch.get_id()
     epoch_id_int: int = epoch_id.to_int()
 
@@ -792,8 +797,9 @@ class Puppet:
         """
         # generate base attributes
         target_epoch: Epoch = get_epoch(epoch_id)
+        initial_roll_collection_id_bytes: bytes = target_epoch.get_initial_roll_collection_id()
 
-        initial_roll_collection_id: int = 1
+        initial_roll_collection_id: int = initial_roll_collection_id_bytes.to_int()
         attrs: [bytes] = Collection.sample_from_collection(initial_roll_collection_id, 6)
 
         self._charisma = attrs[0].to_int()

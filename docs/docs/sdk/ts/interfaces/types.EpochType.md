@@ -15,7 +15,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[interface/interface.ts:49](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L49)
+[interface/interface.ts:58](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L58)
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:50](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L50)
+[interface/interface.ts:60](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L60)
 
 ___
 
@@ -35,7 +35,27 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:51](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L51)
+[interface/interface.ts:61](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L61)
+
+___
+
+### initialRollCollectionId
+
+• **initialRollCollectionId**: `number`
+
+#### Defined in
+
+[interface/interface.ts:62](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L62)
+
+___
+
+### label
+
+• **label**: `string`
+
+#### Defined in
+
+[interface/interface.ts:59](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L59)
 
 ___
 
@@ -45,7 +65,7 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:53](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L53)
+[interface/interface.ts:65](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L65)
 
 ___
 
@@ -55,7 +75,17 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:52](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L52)
+[interface/interface.ts:63](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L63)
+
+___
+
+### sysFee
+
+• **sysFee**: `number`
+
+#### Defined in
+
+[interface/interface.ts:64](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L64)
 
 ___
 
@@ -65,4 +95,4 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:54](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/interface/interface.ts#L54)
+[interface/interface.ts:66](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/interface/interface.ts#L66)

@@ -10,6 +10,7 @@ custom_edit_url: null
 
 - [EventTypeEnum](../enums/types.EventTypeEnum.md)
 - [InstanceAccessMode](../enums/types.InstanceAccessMode.md)
+- [NetworkOption](../enums/types.NetworkOption.md)
 
 ## Interfaces
 

@@ -27,7 +27,6 @@ async function NEFHunter(dirPath) {
     })
 }
 
-
 const network = JSON.parse(fs.readFileSync("default.neo-express").toString());
 const basePath = process.argv[2] || 'contracts'
 const NODE = process.argv[3] || 'http://localhost:50012'

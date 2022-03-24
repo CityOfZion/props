@@ -13,7 +13,7 @@ import { PropConstructorOptions } from "./interface";
  *
  * To use this class:
  * ```typescript
- * import {Dice} from "../../dist"
+ * import {Dice} from "../../dist" //import {Dice} from "@cityofzion/props
  *
  * const dice: Dice = new Dice()
  * await dice.init() // interfaces with the node to resolve network magic

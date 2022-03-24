@@ -13,18 +13,18 @@ export class Puppet {
   private networkMagic: number = -1
 
   constructor(options: PropConstructorOptions = {}) {
-    switch(this.options.network) {
+    switch(options.network) {
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
         this.options.scriptHash = '0x97857c01d64f846b5fe2eca2d09d2d73928b3f43'
         break
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = '' //not implemented
+        this.options.scriptHash = '0x76a8f8a7a901b29a33013b469949f4b08db15756'
         break
       default:
         this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0xcd6e430eb87c4d33b5753717f2937dae6053eed5'
+        this.options.scriptHash = '0x1830a4bacda1008375faa0253f249b04024f8a69'
         break
     }
     this.options = merge({}, this.options, options)
@@ -53,8 +53,8 @@ export class Puppet {
     return PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address, signer)
   }
 
-  async createEpoch(label: string, generatorId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string> {
-    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorId, mintFee, sysFee, maxSupply, signer)
+  async createEpoch(label: string, generatorId: number, initialRollCollectionId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string> {
+    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorId, initialRollCollectionId, mintFee, sysFee, maxSupply, signer)
   }
 
   async decimals(signer?: wallet.Account): Promise<number> {

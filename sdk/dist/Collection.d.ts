@@ -15,7 +15,7 @@ import { CollectionType, PropConstructorOptions } from "./interface";
  *
  * To use this class:
  * ```typescript
- * import {Collection} from "../../dist"
+ * import {Collection} from "../../dist" //import {Collection} from "@cityofzion/props
  *
  * const collection: Collection = new Collection()
  * await collection.init() // interfaces with the node to resolve network magic

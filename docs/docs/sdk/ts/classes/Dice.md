@@ -18,7 +18,7 @@ will publish the invocation and return the txid instead of the method response.
 
 To use this class:
 ```typescript
-import {Dice} from "../../dist"
+import {Dice} from "../../dist" //import {Dice} from "@cityofzion/props
 
 const dice: Dice = new Dice()
 await dice.init() // interfaces with the node to resolve network magic
@@ -42,7 +42,7 @@ for a truly random number.
 
 #### Defined in
 
-[Dice.ts:39](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L39)
+[Dice.ts:38](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L38)
 
 ## Properties
 
@@ -52,17 +52,17 @@ for a truly random number.
 
 #### Defined in
 
-[Dice.ts:37](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L37)
+[Dice.ts:36](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L36)
 
 ___
 
 ### options
 
-• `Private` **options**: [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md)
+• `Private` **options**: [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md) = `DEFAULT_OPTIONS`
 
 #### Defined in
 
-[Dice.ts:36](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L36)
+[Dice.ts:35](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L35)
 
 ## Accessors
 
@@ -78,7 +78,7 @@ The the node that the instance is connected to.
 
 #### Defined in
 
-[Dice.ts:54](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L54)
+[Dice.ts:67](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L67)
 
 ___
 
@@ -94,7 +94,7 @@ The contract script hash that is being interfaced with.
 
 #### Defined in
 
-[Dice.ts:64](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L64)
+[Dice.ts:77](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L77)
 
 ## Methods
 
@@ -110,7 +110,7 @@ Gets the magic number for the network and configures the class instance.
 
 #### Defined in
 
-[Dice.ts:46](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L46)
+[Dice.ts:59](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L59)
 
 ___
 
@@ -139,7 +139,7 @@ The resulting number from the mapping. **OR** a txid if the signer parameter is 
 
 #### Defined in
 
-[Dice.ts:101](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L101)
+[Dice.ts:114](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L114)
 
 ___
 
@@ -168,7 +168,7 @@ The pseudo-random number. **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Dice.ts:84](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L84)
+[Dice.ts:97](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L97)
 
 ___
 
@@ -195,7 +195,7 @@ An array of dice rolls. **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Dice.ts:135](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L135)
+[Dice.ts:148](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L148)
 
 ___
 
@@ -223,4 +223,4 @@ The result of the die roll **OR** a txid if the signer parameter is populated.
 
 #### Defined in
 
-[Dice.ts:118](https://github.com/CityOfZion/isengard/blob/87233a5/sdk/src/Dice.ts#L118)
+[Dice.ts:131](https://github.com/CityOfZion/isengard/blob/4359a42/sdk/src/Dice.ts#L131)

@@ -10,9 +10,6 @@ export function formatter(field: any, num: boolean = false): any {
       if (num) {
         return parseInt(u.reverseHex(rawValue),16)
       }
-      //if (rawValue.length === 40) {
-      //  return new wallet.Account(u.reverseHex(rawValue))
-      //}
       return u.hexstring2str(rawValue)
     case "Integer":
       return parseInt(field.value)

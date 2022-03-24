@@ -30,6 +30,7 @@ export interface PuppetType {
     description: string;
     epoch: number;
     hitDie: string;
+    image: string;
     name: string;
     owner: wallet.Account;
     seed: string;
@@ -48,9 +49,12 @@ export interface CollectionType {
 }
 export interface EpochType {
     author: string;
+    label: string;
     epochId: number;
     generatorInstanceId: number;
+    initialRollCollectionId: number;
     mintFee: number;
+    sysFee: number;
     maxSupply: number;
     totalSupply: number;
 }

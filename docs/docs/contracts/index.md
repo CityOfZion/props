@@ -1,6 +1,5 @@
 ---
-id: "index"
-title: ""
+id: "contracts"
 slug: "/contracts/"
 sidebar_position: 0
 custom_edit_url: null
@@ -29,15 +28,13 @@ As such, the following dependencies are assumed:
 * node v14/16
 
 ## Quickstart
-If you're here to get started quickly with the existing PROPS, simply run the following:
+If you're here to get started quickly with the existing props, simply run the following:
 
 1. From project root, `npm install`
 2. Configure a private network the environment:
 
    ```
-      neoxp policy set FeePerByte 100 genesis
-      neoxp policy set ExecFeeFactor 3 genesis
-      neoxp policy set StoragePrice 10000 genesis
+      neoxp policy sync MainNet genesis
       neoxp transfer 10000 GAS genesis coz
       npm run deploy
       npm run initialize
@@ -85,9 +82,7 @@ If you plan to do development locally, we recommending using this configuration 
 2. Configure your privatenet to mirror the public networks and transfer GAS to the developer account:
 
    ```bash
-   neoxp policy set FeePerByte 100 genesis
-   neoxp policy set ExecFeeFactor 3 genesis
-   neoxp policy set StoragePrice 10000 genesis
+   neoxp policy sync MainNet genesis
    neoxp transfer 10000 GAS genesis coz
    ```
 
@@ -126,9 +121,9 @@ If you plan to do development locally, we recommending using this configuration 
       ```
    **NOTE:** When deploying to testnet/mainnet, make sure to to be explicit in your pathing or you will burn GAS by deploying unnecessary code.*
 
-## Initializing the PROPS:
+## Initializing the Props:
 
-  A number of the PROPS projects have stateful components.  These are not mandatory for use, but include a number of features which are designed to enable high level applications.  To initialize these constants, run:
+  A number of the props contracts have stateful components.  These are not mandatory for use, but include a number of features which are designed to enable high level applications.  To initialize these constants, run:
 
   `npm run initialize`
 

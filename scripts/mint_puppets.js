@@ -6,13 +6,7 @@ const PuppetArmySize = 50
 const EPOCH_TOTAL_SUPPLY = 100
 
 
-//load any wallets and network settings we may want later (helpful if we're local)
-const network = JSON.parse(fs.readFileSync("default.neo-express").toString());
-network.wallets.forEach( (walletObj) => {
-    walletObj.wallet = new Neon.wallet.Account(walletObj.accounts[0]['private-key'])
-})
-
-async function main(target, signer, timeConstant) {
+async function main(network, signer, timeConstant) {
 
 
     let txid, result

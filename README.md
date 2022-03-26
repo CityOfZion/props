@@ -49,9 +49,7 @@ get the project: `git clone git@github.com:CityOfZion/props.git`
 2. `npm install` from project root *(in a second terminal from here on)*
 3. Configure neo-express:
    ```
-   neoxp policy set FeePerByte 100 genesis
-   neoxp policy set ExecFeeFactor 3 genesis
-   neoxp policy set StoragePrice 10000 genesis
+   neoxp policy sync MainNet genesis
    neoxp transfer 10000 GAS genesis coz
    ```
 

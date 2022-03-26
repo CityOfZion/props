@@ -27,7 +27,7 @@ The PROPS project has 3 primary goals:
 
 The PROPS project is ambiguous in scope outside of those goals.  Included within this scope is the minting of `puppet` NFTs which
 are defined as `General Purpose Utility NFTs`.  In addition to the value of having a general use utility NFT in the ecosystem for developers to leverage,
-this particular contract provide multiple great examples of how the other PROPS contracts can be leveraged.  Further, it is an excellent reference for
+this particular contract provide multiple great examples of how the other props contracts can be leveraged.  Further, it is an excellent reference for
 new developers who are interesting in NFT development.
 
 While the `Puppet` NFTs are designed with `metaverse` applications in-mind, we make no assertions which limit their
@@ -46,9 +46,7 @@ get the project: `git clone git@github.com:CityOfZion/props.git`
 2. `npm install` from project root *(in a second terminal from here on)*
 3.
    ```
-   neoxp policy set FeePerByte 100 genesis
-   neoxp policy set ExecFeeFactor 3 genesis
-   neoxp policy set StoragePrice 10000 genesis
+   neoxp policy sync MainNet genesis
    neoxp transfer 10000 GAS genesis coz
    ```
 
@@ -78,7 +76,7 @@ features to meet your needs.
 
 ### parameters
 Smart Contracts present a number of unique features when treated as packages.  One of these features is the mutability of storage.
-Two of the included PROPS: `collection`, and `generator` leverage user-defined constants.  The parameters directory includes a number of examples of these constants, which can be
+Two of the included props: `collection`, and `generator` leverage user-defined constants.  The parameters directory includes a number of examples of these constants, which can be
 pre-loaded into the contract using some included setup scripts.  They are good references to developers who want to use the collection and generator contracts.
 
 **Note:** Make sure to verify the pointers to these constants (generatorID and collectionID) on public networks before deploying your contracts.  We can ensure the pointers in a

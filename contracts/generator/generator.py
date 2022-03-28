@@ -902,7 +902,7 @@ def mk_generator_instance_key(generator_instance_id: bytes) -> bytes:
 # ################Deps############################
 
 
-@contract('0x23e27f3aeb76a65e573f5ee8842c35d42e643b70')
+@contract('0xacf2aa5d0899e860eebd8b8a5454aa3017543848')
 class Collection:
 
     @staticmethod

@@ -24,7 +24,7 @@ class Puppet {
                 break;
             default:
                 this.options.node = 'http://localhost:50012';
-                this.options.scriptHash = '0x1830a4bacda1008375faa0253f249b04024f8a69';
+                this.options.scriptHash = '0xfefe63f07478394fbe514fda386ad8c7e2a485a0';
                 break;
         }
         this.options = lodash_1.merge({}, this.options, options);

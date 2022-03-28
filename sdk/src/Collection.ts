@@ -50,7 +50,7 @@ export class Collection {
         break
       default:
         this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0x23e27f3aeb76a65e573f5ee8842c35d42e643b70'
+        this.options.scriptHash = '0xacf2aa5d0899e860eebd8b8a5454aa3017543848'
         break
     }
     this.options = merge({}, this.options, options)
@@ -222,6 +222,18 @@ export class Collection {
    */
   async sampleFromCollection(collectionId: number, samples: number, signer?: wallet.Account): Promise<string> {
     return CollectionAPI.sampleFromCollection(this.node.url, this.networkMagic, this.scriptHash, collectionId, samples, signer)
+  }
+
+  /**
+   * Samples uniformly from a collection provided at the time of invocation.  Users have the option to 'pick', which
+   * prevents a value from being selected multiple times.  The results are published as outputs on the transaction.
+   * @param values an array of values to sample from
+   * @param samples the number of samples to fairly select from the values
+   * @param pick Are selected values removed from the list of options for future samples?
+   * @param signer The signer of the transaction.
+   */
+  async sampleFromRuntimeCollection(values: string[], samples: number, pick: boolean, signer: wallet.Account): Promise<string> {
+    return CollectionAPI.sampleFromRuntimeCollection(this.node.url, this.networkMagic, this.scriptHash, values, samples, pick, signer)
   }
 
   /**

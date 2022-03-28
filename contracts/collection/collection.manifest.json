@@ -124,15 +124,35 @@
                 "safe": false
             },
             {
-                "name": "total_collections",
+                "name": "sample_from_runtime_collection",
                 "offset": 404,
+                "parameters": [
+                    {
+                        "name": "vals",
+                        "type": "Array"
+                    },
+                    {
+                        "name": "samples",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "pick",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "total_collections",
+                "offset": 608,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "update",
-                "offset": 410,
+                "offset": 614,
                 "parameters": [
                     {
                         "name": "script",
@@ -152,7 +172,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 827,
+                "offset": 1031,
                 "parameters": [
                     {
                         "name": "data",
@@ -168,7 +188,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 865,
+                "offset": 1069,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

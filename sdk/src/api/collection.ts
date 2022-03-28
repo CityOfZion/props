@@ -239,6 +239,34 @@ export class CollectionAPI {
     return u.base642hex(res[0].value as string)
   }
 
+  static async sampleFromRuntimeCollection(
+    node: string,
+    networkMagic: number,
+    contractHash: string,
+    values: string[],
+    samples: number,
+    pick: boolean,
+    signer: wallet.Account
+  ): Promise<string> {
+    const method = "sample_from_runtime_collection"
+
+    const raw_values = values.map( (value) => {
+      return sc.ContractParam.string(value)
+    })
+
+    const param = [
+      sc.ContractParam.array(...raw_values),
+      sc.ContractParam.integer(samples),
+      sc.ContractParam.boolean(pick)
+    ]
+
+    const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
+    if (signer) {
+      return res
+    }
+    return u.base642hex(res[0].value as string)
+  }
+
   static async totalCollections(
     node: string,
     networkMagic: number,

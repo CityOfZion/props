@@ -158,6 +158,53 @@ describe("Basic Collection Test Suite", function() {
             assert(c !== undefined)
         }
     })
+
+    it("should sample uniformly from a runtime sample", async() => {
+        const cozWallet = network.wallets[0].wallet
+
+        const options = ['1','2','3','4','5','6','7','8','9','10']
+        const txid = await collection.sampleFromRuntimeCollection(options, 1000, false, cozWallet)
+
+        await sdk.helpers.sleep(TIME_CONSTANT)
+
+        const result = await sdk.helpers.txDidComplete(collection.node.url, txid, false)
+
+        const chiSquared = sdk.helpers.chiSquared(result[0])
+        assert(chiSquared < 20)
+    })
+
+    it("should pick 9 of the 10 samples multiple times without repeating", async() => {
+        const cozWallet = network.wallets[0].wallet
+
+        const options = ['1','2','3','4','5','6','7','8','9','10']
+
+        const txids = []
+        for (let i = 0; i < 20; i++) {
+           const txid = await collection.sampleFromRuntimeCollection(options, 9, true, cozWallet)
+           txids.push(txid)
+        }
+        await sdk.helpers.sleep(TIME_CONSTANT)
+
+        for (let txid of txids) {
+            let result = await sdk.helpers.txDidComplete(collection.node.url, txid, false)
+            assert(result[0].length === result[0].filter(onlyUnique).length)
+        }
+
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+        }
+    })
+
+    it('should reject a runtime sampling because the picks count is larger than the array length', async() => {
+        const cozWallet = network.wallets[0].wallet
+
+        const options = ['1','2','3','4','5','6','7','8','9','10']
+
+        try {
+            const txid = await collection.sampleFromRuntimeCollection(options, 12, true, cozWallet)
+            assert.fail('this tx should fail due to sample length')
+        } catch(e) {}
+    })
 })
 
 async function createCollection(collection, timeConstant, signer) {

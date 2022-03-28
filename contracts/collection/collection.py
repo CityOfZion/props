@@ -139,6 +139,29 @@ def sample_from_collection(collection_id: bytes, samples: int) -> [bytes]:
 
 
 @public
+def sample_from_runtime_collection(vals: [bytes], samples: int, pick: bool) -> [bytes]:
+    """
+    Gets values from a uniform-random sampled index an array.  The user has the option of replacement.
+    :param vals: the values to uniformly sample from
+    :param samples: the number of samples to return
+    :return: The value at the sampled index
+    """
+    assert (not pick) or \
+           (len(vals) >= samples)
+
+    result: [bytes] = []
+    for x in range(samples):
+        idx: int = Dice.rand_between(0, len(vals) - 1)
+        result.append(vals[idx])
+
+        if pick:
+            # if pick, remove the index as a selectable option
+            vals.pop(idx)
+
+    return result
+
+
+@public
 def total_collections() -> int:
     """
     Gets the total collection count

@@ -1121,7 +1121,7 @@ def mk_token_key(token_id: bytes) -> bytes:
 # ############INTERFACES###########
 
 
-@contract('0x23e27f3aeb76a65e573f5ee8842c35d42e643b70')
+@contract('0xacf2aa5d0899e860eebd8b8a5454aa3017543848')
 class Collection:
 
     @staticmethod
@@ -1137,7 +1137,7 @@ class Dice:
         pass
 
 
-@contract('0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab')
+@contract('0xa3e59ddc61b2d8ac42c519cee5ddaac83c7df276')
 class Generator:
 
     @staticmethod

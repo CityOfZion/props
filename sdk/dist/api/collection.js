@@ -157,6 +157,22 @@ class CollectionAPI {
         }
         return neon_js_1.u.base642hex(res[0].value);
     }
+    static async sampleFromRuntimeCollection(node, networkMagic, contractHash, values, samples, pick, signer) {
+        const method = "sample_from_runtime_collection";
+        const raw_values = values.map((value) => {
+            return neon_js_1.sc.ContractParam.string(value);
+        });
+        const param = [
+            neon_js_1.sc.ContractParam.array(...raw_values),
+            neon_js_1.sc.ContractParam.integer(samples),
+            neon_js_1.sc.ContractParam.boolean(pick)
+        ];
+        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        if (signer) {
+            return res;
+        }
+        return neon_js_1.u.base642hex(res[0].value);
+    }
     static async totalCollections(node, networkMagic, contractHash, signer) {
         const method = "total_collections";
         const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);

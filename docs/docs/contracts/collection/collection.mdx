@@ -74,6 +74,9 @@ class Collection:
   def sample_from_collection(collection_id: int) -> bytes:
       pass
 
+  @staticmethod
+  def sample_from_runtime_collection(vals: [bytes], samples: int, pick: bool) -> [bytes]:
+      pass
 
   @staticmethod
   def total_collections() -> int:

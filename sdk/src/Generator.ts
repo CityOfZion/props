@@ -31,7 +31,7 @@ export class Generator {
         break
       default:
         this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0xf8cab6d2ad81e3b7b6f94ef8bb12b8611c9952ab'
+        this.options.scriptHash = '0xa3e59ddc61b2d8ac42c519cee5ddaac83c7df276'
         break
     }
     this.options = merge({}, this.options, options)

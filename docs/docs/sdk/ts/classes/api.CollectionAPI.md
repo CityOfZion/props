@@ -38,7 +38,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[api/collection.ts:10](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L10)
+[api/collection.ts:10](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L10)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:40](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L40)
+[api/collection.ts:40](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L40)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:125](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L125)
+[api/collection.ts:125](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L125)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:143](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L143)
+[api/collection.ts:143](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L143)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:66](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L66)
+[api/collection.ts:66](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L66)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:163](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L163)
+[api/collection.ts:163](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L163)
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:181](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L181)
+[api/collection.ts:181](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L181)
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:202](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L202)
+[api/collection.ts:202](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L202)
 
 ___
 
@@ -236,7 +236,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:222](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L222)
+[api/collection.ts:222](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L222)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-[api/collection.ts:242](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L242)
+[api/collection.ts:242](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L242)
 
 ___
 
@@ -285,4 +285,4 @@ ___
 
 #### Defined in
 
-[api/collection.ts:260](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/collection.ts#L260)
+[api/collection.ts:260](https://github.com/CityOfZion/isengard/blob/1a0270b/sdk/src/api/collection.ts#L260)

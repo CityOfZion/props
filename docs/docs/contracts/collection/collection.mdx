@@ -18,8 +18,13 @@ the need to quickly sample from a range of data (like a discrete probability dis
 * **Testnet:** [`0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e`](https://dora.coz.io/contract/neo3/testnet_rc4/0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e)
 * **Mainnet:** [`0xf05651bc505fd5c7d36593f6e8409932342f9085`](https://dora.coz.io/contract/neo3/mainnet/0xf05651bc505fd5c7d36593f6e8409932342f9085)
 
-### Using the collection contract:
-To use the collection contract, begin by adding the interface to your smart contract.  Below, we provide an example.  Make sure to also include the methods you would like to use. For `SCRIPT_HASH`, refer to the [Where am I?](#where-am-i) section.
+### Including the collection prop in your project:
+To use the collection contract, begin by adding the interface to your smart contract.
+Below, we provide a complete interface definition in a number of languages to facilitate integration across all major
+contract development languages in the Neo N3 ecosystem. You can copy an paste this code directly into your smart contract to
+begin using the collection features. Because this is an interface, you only need to include the methods you will use.
+
+ For **SCRIPT_HASH**, refer to the [Where am I?](#where-am-i) section.
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -31,11 +36,47 @@ from boa3.builtin import contract
 class Collection:
 
   @staticmethod
+  def create_collection(description: bytes, collection_type: bytes, extra: bytes,  vals: [bytes]) -> int:
+      pass
+
+
+  @staticmethod
+  def get_collection_json(collection_id: bytes) -> Dict[str, Any]:
+      pass
+
+
+  @staticmethod
+  def get_collection(collection_id: bytes) -> Collection:
+      pass
+
+
+  @staticmethod
   def get_collection_element(collection:id: bytes, index: int) -> bytes:
       pass
 
+
+  @staticmethod
+  def get_collection_length(collection_id: bytes) -> int:
+      pass
+
+
+  @staticmethod
+  def get_collection_values(collection_id: bytes) -> [bytes]:
+      pass
+
+
+  @staticmethod
+  def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
+      pass
+
+
   @staticmethod
   def sample_from_collection(collection_id: int) -> bytes:
+      pass
+
+
+  @staticmethod
+  def total_collections() -> int:
       pass
 ```
 
@@ -67,6 +108,20 @@ To be Implemented
 </TabItem>
 
 </Tabs>
+
+#### Direct Import
+The collection prop is also structured in a way to allow the methods to be built directly into your contract.  To use the
+methods as direct import (instead of via contract call), **python** developers can import the `internal` methods found in the
+[`contracts/collection/helpers/collection.py`](https://github.com/CityOfZion/props/blob/develop/contracts/collection/helpers/collection.py) library:
+
+```python
+from helpers.collection import Collection, create_collection_internal, get_collection_json_internal, \
+    get_collection_internal, total_collections_internal`
+```
+
+This approach is not generally recommended, but can be helpful in a few circumstances where using a public contract is a risk.
+You may find importing the Collection type helpful when doing extensive interfacing with the `get_collection` methods.
+When directly importing, the examples below are applicable, but the method names have minor differences (`_internal`):
 
 ### Creating a new collection:
 To create a new collection, you can either use the contract interface on-chain or side-load via the [SDK](/docs/sdk/ts/classes/Collection#createcollection).

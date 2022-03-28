@@ -18,8 +18,13 @@ procedural object generation to probabilistic event execution.
 * **Testnet:** [`0xdda8055789f0eb3c1d092c714a68ba3e631586c7`](https://dora.coz.io/contract/neo3/testnet_rc4/0xdda8055789f0eb3c1d092c714a68ba3e631586c7)
 * **Mainnet:** [`0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9`](https://dora.coz.io/contract/neo3/mainnet/0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9)
 
-### Using the generator contract:
-To use the generator contract, begin by adding the interface to your smart contract.  Below, we provide an example.  Make sure to also include the methods you would like to use. For `SCRIPT_HASH`, refer to the [Where am I?](#where-am-i) section.
+### Including the generator prop in your project:
+To use the generator contract, begin by adding the interface to your smart contract.
+Below, we provide a complete interface definition in a number of languages to facilitate integration across all major
+contract development languages in the Neo N3 ecosystem. You can copy an paste this code directly into your smart contract to
+begin using the generator features. Because this is an interface, you only need to include the methods you will use.
+
+ For **SCRIPT_HASH**, refer to the [Where am I?](#where-am-i) section.
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -31,7 +36,67 @@ from boa3.builtin import contract
 class Generator:
 
     @staticmethod
+    def create_instance(generator_id: bytes) -> int:
+        pass
+
+    @staticmethod
     def mint_from_instance(from_code: bytes, to_instance_id: bytes) -> Dict[str, Any]:
+        pass
+
+    @staticmethod
+    def set_instance_authorized_users(instance_id: bytes, authorized_users: [UInt160]) -> bool:
+        pass
+
+    @staticmethod
+    def set_instance_authorized_contracts(instance_id: bytes, authorized_contracts: List) -> bool:
+        pass
+
+    @staticmethod
+    def set_instance_access_mode(instance_id: bytes, access_mode: int) -> bool:
+        pass
+
+    @staticmethod
+    def set_instance_fee(instance_id: bytes, fee: int) -> bool:
+        pass
+
+    @staticmethod
+    def get_generator_instance_json(instance_id: bytes) -> Dict[str, Any]:
+        pass
+
+    @staticmethod
+    def get_generator_instance(instance_id: bytes) -> GeneratorInstance:
+        pass
+
+    @staticmethod
+    def total_generator_instances() -> int:
+        pass
+
+    @staticmethod
+    def create_trait(generator_id: bytes, label: bytes, slots: int, trait_levels: List) -> bytes:
+        pass
+
+    @staticmethod
+    def get_trait_json(trait_id: bytes) -> Dict[str, Any]:
+        pass
+
+    @staticmethod
+    def get_trait(trait_id: bytes) -> Trait:
+        pass
+
+    @staticmethod
+    def total_generators() -> int:
+        pass
+
+    @staticmethod
+    def create_generator(label: bytes, base_generator_fee: int) -> int:
+        pass
+
+    @staticmethod
+    def get_generator_json(generator_id: bytes) -> Dict[str, Any]:
+        pass
+
+    @staticmethod
+    def get_generator(generator_id: bytes) -> Generator:
         pass
 
 ```

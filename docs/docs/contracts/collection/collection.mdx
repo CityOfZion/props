@@ -21,6 +21,9 @@ the need to quickly sample from a range of data (like a discrete probability dis
 ### Using the collection contract:
 To use the collection contract, begin by adding the interface to your smart contract.  Below, we provide an example.  Make sure to also include the methods you would like to use. For `SCRIPT_HASH`, refer to the [Where am I?](#where-am-i) section.
 
+<Tabs>
+<TabItem value="python" label="Python">
+
 ```python
 from boa3.builtin import contract
 
@@ -35,6 +38,35 @@ class Collection:
   def sample_from_collection(collection_id: int) -> bytes:
       pass
 ```
+
+</TabItem>
+
+<TabItem value="cSharp" label="C#">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+<TabItem value="go" label="Go">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+
+<TabItem value="java" label="Java">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+</Tabs>
 
 ### Creating a new collection:
 To create a new collection, you can either use the contract interface on-chain or side-load via the [SDK](/docs/sdk/ts/classes/Collection#createcollection).

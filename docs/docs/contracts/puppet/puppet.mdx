@@ -6,6 +6,9 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # puppet
 The puppet contract is a NEP-11 compliant NFT contract which uses the [collection](../collection), [dice](../dice), and [generator](../generator) contracts
 to procedurally generate utility NFTs entirely on-chain.
@@ -18,6 +21,9 @@ to procedurally generate utility NFTs entirely on-chain.
 ### Using the puppet contract:
 To use the puppet contract, begin by adding the interface to your smart contract.  Below, we provide an example.  Make sure to also include the methods you would like to use. For `SCRIPT_HASH`, refer to the [Where am I?](#where-am-i) section.
 
+<Tabs>
+<TabItem value="python" label="Python">
+
 ```python
 from boa3.builtin import contract
 
@@ -29,6 +35,35 @@ class Puppet:
         pass
 
 ```
+
+</TabItem>
+
+<TabItem value="cSharp" label="C#">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+<TabItem value="go" label="Go">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+
+<TabItem value="java" label="Java">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+</Tabs>
 
 
 

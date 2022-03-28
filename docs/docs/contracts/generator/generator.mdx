@@ -6,6 +6,9 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # generator
 The generator contract is designed to provide probabilistic event features.  It can be used for a number of processes ranging from
 procedural object generation to probabilistic event execution.
@@ -18,6 +21,9 @@ procedural object generation to probabilistic event execution.
 ### Using the generator contract:
 To use the generator contract, begin by adding the interface to your smart contract.  Below, we provide an example.  Make sure to also include the methods you would like to use. For `SCRIPT_HASH`, refer to the [Where am I?](#where-am-i) section.
 
+<Tabs>
+<TabItem value="python" label="Python">
+
 ```python
 from boa3.builtin import contract
 
@@ -29,6 +35,35 @@ class Generator:
         pass
 
 ```
+
+</TabItem>
+
+<TabItem value="cSharp" label="C#">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+<TabItem value="go" label="Go">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+
+<TabItem value="java" label="Java">
+
+```
+To be Implemented
+```
+
+</TabItem>
+
+</Tabs>
 
 ### Creating a new generator:
 To create a new generator, you can either use the contract interface on-chain or side-load via the [SDK](/docs/sdk/ts/classes/Generator#createGenerator).

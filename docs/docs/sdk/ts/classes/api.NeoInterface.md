@@ -38,7 +38,7 @@ A method for publishing contract invocations on the Neo Blockchain.
 
 #### Defined in
 
-[api/interface.ts:51](https://github.com/CityOfZion/isengard/blob/f78053a/sdk/src/api/interface.ts#L51)
+[api/interface.ts:51](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/interface.ts#L51)
 
 ___
 
@@ -64,4 +64,4 @@ A method for executing test invocations on the Neo blockchain
 
 #### Defined in
 
-[api/interface.ts:23](https://github.com/CityOfZion/isengard/blob/f78053a/sdk/src/api/interface.ts#L23)
+[api/interface.ts:23](https://github.com/CityOfZion/isengard/blob/bbb1dd3/sdk/src/api/interface.ts#L23)

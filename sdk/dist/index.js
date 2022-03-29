@@ -30,4 +30,5 @@ __exportStar(require("./Collection"), exports);
 __exportStar(require("./Dice"), exports);
 __exportStar(require("./Puppet"), exports);
 __exportStar(require("./Generator"), exports);
+__exportStar(require("./Template"), exports);
 //# sourceMappingURL=index.js.map

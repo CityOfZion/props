@@ -1,7 +1,7 @@
 # Fair Sampling
 
 This example walks users through a scenario where they need to sample from a list of options in an honest way.
-This functionality is extremely useful in the scenario of a giveaway there the host wants to execute the event in a
+This functionality is extremely useful in the scenario of a giveaway where the host wants to execute the event in a
 manner which is completely transparent and fair.  Because the selection process is handled on-chain and the contract
 code as well as the execution path are transparent, anyone can verify the honesty of the selection process.
 
@@ -45,7 +45,8 @@ const txid = await collection.sampleFromRuntimeCollection(options, 5, false, coz
 The NeoF1 community recently hosted an event for an airdrop of 10 Puppet utility NFTs.  Over 100 unique
 members participated in the event by providing their addresses in a public discord channel for a chance to win a Puppet.
 Generally, once the addresses for a competition like this are collected, there isn't any visibility to the participants
-with regard to the selection process.
+with regard to the selection process.  We've coordinated with the NeoF1 team to ensure a completely transparent
+selection process.
 
 In our case, we can use the collection prop to select winners with **100% transparency**:
 
@@ -62,13 +63,13 @@ const options = [
 ]
 
 // lets filter out all the users who submitted their address twice because they were super excited!
-const uniqueContestants = contestantsRaw.filter(onlyUnique)
+const uniqueContestants = options.filter(onlyUnique)
 
 // We'll use the first few characters of the sha256 of their address to select from.  This allows users to verify
 // that the contest was fair without dumping a ton of data onto the chain or communicating all the participating
 // addresses.  In this case, 4 characters was enough to guarantee that every value was unique. Make sure to
 //check this before invoking
-const contestantsClean = contestantsRaw.map( (item) => {
+const contestantsClean = uniqueContestants.map( (item) => {
             return Neon.u.sha256(item).slice(0,4)
         })
 assert(contestantsClean.length === contestantsClean.filter(onlyUnique).length)

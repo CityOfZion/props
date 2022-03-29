@@ -15,7 +15,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[interface/interface.ts:24](https://github.com/CityOfZion/isengard/blob/aaf6827/sdk/src/interface/interface.ts#L24)
+[interface/interface.ts:24](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/interface/interface.ts#L24)
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:25](https://github.com/CityOfZion/isengard/blob/aaf6827/sdk/src/interface/interface.ts#L25)
+[interface/interface.ts:25](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/interface/interface.ts#L25)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:26](https://github.com/CityOfZion/isengard/blob/aaf6827/sdk/src/interface/interface.ts#L26)
+[interface/interface.ts:26](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/interface/interface.ts#L26)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:27](https://github.com/CityOfZion/isengard/blob/aaf6827/sdk/src/interface/interface.ts#L27)
+[interface/interface.ts:27](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/interface/interface.ts#L27)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:28](https://github.com/CityOfZion/isengard/blob/aaf6827/sdk/src/interface/interface.ts#L28)
+[interface/interface.ts:28](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/interface/interface.ts#L28)
 
 ___
 
@@ -65,4 +65,4 @@ ___
 
 #### Defined in
 
-[interface/interface.ts:29](https://github.com/CityOfZion/isengard/blob/aaf6827/sdk/src/interface/interface.ts#L29)
+[interface/interface.ts:29](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/interface/interface.ts#L29)

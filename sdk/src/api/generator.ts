@@ -1,15 +1,16 @@
 import {sc} from "@cityofzion/neon-js";
 import {wallet} from "@cityofzion/neon-core";
 import {
-  EventCollectionPointer,
+  EventCollectionPointer, EventCollectionSampleFrom,
   EventInstanceCall,
-  GeneratorType,
   EventTypeEnum,
   EventTypeWrapper,
-  TraitLevel,
-  TraitType,
+  EventValue,
+  GeneratorType,
+  InstanceAccessMode,
   InstanceAuthorizedContracts,
-  InstanceAccessMode
+  TraitLevel,
+  TraitType
 } from "../interface";
 import {formatter, variableInvoke} from "../helpers";
 
@@ -85,6 +86,23 @@ export class GeneratorAPI {
                 sc.ContractParam.array(...instanceCall.param)
               )
             )
+          case EventTypeEnum.Value:
+            const valueCall: EventValue = traitEvent.args as EventValue
+            return sc.ContractParam.array(
+              sc.ContractParam.integer(traitEvent.type),
+              sc.ContractParam.integer(traitEvent.maxMint),
+              sc.ContractParam.array(
+                sc.ContractParam.byteArray(valueCall.value)
+              )
+            )
+          case EventTypeEnum.CollectionSampleFrom:
+            const collectionPtr: EventCollectionSampleFrom = traitEvent.args as EventCollectionSampleFrom
+            return sc.ContractParam.array(
+              sc.ContractParam.integer(traitEvent.type),
+              sc.ContractParam.integer(traitEvent.maxMint),
+              sc.ContractParam.array(
+                sc.ContractParam.integer(collectionPtr.collectionId),
+              ))
 
           default:
             throw new Error("unrecognized trait event type")

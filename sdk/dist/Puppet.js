@@ -48,8 +48,8 @@ class Puppet {
     async balanceOf(address, signer) {
         return api_1.PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address, signer);
     }
-    async createEpoch(label, generatorId, initialRollCollectionId, mintFee, sysFee, maxSupply, signer) {
-        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorId, initialRollCollectionId, mintFee, sysFee, maxSupply, signer);
+    async createEpoch(label, generatorInstanceId, initialRollCollectionId, mintFee, sysFee, maxSupply, signer) {
+        return api_1.PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorInstanceId, initialRollCollectionId, mintFee, sysFee, maxSupply, signer);
     }
     async decimals(signer) {
         return api_1.PuppetAPI.decimals(this.node.url, this.networkMagic, this.scriptHash, signer);

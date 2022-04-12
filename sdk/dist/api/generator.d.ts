@@ -1,5 +1,5 @@
 import { wallet } from "@cityofzion/neon-core";
-import { GeneratorType, TraitLevel, TraitType, InstanceAuthorizedContracts, InstanceAccessMode } from "../interface";
+import { GeneratorType, InstanceAccessMode, InstanceAuthorizedContracts, TraitLevel, TraitType } from "../interface";
 export declare class GeneratorAPI {
     static createGenerator(node: string, networkMagic: number, contractHash: string, label: string, baseGeneratorFee: number, signer: wallet.Account): Promise<string>;
     static createInstance(node: string, networkMagic: number, contractHash: string, generatorId: number, signer: wallet.Account): Promise<string>;

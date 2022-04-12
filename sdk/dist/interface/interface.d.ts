@@ -82,16 +82,22 @@ export interface TraitLevel {
 export interface EventTypeWrapper {
     type: EventTypeEnum;
     maxMint: number;
-    args: EventCollectionPointer | EventInstanceCall;
+    args: EventCollectionPointer | EventInstanceCall | EventValue | EventCollectionSampleFrom;
 }
 export interface EventCollectionPointer {
     collectionId: number;
     index: number;
 }
+export interface EventCollectionSampleFrom {
+    collectionId: number;
+}
 export interface EventInstanceCall {
     scriptHash: string;
     method: string;
     param: ContractParamLike[];
+}
+export interface EventValue {
+    value: string;
 }
 export interface PropConstructorOptions {
     network?: NetworkOption;

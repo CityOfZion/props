@@ -34,7 +34,7 @@ async function main(network, signer, timeConstant) {
     console.log('  Generator Instance ID: ', generatorInstanceId)
 
     console.log(`creating an epoch with generator instance ${generatorInstanceId}`)
-    txid = await puppet.createEpoch("Puppeteer", result[0], 1,  10 * 10**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
+    txid = await puppet.createEpoch("Puppeteer", generatorInstanceId, 1,  10 * 10**8, 40000000, EPOCH_TOTAL_SUPPLY, signer)
     await sdk.helpers.sleep(timeConstant)
     result = await sdk.helpers.txDidComplete(puppet.node.url, txid)
     const epochId = result[0]

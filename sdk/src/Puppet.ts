@@ -53,8 +53,8 @@ export class Puppet {
     return PuppetAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address, signer)
   }
 
-  async createEpoch(label: string, generatorId: number, initialRollCollectionId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string> {
-    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorId, initialRollCollectionId, mintFee, sysFee, maxSupply, signer)
+  async createEpoch(label: string, generatorInstanceId: number, initialRollCollectionId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string> {
+    return PuppetAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorInstanceId, initialRollCollectionId, mintFee, sysFee, maxSupply, signer)
   }
 
   async decimals(signer?: wallet.Account): Promise<number> {

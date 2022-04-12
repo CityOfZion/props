@@ -6,3 +6,4 @@ export * from "./Dice";
 export * from "./Puppet";
 export * from "./Generator";
 export * from "./Template";
+export * from "./TurnBased";

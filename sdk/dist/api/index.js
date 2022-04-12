@@ -16,4 +16,5 @@ __exportStar(require("./interface"), exports);
 __exportStar(require("./collection"), exports);
 __exportStar(require("./generator"), exports);
 __exportStar(require("./template"), exports);
+__exportStar(require("./turnBased"), exports);
 //# sourceMappingURL=index.js.map

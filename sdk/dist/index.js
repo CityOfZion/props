@@ -31,4 +31,5 @@ __exportStar(require("./Dice"), exports);
 __exportStar(require("./Puppet"), exports);
 __exportStar(require("./Generator"), exports);
 __exportStar(require("./Template"), exports);
+__exportStar(require("./TurnBased"), exports);
 //# sourceMappingURL=index.js.map

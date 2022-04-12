@@ -1,0 +1,173 @@
+{
+    "name": "turn_based",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "load_monster",
+                "offset": 75,
+                "parameters": [
+                    {
+                        "name": "monster_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "load_game",
+                "offset": 227,
+                "parameters": [
+                    {
+                        "name": "game_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "total_games",
+                "offset": 304,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "get_game_json",
+                "offset": 340,
+                "parameters": [
+                    {
+                        "name": "game_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "join_game",
+                "offset": 354,
+                "parameters": [
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "ByteArray",
+                "safe": false
+            },
+            {
+                "name": "fight",
+                "offset": 572,
+                "parameters": [
+                    {
+                        "name": "game_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "attribute",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 1450,
+                "parameters": [
+                    {
+                        "name": "script",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_deploy",
+                "offset": 1574,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_initialize",
+                "offset": 1612,
+                "parameters": [],
+                "returntype": "Void",
+                "safe": false
+            }
+        ],
+        "events": [
+            {
+                "name": "debug",
+                "parameters": [
+                    {
+                        "name": "debug",
+                        "type": "Any"
+                    }
+                ]
+            },
+            {
+                "name": "NewGame",
+                "parameters": [
+                    {
+                        "name": "game_id",
+                        "type": "Integer"
+                    }
+                ]
+            },
+            {
+                "name": "MonsterVanquished",
+                "parameters": [
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "monster_id",
+                        "type": "Integer"
+                    }
+                ]
+            }
+        ]
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Author": "COZ, Inc.",
+        "Description": "A turn-based multi-player demo prop",
+        "Email": "contact@coz.io"
+    }
+}

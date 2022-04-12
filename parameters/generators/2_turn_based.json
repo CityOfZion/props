@@ -1,0 +1,96 @@
+{
+  "label": "Game demo monster generator",
+  "baseGeneratorFee": 15429687,
+  "traits": [
+    {
+      "label": "element",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 1000000,
+          "mintMode": 0,
+          "traits": [
+            {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "earth"
+              }
+            },
+            {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "wind"
+              }
+            },
+            {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "fire"
+              }
+            },
+            {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "water"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "attribute",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 1000000,
+          "mintMode": 0,
+          "traits": [
+            {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "strength"
+              }
+            },
+            {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "intelligence"
+              }
+            }, {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "wisdom"
+              }
+            }, {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "dexterity"
+              }
+            }, {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "constitution"
+              }
+            }, {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "charisma"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

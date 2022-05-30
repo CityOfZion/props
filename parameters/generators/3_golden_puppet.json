@@ -1,0 +1,25 @@
+{
+  "label": "Golden Puppet Generator",
+  "baseGeneratorFee": 1562500,
+  "traits": [
+    {
+      "label": "color",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 1000000,
+          "mintMode": 0,
+          "traits": [
+            {
+              "type": 2,
+              "maxMint": -1,
+              "args": {
+                "value": "gold"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -26,6 +26,7 @@ exports.types = exports.helpers = exports.api = void 0;
 exports.api = __importStar(require("./api"));
 exports.helpers = __importStar(require("./helpers"));
 exports.types = __importStar(require("./interface"));
+__exportStar(require("./Chest"), exports);
 __exportStar(require("./Collection"), exports);
 __exportStar(require("./Dice"), exports);
 __exportStar(require("./Puppet"), exports);

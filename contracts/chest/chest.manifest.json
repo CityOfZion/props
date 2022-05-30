@@ -1,0 +1,249 @@
+{
+    "name": "chest",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "create_chest",
+                "offset": 177,
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "chest_type",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "eligible_epochs",
+                        "type": "Array"
+                    },
+                    {
+                        "name": "puppet_traits",
+                        "type": "Array"
+                    }
+                ],
+                "returntype": "ByteArray",
+                "safe": false
+            },
+            {
+                "name": "loot_chest_with_puppet",
+                "offset": 283,
+                "parameters": [
+                    {
+                        "name": "chest_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "puppet_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "loot_chest_as_owner",
+                "offset": 473,
+                "parameters": [
+                    {
+                        "name": "chest_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "is_puppet_eligible",
+                "offset": 584,
+                "parameters": [
+                    {
+                        "name": "chest_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "puppet_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "get_chest_json",
+                "offset": 803,
+                "parameters": [
+                    {
+                        "name": "chest_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "get_chest",
+                "offset": 817,
+                "parameters": [
+                    {
+                        "name": "chest_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "get_chest_raw",
+                "offset": 880,
+                "parameters": [
+                    {
+                        "name": "chest_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "ByteArray",
+                "safe": false
+            },
+            {
+                "name": "total_chests",
+                "offset": 908,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "onNEP11Payment",
+                "offset": 962,
+                "parameters": [
+                    {
+                        "name": "from_address",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "onNEP17Payment",
+                "offset": 1061,
+                "parameters": [
+                    {
+                        "name": "from_address",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 1292,
+                "parameters": [
+                    {
+                        "name": "script",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_deploy",
+                "offset": 1416,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_initialize",
+                "offset": 1454,
+                "parameters": [],
+                "returntype": "Void",
+                "safe": false
+            }
+        ],
+        "events": [
+            {
+                "name": "NewChest",
+                "parameters": [
+                    {
+                        "name": "ChestId",
+                        "type": "ByteArray"
+                    }
+                ]
+            },
+            {
+                "name": "ChestOpened",
+                "parameters": [
+                    {
+                        "name": "ChestId",
+                        "type": "ByteArray"
+                    }
+                ]
+            },
+            {
+                "name": "Debug",
+                "parameters": [
+                    {
+                        "name": "debug",
+                        "type": "Any"
+                    }
+                ]
+            }
+        ]
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Author": "COZ, Inc.",
+        "Description": "A public smart contract for holding things",
+        "Email": "contact@coz.io"
+    }
+}

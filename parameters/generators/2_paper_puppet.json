@@ -1,0 +1,34 @@
+{
+  "label": "Paper Puppet Generator",
+  "baseGeneratorFee": 1953125,
+  "traits": [
+    {
+      "label": "color",
+      "slots": 1,
+      "traitLevels": [
+        {
+          "dropScore": 1000000,
+          "mintMode": 0,
+          "traits": [
+            {
+              "type": 0,
+              "maxMint": -1,
+              "args": {
+                "collectionId": 3,
+                "index": 0
+              }
+            },
+            {
+              "type": 0,
+              "maxMint": -1,
+              "args": {
+                "collectionId": 3,
+                "index": 5
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

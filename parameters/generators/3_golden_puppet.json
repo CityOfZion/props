@@ -1,6 +1,6 @@
 {
   "label": "Golden Puppet Generator",
-  "baseGeneratorFee": 1562500,
+  "baseGeneratorFee": 1953125,
   "traits": [
     {
       "label": "color",
@@ -11,10 +11,11 @@
           "mintMode": 0,
           "traits": [
             {
-              "type": 2,
+              "type": 0,
               "maxMint": -1,
               "args": {
-                "value": "gold"
+                "collectionId": 7,
+                "index": 56
               }
             }
           ]

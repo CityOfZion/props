@@ -29,7 +29,7 @@ export class Chest {
         break
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = ''
+        this.options.scriptHash = '0xb94e721f5425ba1d8830ad752e50e0474f989da5'
         break
       default:
         this.options.node = 'http://localhost:50012'

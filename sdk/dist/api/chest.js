@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChestAPI = void 0;
 const neon_js_1 = require("@cityofzion/neon-js");
+const neon_core_1 = require("@cityofzion/neon-core");
 const helpers_1 = require("../helpers");
 class ChestAPI {
     static async createChest(node, networkMagic, contractHash, name, type, eligibleEpochs, puppetTraits, signer) {
@@ -46,7 +47,9 @@ class ChestAPI {
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        let formattedRes = helpers_1.formatter(res[0]);
+        formattedRes.scriptHash = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(formattedRes.scripHash));
+        return formattedRes;
     }
     static async lootChestAsOwner(node, networkMagic, contractHash, chestId, signer) {
         const method = "loot_chest_as_owner";
@@ -57,7 +60,9 @@ class ChestAPI {
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        let formattedRes = helpers_1.formatter(res[0]);
+        formattedRes.scriptHash = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(formattedRes.scripHash));
+        return formattedRes;
     }
     static async getChestJSON(node, networkMagic, contractHash, chestId, signer) {
         const method = "get_chest_json";
@@ -68,7 +73,10 @@ class ChestAPI {
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        let formattedRes = helpers_1.formatter(res[0]);
+        const author = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(formattedRes.author));
+        formattedRes.author = new neon_core_1.wallet.Account(author);
+        return formattedRes;
     }
     static async totalChests(node, networkMagic, contractHash, signer) {
         const method = "total_chests";

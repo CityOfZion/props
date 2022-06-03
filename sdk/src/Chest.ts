@@ -1,8 +1,8 @@
 import {merge} from 'lodash'
-import {rpc, wallet} from '@cityofzion/neon-core'
+import {rpc, u, wallet} from '@cityofzion/neon-core'
 import {ChestAPI, TemplateAPI} from './api'
 import {NetworkOption, PropConstructorOptions} from "./interface";
-import {sleep, txDidComplete} from "./helpers";
+import {formatter, sleep, txDidComplete} from "./helpers";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   network: NetworkOption.LocalNet
@@ -98,7 +98,9 @@ export class Chest {
     while (timeout >= age) {
       try {
         let res = await txDidComplete(this.node.url, txid, true)
-        return res[0]
+        let formattedRes = formatter(res[0])
+        formattedRes.scriptHash = u.reverseHex(u.str2hexstring(formattedRes.scripHash))
+        return formattedRes
       } catch (e) {
         await sleep(1000)
         age += 1000

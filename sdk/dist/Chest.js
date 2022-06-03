@@ -90,7 +90,9 @@ class Chest {
         while (timeout >= age) {
             try {
                 let res = await helpers_1.txDidComplete(this.node.url, txid, true);
-                return res[0];
+                let formattedRes = helpers_1.formatter(res[0]);
+                formattedRes.scriptHash = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(formattedRes.scripHash));
+                return formattedRes;
             }
             catch (e) {
                 await helpers_1.sleep(1000);

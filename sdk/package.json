@@ -1,6 +1,6 @@
 {
   "name": "@cityofzion/props",
-  "version": "0.1.1",
+  "version": "0.1.6",
   "description": "an sdk for interfacing with props to use in decentralized applications",
   "main": "dist/index",
   "types": "dist/index",
@@ -16,6 +16,9 @@
     "docs": "typedoc",
     "fmt": "prettier --write ./src/**/*.ts",
     "test": "mocha test --recursive --exit --timeout 10000"
+  },
+  "browser": {
+    "fs": false
   },
   "keywords": [],
   "author": "COZ, Inc.",

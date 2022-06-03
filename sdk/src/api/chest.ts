@@ -1,5 +1,5 @@
 import {sc} from "@cityofzion/neon-js";
-import {wallet} from "@cityofzion/neon-core";
+import {u, wallet} from "@cityofzion/neon-core";
 import {formatter, variableInvoke} from "../helpers";
 
 export class ChestAPI {
@@ -121,7 +121,10 @@ export class ChestAPI {
     if (signer) {
       return res
     }
-    return formatter(res[0])
+    let formattedRes = formatter(res[0])
+    const author = u.reverseHex(u.str2hexstring(formattedRes.author))
+    formattedRes.author = new wallet.Account(author)
+    return formattedRes
   }
 
   static async totalChests(

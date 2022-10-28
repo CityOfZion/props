@@ -1,0 +1,134 @@
+{
+    "name": "dice",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "rand_between",
+                "offset": 0,
+                "parameters": [
+                    {
+                        "name": "start",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "end",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "map_bytes_onto_range",
+                "offset": 11,
+                "parameters": [
+                    {
+                        "name": "start",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "end",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "entropy",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "roll_die",
+                "offset": 23,
+                "parameters": [
+                    {
+                        "name": "die",
+                        "type": "String"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "roll_dice_with_entropy",
+                "offset": 33,
+                "parameters": [
+                    {
+                        "name": "die",
+                        "type": "String"
+                    },
+                    {
+                        "name": "precision",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "entropy",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 45,
+                "parameters": [
+                    {
+                        "name": "script",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_deploy",
+                "offset": 656,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_initialize",
+                "offset": 694,
+                "parameters": [],
+                "returntype": "Void",
+                "safe": false
+            }
+        ],
+        "events": []
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Author": "COZ, Inc.",
+        "Description": "A public smart contract full of magic number rocks.",
+        "Email": "contact@coz.io"
+    }
+}

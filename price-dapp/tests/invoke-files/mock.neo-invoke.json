@@ -1,0 +1,38 @@
+[
+  {
+    "contract": "Price DApp",
+    "operation": "setLiquidityPool",
+    "args": [
+      "0x28ab1874da47aad82c9cb35188552781521f15f0",
+      "0x20f0bea450ada7b903b89749d7c9bbc160b148cd",
+      "0x6ad79e5c274677e01d60a59ae70f128a4680aa59"
+    ]
+  },
+  {
+    "contract": "Price DApp",
+    "operation": "setLiquidityPool",
+    "args": [
+      "0x28ab1874da47aad82c9cb35188552781521f15f0",
+      "0x2a4c9a4d4022678b03ef1bbe0834f966460dc448",
+      "0xecc0204e0e9733a965b6cf72df7737c8b0855a4d"
+    ]
+  },
+  {
+    "contract": "Price DApp",
+    "operation": "setLiquidityPool",
+    "args": [
+      "0x28ab1874da47aad82c9cb35188552781521f15f0",
+      "0xcf76e28bd0062c4a478ee35561011319f3cfa4d2",
+      "0x06b6345e9632ee71635ce9cf32c301031c791d17"
+    ]
+  },
+  {
+    "contract": "Price DApp",
+    "operation": "setLiquidityPool",
+    "args": [
+      "0x2a4c9a4d4022678b03ef1bbe0834f966460dc448",
+      "0x20f0bea450ada7b903b89749d7c9bbc160b148cd",
+      "0x47520205742f09e424c54adf1b3d825483ee5d54"
+    ]
+  }
+]

@@ -1,0 +1,4 @@
+transfer 2000000 gas genesis admin
+contract deploy ../contract/pricedapp.nef admin
+contract invoke ./invoke-files/mock.neo-invoke.json admin
+contract invoke ./invoke-files/test-get-prices.neo-invoke.json admin

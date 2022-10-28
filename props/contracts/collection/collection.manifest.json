@@ -1,0 +1,223 @@
+{
+    "name": "collection",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "create_collection",
+                "offset": 0,
+                "parameters": [
+                    {
+                        "name": "description",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "collection_type",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "extra",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "vals",
+                        "type": "Array"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "get_collection_json",
+                "offset": 59,
+                "parameters": [
+                    {
+                        "name": "collection_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "get_collection",
+                "offset": 69,
+                "parameters": [
+                    {
+                        "name": "collection_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "get_collection_element",
+                "offset": 79,
+                "parameters": [
+                    {
+                        "name": "collection_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "index",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "ByteArray",
+                "safe": false
+            },
+            {
+                "name": "get_collection_length",
+                "offset": 97,
+                "parameters": [
+                    {
+                        "name": "collection_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "get_collection_values",
+                "offset": 107,
+                "parameters": [
+                    {
+                        "name": "collection_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "map_bytes_onto_collection",
+                "offset": 126,
+                "parameters": [
+                    {
+                        "name": "collection_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "entropy",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "ByteArray",
+                "safe": false
+            },
+            {
+                "name": "sample_from_collection",
+                "offset": 214,
+                "parameters": [
+                    {
+                        "name": "collection_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "samples",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "sample_from_runtime_collection",
+                "offset": 323,
+                "parameters": [
+                    {
+                        "name": "vals",
+                        "type": "Array"
+                    },
+                    {
+                        "name": "samples",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "pick",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "total_collections",
+                "offset": 527,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 533,
+                "parameters": [
+                    {
+                        "name": "script",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_deploy",
+                "offset": 950,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_initialize",
+                "offset": 988,
+                "parameters": [],
+                "returntype": "Void",
+                "safe": false
+            }
+        ],
+        "events": [
+            {
+                "name": "NewCollection",
+                "parameters": [
+                    {
+                        "name": "collection_id",
+                        "type": "ByteArray"
+                    }
+                ]
+            }
+        ]
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Author": "COZ, Inc.",
+        "Description": "A public smart contract for storing immutable collections of stuff",
+        "Email": "contact@coz.io"
+    }
+}

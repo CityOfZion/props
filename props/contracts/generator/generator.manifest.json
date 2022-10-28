@@ -1,0 +1,294 @@
+{
+    "name": "generator",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "create_instance",
+                "offset": 0,
+                "parameters": [
+                    {
+                        "name": "generator_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "mint_from_instance",
+                "offset": 86,
+                "parameters": [
+                    {
+                        "name": "from_code",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "to_instance_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "set_instance_authorized_users",
+                "offset": 199,
+                "parameters": [
+                    {
+                        "name": "instance_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "authorized_users",
+                        "type": "Array"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "set_instance_authorized_contracts",
+                "offset": 313,
+                "parameters": [
+                    {
+                        "name": "instance_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "authorized_contracts",
+                        "type": "Array"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "set_instance_access_mode",
+                "offset": 519,
+                "parameters": [
+                    {
+                        "name": "instance_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "access_mode",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "set_instance_fee",
+                "offset": 633,
+                "parameters": [
+                    {
+                        "name": "instance_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "fee",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "get_generator_instance_json",
+                "offset": 744,
+                "parameters": [
+                    {
+                        "name": "instance_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "get_generator_instance",
+                "offset": 758,
+                "parameters": [
+                    {
+                        "name": "instance_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "total_generator_instances",
+                "offset": 841,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "create_trait",
+                "offset": 951,
+                "parameters": [
+                    {
+                        "name": "generator_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "label",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "slots",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "trait_levels",
+                        "type": "Array"
+                    }
+                ],
+                "returntype": "ByteArray",
+                "safe": false
+            },
+            {
+                "name": "get_trait_json",
+                "offset": 1203,
+                "parameters": [
+                    {
+                        "name": "trait_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "get_trait",
+                "offset": 1217,
+                "parameters": [
+                    {
+                        "name": "trait_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "total_generators",
+                "offset": 1315,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "create_generator",
+                "offset": 1351,
+                "parameters": [
+                    {
+                        "name": "label",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "base_generator_fee",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "get_generator_json",
+                "offset": 1451,
+                "parameters": [
+                    {
+                        "name": "generator_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "get_generator",
+                "offset": 1465,
+                "parameters": [
+                    {
+                        "name": "generator_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 1622,
+                "parameters": [
+                    {
+                        "name": "script",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_deploy",
+                "offset": 1773,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "_initialize",
+                "offset": 1811,
+                "parameters": [],
+                "returntype": "Void",
+                "safe": false
+            }
+        ],
+        "events": [
+            {
+                "name": "NewGenerator",
+                "parameters": [
+                    {
+                        "name": "generator_id",
+                        "type": "ByteArray"
+                    }
+                ]
+            }
+        ]
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Author": "COZ, Inc.",
+        "Description": "A public smart contract for handling probabilistic events",
+        "Email": "contact@coz.io"
+    }
+}

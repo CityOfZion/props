@@ -1,0 +1,83 @@
+{
+	"defaults": {
+		"contract-source-network": "mainnet",
+		"contract-destination": "neo-express",
+		"contract-generate-sdk": false,
+		"sdk-language": "python"
+	},
+	"contracts": [
+		{
+			"label": "FLM-fUSDT",
+			"script-hash": "0x59aa80468a120fe79aa5601de07746275c9ed76a",
+			"source-network": "mainnet",
+			"contract-generate-sdk": false
+		},
+		{
+			"label": "FLM-bNEO",
+			"script-hash": "0x4d5a85b0c83777df72cfb665a933970e4e20c0ec",
+			"source-network": "mainnet",
+			"contract-generate-sdk": false
+		},
+		{
+			"label": "FLM-GAS",
+			"script-hash": "0x171d791c0301c332cfe95c6371ee32965e34b606",
+			"source-network": "mainnet",
+			"contract-generate-sdk": false
+		},
+		{
+			"label": "bNEO-fUSDT",
+			"script-hash": "0x545dee8354823d1bdf4ac524e4092f7405025247",
+			"source-network": "mainnet",
+			"contract-generate-sdk": false
+		},
+		{
+			"label": "fUSDT",
+			"script-hash": "0xcd48b160c1bbc9d74997b803b9a7ad50a4bef020",
+			"source-network": "mainnet",
+			"contract-generate-sdk": false
+		},
+		{
+			"label": "FLM",
+			"script-hash": "0xf0151f528127558851b39c2cd8aa47da7418ab28",
+			"source-network": "mainnet",
+			"contract-generate-sdk": false
+		},
+		{
+			"label": "bNEO",
+			"script-hash": "0x48c40d4666f93408be1bef038b6722404d9a4c2a",
+			"source-network": "mainnet",
+			"contract-generate-sdk": false
+		}
+	],
+	"tools": {
+		"neo-express":{
+			"canGenerateSDK": false,
+			"canDownloadContract": true,
+			"executable-path": null,
+			"config-path": "../default.neo-express"
+		}
+	},
+	"networks": [
+		{
+			"label": "mainnet",
+			"hosts": [
+				"http://seed1.neo.org:10332",
+				"http://seed2.neo.org:10332",
+				"http://seed3.neo.org:10332",
+				"https://mainnet1.neo.coz.io:443"
+			]
+		},
+		{
+			"label": "testnet",
+			"hosts": [
+				"https://testnet1.neo.coz.io:443"
+			]
+		},
+		{
+			"label": "priv",
+			"hosts": [
+				"http://127.0.0.1:10332"
+			]
+		}
+	]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "neo-icon-dapp-scripts",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "CoZ in a partnership with NNT",
+  "type": "module",
+  "scripts": {
+    "deploy": "node scripts/deploy.js",
+    "metadata": "node scripts/set_initial_metadata.js"
+  },
+  "dependencies": {
+    "@cityofzion/neon-core": "^5.0.0-next.16",
+    "@cityofzion/neon-js": "^5.0.0-next.16",
+    "@types/node": "^16.11.11"
+  }
+}

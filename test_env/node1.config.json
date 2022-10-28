@@ -1,0 +1,27 @@
+{
+  "ApplicationConfiguration": {
+    "Storage": {
+      "Engine": "MemoryStore"
+    },
+    "P2P": {
+      "Port": 50013,
+      "WsPort": 50014
+    },
+    "UnlockWallet": {
+      "Path": "C:\\Users\\Ricardo\\Workspace\\meta-dapps\\test_env\\node1.wallet.json",
+      "Password": "pasword",
+      "IsActive": true
+    }
+  },
+  "ProtocolConfiguration": {
+    "Magic": 2380224224,
+    "AddressVersion": 53,
+    "ValidatorsCount": 1,
+    "StandbyCommittee": [
+      "03e2b8dccc6a5c39f5ba92cf5a0759c5eb542fed2a3c0ed142ee09495b82b3a927"
+    ],
+    "SeedList": [
+      "127.0.0.1:50013"
+    ]
+  }
+}

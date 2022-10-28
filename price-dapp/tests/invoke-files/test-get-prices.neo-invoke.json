@@ -1,0 +1,23 @@
+[
+  {
+    "contract": "Price DApp",
+    "operation": "getLiquidityPool",
+    "args": [
+      "0x28ab1874da47aad82c9cb35188552781521f15f0",
+      "0x20f0bea450ada7b903b89749d7c9bbc160b148cd"
+    ]
+  },
+  {
+    "contract": "Price DApp",
+    "operation": "getLiquidityPool",
+    "args": [
+      "0x20f0bea450ada7b903b89749d7c9bbc160b148cd",
+      "0x28ab1874da47aad82c9cb35188552781521f15f0"
+    ]
+  },
+  {
+    "contract": "Price DApp",
+    "operation": "getAllPrices",
+    "args": [ ]
+  }
+]

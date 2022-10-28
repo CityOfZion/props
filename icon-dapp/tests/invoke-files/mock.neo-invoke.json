@@ -1,0 +1,19 @@
+[
+  {
+    "contract": "Icon DApp",
+    "operation": "addProperty",
+    "args": [
+      "small-icon",
+      "rounded"
+    ]
+  },
+  {
+    "contract": "Icon DApp",
+    "operation": "setMetaData",
+    "args": [
+      "test",
+      "small-icon",
+      "url"
+    ]
+  }
+]

@@ -2,14 +2,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,python
 
-icon-dapp/**/*.manifest.json
-icon-dapp/**/*.nef
-icon-dapp/**/*.nefdbgnfo
-
-price-dapp/**/*.manifest.json
-price-dapp/**/*.nef
-price-dapp/**/*.nefdbgnfo
-
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

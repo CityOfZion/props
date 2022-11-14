@@ -1,0 +1,28 @@
+{
+    "name": "Child",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "main",
+                "offset": 0,
+                "parameters": [],
+                "returntype": "String",
+                "safe": false
+            }
+        ],
+        "events": []
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Description": "Child Auxiliary smart contract"
+    }
+}

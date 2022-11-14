@@ -1,8 +1,0 @@
-transfer 1000 gas genesis owner
-transfer 50 gas genesis user1
-
-contract deploy ../contract/icondapp.nef owner
-
-contract deploy ./test-contracts/child.nef owner
-contract deploy ./test-contracts/parent.nef owner
-contract deploy ./test-contracts/ownership.nef user1

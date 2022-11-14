@@ -1,0 +1,167 @@
+{
+    "name": "Price DApp",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "_deploy",
+                "offset": 2272,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 0,
+                "parameters": [
+                    {
+                        "name": "nef_file",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "name",
+                "offset": 77,
+                "parameters": [],
+                "returntype": "String",
+                "safe": false
+            },
+            {
+                "name": "get_owner",
+                "offset": 90,
+                "parameters": [],
+                "returntype": "Hash160",
+                "safe": false
+            },
+            {
+                "name": "getPrice",
+                "offset": 931,
+                "parameters": [
+                    {
+                        "name": "token_hash",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": true
+            },
+            {
+                "name": "getPrices",
+                "offset": 1070,
+                "parameters": [
+                    {
+                        "name": "token_hashes",
+                        "type": "Array"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": true
+            },
+            {
+                "name": "getAllPrices",
+                "offset": 1209,
+                "parameters": [],
+                "returntype": "Array",
+                "safe": true
+            },
+            {
+                "name": "getReferenceToken",
+                "offset": 1220,
+                "parameters": [],
+                "returntype": "Hash160",
+                "safe": true
+            },
+            {
+                "name": "setReferenceToken",
+                "offset": 1335,
+                "parameters": [
+                    {
+                        "name": "token_hash",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "getLiquidityPool",
+                "offset": 1436,
+                "parameters": [
+                    {
+                        "name": "token_1_hash",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "token_2_hash",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Any",
+                "safe": true
+            },
+            {
+                "name": "setLiquidityPool",
+                "offset": 1602,
+                "parameters": [
+                    {
+                        "name": "token_1_hash",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "token_2_hash",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "pool_hash",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            }
+        ],
+        "events": []
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": [
+                "decimals",
+                "symbol",
+                "getReserves",
+                "getToken0"
+            ]
+        },
+        {
+            "contract": "0xfffdc93764dbaddd97c48f252a53ea4643faa3fd",
+            "methods": [
+                "update",
+                "destroy"
+            ]
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Description": "Smart Contract Price DApp",
+        "Author": "Ricardo Prado",
+        "Email": "ricardo@coz.io"
+    }
+}

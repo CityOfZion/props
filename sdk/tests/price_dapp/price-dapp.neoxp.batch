@@ -1,0 +1,2 @@
+transfer 2000000 gas genesis coz
+contract invoke ./invoke-files/mock.neo-invoke.json coz

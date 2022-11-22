@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[types/index.ts:63](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L63)
+[types/index.ts:63](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L63)
 
 ___
 
@@ -24,4 +24,4 @@ ___
 
 #### Defined in
 
-[types/index.ts:64](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L64)
+[types/index.ts:64](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L64)

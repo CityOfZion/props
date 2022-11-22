@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[types/index.ts:89](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L89)
+[types/index.ts:89](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L89)
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:91](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L91)
+[types/index.ts:91](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L91)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:92](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L92)
+[types/index.ts:92](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L92)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:93](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L93)
+[types/index.ts:93](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L93)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:90](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L90)
+[types/index.ts:90](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L90)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:96](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L96)
+[types/index.ts:96](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L96)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:94](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L94)
+[types/index.ts:94](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L94)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:95](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L95)
+[types/index.ts:95](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L95)
 
 ___
 
@@ -94,4 +94,4 @@ ___
 
 #### Defined in
 
-[types/index.ts:97](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L97)
+[types/index.ts:97](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L97)

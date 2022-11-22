@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Puppet.ts:204](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L204)
+[Puppet.ts:10](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L10)
 
 ## Properties
 
@@ -30,7 +30,27 @@ custom_edit_url: null
 
 #### Defined in
 
-[Puppet.ts:205](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L205)
+[Puppet.ts:11](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L11)
+
+___
+
+### MAINNET
+
+▪ `Static` **MAINNET**: `string` = `'0x76a8f8a7a901b29a33013b469949f4b08db15756'`
+
+#### Defined in
+
+[Puppet.ts:7](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L7)
+
+___
+
+### TESTNET
+
+▪ `Static` **TESTNET**: `string` = `''`
+
+#### Defined in
+
+[Puppet.ts:8](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L8)
 
 ## Methods
 
@@ -51,7 +71,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Puppet.ts:209](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L209)
+[Puppet.ts:15](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L15)
 
 ___
 
@@ -77,7 +97,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:213](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L213)
+[Puppet.ts:19](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L19)
 
 ___
 
@@ -91,7 +111,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:222](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L222)
+[Puppet.ts:28](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L28)
 
 ___
 
@@ -105,7 +125,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:226](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L226)
+[Puppet.ts:32](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L32)
 
 ___
 
@@ -126,7 +146,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:236](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L236)
+[Puppet.ts:42](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L42)
 
 ___
 
@@ -147,7 +167,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:251](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L251)
+[Puppet.ts:57](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L57)
 
 ___
 
@@ -168,7 +188,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:255](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L255)
+[Puppet.ts:61](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L61)
 
 ___
 
@@ -189,7 +209,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:259](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L259)
+[Puppet.ts:65](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L65)
 
 ___
 
@@ -211,7 +231,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:267](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L267)
+[Puppet.ts:73](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L73)
 
 ___
 
@@ -232,7 +252,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:263](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L263)
+[Puppet.ts:69](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L69)
 
 ___
 
@@ -253,7 +273,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:276](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L276)
+[Puppet.ts:82](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L82)
 
 ___
 
@@ -275,7 +295,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:280](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L280)
+[Puppet.ts:86](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L86)
 
 ___
 
@@ -297,7 +317,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:309](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L309)
+[Puppet.ts:115](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L115)
 
 ___
 
@@ -324,7 +344,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:366](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L366)
+[Puppet.ts:172](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L172)
 
 ___
 
@@ -338,7 +358,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:318](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L318)
+[Puppet.ts:124](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L124)
 
 ___
 
@@ -352,7 +372,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:322](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L322)
+[Puppet.ts:128](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L128)
 
 ___
 
@@ -373,7 +393,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:326](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L326)
+[Puppet.ts:132](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L132)
 
 ___
 
@@ -387,7 +407,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:330](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L330)
+[Puppet.ts:136](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L136)
 
 ___
 
@@ -401,7 +421,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:334](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L334)
+[Puppet.ts:140](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L140)
 
 ___
 
@@ -415,7 +435,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:338](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L338)
+[Puppet.ts:144](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L144)
 
 ___
 
@@ -438,7 +458,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:342](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L342)
+[Puppet.ts:148](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L148)
 
 ___
 
@@ -461,4 +481,441 @@ ___
 
 #### Defined in
 
-[Puppet.ts:351](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Puppet.ts#L351)
+[Puppet.ts:157](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L157)
+
+___
+
+### buildBalanceOfInvocation
+
+▸ `Static` **buildBalanceOfInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.address` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:187](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L187)
+
+___
+
+### buildCreateEpochInvocation
+
+▸ `Static` **buildCreateEpochInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.generatorInstanceId` | `number` |
+| `params.initialRollCollectionId` | `number` |
+| `params.label` | `string` |
+| `params.maxSupply` | `number` |
+| `params.mintFee` | `number` |
+| `params.sysFee` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:197](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L197)
+
+___
+
+### buildDecimalsInvocation
+
+▸ `Static` **buildDecimalsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:212](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L212)
+
+___
+
+### buildDeployInvocation
+
+▸ `Static` **buildDeployInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:220](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L220)
+
+___
+
+### buildGetAttributeModInvocation
+
+▸ `Static` **buildGetAttributeModInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.attributeValue` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:228](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L228)
+
+___
+
+### buildGetEpochJSONInvocation
+
+▸ `Static` **buildGetEpochJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.epochId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:238](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L238)
+
+___
+
+### buildGetPuppetJSONInvocation
+
+▸ `Static` **buildGetPuppetJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:249](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L249)
+
+___
+
+### buildGetPuppetRawInvocation
+
+▸ `Static` **buildGetPuppetRawInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:259](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L259)
+
+___
+
+### buildOfflineMintInvocation
+
+▸ `Static` **buildOfflineMintInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.epochId` | `number` |
+| `params.owner` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:279](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L279)
+
+___
+
+### buildOwnerOfInvocation
+
+▸ `Static` **buildOwnerOfInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:269](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L269)
+
+___
+
+### buildPropertiesInvocation
+
+▸ `Static` **buildPropertiesInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:290](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L290)
+
+___
+
+### buildSetMintFeeInvocation
+
+▸ `Static` **buildSetMintFeeInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.epochId` | `number` |
+| `params.fee` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:300](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L300)
+
+___
+
+### buildSymbolInvocation
+
+▸ `Static` **buildSymbolInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:311](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L311)
+
+___
+
+### buildTokensInvocation
+
+▸ `Static` **buildTokensInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:319](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L319)
+
+___
+
+### buildTokensOfInvocation
+
+▸ `Static` **buildTokensOfInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.address` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:327](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L327)
+
+___
+
+### buildTotalAccountsInvocation
+
+▸ `Static` **buildTotalAccountsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:337](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L337)
+
+___
+
+### buildTotalEpochsInvocation
+
+▸ `Static` **buildTotalEpochsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:345](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L345)
+
+___
+
+### buildTotalSupplyInvocation
+
+▸ `Static` **buildTotalSupplyInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:353](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L353)
+
+___
+
+### buildTransferInvocation
+
+▸ `Static` **buildTransferInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.data` | `any` |
+| `params.to` | `string` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:361](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L361)
+
+___
+
+### buildUpdateInvocation
+
+▸ `Static` **buildUpdateInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.data` | `any` |
+| `params.manifest` | `string` |
+| `params.script` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:373](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L373)

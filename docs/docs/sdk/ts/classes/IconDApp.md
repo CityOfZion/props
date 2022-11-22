@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[IconDApp.ts:11](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L11)
+[IconDApp.ts:11](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L11)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[IconDApp.ts:12](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L12)
+[IconDApp.ts:12](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L12)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:8](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L8)
+[IconDApp.ts:8](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L8)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:9](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L9)
+[IconDApp.ts:9](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L9)
 
 ## Methods
 
@@ -74,7 +74,7 @@ Adds a property to the Icons, e.g., icons-24, icons-36, icons-24-dark (not the f
 
 #### Defined in
 
-[IconDApp.ts:76](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L76)
+[IconDApp.ts:76](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L76)
 
 ___
 
@@ -97,7 +97,7 @@ Returns the parent of a smart contract. If there is no parent it will return nul
 
 #### Defined in
 
-[IconDApp.ts:252](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L252)
+[IconDApp.ts:252](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L252)
 
 ___
 
@@ -120,7 +120,7 @@ Returns the metadata of a smart contract. If the smart contract is a child it wi
 
 #### Defined in
 
-[IconDApp.ts:186](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L186)
+[IconDApp.ts:186](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L186)
 
 ___
 
@@ -143,7 +143,7 @@ Returns the metadata of multiple smart contracts.
 
 #### Defined in
 
-[IconDApp.ts:204](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L204)
+[IconDApp.ts:204](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L204)
 
 ___
 
@@ -159,7 +159,7 @@ Returns the name of the owner of the smart contract. The owner is the one who de
 
 #### Defined in
 
-[IconDApp.ts:36](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L36)
+[IconDApp.ts:36](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L36)
 
 ___
 
@@ -175,7 +175,7 @@ Returns the name of the owner of the smart contract. The owner is the one who de
 
 #### Defined in
 
-[IconDApp.ts:18](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L18)
+[IconDApp.ts:18](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L18)
 
 ___
 
@@ -191,7 +191,7 @@ Returns all Icon properties.
 
 #### Defined in
 
-[IconDApp.ts:130](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L130)
+[IconDApp.ts:130](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L130)
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:297](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L297)
+[IconDApp.ts:297](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L297)
 
 ___
 
@@ -235,7 +235,7 @@ Sets the parent of a smart contract, children will have the same metadata as the
 
 #### Defined in
 
-[IconDApp.ts:240](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L240)
+[IconDApp.ts:240](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L240)
 
 ___
 
@@ -260,7 +260,7 @@ Adds a property to the metadata of a smart contract. (Admin and deployer only)
 
 #### Defined in
 
-[IconDApp.ts:170](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L170)
+[IconDApp.ts:170](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L170)
 
 ___
 
@@ -284,7 +284,7 @@ Sets the owner of a smart contract. If sender is not the owner of the smart cont
 
 #### Defined in
 
-[IconDApp.ts:288](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L288)
+[IconDApp.ts:288](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L288)
 
 ___
 
@@ -308,7 +308,7 @@ Adds a property to the Icons, e.g., icons-24, icons-36, icons-24-dark (not the f
 
 #### Defined in
 
-[IconDApp.ts:54](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L54)
+[IconDApp.ts:54](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L54)
 
 ___
 
@@ -332,7 +332,7 @@ Sets the parent of a smart contract, children will have the same metadata as the
 
 #### Defined in
 
-[IconDApp.ts:222](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L222)
+[IconDApp.ts:222](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L222)
 
 ___
 
@@ -357,7 +357,7 @@ Adds a property to the metadata of a smart contract. (Admin and deployer only)
 
 #### Defined in
 
-[IconDApp.ts:148](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L148)
+[IconDApp.ts:148](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L148)
 
 ___
 
@@ -381,7 +381,7 @@ Sets the owner of a smart contract. If sender is not the owner of the smart cont
 
 #### Defined in
 
-[IconDApp.ts:270](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L270)
+[IconDApp.ts:270](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L270)
 
 ___
 
@@ -405,7 +405,7 @@ Updates a property to the Icons, e.g., icons-24, icons-36, icons-24-dark (not th
 
 #### Defined in
 
-[IconDApp.ts:92](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L92)
+[IconDApp.ts:92](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L92)
 
 ___
 
@@ -429,7 +429,7 @@ Updates a property to the Icons, e.g., icons-24, icons-36, icons-24-dark (not th
 
 #### Defined in
 
-[IconDApp.ts:114](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L114)
+[IconDApp.ts:114](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L114)
 
 ___
 
@@ -453,7 +453,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:317](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L317)
+[IconDApp.ts:317](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L317)
 
 ___
 
@@ -475,7 +475,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:386](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L386)
+[IconDApp.ts:386](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L386)
 
 ___
 
@@ -497,7 +497,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:359](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L359)
+[IconDApp.ts:359](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L359)
 
 ___
 
@@ -519,7 +519,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:367](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L367)
+[IconDApp.ts:367](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L367)
 
 ___
 
@@ -539,7 +539,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:301](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L301)
+[IconDApp.ts:301](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L301)
 
 ___
 
@@ -559,7 +559,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:339](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L339)
+[IconDApp.ts:339](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L339)
 
 ___
 
@@ -579,7 +579,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:309](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L309)
+[IconDApp.ts:309](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L309)
 
 ___
 
@@ -602,7 +602,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:375](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L375)
+[IconDApp.ts:375](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L375)
 
 ___
 
@@ -627,7 +627,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:347](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L347)
+[IconDApp.ts:347](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L347)
 
 ___
 
@@ -650,7 +650,7 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:394](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L394)
+[IconDApp.ts:394](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L394)
 
 ___
 
@@ -674,4 +674,4 @@ ___
 
 #### Defined in
 
-[IconDApp.ts:328](https://github.com/CityOfZion/props/blob/88e04c4/sdk/src/IconDApp.ts#L328)
+[IconDApp.ts:328](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/IconDApp.ts#L328)

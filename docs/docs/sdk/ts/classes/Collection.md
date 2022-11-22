@@ -46,7 +46,7 @@ console.log(total) // outputs the total collection count in the contract
 
 #### Defined in
 
-[Collection.ts:144](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L144)
+[Collection.ts:39](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L39)
 
 ## Properties
 
@@ -56,7 +56,27 @@ console.log(total) // outputs the total collection count in the contract
 
 #### Defined in
 
-[Collection.ts:145](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L145)
+[Collection.ts:40](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L40)
+
+___
+
+### MAINNET
+
+▪ `Static` **MAINNET**: `string` = `'0xf05651bc505fd5c7d36593f6e8409932342f9085'`
+
+#### Defined in
+
+[Collection.ts:36](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L36)
+
+___
+
+### TESTNET
+
+▪ `Static` **TESTNET**: `string` = `''`
+
+#### Defined in
+
+[Collection.ts:37](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L37)
 
 ## Methods
 
@@ -84,7 +104,7 @@ The transaction id of a transaction that will return the new collection id.
 
 #### Defined in
 
-[Collection.ts:161](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L161)
+[Collection.ts:56](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L56)
 
 ___
 
@@ -108,7 +128,7 @@ The transaction id of a transaction that will return the new collection id.
 
 #### Defined in
 
-[Collection.ts:187](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L187)
+[Collection.ts:82](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L82)
 
 ___
 
@@ -134,7 +154,7 @@ The requested collection.
 
 #### Defined in
 
-[Collection.ts:241](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L241)
+[Collection.ts:136](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L136)
 
 ___
 
@@ -160,7 +180,7 @@ The value of the collection element.
 
 #### Defined in
 
-[Collection.ts:267](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L267)
+[Collection.ts:162](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L162)
 
 ___
 
@@ -185,7 +205,7 @@ The requested collection.
 
 #### Defined in
 
-[Collection.ts:215](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L215)
+[Collection.ts:110](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L110)
 
 ___
 
@@ -210,7 +230,7 @@ The length of the collection.
 
 #### Defined in
 
-[Collection.ts:292](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L292)
+[Collection.ts:187](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L187)
 
 ___
 
@@ -235,7 +255,7 @@ The values in the collection.
 
 #### Defined in
 
-[Collection.ts:317](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L317)
+[Collection.ts:212](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L212)
 
 ___
 
@@ -267,7 +287,7 @@ The element from the mapping.
 
 #### Defined in
 
-[Collection.ts:349](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L349)
+[Collection.ts:244](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L244)
 
 ___
 
@@ -296,7 +316,7 @@ testing.
 
 #### Defined in
 
-[Collection.ts:381](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L381)
+[Collection.ts:276](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L276)
 
 ___
 
@@ -327,7 +347,7 @@ testing.
 
 #### Defined in
 
-[Collection.ts:409](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L409)
+[Collection.ts:304](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L304)
 
 ___
 
@@ -346,7 +366,7 @@ The total number of collections stored in the contract.
 
 #### Defined in
 
-[Collection.ts:427](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L427)
+[Collection.ts:322](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L322)
 
 ___
 
@@ -369,4 +389,254 @@ ___
 
 #### Defined in
 
-[Collection.ts:444](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Collection.ts#L444)
+[Collection.ts:339](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L339)
+
+___
+
+### buildCreateCollectionInvocation
+
+▸ `Static` **buildCreateCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionType` | `string` |
+| `params.description` | `string` |
+| `params.extra` | `string` |
+| `params.values` | (`string` \| `number`)[] |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:354](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L354)
+
+___
+
+### buildGetCollectionElementInvocation
+
+▸ `Static` **buildGetCollectionElementInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+| `params.index` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:387](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L387)
+
+___
+
+### buildGetCollectionInvocation
+
+▸ `Static` **buildGetCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:377](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L377)
+
+___
+
+### buildGetCollectionJSONInvocation
+
+▸ `Static` **buildGetCollectionJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:367](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L367)
+
+___
+
+### buildGetCollectionLengthInvocation
+
+▸ `Static` **buildGetCollectionLengthInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:398](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L398)
+
+___
+
+### buildGetCollectionValuesInvocation
+
+▸ `Static` **buildGetCollectionValuesInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:408](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L408)
+
+___
+
+### buildMapBytesOntoCollectionInvocation
+
+▸ `Static` **buildMapBytesOntoCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+| `params.entropy` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:418](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L418)
+
+___
+
+### buildSampleFromCollectionInvocation
+
+▸ `Static` **buildSampleFromCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+| `params.samples` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:429](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L429)
+
+___
+
+### buildSampleFromRuntimeCollectionInvocation
+
+▸ `Static` **buildSampleFromRuntimeCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.pick` | `boolean` |
+| `params.samples` | `number` |
+| `params.values` | `string`[] |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:440](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L440)
+
+___
+
+### buildTotalCollectionsInvocation
+
+▸ `Static` **buildTotalCollectionsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:452](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L452)
+
+___
+
+### buildUpdateInvocation
+
+▸ `Static` **buildUpdateInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.data` | `any` |
+| `params.manifest` | `string` |
+| `params.script` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:460](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L460)

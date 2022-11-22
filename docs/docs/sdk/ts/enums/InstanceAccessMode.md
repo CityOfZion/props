@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[types/index.ts:22](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L22)
+[types/index.ts:22](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L22)
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:21](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L21)
+[types/index.ts:21](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L21)
 
 ___
 
@@ -34,4 +34,4 @@ ___
 
 #### Defined in
 
-[types/index.ts:23](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L23)
+[types/index.ts:23](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L23)

@@ -45,7 +45,7 @@ console.log(randomNumber)
 
 #### Defined in
 
-[Dice.ts:79](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Dice.ts#L79)
+[Dice.ts:40](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L40)
 
 ## Properties
 
@@ -55,7 +55,27 @@ console.log(randomNumber)
 
 #### Defined in
 
-[Dice.ts:77](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Dice.ts#L77)
+[Dice.ts:38](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L38)
+
+___
+
+### MAINNET
+
+▪ `Static` **MAINNET**: `string` = `'0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'`
+
+#### Defined in
+
+[Dice.ts:35](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L35)
+
+___
+
+### TESTNET
+
+▪ `Static` **TESTNET**: `string` = `''`
+
+#### Defined in
+
+[Dice.ts:36](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L36)
 
 ## Methods
 
@@ -84,7 +104,7 @@ The resulting number from the mapping.
 
 #### Defined in
 
-[Dice.ts:121](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Dice.ts#L121)
+[Dice.ts:82](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L82)
 
 ___
 
@@ -113,7 +133,7 @@ The transaction id of a transaction that will return the random number.
 
 #### Defined in
 
-[Dice.ts:95](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Dice.ts#L95)
+[Dice.ts:56](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L56)
 
 ___
 
@@ -140,7 +160,7 @@ The transaction id of a transaction that will return the result an array of dice
 
 #### Defined in
 
-[Dice.ts:170](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Dice.ts#L170)
+[Dice.ts:131](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L131)
 
 ___
 
@@ -168,4 +188,97 @@ The transaction id of a transaction that will return the result of the die roll.
 
 #### Defined in
 
-[Dice.ts:150](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Dice.ts#L150)
+[Dice.ts:111](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L111)
+
+___
+
+### buildMapBytesOntoRangeInvocation
+
+▸ `Static` **buildMapBytesOntoRangeInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.end` | `number` |
+| `params.entropy` | `string` |
+| `params.start` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Dice.ts:152](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L152)
+
+___
+
+### buildRandBetweenInvocation
+
+▸ `Static` **buildRandBetweenInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.end` | `number` |
+| `params.start` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Dice.ts:141](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L141)
+
+___
+
+### buildRollDieInvocation
+
+▸ `Static` **buildRollDieInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.die` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Dice.ts:164](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L164)
+
+___
+
+### buildRollDieWithEntropyInvocation
+
+▸ `Static` **buildRollDieWithEntropyInvocation**(`scriptHash`, `parser`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `parser` | `Neo3Parser` |
+| `params` | `Object` |
+| `params.die` | `string` |
+| `params.precision` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Dice.ts:174](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L174)

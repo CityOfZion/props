@@ -14,4 +14,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[types/index.ts:68](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/types/index.ts#L68)
+[types/index.ts:68](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L68)

@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Generator.ts:236](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L236)
+[Generator.ts:13](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L13)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Generator.ts:237](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L237)
+[Generator.ts:14](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L14)
 
 ___
 
@@ -40,7 +40,27 @@ ___
 
 #### Defined in
 
-[Generator.ts:234](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L234)
+[Generator.ts:11](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L11)
+
+___
+
+### MAINNET
+
+▪ `Static` **MAINNET**: `string` = `'0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9'`
+
+#### Defined in
+
+[Generator.ts:8](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L8)
+
+___
+
+### TESTNET
+
+▪ `Static` **TESTNET**: `string` = `''`
+
+#### Defined in
+
+[Generator.ts:9](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L9)
 
 ## Methods
 
@@ -62,7 +82,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:240](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L240)
+[Generator.ts:17](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L17)
 
 ___
 
@@ -82,7 +102,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:251](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L251)
+[Generator.ts:28](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L28)
 
 ___
 
@@ -103,7 +123,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:346](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L346)
+[Generator.ts:123](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L123)
 
 ___
 
@@ -125,7 +145,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:318](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L318)
+[Generator.ts:95](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L95)
 
 ___
 
@@ -147,7 +167,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:265](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L265)
+[Generator.ts:42](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L42)
 
 ___
 
@@ -168,7 +188,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:329](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L329)
+[Generator.ts:106](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L106)
 
 ___
 
@@ -189,7 +209,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:279](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L279)
+[Generator.ts:56](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L56)
 
 ___
 
@@ -210,7 +230,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:357](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L357)
+[Generator.ts:134](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L134)
 
 ___
 
@@ -232,7 +252,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:368](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L368)
+[Generator.ts:145](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L145)
 
 ___
 
@@ -254,7 +274,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:390](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L390)
+[Generator.ts:167](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L167)
 
 ___
 
@@ -276,7 +296,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:379](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L379)
+[Generator.ts:156](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L156)
 
 ___
 
@@ -298,7 +318,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:401](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L401)
+[Generator.ts:178](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L178)
 
 ___
 
@@ -312,7 +332,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:427](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L427)
+[Generator.ts:204](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L204)
 
 ___
 
@@ -326,4 +346,292 @@ ___
 
 #### Defined in
 
-[Generator.ts:412](https://github.com/simplitech/meta-dapp/blob/8e62abf/props/sdk/src/Generator.ts#L412)
+[Generator.ts:189](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L189)
+
+___
+
+### buildCreateGeneratorInvocation
+
+▸ `Static` **buildCreateGeneratorInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.baseGeneratorFee` | `number` |
+| `params.label` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:220](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L220)
+
+___
+
+### buildCreateInstanceInvocation
+
+▸ `Static` **buildCreateInstanceInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.generatorId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:360](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L360)
+
+___
+
+### buildCreateTraitInvocation
+
+▸ `Static` **buildCreateTraitInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.generatorId` | `number` |
+| `params.trait` | [`TraitType`](../interfaces/TraitType.md) |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:251](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L251)
+
+___
+
+### buildGetGeneratorInstanceJSONInvocation
+
+▸ `Static` **buildGetGeneratorInstanceJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.instanceId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:350](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L350)
+
+___
+
+### buildGetGeneratorJSONInvocation
+
+▸ `Static` **buildGetGeneratorJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.generatorId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:231](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L231)
+
+___
+
+### buildGetTraitJSONInvocation
+
+▸ `Static` **buildGetTraitJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.traitId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:241](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L241)
+
+___
+
+### buildMintFromInstanceInvocation
+
+▸ `Static` **buildMintFromInstanceInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.instanceId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:370](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L370)
+
+___
+
+### buildSetInstanceAccessModeInvocation
+
+▸ `Static` **buildSetInstanceAccessModeInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.accessMode` | [`InstanceAccessMode`](../enums/InstanceAccessMode.md) |
+| `params.instanceId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:381](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L381)
+
+___
+
+### buildSetInstanceAuthorizedContractsInvocation
+
+▸ `Static` **buildSetInstanceAuthorizedContractsInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.authorizedContracts` | [`InstanceAuthorizedContracts`](../interfaces/InstanceAuthorizedContracts.md)[] |
+| `params.instanceId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:403](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L403)
+
+___
+
+### buildSetInstanceAuthorizedUsersInvocation
+
+▸ `Static` **buildSetInstanceAuthorizedUsersInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.authorizedUsers` | `string`[] |
+| `params.instanceId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:392](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L392)
+
+___
+
+### buildSetInstanceFeeInvocation
+
+▸ `Static` **buildSetInstanceFeeInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.fee` | `number` |
+| `params.instanceId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:421](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L421)
+
+___
+
+### buildTotalGeneratorInstancesInvocation
+
+▸ `Static` **buildTotalGeneratorInstancesInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:440](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L440)
+
+___
+
+### buildTotalGeneratorsInvocation
+
+▸ `Static` **buildTotalGeneratorsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Generator.ts:432](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L432)

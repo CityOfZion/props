@@ -579,7 +579,7 @@ describe('Basic Generator Test Suite', function () {
   }
 
   async function createCollectionHelper(collection: Collection) {
-    const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json')
+    const txid = await collection.createFromFile('../props_initialize_data/collections/3_traits.colors.json')
     await wait(TIME_CONSTANT)
     const res = await txDidComplete(NODE, txid, true)
     return res[0]

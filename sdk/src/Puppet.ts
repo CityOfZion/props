@@ -3,6 +3,9 @@ import { ContractInvocation } from '@cityofzion/neo3-invoker'
 
 
 export class Puppet {
+
+  static MAINNET = '0x76a8f8a7a901b29a33013b469949f4b08db15756'
+  static TESTNET = ''
   
   constructor(
     private config: SmartContractConfig

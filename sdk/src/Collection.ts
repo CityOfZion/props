@@ -32,6 +32,9 @@ import fs from 'fs'
  * ```
  */
 export class Collection {
+
+  static MAINNET = '0xf05651bc505fd5c7d36593f6e8409932342f9085'
+  static TESTNET = ''
   
   constructor(
     private config: SmartContractConfig

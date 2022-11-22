@@ -4,6 +4,10 @@ import fs from "fs";
 
 
 export class Generator {
+  
+  static MAINNET = '0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9'
+  static TESTNET = ''
+
   node: any
   
   constructor(

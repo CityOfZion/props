@@ -28,7 +28,7 @@ describe('Basic IconDApp Test Suite', function () {
   beforeEach(async function () {
     await exec('neoxp checkpoint restore -i ../default.neo-express -f ../postSetup.neoxp-checkpoint')
 
-    await exec('neoxp batch -i ../../../default.neo-express ./tests/icon_dapp/initialize.batch')
+    await exec('neoxp batch -i ../../../../default.neo-express ./tests/batch_files/icon_dapp/initialize.batch')
     const {stdout} = await exec('neoxp contract get "Icon DApp by COZ & NNT" -i ../default.neo-express')
 
     const neoxpContract = JSON.parse(stdout)[0]
@@ -183,7 +183,7 @@ describe('Basic IconDApp Test Suite', function () {
       })
 
       assert.equal(resp.prop1, 'https://www.google.com/')
-    })
+  })
 
   it('Tests getMultipleMetaData', async () => {
     const owner = wallets.find((wallet: any) => wallet.name === 'coz')

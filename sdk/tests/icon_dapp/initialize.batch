@@ -1,6 +1,0 @@
-transfer 1000 gas genesis coz
-transfer 50 gas genesis user1
-
-contract deploy ./smart_contracts/child.nef coz
-contract deploy ./smart_contracts/parent.nef coz
-contract deploy ./smart_contracts/ownership.nef user1

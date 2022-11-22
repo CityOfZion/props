@@ -4,6 +4,10 @@ import { Neo3Parser } from '@cityofzion/neo3-parser'
 
 
 export class IconDApp {
+
+  static MAINNET = '0x489e98351485bbd85be99618285932172f1862e4'
+  static TESTNET = ''
+  
   constructor(
     private config: SmartContractConfig
   ) {}

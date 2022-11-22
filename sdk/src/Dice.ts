@@ -32,6 +32,9 @@ import { Neo3Parser } from '@cityofzion/neo3-parser'
  * ```
  */
 export class Dice {
+  static MAINNET = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
+  static TESTNET = ''
+
 	private config: SmartContractConfig
 
 	constructor(configOptions: SmartContractConfig) {

@@ -11,8 +11,6 @@
   <br/> Made with ❤ by <b>COZ.IO</b>
 </p>
 
-To install the package: `npm install @cityofzion/props --save`
-
 ## Documentation
 
 For a more complete set of
@@ -20,16 +18,14 @@ project documentation, visit the [**project documentation**](https://props.coz.i
 
 For SDK specific documentation, visit our [**sdk documentation**](https://props.coz.io/d/docs/sdk/ts/)
 
-## ScriptHashes:
-
-Refer to the relevant contract in the [contracts](../contracts/) documentation.
-
 ## Quickstart:
 
 #### Setup:
 
-To install the package:
-`npm install @cityofzion/props --save`
+Install the props package using:
+`npm install @cityofzion/props`
+
+It's also necessary to install an implementation of the neo3-parser and neo3-invoker interfaces. For example, this could be done by installing Neon-Parser: `npm i @CityOfZion/neon-parser` and choosing to install either Neon-JS via npm: `npm i @CityOfZion/neon-invoker` or [WalletConnect](https://github.com/CityOfZion/wallet-connect-sdk)
 
 Each contract interface is represented by a class. To interface with a contract, create an instance of the interface as follows:
 
@@ -40,10 +36,11 @@ import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonParser } from '@cityofzion/neon-parser'
 
 
-const node = //refer to dora.coz.io/monitor for a list of nodes.
+const node = NeonInvoker.MAINNET // You can choose to use any node here, refer to dora.coz.io/monitor for a list of nodes.
 const scriptHash = //refer to the scriptHashes section above
 const account = // need to send either an wallet.Account() or undefined, testInvokes don't need an account
-const neo3Invoker = await NeonInvoker.init(node, account) // need to instantiate a Neo3Invoker, currently only NeonInvoker implements this interface
+const neo3Invoker = await NeonInvoker.init(node, account) // need to instantiate a Neo3Invoker
+// If you installed WalletConnect instead of NeonInvoker, it also implements this interface. 
 const neo3Parser = NeonParser // need to use a Neo3Parser, currently only NeonParser implements this interface
 const puppet = await new Puppet({
       scriptHash,
@@ -63,22 +60,6 @@ const totalSupply = await puppet.totalSupply(); //returns the total supply
 const decimals = await puppet.decimals(); //returns the decimals
 ```
 
-Currently, the SDK does not permit the user to invoke a function instead of test invoking, however it's possible to use a Neo3Invoker implementation to do this.
-
-```ts
-import { Puppet } from "@cityofzion/props";
-
-const myAwesomeCOZWallet = new wallet.Account(); //remember that you will need some GAS in the wallet in order to pay the transaction fee
-
-const txid = await neo3Invoker.invokeFunction({
-  invocations: Puppet.buildSymbolInvocation(),
-  signers: [],
-});
-```
-
-- **Note:** In the example above a [`buildInvocation`](./ts/modules#functions) function was used, however it's not necessary to use it if the user doesn't want to, it could have been any implementation of `ContractInvocation`
-
-
 ## Tests:
 
-To run the tests on the sdk it's necessary to create a checkpoint named "postSetup" after setting up the private net, this checkpoint already exists on the repository, but if the user wants to they can overwrite it.
+To run the tests on the sdk it's necessary to create a checkpoint named "postSetup" after setting up the private net. This checkpoint should already exist on the repository, but if the user wants to they can overwrite it by running `neoxp checkpoint create -f postSetup` on the parent directory.

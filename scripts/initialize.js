@@ -39,7 +39,7 @@ async function main(network, signer, timeConstant) {
     )
 
     //deploy all collections
-    let basePath = 'parameters/collections'
+    let basePath = 'props_initialize_data/collections'
     let files = fs.readdirSync(basePath)
 
     for await (let file of files) {
@@ -58,7 +58,7 @@ async function main(network, signer, timeConstant) {
     )
 
     console.log('\nDeploying all generators: ')
-    basePath = 'parameters/generators'
+    basePath = 'props_initialize_data/generators'
     files = fs.readdirSync(basePath)
 
     for await (let file of files) {

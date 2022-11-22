@@ -122,7 +122,7 @@ describe('Basic Collection Test Suite', function () {
     const collection = await getSdk(cozWallet.account)
 
     const cid = await createCollectionHelper(collection)
-    const localCollection = JSON.parse(fs.readFileSync('../parameters/collections/3_traits.colors.json').toString())
+    const localCollection = JSON.parse(fs.readFileSync('../props_initialize_data/collections/3_traits.colors.json').toString())
     
     const collectionValues = await collection.getCollectionValues({collectionId: cid})
 
@@ -252,7 +252,7 @@ describe('Basic Collection Test Suite', function () {
   })
 
   async function createCollectionHelper(collection: Collection) {
-    const txid = await collection.createFromFile('../parameters/collections/3_traits.colors.json')
+    const txid = await collection.createFromFile('../props_initialize_data/collections/3_traits.colors.json')
     await wait(TIME_CONSTANT)
     const res = await txDidComplete(NODE, txid, true)
     return res[0]

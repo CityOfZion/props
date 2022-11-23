@@ -406,30 +406,55 @@ describe('Basic IconDApp Test Suite', function () {
     assert.equal(resp, true)
   })
 
-  it('Tests setOwnership and getOwner', async () => {
-    const owner = wallets.find((wallet: any) => wallet.name === 'coz')
-    const iconDapp = await getSdk(owner.account)
-    await iconDapp.addProperty({
-      propertyName: 'prop1',
+  it('Tests setOwnership', async () => {
+    const coz = wallets.find((wallet: any) => wallet.name === 'coz')
+    const userOwner = wallets.find((wallet: any) => wallet.name === 'User1')
+    const iconDappCoz = await getSdk(coz.account)
+    const iconDappUser = await getSdk(userOwner.account)
+    const propertyName = 'prop1'
+    const value = 'https://www.google.com'
+
+    const {stdout} = await exec('neoxp contract get "ownership" -i ../default.neo-express')
+    const contractScriptHash = JSON.parse(stdout)[0].hash
+
+    await iconDappCoz.addProperty({
+      propertyName,
       description: 'description1',
     })
     await wait(1200)
 
-    await iconDapp.setMetaData({
-      scriptHash: '0x14d91cd393bc06c571b966df1cc59c0115bdb59c',
-      propertyName: 'prop1',
-      value: 'https://www.google.com/',
-    })
+    await assert.rejects( 
+      async () => await iconDappUser.setMetaData({
+        scriptHash: contractScriptHash,
+        propertyName,
+        value
+      }),
+      /No authorization$/,
+      'User can\'t change metadata if he is not the owner'
+    )
     await wait(1200)
 
-    const txid = await iconDapp.setOwnership({
-      scriptHash: '0x14d91cd393bc06c571b966df1cc59c0115bdb59c',
-      sender: owner.account.scriptHash,
+    // making sure no value was saved
+    let contractMetadata = await iconDappUser.getMetaData({scriptHash: contractScriptHash})
+    assert(contractMetadata[propertyName] === undefined, 'Property value should not have been added')
+    
+    // user is claiming ownership of the smart contract they deployed
+    const txid = await iconDappUser.setOwnership({
+      scriptHash: contractScriptHash,
+      sender: userOwner.account.scriptHash,
     })
     assert(txid.length > 0)
     await wait(1200)
 
-    // TODO: to fully test setOwnership we need to have an account that is the owner of a smartcontract
-    // because we can only setOwnership for the deployer of the SC of the scripthash
+    // user can change their smart contract's metadata now
+    await iconDappUser.setMetaData({
+      scriptHash: contractScriptHash,
+      propertyName,
+      value
+    })
+    await wait(1200)
+
+    contractMetadata = await iconDappUser.getMetaData({scriptHash: contractScriptHash})
+    assert(contractMetadata[propertyName] === value, 'Property value should have been added')
   })
 })

@@ -315,6 +315,14 @@ export class IconDApp {
   }
   
   static buildAddPropertyInvocation(scriptHash: string, parser: Neo3Parser, params: {propertyName: string, description: string}): ContractInvocation{
+    if (params.propertyName.length >= 31 || params.propertyName.length <= 0){
+      throw new Error('Length of propertyName is incorrect, it should be between 1 and 30');
+    }
+  
+    if (params.description.length >= 255 || params.description.length <= 0){
+      throw new Error('Length of description is incorrect, it should be between 1 and 254');
+    }
+    
     return {
       scriptHash,
       operation: 'addProperty',
@@ -326,6 +334,14 @@ export class IconDApp {
   }
   
   static buildUpdatePropertyInvocation(scriptHash: string, parser: Neo3Parser, params: {propertyName: string, description: string}): ContractInvocation{
+    if (params.propertyName.length >= 31 || params.propertyName.length <= 0){
+      throw new Error('Length of propertyName is incorrect, it should be between 1 and 30');
+    }
+  
+    if (params.description.length >= 255 || params.description.length <= 0){
+      throw new Error('Length of description is incorrect, it should be between 1 and 254');
+    }
+    
     return {
       scriptHash,
       operation: 'updateProperty',
@@ -345,6 +361,10 @@ export class IconDApp {
   }
   
   static buildSetMetaDataInvocation(scriptHash: string, parser: Neo3Parser, params: {scriptHash: string, propertyName: string, value: string}): ContractInvocation{
+    if (params.value.length >= 390 || params.value.length <= 0){
+      throw new Error('Length of value is incorrect, it should be between 1 and 389');
+    }
+    
     return {
       scriptHash,
       operation: 'setMetaData',

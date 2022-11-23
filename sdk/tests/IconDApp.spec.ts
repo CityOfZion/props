@@ -102,6 +102,59 @@ describe('Basic IconDApp Test Suite', function () {
     assert.equal(resp.prop1, 'description1')
   })
 
+  it('Tests addProperty length validation', async () => {
+    const owner = wallets.find((wallet: any) => wallet.name === 'coz')
+    const iconDapp = await getSdk(owner.account)
+
+    await assert.rejects(
+      async () => await iconDapp.addProperty({
+        propertyName: 'a'.repeat(31),
+        description: 'description1',
+      }),
+      /Length of propertyName is incorrect, it should be between 1 and 30$/,
+      'Property name should be less than or equals to 30'
+    )
+
+    await assert.rejects(
+      async () => await iconDapp.addProperty({
+        propertyName: '',
+        description: 'description1',
+      }),
+      /Length of propertyName is incorrect, it should be between 1 and 30$/,
+      'Property name should be greater than 0'
+    )
+
+    await assert.rejects(
+      async () => await iconDapp.addProperty({
+        propertyName: 'prop1',
+        description: 'a'.repeat(255),
+      }),
+      /Length of description is incorrect, it should be between 1 and 254$/,
+      'Description should be less than or equals to 254'
+    )
+
+    await assert.rejects(
+      async () => await iconDapp.addProperty({
+        propertyName: 'prop1',
+        description: '',
+      }),
+      /Length of description is incorrect, it should be between 1 and 254$/,
+      'Description should be greater than 0'
+    )
+
+    // testing max length possible
+    await iconDapp.addProperty({
+      propertyName: 'a'.repeat(30),
+      description: 'a'.repeat(254),
+    })
+
+    // testing min length possible
+    await iconDapp.addProperty({
+      propertyName: 'a',
+      description: 'a',
+    })
+  })
+
   it('Tests testUpdateProperty with property not set', async () => {
     const owner = wallets.find((wallet: any) => wallet.name === 'coz')
     const iconDapp = await getSdk(owner.account)
@@ -109,6 +162,48 @@ describe('Basic IconDApp Test Suite', function () {
       async () => await iconDapp.updateProperty({propertyName: 'prop2', description: 'description2'}),
       /Invalid property/
     )
+  })
+
+  it('Tests updateProperty with invalid length of strings', async () => {
+    const owner = wallets.find((wallet: any) => wallet.name === 'coz')
+    const iconDapp = await getSdk(owner.account)
+
+    await assert.rejects(
+      async () => await iconDapp.updateProperty({
+        propertyName: 'a'.repeat(31),
+        description: 'description1',
+      }),
+      /Length of propertyName is incorrect, it should be between 1 and 30$/,
+      'Property name should be less than or equals to 30'
+    )
+
+    await assert.rejects(
+      async () => await iconDapp.updateProperty({
+        propertyName: '',
+        description: 'description1',
+      }),
+      /Length of propertyName is incorrect, it should be between 1 and 30$/,
+      'Property name should be greater than 0'
+    )
+
+    await assert.rejects(
+      async () => await iconDapp.updateProperty({
+        propertyName: 'prop1',
+        description: 'a'.repeat(255),
+      }),
+      /Length of description is incorrect, it should be between 1 and 254$/,
+      'Description should be less than or equals to 254'
+    )
+
+    await assert.rejects(
+      async () => await iconDapp.updateProperty({
+        propertyName: 'prop1',
+        description: '',
+      }),
+      /Length of description is incorrect, it should be between 1 and 254$/,
+      'Description should be greater than 0'
+    )
+
   })
 
   it('Tests addProperty, updateProperty and getProperties', async () => {
@@ -183,6 +278,32 @@ describe('Basic IconDApp Test Suite', function () {
       })
 
       assert.equal(resp.prop1, 'https://www.google.com/')
+  })
+
+  it('Tests setMetaData invalid length',
+  async () => {
+    const owner = wallets.find((wallet: any) => wallet.name === 'coz')
+    const iconDapp = await getSdk(owner.account)
+    
+    await assert.rejects( 
+      async() => await iconDapp.setMetaData({
+        scriptHash: '0x1234567890123456789012345678901234567890',
+        propertyName: 'icon/25x25',
+        value: 'a'.repeat(390),
+      }),
+      /Length of value is incorrect, it should be between 1 and 389$/,
+      'Value should be less than or equals to 389'
+    )
+    
+    await assert.rejects( 
+      async() => await iconDapp.setMetaData({
+        scriptHash: '0x1234567890123456789012345678901234567890',
+        propertyName: 'icon/25x25',
+        value: '',
+      }),
+      /Length of value is incorrect, it should be between 1 and 389$/,
+      'Value should be greater than 0'
+    )
   })
 
   it('Tests getMultipleMetaData', async () => {

@@ -10,78 +10,60 @@ custom_edit_url: null
 
 ### constructor
 
-• **new Puppet**(`options?`)
+• **new Puppet**(`config`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md) |
+| `config` | [`SmartContractConfig`](../modules.md#smartcontractconfig) |
 
 #### Defined in
 
-[Puppet.ts:15](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L15)
+[Puppet.ts:10](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L10)
 
 ## Properties
 
-### networkMagic
+### config
 
-• `Private` **networkMagic**: `number` = `-1`
+• `Private` **config**: [`SmartContractConfig`](../modules.md#smartcontractconfig)
 
 #### Defined in
 
-[Puppet.ts:13](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L13)
+[Puppet.ts:11](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L11)
 
 ___
 
-### options
+### MAINNET
 
-• `Private` **options**: [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md) = `DEFAULT_OPTIONS`
-
-#### Defined in
-
-[Puppet.ts:12](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L12)
-
-## Accessors
-
-### node
-
-• `get` **node**(): `RPCClient`
-
-#### Returns
-
-`RPCClient`
+▪ `Static` **MAINNET**: `string` = `'0x76a8f8a7a901b29a33013b469949f4b08db15756'`
 
 #### Defined in
 
-[Puppet.ts:38](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L38)
+[Puppet.ts:7](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L7)
 
 ___
 
-### scriptHash
+### TESTNET
 
-• `get` **scriptHash**(): `string`
-
-#### Returns
-
-`string`
+▪ `Static` **TESTNET**: `string` = `''`
 
 #### Defined in
 
-[Puppet.ts:45](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L45)
+[Puppet.ts:8](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L8)
 
 ## Methods
 
 ### balanceOf
 
-▸ **balanceOf**(`address`, `signer?`): `Promise`<`number`\>
+▸ **balanceOf**(`options`): `Promise`<`number`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `address` | `string` |
-| `signer?` | `Account` |
+| `options` | `Object` |
+| `options.address` | `string` |
 
 #### Returns
 
@@ -89,25 +71,25 @@ ___
 
 #### Defined in
 
-[Puppet.ts:52](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L52)
+[Puppet.ts:15](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L15)
 
 ___
 
 ### createEpoch
 
-▸ **createEpoch**(`label`, `generatorId`, `initialRollCollectionId`, `mintFee`, `sysFee`, `maxSupply`, `signer`): `Promise`<`string`\>
+▸ **createEpoch**(`options`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `label` | `string` |
-| `generatorId` | `number` |
-| `initialRollCollectionId` | `number` |
-| `mintFee` | `number` |
-| `sysFee` | `number` |
-| `maxSupply` | `number` |
-| `signer` | `Account` |
+| `options` | `Object` |
+| `options.generatorInstanceId` | `number` |
+| `options.initialRollCollectionId` | `number` |
+| `options.label` | `string` |
+| `options.maxSupply` | `number` |
+| `options.mintFee` | `number` |
+| `options.sysFee` | `number` |
 
 #### Returns
 
@@ -115,19 +97,13 @@ ___
 
 #### Defined in
 
-[Puppet.ts:56](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L56)
+[Puppet.ts:19](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L19)
 
 ___
 
 ### decimals
 
-▸ **decimals**(`signer?`): `Promise`<`number`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `signer?` | `Account` |
+▸ **decimals**(): `Promise`<`number`\>
 
 #### Returns
 
@@ -135,19 +111,13 @@ ___
 
 #### Defined in
 
-[Puppet.ts:60](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L60)
+[Puppet.ts:28](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L28)
 
 ___
 
 ### deploy
 
-▸ **deploy**(`signer`): `Promise`<`string`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `signer` | `Account` |
+▸ **deploy**(): `Promise`<`string`\>
 
 #### Returns
 
@@ -155,20 +125,20 @@ ___
 
 #### Defined in
 
-[Puppet.ts:64](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L64)
+[Puppet.ts:32](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L32)
 
 ___
 
 ### getAttributeMod
 
-▸ **getAttributeMod**(`attributeValue`, `signer?`): `Promise`<`string` \| `number`\>
+▸ **getAttributeMod**(`options`): `Promise`<`string` \| `number`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `attributeValue` | `number` |
-| `signer?` | `Account` |
+| `options` | `Object` |
+| `options.attributeValue` | `number` |
 
 #### Returns
 
@@ -176,62 +146,62 @@ ___
 
 #### Defined in
 
-[Puppet.ts:68](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L68)
+[Puppet.ts:42](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L42)
 
 ___
 
 ### getEpochJSON
 
-▸ **getEpochJSON**(`epochId`, `signer?`): `Promise`<`string` \| [`EpochType`](../interfaces/types.EpochType.md)\>
+▸ **getEpochJSON**(`options`): `Promise`<[`EpochType`](../interfaces/EpochType.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `epochId` | `number` |
-| `signer?` | `Account` |
+| `options` | `Object` |
+| `options.epochId` | `number` |
 
 #### Returns
 
-`Promise`<`string` \| [`EpochType`](../interfaces/types.EpochType.md)\>
+`Promise`<[`EpochType`](../interfaces/EpochType.md)\>
 
 #### Defined in
 
-[Puppet.ts:72](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L72)
+[Puppet.ts:57](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L57)
 
 ___
 
 ### getPuppetJSON
 
-▸ **getPuppetJSON**(`tokenId`, `signer?`): `Promise`<`string` \| [`PuppetType`](../interfaces/types.PuppetType.md)\>
+▸ **getPuppetJSON**(`options`): `Promise`<[`PuppetType`](../interfaces/PuppetType.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `tokenId` | `string` |
-| `signer?` | `Account` |
+| `options` | `Object` |
+| `options.tokenId` | `string` |
 
 #### Returns
 
-`Promise`<`string` \| [`PuppetType`](../interfaces/types.PuppetType.md)\>
+`Promise`<[`PuppetType`](../interfaces/PuppetType.md)\>
 
 #### Defined in
 
-[Puppet.ts:76](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L76)
+[Puppet.ts:61](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L61)
 
 ___
 
 ### getPuppetRaw
 
-▸ **getPuppetRaw**(`tokenId`, `signer?`): `Promise`<`string`\>
+▸ **getPuppetRaw**(`options`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `tokenId` | `string` |
-| `signer?` | `Account` |
+| `options` | `Object` |
+| `options.tokenId` | `string` |
 
 #### Returns
 
@@ -239,35 +209,21 @@ ___
 
 #### Defined in
 
-[Puppet.ts:80](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L80)
-
-___
-
-### init
-
-▸ **init**(): `Promise`<`void`\>
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Defined in
-
-[Puppet.ts:33](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L33)
+[Puppet.ts:65](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L65)
 
 ___
 
 ### offlineMint
 
-▸ **offlineMint**(`epochId`, `owner`, `signer`): `Promise`<`string`\>
+▸ **offlineMint**(`options`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `epochId` | `number` |
-| `owner` | `string` |
-| `signer` | `Account` |
+| `options` | `Object` |
+| `options.epochId` | `number` |
+| `options.owner` | `string` |
 
 #### Returns
 
@@ -275,84 +231,85 @@ ___
 
 #### Defined in
 
-[Puppet.ts:88](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L88)
+[Puppet.ts:73](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L73)
 
 ___
 
 ### ownerOf
 
-▸ **ownerOf**(`tokenId`, `signer?`): `Promise`<`string` \| `Account`\>
+▸ **ownerOf**(`options`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `tokenId` | `string` |
-| `signer?` | `Account` |
+| `options` | `Object` |
+| `options.tokenId` | `string` |
 
 #### Returns
 
-`Promise`<`string` \| `Account`\>
+`Promise`<`string`\>
 
 #### Defined in
 
-[Puppet.ts:84](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L84)
+[Puppet.ts:69](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L69)
 
 ___
 
 ### properties
 
-▸ **properties**(`tokenId`, `signer?`): `Promise`<`string` \| [`PuppetType`](../interfaces/types.PuppetType.md)\>
+▸ **properties**(`options`): `Promise`<`string` \| [`PuppetType`](../interfaces/PuppetType.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `tokenId` | `string` |
-| `signer?` | `Account` |
+| `options` | `Object` |
+| `options.tokenId` | `string` |
 
 #### Returns
 
-`Promise`<`string` \| [`PuppetType`](../interfaces/types.PuppetType.md)\>
+`Promise`<`string` \| [`PuppetType`](../interfaces/PuppetType.md)\>
 
 #### Defined in
 
-[Puppet.ts:92](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L92)
+[Puppet.ts:82](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L82)
 
 ___
 
 ### purchase
 
-▸ **purchase**(`epochId`, `signer`): `Promise`<`undefined` \| `string`\>
+▸ **purchase**(`options`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `epochId` | `number` |
-| `signer` | `Account` |
+| `options` | `Object` |
+| `options.epochId` | `number` |
+| `options.signerAddress` | `string` |
 
 #### Returns
 
-`Promise`<`undefined` \| `string`\>
+`Promise`<`string`\>
 
 #### Defined in
 
-[Puppet.ts:96](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L96)
+[Puppet.ts:86](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L86)
 
 ___
 
 ### setMintFee
 
-▸ **setMintFee**(`epochId`, `fee`, `signer`): `Promise`<`string`\>
+▸ **setMintFee**(`options`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `epochId` | `number` |
-| `fee` | `number` |
-| `signer` | `Account` |
+| `options` | `Object` |
+| `options.epochId` | `number` |
+| `options.fee` | `number` |
 
 #### Returns
 
@@ -360,19 +317,40 @@ ___
 
 #### Defined in
 
-[Puppet.ts:127](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L127)
+[Puppet.ts:115](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L115)
+
+___
+
+### singleInvocationTestInvoke
+
+▸ `Private` **singleInvocationTestInvoke**<`Type`\>(`args`, `buildInvocationFunction`): `Promise`<`any`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `Type` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `args` | `Type` |
+| `buildInvocationFunction` | (`scriptHash`: `string`, `params`: `Type`) => `ContractInvocation` |
+
+#### Returns
+
+`Promise`<`any`\>
+
+#### Defined in
+
+[Puppet.ts:172](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L172)
 
 ___
 
 ### symbol
 
-▸ **symbol**(`signer?`): `Promise`<`string`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `signer?` | `Account` |
+▸ **symbol**(): `Promise`<`string`\>
 
 #### Returns
 
@@ -380,123 +358,99 @@ ___
 
 #### Defined in
 
-[Puppet.ts:131](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L131)
+[Puppet.ts:124](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L124)
 
 ___
 
 ### tokens
 
-▸ **tokens**(`signer?`): `Promise`<`string` \| `number`[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `signer?` | `Account` |
+▸ **tokens**(): `Promise`<`number`[]\>
 
 #### Returns
 
-`Promise`<`string` \| `number`[]\>
+`Promise`<`number`[]\>
 
 #### Defined in
 
-[Puppet.ts:135](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L135)
+[Puppet.ts:128](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L128)
 
 ___
 
 ### tokensOf
 
-▸ **tokensOf**(`address`, `signer?`): `Promise`<`string` \| `string`[]\>
+▸ **tokensOf**(`options`): `Promise`<`string`[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `address` | `string` |
-| `signer?` | `Account` |
+| `options` | `Object` |
+| `options.address` | `string` |
 
 #### Returns
 
-`Promise`<`string` \| `string`[]\>
+`Promise`<`string`[]\>
 
 #### Defined in
 
-[Puppet.ts:139](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L139)
+[Puppet.ts:132](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L132)
 
 ___
 
 ### totalAccounts
 
-▸ **totalAccounts**(`signer?`): `Promise`<`string` \| `number`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `signer?` | `Account` |
+▸ **totalAccounts**(): `Promise`<`number`\>
 
 #### Returns
 
-`Promise`<`string` \| `number`\>
+`Promise`<`number`\>
 
 #### Defined in
 
-[Puppet.ts:143](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L143)
+[Puppet.ts:136](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L136)
 
 ___
 
 ### totalEpochs
 
-▸ **totalEpochs**(`signer?`): `Promise`<`string` \| `number`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `signer?` | `Account` |
+▸ **totalEpochs**(): `Promise`<`number`\>
 
 #### Returns
 
-`Promise`<`string` \| `number`\>
+`Promise`<`number`\>
 
 #### Defined in
 
-[Puppet.ts:147](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L147)
+[Puppet.ts:140](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L140)
 
 ___
 
 ### totalSupply
 
-▸ **totalSupply**(`signer?`): `Promise`<`string` \| `number`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `signer?` | `Account` |
+▸ **totalSupply**(): `Promise`<`number`\>
 
 #### Returns
 
-`Promise`<`string` \| `number`\>
+`Promise`<`number`\>
 
 #### Defined in
 
-[Puppet.ts:151](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L151)
+[Puppet.ts:144](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L144)
 
 ___
 
 ### transfer
 
-▸ **transfer**(`to`, `tokenId`, `signer`, `data`): `Promise`<`string`\>
+▸ **transfer**(`options`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `to` | `string` |
-| `tokenId` | `string` |
-| `signer` | `Account` |
-| `data` | `any` |
+| `options` | `Object` |
+| `options.data` | `any` |
+| `options.to` | `string` |
+| `options.tokenId` | `string` |
 
 #### Returns
 
@@ -504,21 +458,22 @@ ___
 
 #### Defined in
 
-[Puppet.ts:155](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L155)
+[Puppet.ts:148](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L148)
 
 ___
 
 ### update
 
-▸ **update**(`script`, `manifest`, `signer`): `Promise`<`string`\>
+▸ **update**(`options`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `script` | `string` |
-| `manifest` | `string` |
-| `signer` | `Account` |
+| `options` | `Object` |
+| `options.data?` | `any` |
+| `options.manifest` | `string` |
+| `options.script` | `string` |
 
 #### Returns
 
@@ -526,4 +481,441 @@ ___
 
 #### Defined in
 
-[Puppet.ts:159](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Puppet.ts#L159)
+[Puppet.ts:157](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L157)
+
+___
+
+### buildBalanceOfInvocation
+
+▸ `Static` **buildBalanceOfInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.address` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:187](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L187)
+
+___
+
+### buildCreateEpochInvocation
+
+▸ `Static` **buildCreateEpochInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.generatorInstanceId` | `number` |
+| `params.initialRollCollectionId` | `number` |
+| `params.label` | `string` |
+| `params.maxSupply` | `number` |
+| `params.mintFee` | `number` |
+| `params.sysFee` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:197](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L197)
+
+___
+
+### buildDecimalsInvocation
+
+▸ `Static` **buildDecimalsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:212](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L212)
+
+___
+
+### buildDeployInvocation
+
+▸ `Static` **buildDeployInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:220](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L220)
+
+___
+
+### buildGetAttributeModInvocation
+
+▸ `Static` **buildGetAttributeModInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.attributeValue` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:228](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L228)
+
+___
+
+### buildGetEpochJSONInvocation
+
+▸ `Static` **buildGetEpochJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.epochId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:238](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L238)
+
+___
+
+### buildGetPuppetJSONInvocation
+
+▸ `Static` **buildGetPuppetJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:249](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L249)
+
+___
+
+### buildGetPuppetRawInvocation
+
+▸ `Static` **buildGetPuppetRawInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:259](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L259)
+
+___
+
+### buildOfflineMintInvocation
+
+▸ `Static` **buildOfflineMintInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.epochId` | `number` |
+| `params.owner` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:279](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L279)
+
+___
+
+### buildOwnerOfInvocation
+
+▸ `Static` **buildOwnerOfInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:269](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L269)
+
+___
+
+### buildPropertiesInvocation
+
+▸ `Static` **buildPropertiesInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:290](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L290)
+
+___
+
+### buildSetMintFeeInvocation
+
+▸ `Static` **buildSetMintFeeInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.epochId` | `number` |
+| `params.fee` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:300](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L300)
+
+___
+
+### buildSymbolInvocation
+
+▸ `Static` **buildSymbolInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:311](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L311)
+
+___
+
+### buildTokensInvocation
+
+▸ `Static` **buildTokensInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:319](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L319)
+
+___
+
+### buildTokensOfInvocation
+
+▸ `Static` **buildTokensOfInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.address` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:327](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L327)
+
+___
+
+### buildTotalAccountsInvocation
+
+▸ `Static` **buildTotalAccountsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:337](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L337)
+
+___
+
+### buildTotalEpochsInvocation
+
+▸ `Static` **buildTotalEpochsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:345](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L345)
+
+___
+
+### buildTotalSupplyInvocation
+
+▸ `Static` **buildTotalSupplyInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:353](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L353)
+
+___
+
+### buildTransferInvocation
+
+▸ `Static` **buildTransferInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.data` | `any` |
+| `params.to` | `string` |
+| `params.tokenId` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:361](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L361)
+
+___
+
+### buildUpdateInvocation
+
+▸ `Static` **buildUpdateInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.data` | `any` |
+| `params.manifest` | `string` |
+| `params.script` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Puppet.ts:373](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L373)

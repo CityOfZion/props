@@ -1,3 +1,4 @@
+from typing import List 
 from boa3.builtin.interop.runtime import get_random
 from boa3.builtin.interop.stdlib import atoi
 
@@ -49,7 +50,7 @@ def roll_die_internal(die: str) -> int:
     return roll_dice_with_entropy_internal(die, len(pruned_entropy), pruned_entropy)[0]
 
 
-def roll_dice_with_entropy_internal(die: str, precision: int, entropy: bytes) -> [int]:
+def roll_dice_with_entropy_internal(die: str, precision: int, entropy: bytes) -> List[int]:
     """
     A deterministic conversation of entropy into dice rolls.
     :param precision: a byte length to use in each roll
@@ -62,7 +63,7 @@ def roll_dice_with_entropy_internal(die: str, precision: int, entropy: bytes) ->
     dice_sides_bytes: bytes = dice_sides.to_bytes()
     assert entropy_length >= len(dice_sides_bytes), "Not enough entropy"
 
-    rolls: [int] = []
+    rolls: List[int] = []
     roll: int
     for i in range(entropy_length // precision):
         e: bytes = entropy[i * precision: (i + 1) * precision]

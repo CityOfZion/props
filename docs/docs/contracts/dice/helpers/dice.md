@@ -60,7 +60,7 @@ The integer result of the roll.
 
 ```python
 def roll_dice_with_entropy_internal(die: str, precision: int,
-                                    entropy: bytes) -> [int]
+                                    entropy: bytes) -> List[int]
 ```
 
 A deterministic conversation of entropy into dice rolls.

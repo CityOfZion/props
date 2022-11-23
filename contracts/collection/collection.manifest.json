@@ -125,7 +125,7 @@
             },
             {
                 "name": "sample_from_runtime_collection",
-                "offset": 404,
+                "offset": 323,
                 "parameters": [
                     {
                         "name": "vals",
@@ -145,14 +145,14 @@
             },
             {
                 "name": "total_collections",
-                "offset": 608,
+                "offset": 527,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "update",
-                "offset": 614,
+                "offset": 533,
                 "parameters": [
                     {
                         "name": "script",
@@ -172,7 +172,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 1031,
+                "offset": 950,
                 "parameters": [
                     {
                         "name": "data",
@@ -188,7 +188,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 1069,
+                "offset": 988,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

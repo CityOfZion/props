@@ -8,7 +8,7 @@ from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.storage.findoptions import FindOptions
 from boa3.builtin.interop.iterator import Iterator
-from boa3.builtin.type import UInt160
+from boa3.builtin.type import UInt160, ByteString
 
 # -------------------------------------------
 # METADATA
@@ -61,7 +61,7 @@ on_transfer = CreateNewEvent(
         ('from_addr', Union[UInt160, None]),
         ('to_addr', Union[UInt160, None]),
         ('amount', int),
-        ('token_id', bytes)
+        ('token_id', ByteString)
     ],
     'Transfer'
 )
@@ -70,7 +70,7 @@ on_transfer = CreateNewEvent(
 # NEP-11 Methods
 # -------------------------------------------
 
-@public
+@public(safe=True)
 def symbol() -> str:
     """
     Gets the symbols of the token.
@@ -84,7 +84,7 @@ def symbol() -> str:
     return TOKEN_SYMBOL
 
 
-@public
+@public(safe=True)
 def decimals() -> int:
     """
     Gets the amount of decimals used by the token.
@@ -97,7 +97,7 @@ def decimals() -> int:
     return TOKEN_DECIMALS
 
 
-@public
+@public(safe=True)
 def totalSupply() -> int:
     """
     Gets the total token supply deployed in the system.
@@ -113,7 +113,7 @@ def totalSupply() -> int:
     return total.to_int()
 
 
-@public
+@public(safe=True)
 def balanceOf(owner: UInt160) -> int:
     """
     Get the current balance of an address
@@ -130,7 +130,7 @@ def balanceOf(owner: UInt160) -> int:
     return user.get_balance_of()
 
 
-@public
+@public(safe=True)
 def tokensOf(owner: UInt160) -> Iterator:
     """
     Get all of the token ids owned by the specified address
@@ -148,7 +148,7 @@ def tokensOf(owner: UInt160) -> Iterator:
 
 
 @public
-def transfer(to: UInt160, token_id: bytes, data: Any) -> bool:
+def transfer(to: UInt160, token_id: ByteString, data: Any) -> bool:
     """
     Transfers the token with id token_id to address to
 
@@ -175,7 +175,7 @@ def transfer(to: UInt160, token_id: bytes, data: Any) -> bool:
     """
     assert len(to) == 20, 'Incorrect `to` length'
 
-    puppet: Puppet = get_puppet(token_id)
+    puppet: Puppet = get_puppet(token_id.to_bytes())
     token_owner: UInt160 = puppet.get_owner()
     formatted_token_id: bytes = puppet.get_token_id()
     if not check_witness(token_owner):
@@ -195,7 +195,7 @@ def transfer(to: UInt160, token_id: bytes, data: Any) -> bool:
         puppet.set_owner(to)
         save_puppet(puppet)
 
-    post_transfer(token_owner, to, token_id, data)
+    post_transfer(token_owner, to, token_id.to_bytes(), data)
     return True
 
 
@@ -221,8 +221,8 @@ def post_transfer(token_owner: Union[UInt160, None], to: Union[UInt160, None], t
             pass
 
 
-@public
-def ownerOf(token_id: bytes) -> UInt160:
+@public(safe=True)
+def ownerOf(token_id: ByteString) -> UInt160:
     """
     Get the owner of the specified token.
 
@@ -233,12 +233,12 @@ def ownerOf(token_id: bytes) -> UInt160:
     :return: the owner of the specified token.
     :raise AssertionError: raised if `token_id` is not a valid NFT.
     """
-    puppet: Puppet = get_puppet(token_id)
+    puppet: Puppet = get_puppet(token_id.to_bytes())
     owner = puppet.get_owner()
     return owner
 
 
-@public
+@public(safe=True)
 def tokens() -> Iterator:
     """
     Get all tokens minted by the contract
@@ -250,8 +250,8 @@ def tokens() -> Iterator:
     return find(TOKEN_PREFIX, context, flags)
 
 
-@public
-def properties(token_id: bytes) -> Dict[str, Any]:
+@public(safe=True)
+def properties(token_id: ByteString) -> Dict[Any, Any]:
     """
     Get the properties of a token.
 
@@ -262,7 +262,7 @@ def properties(token_id: bytes) -> Dict[str, Any]:
     :return: a serialized NVM object containing the properties for the given NFT.
     :raise AssertionError: raised if `token_id` is not a valid NFT, or if no metadata available.
     """
-    puppet_json = get_puppet_json_flat(token_id)
+    puppet_json = get_puppet_json_flat(token_id.to_bytes())
     assert len(puppet_json) != 0, 'Puppet does not exist'
 
     return puppet_json
@@ -415,7 +415,9 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
     start_gas: int = gas_left
 
     mint_epoch: Epoch = get_epoch(epoch_id)
+
     assert mint_epoch.can_mint(), 'No available puppets to mint in the selected epoch'
+
 
     mint_epoch.increment_supply()
     save_epoch(mint_epoch)
@@ -423,6 +425,7 @@ def internal_mint(epoch_id: bytes, owner: UInt160) -> bytes:
     token_id_int: int = (totalSupply() + 1)
     token_id_string: bytes = itoa(token_id_int)
     new_puppet: Puppet = Puppet()
+    
     new_puppet.generate(owner, token_id_string, epoch_id)
 
     save_puppet(new_puppet)
@@ -800,7 +803,7 @@ class Puppet:
         initial_roll_collection_id_bytes: bytes = target_epoch.get_initial_roll_collection_id()
 
         initial_roll_collection_id: int = initial_roll_collection_id_bytes.to_int()
-        attrs: [bytes] = Collection.sample_from_collection(initial_roll_collection_id, 6)
+        attrs: List[bytes] = Collection.sample_from_collection(initial_roll_collection_id, 6)
 
         self._charisma = attrs[0].to_int()
         self._constitution = attrs[1].to_int()
@@ -1030,8 +1033,8 @@ class Puppet:
         self._intelligence: int = attributes['intelligence']
         self._strength: int = attributes['strength']
         self._wisdom: int = attributes['wisdom']
-        self._traits: [str] = abstract['traits']
-        self._token_id: [int] = abstract['tokenId']
+        self._traits: List[str] = abstract['traits']
+        self._token_id: List[int] = abstract['tokenId']
         self._owner: bytes = abstract['owner']
         return True
 
@@ -1121,7 +1124,7 @@ def mk_token_key(token_id: bytes) -> bytes:
 # ############INTERFACES###########
 
 
-@contract('0xacf2aa5d0899e860eebd8b8a5454aa3017543848')
+@contract('0x581eb6dfcd9e8a53b4a1d555f93fd6186d863ccf')
 class Collection:
 
     @staticmethod
@@ -1129,7 +1132,7 @@ class Collection:
         pass
 
 
-@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
+@contract('0xb38a85f268a5f1b6a9fad10d7023c85f952e7653')
 class Dice:
 
     @staticmethod
@@ -1137,7 +1140,7 @@ class Dice:
         pass
 
 
-@contract('0xa3e59ddc61b2d8ac42c519cee5ddaac83c7df276')
+@contract('0xbc6939fc5466eea73032fce76adba50c57ad8c3a')
 class Generator:
 
     @staticmethod

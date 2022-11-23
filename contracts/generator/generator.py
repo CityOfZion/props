@@ -71,8 +71,8 @@ class GeneratorInstance:
         self._instance_id: bytes = (total_generator_instances() + 1).to_bytes()
         self._author: UInt160 = author
         self._access_mode: int = access_mode
-        self._authorized_contracts: [AccessControllerContract] = []
-        self._authorized_users: [UInt160] = [author]
+        self._authorized_contracts: List[AccessControllerContract] = []
+        self._authorized_users: List[UInt160] = [author]
         self._storage_keys = []
 
     def get_id(self) -> bytes:
@@ -128,11 +128,11 @@ class GeneratorInstance:
         self._access_mode = access_mode
         return True
 
-    def set_authorized_users(self, authorized_users: [UInt160]) -> bool:
+    def set_authorized_users(self, authorized_users: List[UInt160]) -> bool:
         self._authorized_users = authorized_users
         return True
 
-    def set_authorized_contracts(self, authorized_contracts: [AccessControllerContract]) -> bool:
+    def set_authorized_contracts(self, authorized_contracts: List[AccessControllerContract]) -> bool:
         self._authorized_contracts = authorized_contracts
         return True
 
@@ -194,7 +194,7 @@ def mint_from_instance(from_code: bytes, to_instance_id: bytes) -> Dict[str, Any
 
 
 @public
-def set_instance_authorized_users(instance_id: bytes, authorized_users: [UInt160]) -> bool:
+def set_instance_authorized_users(instance_id: bytes, authorized_users: List[UInt160]) -> bool:
     tx = cast(Transaction, script_container)
     signer: UInt160 = tx.sender
 
@@ -219,7 +219,7 @@ def set_instance_authorized_contracts(instance_id: bytes, authorized_contracts: 
     author: UInt160 = generator_instance.get_author()
     assert signer == author, "Transaction signer is not the instance author"
 
-    contracts: [AccessControllerContract] = []
+    contracts: List[AccessControllerContract] = []
     for authorized_contract in authorized_contracts:
         contract_payload: List = cast(List, authorized_contract)
         script_hash: UInt160 = cast(UInt160, contract_payload[0])
@@ -386,7 +386,7 @@ class CollectionSampleFromEvent:
 
     def get_value(self, generator_instance: GeneratorInstance) -> bytes:
         cid: int = self.collection_id
-        value: [bytes] = Collection.sample_from_collection(cid, 1)
+        value: List[bytes] = Collection.sample_from_collection(cid, 1)
         return value[0]
 
 
@@ -511,7 +511,7 @@ class TraitLevel:
         self._drop_score: int = drop_score.to_int()
         self._mint_mode: int = mint_mode
 
-        traits: [EventInterface] = []
+        traits: List[EventInterface] = []
         for i in range(len(events)):
             event_list: List = cast(List, events[i])
             event_type: int = cast(int, event_list[0])
@@ -520,7 +520,7 @@ class TraitLevel:
             event_id: bytes = append_key_stack(self._id, i.to_bytes())
             new_event: EventInterface = EventInterface(event_id, event_type, max_mint, event_args)
             traits.append(new_event)
-        self._traits: [EventInterface] = traits
+        self._traits: List[EventInterface] = traits
 
     def dropped(self, roll: int) -> bool:
         dropped: bool = roll < self._drop_score
@@ -547,7 +547,7 @@ class TraitLevel:
         return available_traits > 0
 
     def mint(self, entropy: bytes, generator_instance: GeneratorInstance) -> bytes:
-        traits: [EventInterface] = self._traits
+        traits: List[EventInterface] = self._traits
         max_index: int = len(traits)
         mint_mode: int = self._mint_mode
 
@@ -564,7 +564,7 @@ class TraitLevel:
 
         # mints randomly from options, considerate of maxMint | Will always mint if options are available
         if mint_mode == 1:
-            remaining: [int] = []
+            remaining: List[int] = []
             for i in range(max_index):
                 target_event: EventInterface = traits[i]
                 mint_count: int = target_event.get_mint_count(generator_instance)
@@ -593,7 +593,7 @@ class Trait:
         self._id: bytes = trait_id
         self._slots: int = slots
 
-        new_trait_levels: [TraitLevel] = []
+        new_trait_levels: List[TraitLevel] = []
         for i in range(len(trait_levels)):
             trait_list: List = cast(List, trait_levels[i])
             drop_score: bytes = cast(bytes, trait_list[0])
@@ -603,7 +603,11 @@ class Trait:
             t: TraitLevel = TraitLevel(trait_level_id, drop_score, mint_mode, traits)
             new_trait_levels.append(t)
 
-        self._trait_levels: [TraitLevel] = new_trait_levels
+        self._trait_levels: List[TraitLevel] = new_trait_levels
+
+    @property
+    def slots(self) -> int:
+        return self._slots
 
     def get_label(self) -> bytes:
         return self._label
@@ -611,12 +615,12 @@ class Trait:
     def get_slots(self) -> int:
         return self._slots
 
-    def mint(self, generator_instance: GeneratorInstance) -> [bytes]:
+    def mint(self, generator_instance: GeneratorInstance) -> List[bytes]:
         slot_entropy = get_random().to_bytes()
-        trait_levels: [TraitLevel] = self._trait_levels
-        slots: int = self._slots
+        trait_levels: List[TraitLevel] = self._trait_levels
+        slots: int = self.slots
 
-        traits: [bytes] = []
+        traits: List[bytes] = []
         for i in range(slots):
             roll: int = Dice.rand_between(0, 999999)
             for trait_level in trait_levels:
@@ -664,7 +668,7 @@ def create_trait(generator_id: bytes, label: bytes, slots: int, trait_levels: Li
     author: UInt160 = generator.get_author()
     assert signer == author, "Transaction signer is not the generator author"
 
-    generator_traits: [bytes] = generator.get_traits()
+    generator_traits: List[bytes] = generator.get_traits()
     trait_length: int = len(generator_traits)
     trait_id: bytes = generator.get_id() + b'_' + trait_length.to_bytes()
     new_trait: Trait = Trait(trait_id, label, slots, trait_levels)
@@ -715,7 +719,7 @@ def append_key_stack(current: bytes, new_key: bytes) -> bytes:
 class Generator:
     def __init__(self):
         self._label: bytes = b''
-        self._traits: [bytes] = []
+        self._traits: List[bytes] = []
         self._id: bytes = (total_generators() + 1).to_bytes()
         self._author: UInt160 = b''
         self._base_generator_fee: int = 0
@@ -753,7 +757,7 @@ class Generator:
         return self._traits
 
     def append_trait(self, trait_id: bytes) -> bool:
-        trait_list: [bytes] = self._traits
+        trait_list: List[bytes] = self._traits
         trait_list.append(trait_id)
         self._traits = trait_list
         return True
@@ -765,13 +769,13 @@ class Generator:
         start_gas: int = gas_left
 
         # mint some traits
-        trait_objects: [bytes] = self._traits
+        trait_objects: List[bytes] = self._traits
         for trait_id in trait_objects:
             trait_object: Trait = get_trait(trait_id)
             label_bytes: bytes = trait_object.get_label()
             label: str = label_bytes.to_str()
 
-            trait: [bytes] = trait_object.mint(generator_instance)
+            trait: List[bytes] = trait_object.mint(generator_instance)
             traits_count: int = len(trait)
             if traits_count > 1 or trait_object.get_slots() > 1:
                 traits[label] = trait
@@ -902,7 +906,7 @@ def mk_generator_instance_key(generator_instance_id: bytes) -> bytes:
 # ################Deps############################
 
 
-@contract('0xacf2aa5d0899e860eebd8b8a5454aa3017543848')
+@contract('0x581eb6dfcd9e8a53b4a1d555f93fd6186d863ccf')
 class Collection:
 
     @staticmethod
@@ -918,7 +922,7 @@ class Collection:
         pass
 
 
-@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
+@contract('0xb38a85f268a5f1b6a9fad10d7023c85f952e7653')
 class Dice:
 
     @staticmethod

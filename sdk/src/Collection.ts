@@ -1,14 +1,7 @@
-import {merge} from 'lodash'
-import {rpc, wallet} from '@cityofzion/neon-core'
-import {sc} from "@cityofzion/neon-js";
-import {CollectionType, NetworkOption, PropConstructorOptions} from "./interface";
-import {CollectionAPI} from "./api";
+import { CollectionType, SmartContractConfig } from './types'
+import { ContractInvocation } from '@cityofzion/neo3-invoker'
 import fs from 'fs'
-import {ContractParamLike} from "@cityofzion/neon-core/lib/sc";
 
-const DEFAULT_OPTIONS: PropConstructorOptions = {
-  network: NetworkOption.LocalNet
-}
 
 /**
  * The Collection prop is designed to store static-immutable data for reference in other projects. Storing static data
@@ -16,176 +9,222 @@ const DEFAULT_OPTIONS: PropConstructorOptions = {
  * library for static data. This class exposes the interface along with a number of helpful features to make the smart
  * contract easy to use for typescript developers.
  *
- * All of the prop helper classes will auto-configure your network settings.  The default configuration will interface with
- * the contract compiled with this project and deployed locally at http://localhost:50012.  For more information on deploying
- * contract packages, refer to the quickstart.
- *
- * All methods support a signer.  If the method can be run as a test-invoke, optionally populating the signer parameter
- * will publish the invocation and return the txid instead of the method response.
+ * All of the props smart contract interface classes will need a scripthash, and a `Neo3-Invoker` and `Neo3Parser` to be initialized.  For more information on deploying
+ * contract packages, refer to the [quickstart](https://props.coz.io/d/docs/sdk/ts/#quickstart).
  *
  * To use this class:
  * ```typescript
- * import {Collection} from "../../dist" //import {Collection} from "@cityofzion/props
+ * import { Collection } from "@cityofzion/props"
  *
- * const collection: Collection = new Collection()
- * await collection.init() // interfaces with the node to resolve network magic
- *
+ * 
+ * const node = //refer to dora.coz.io/monitor for a list of nodes.
+ * const scriptHash = //refer to the scriptHashes section above
+ * const neo3Invoker = await NeonInvoker.init(node) // need to instantiate a Neo3Invoker, currently only NeonInvoker implements this interface
+ * const neo3Parser = NeonParser // need to use a Neo3Parser, currently only NeonParser implements this interface
+ * const puppet = await new Collection({
+ *       scriptHash,
+ *       invoker: neo3Invoker,
+ *       parser: neo3Parser,
+ * })
+ * 
  * const total = await collection.totalCollections()
  * console.log(total) // outputs the total collection count in the contract
  * ```
  */
 export class Collection {
-  private options: PropConstructorOptions = DEFAULT_OPTIONS
-  private networkMagic: number = -1
 
-  constructor(options: PropConstructorOptions = {}) {
-    switch(options.network) {
-      case NetworkOption.TestNet:
-        this.options.node = 'https://testnet1.neo.coz.io:443'
-        this.options.scriptHash = '0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e'
-        break
-      case NetworkOption.MainNet:
-        this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = '0xf05651bc505fd5c7d36593f6e8409932342f9085'
-        break
-      default:
-        this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0xacf2aa5d0899e860eebd8b8a5454aa3017543848'
-        break
-    }
-    this.options = merge({}, this.options, options)
-  }
+  static MAINNET = '0xf05651bc505fd5c7d36593f6e8409932342f9085'
+  static TESTNET = ''
+  
+  constructor(
+    private config: SmartContractConfig
+  ) {}
 
-  /**
-   * Gets the magic number for the network and configures the class instance.
-   */
-  async init() {
-    const getVersionRes = await this.node.getVersion()
-    this.networkMagic = getVersionRes.protocol.network
-  }
-
-  /**
-   * The the node that the instance is connected to.
-   */
-  get node(): rpc.RPCClient {
-    if (this.options.node) {
-      return new rpc.RPCClient(this.options.node)
-    }
-    throw new Error('no node selected!')
-  }
-
-  /**
-   * The contract script hash that is being interfaced with.
-   */
-  get scriptHash() : string {
-    if (this.options.scriptHash) {
-      return this.options.scriptHash
-    }
-    throw new Error('scripthash defined')
-  }
-
+	
   /**
    * Publishes an array of immutable data to the smart contract along with some useful metadata.
    *
-   * @param description A useful description of the collection.
-   * @param collectionType The type of the data being store.  This is an unregulated field.  Standard NVM datatypes should
+   * @param options.description A useful description of the collection.
+   * @param options.collectionType The type of the data being store.  This is an unregulated field.  Standard NVM datatypes should
    * adhere to existing naming conventions.
-   * @param extra An unregulated field for unplanned feature development.
-   * @param values An array of values that represent the body of the collection.
-   * @param signer The signer of the transaction.
+   * @param options.extra An unregulated field for unplanned feature development.
+   * @param options.values An array of values that represent the body of the collection.
+   * @param options.signer The signer of the transaction.
    *
-   * @returns A transaction ID.  Refer to {@link helpers.txDidComplete} for parsing.
+   * @returns The transaction id of a transaction that will return the new collection id.
    */
-  async createCollection(description: string, collectionType: string, extra: string, values: string[], signer: wallet.Account): Promise<string> {
-    return CollectionAPI.createCollection(this.node.url, this.networkMagic, this.scriptHash, description, collectionType, extra,  values, signer)
+  async createCollection(options: {description: string, collectionType: string, extra: string, values: (string|number)[]}): Promise<string> {
+    const res = await this.config.invoker.invokeFunction({
+      invocations: [
+        Collection.buildCreateCollectionInvocation(
+					this.config.scriptHash, 
+					{
+            description: options.description,
+            collectionType: options.collectionType,
+            extra: options.extra,
+            values: options.values,
+          }
+				)
+      ],
+      signers: [],
+    })
+
+    return res
   }
 
   /**
    * Loads a {@link CollectionType} formatted JSON file and pushes it to the smart contract.
    *
    * @param path The path to the file.
-   * @param signer The signer of the transaction.
    *
-   * @returns A transaction ID. Refer to {@link helper.txDidComplete} for parsing.
+   * @returns The transaction id of a transaction that will return the new collection id.
    */
-  async createFromFile(path: string, signer: wallet.Account): Promise<string> {
+  async createFromFile(path: string): Promise<string> {
     const localCollection = JSON.parse(fs.readFileSync(path).toString()) as CollectionType
-    const formattedValues = (localCollection.values as any[]).map( (value: string | number) => {
-      switch (localCollection.type) {
-        case 'string':
-          return sc.ContractParam.string(value as string)
-        case 'int':
-          return sc.ContractParam.integer(value as number)
-      }
-    }) as ContractParamLike[]
-    return CollectionAPI.createCollectionRaw(this.node.url, this.networkMagic, this.scriptHash, localCollection.description, localCollection.type, localCollection.extra, formattedValues, signer)
+
+    const res = await this.config.invoker.invokeFunction({
+      invocations: [
+        Collection.buildCreateCollectionInvocation(
+					this.config.scriptHash, 
+					{
+            description: localCollection.description,
+            collectionType: localCollection.type,
+            extra: localCollection.extra,
+            values: localCollection.values as string[],
+          }
+				)
+      ],
+      signers: [],
+    })
+
+    return res
   }
 
   /**
    * Gets a JSON formatting collection from the smart contract.
    *
-   * @param collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
    *
-   * @returns The requested collection **OR** a txid if the signer parameter is populated.
+   * @returns The requested collection.
    */
-  async getCollectionJSON(collectionId: number, signer?: wallet.Account): Promise<CollectionType | string> {
-    return CollectionAPI.getCollectionJSON(this.node.url, this.networkMagic, this.scriptHash, collectionId, signer)
+  async getCollectionJSON(options: {collectionId: number}): Promise<CollectionType> {
+    const res = await this.config.invoker.testInvoke({
+			invocations: [
+				Collection.buildGetCollectionJSONInvocation(
+					this.config.scriptHash, 
+					{collectionId: options.collectionId}
+				)
+			],
+			signers: [],
+		})
+
+		if (res.stack.length === 0) {
+			throw new Error(res.exception ?? 'unrecognized response')
+		}
+		
+    return this.config.parser.parseRpcResponse(res.stack[0])
   }
 
   /**
    * Gets the bytestring representation of the collection.  This is primarilly used for inter-contract interfacing,
    * but we include it here for completeness.
    *
-   * @param collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
-   *
-   * @returns The bytestring representation of the collection. **OR** a txid if the signer parameter is populated.
+   * @param options.collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
+   * 
+   * @returns The requested collection.
    */
-  async getCollection(collectionId: number, signer?: wallet.Account): Promise<string> {
-    return CollectionAPI.getCollection(this.node.url, this.networkMagic, this.scriptHash, collectionId, signer)
-  }
+  async getCollection(options: {collectionId: number}): Promise<string> {
+    const res = await this.config.invoker.testInvoke({
+			invocations: [
+				Collection.buildGetCollectionInvocation(
+					this.config.scriptHash, 
+					{collectionId: options.collectionId}
+				)
+			],
+			signers: [],
+		})
 
+		if (res.stack.length === 0) {
+			throw new Error(res.exception ?? 'unrecognized response')
+		}
+
+		return this.config.parser.parseRpcResponse(res.stack[0])
+  }
+  
   /**
    * Returns the value of a collection from a requested index.
    *
-   * @param collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
-   * @param index The index of the array element being requested.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
+   * @param options.index The index of the array element being requested.
    *
-   * @returns The value of the collection element **OR** a txid if the signer parameter is populated.
+   * @returns The value of the collection element.
    */
-  async getCollectionElement(collectionId: number, index: number, signer?: wallet.Account): Promise<string> {
-    return CollectionAPI.getCollectionElement(this.node.url, this.networkMagic, this.scriptHash, collectionId, index, signer)
+  async getCollectionElement(options: {collectionId: number, index: number}): Promise<string> {
+    const res = await this.config.invoker.testInvoke({
+      invocations: [
+        Collection.buildGetCollectionElementInvocation(
+          this.config.scriptHash, 
+          {collectionId: options.collectionId, index: options.index}
+        )
+      ],
+      signers: [],
+    })
+
+    if (res.stack.length === 0) {
+      throw new Error(res.exception ?? 'unrecognized response')
+    }
+
+    return this.config.parser.parseRpcResponse(res.stack[0])
   }
 
   /**
    * Gets the array length of a requested collection.
    *
-   * @param collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
    *
-   * @returns The length of the collection **OR** a txid if the signer parameter is populated.
+   * @returns The length of the collection.
    */
-  async getCollectionLength(collectionId: number, signer?: wallet.Account): Promise<number> {
-    return CollectionAPI.getCollectionLength(this.node.url, this.networkMagic, this.scriptHash, collectionId, signer)
-  }
+  async getCollectionLength(options: {collectionId: number}): Promise<number> {
+    const res = await this.config.invoker.testInvoke({
+      invocations: [
+        Collection.buildGetCollectionLengthInvocation(
+          this.config.scriptHash, 
+          {collectionId: options.collectionId}
+        )
+      ],
+      signers: [],
+    })
 
+    if (res.stack.length === 0) {
+      throw new Error(res.exception ?? 'unrecognized response')
+    }
+
+    return this.config.parser.parseRpcResponse(res.stack[0])
+  }
+  
   /**
    * Gets the values of a collection, omitting the metadata.
    *
-   * @param collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
    *
-   * @returns The values in the collection **OR** a txid if the signer parameter is populated.
+   * @returns The values in the collection.
    */
-  async getCollectionValues(collectionId: number, signer?: wallet.Account): Promise<string[] | any> {
-    return CollectionAPI.getCollectionValues(this.node.url, this.networkMagic, this.scriptHash, collectionId, signer)
+  async getCollectionValues(options: {collectionId: number}): Promise<(string|number)[]> {
+    const res = await this.config.invoker.testInvoke({
+      invocations: [
+        Collection.buildGetCollectionValuesInvocation(
+          this.config.scriptHash, 
+          {collectionId: options.collectionId}
+        )
+      ],
+      signers: [],
+    })
+
+    if (res.stack.length === 0) {
+      throw new Error(res.exception ?? 'unrecognized response')
+    }
+
+    return this.config.parser.parseRpcResponse(res.stack[0])
   }
 
   /**
@@ -197,60 +236,237 @@ export class Collection {
    * sampling from a distribution, use {@link getCollectionLength} in combination with {@link getCollectionElement} or
    * {@link sampleFromCollection}.
    *
-   * @param collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
-   * @param entropy Bytes to use for the mapping.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
+   * @param options.entropy Bytes to use for the mapping.
    *
-   * @returns The element from the mapping **OR** a txid if the signer parameter is populated.
+   * @returns The element from the mapping.
    */
-  async mapBytesOntoCollection(collectionId: number, entropy: string, signer?: wallet.Account): Promise<string> {
-    return CollectionAPI.mapBytesOntoCollection(this.node.url, this.networkMagic, this.scriptHash, collectionId, entropy, signer)
+  async mapBytesOntoCollection(options: {collectionId: number, entropy: string}): Promise<string> {
+    const res = await this.config.invoker.testInvoke({
+      invocations: [
+        Collection.buildMapBytesOntoCollectionInvocation(
+          this.config.scriptHash, 
+          {
+            collectionId: options.collectionId, 
+            entropy: options.entropy
+          }
+        )
+      ],
+      signers: [],
+    })
+
+    if (res.stack.length === 0) {
+      throw new Error(res.exception ?? 'unrecognized response')
+    }
+
+    return this.config.parser.parseRpcResponse(res.stack[0])
   }
 
   /**
    * Samples a uniform random value from the collection using a Contract.Call to the {@link Dice} contract.
    *
-   * @param collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
-   * @param samples The number of samples to return
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.collectionId The collectionID being requested.  Refer to {@link https://props.coz.io} for a formatted list.
+   * @param options.samples The number of samples to return
    *
-   * @returns A uniform random sample from the collection. **OR** a txid if the signer parameter is populated.
+   * @returns The transaction id of a transaction that will return a uniform random sample from the collection.
+   * 
    * **Note:** This method will not randomly generate unless the transaction is published so use the signer field for
    * testing.
    */
-  async sampleFromCollection(collectionId: number, samples: number, signer?: wallet.Account): Promise<string> {
-    return CollectionAPI.sampleFromCollection(this.node.url, this.networkMagic, this.scriptHash, collectionId, samples, signer)
-  }
-
+     async sampleFromCollection(options: {collectionId: number, samples: number}): Promise<string> {
+      return await this.config.invoker.invokeFunction({
+        invocations: [
+          Collection.buildSampleFromCollectionInvocation(
+            this.config.scriptHash, 
+            {
+              collectionId: options.collectionId, 
+              samples: options.samples
+            }
+          )
+        ],
+        signers: [],
+      })
+  
+    }
+  
   /**
    * Samples uniformly from a collection provided at the time of invocation.  Users have the option to 'pick', which
    * prevents a value from being selected multiple times.  The results are published as outputs on the transaction.
-   * @param values an array of values to sample from
-   * @param samples the number of samples to fairly select from the values
-   * @param pick Are selected values removed from the list of options for future samples?
-   * @param signer The signer of the transaction.
+   * @param options.values an array of values to sample from
+   * @param options.samples the number of samples to fairly select from the values
+   * @param options.pick Are selected values removed from the list of options for future samples?
+   * 
+   * @returns The transaction id of a transaction that will return a uniform random sample from the collection.
+   * 
+   * **Note:** This method will not randomly generate unless the transaction is published so use the signer field for
+   * testing.
    */
-  async sampleFromRuntimeCollection(values: string[], samples: number, pick: boolean, signer: wallet.Account): Promise<string> {
-    return CollectionAPI.sampleFromRuntimeCollection(this.node.url, this.networkMagic, this.scriptHash, values, samples, pick, signer)
+  async sampleFromRuntimeCollection(options: {values: string[], samples: number, pick: boolean}): Promise<string> {    
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Collection.buildSampleFromRuntimeCollectionInvocation(
+					this.config.scriptHash, 
+					{values: options.values, samples: options.samples, pick: options.pick}
+				)
+      ],
+      signers: [],
+    })
   }
 
   /**
    * Gets the total collections.  Collection IDs are autogenerated on range [1 -> totalCollections] inclusive if you are
    * planning to iterate of their collection IDs.
    *
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
-   *
-   * @returns The total number of collections stored in the contract. **OR** a txid if the signer parameter is populated.
+   * @returns The total number of collections stored in the contract.
    */
-  async totalCollections(signer?: wallet.Account): Promise<number | undefined> {
-    return CollectionAPI.totalCollections(this.node.url, this.networkMagic, this.scriptHash, signer)
+  async totalCollections(): Promise<number> {
+		const res = await this.config.invoker.testInvoke({
+			invocations: [
+				Collection.buildTotalCollectionsInvocation(
+					this.config.scriptHash
+				)
+			],
+			signers: [],
+		})
+
+		if (res.stack.length === 0) {
+			throw new Error(res.exception ?? 'unrecognized response')
+		}
+
+		return this.config.parser.parseRpcResponse(res.stack[0])
+  }
+  
+  async update(options: {script: string, manifest: string, data?: any}): Promise<string> {
+    options.data = options.data || ''
+
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Collection.buildUpdateInvocation(this.config.scriptHash, {
+          script: options.script,
+          manifest: options.manifest,
+          data: options.data
+        })
+      ],
+      signers: [],
+    })
   }
 
-  async update(script: string, manifest: string, signer: wallet.Account): Promise<string | undefined> {
-    return CollectionAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, '', signer)
+  static buildCreateCollectionInvocation(scriptHash: string, params: {description: string, collectionType: string, extra: string, values: (string|number)[]}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'create_collection',
+      args: [
+        {type: 'String', value: params.description},
+        {type: 'String', value: params.collectionType},
+        {type: 'String', value: params.extra},
+        {type: 'Array', value: params.values.map(value => ({type: params.collectionType == 'string' ? 'String' : 'Integer', value:value}))},
+      ]
+    }
   }
-
+  
+  static buildGetCollectionJSONInvocation(scriptHash: string, params: {collectionId: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'get_collection_json',
+      args: [
+        {type: 'Integer', value: params.collectionId},
+      ]
+    }
+  }
+  
+  static buildGetCollectionInvocation(scriptHash: string, params: {collectionId: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'get_collection',
+      args: [
+        {type: 'Integer', value: params.collectionId},
+      ]
+    }
+  }
+  
+  static buildGetCollectionElementInvocation(scriptHash: string, params: {collectionId: number, index: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'get_collection_element',
+      args: [
+        {type: 'Integer', value: params.collectionId},
+        {type: 'Integer', value: params.index},
+      ]
+    }
+  }
+  
+  static buildGetCollectionLengthInvocation(scriptHash: string, params: {collectionId: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'get_collection_length',
+      args: [
+        {type: 'Integer', value: params.collectionId},
+      ]
+    }
+  }
+  
+  static buildGetCollectionValuesInvocation(scriptHash: string, params: {collectionId: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'get_collection_values',
+      args: [
+        {type: 'Integer', value: params.collectionId},
+      ]
+    }
+  }
+  
+  static buildMapBytesOntoCollectionInvocation(scriptHash: string, params: {collectionId: number, entropy: string}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'map_bytes_onto_collection',
+      args: [
+        {type: 'Integer', value: params.collectionId},
+        {type: 'String', value: params.entropy},
+      ]
+    }
+  }
+  
+  static buildSampleFromCollectionInvocation(scriptHash: string, params: {collectionId: number, samples: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'sample_from_collection',
+      args: [
+        {type: 'Integer', value: params.collectionId},
+        {type: 'Integer', value: params.samples},
+      ]
+    }
+  }
+  
+  static buildSampleFromRuntimeCollectionInvocation(scriptHash: string, params: {values: string[], samples: number, pick: boolean}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'sample_from_runtime_collection',
+      args: [
+        {type: 'Array', value: params.values.map(value => ({type: 'String', value:value}))},
+        {type: 'Integer', value: params.samples},
+        {type: 'Boolean', value: params.pick},
+      ]
+    }
+  }
+  
+  static buildTotalCollectionsInvocation(scriptHash: string): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'total_collections',
+      args: []
+    }
+  }
+  
+  static buildUpdateInvocation(scriptHash: string, params: {script: string, manifest: string, data: any}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'update',
+      args: [
+        {type: 'ByteArray', value: params.script},
+        {type: 'String', value: params.manifest},
+        {type: 'Any', value: params.data},
+      ]
+    }
+  }
+  
 }

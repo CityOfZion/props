@@ -1,4 +1,4 @@
-from typing import Any, Dict, cast
+from typing import Any, Dict, cast, List
 from boa3.builtin.type import UInt160
 from boa3.builtin import CreateNewEvent, NeoMetadata, metadata, public, contract
 from boa3.builtin.interop.blockchain import Transaction
@@ -34,7 +34,7 @@ new_collection = CreateNewEvent(
 
 
 @public
-def create_collection(description: bytes, collection_type: bytes, extra: bytes,  vals: [bytes]) -> int:
+def create_collection(description: bytes, collection_type: bytes, extra: bytes,  vals: List[bytes]) -> int:
     """
     Creates a new collection
     :param description: A brief string formatted description of the collection
@@ -90,19 +90,19 @@ def get_collection_length(collection_id: bytes) -> int:
     :param collection_id: The collection_id to get the length of
     :return: An integer representing the length of the collection
     """
-    collection_values: [bytes] = get_collection_values(collection_id)
+    collection_values: List[bytes] = get_collection_values(collection_id)
     return len(collection_values)
 
 
 @public
-def get_collection_values(collection_id: bytes) -> [bytes]:
+def get_collection_values(collection_id: bytes) -> List[bytes]:
     """
     Gets the values of a collection
     :param collection_id: The collection_id to get the values of
     :return: An array containing the values of a collection
     """
     collection: Collection = get_collection_internal(collection_id)
-    collection_values: [bytes] = collection.get_values()
+    collection_values: List[bytes] = collection.get_values()
     return collection_values
 
 
@@ -115,13 +115,13 @@ def map_bytes_onto_collection(collection_id: bytes, entropy: bytes) -> bytes:
     :return: The bytes at the sample location
     """
     collection: Collection = get_collection_internal(collection_id)
-    vals: [bytes] = collection.get_values()
+    vals: List[bytes] = collection.get_values()
     idx: int = Dice.map_bytes_onto_range(0, len(vals) - 1, entropy)
     return vals[idx]
 
 
 @public
-def sample_from_collection(collection_id: bytes, samples: int) -> [bytes]:
+def sample_from_collection(collection_id: bytes, samples: int) -> List[bytes]:
     """
     Gets values from a uniform-random sampled index of a colection
     :param collection_id: The collection_id of the collection to sample from
@@ -129,17 +129,21 @@ def sample_from_collection(collection_id: bytes, samples: int) -> [bytes]:
     :return: The value at the sampled index
     """
     collection: Collection = get_collection_internal(collection_id)
-    collection_values: [bytes] = collection.get_values()
+    collection_values: List[bytes] = collection._values
 
-    result: [bytes] = []
-    for x in range(samples):
+    result: List[bytes] = []
+
+    x = 0
+    # While is being used instead of for because there is a bug in Neo3-boa
+    while (x < samples and samples > 0):
         idx: int = Dice.rand_between(0, len(collection_values) - 1)
         result.append(collection_values[idx])
+        x = x + 1
     return result
 
 
 @public
-def sample_from_runtime_collection(vals: [bytes], samples: int, pick: bool) -> [bytes]:
+def sample_from_runtime_collection(vals: List[bytes], samples: int, pick: bool) -> List[bytes]:
     """
     Gets values from a uniform-random sampled index an array.  The user has the option of replacement.
     :param vals: the values to uniformly sample from
@@ -149,7 +153,7 @@ def sample_from_runtime_collection(vals: [bytes], samples: int, pick: bool) -> [
     assert (not pick) or \
            (len(vals) >= samples)
 
-    result: [bytes] = []
+    result: List[bytes] = []
     for x in range(samples):
         idx: int = Dice.rand_between(0, len(vals) - 1)
         result.append(vals[idx])
@@ -198,7 +202,7 @@ def _deploy(data: Any, update: bool):
         put(OWNER_KEY, signer)
 
 
-@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
+@contract('0xb38a85f268a5f1b6a9fad10d7023c85f952e7653')
 class Dice:
 
     @staticmethod

@@ -1,0 +1,48 @@
+{
+  "items": [
+    {
+      "items": [
+        {
+          "items": [
+            "contracts/collection/helpers/collection"
+          ],
+          "label": "collection.helpers",
+          "type": "category"
+        },
+        "contracts/collection/collection"
+      ],
+      "label": "collection",
+      "type": "category"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            "contracts/dice/helpers/dice"
+          ],
+          "label": "dice.helpers",
+          "type": "category"
+        },
+        "contracts/dice/dice"
+      ],
+      "label": "dice",
+      "type": "category"
+    },
+    {
+      "items": [
+        "contracts/generator/generator"
+      ],
+      "label": "generator",
+      "type": "category"
+    },
+    {
+      "items": [
+        "contracts/puppet/puppet"
+      ],
+      "label": "puppet",
+      "type": "category"
+    }
+  ],
+  "label": "contracts",
+  "type": "category"
+}

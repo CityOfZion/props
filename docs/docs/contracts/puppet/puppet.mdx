@@ -6,20 +6,23 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 # puppet
+
 The puppet contract is a NEP-11 compliant NFT contract which uses the [collection](../collection), [dice](../dice), and [generator](../generator) contracts
 to procedurally generate utility NFTs entirely on-chain.
 
 ### Where Am I:
-* **PrivateNet:** [Current Location](https://github.com/CityOfZion/props/blob/develop/sdk/src/Puppet.ts#L50)
-* **Testnet:** [`0x97857c01d64f846b5fe2eca2d09d2d73928b3f43`](https://dora.coz.io/contract/neo3/testnet_rc4/0x97857c01d64f846b5fe2eca2d09d2d73928b3f43)
-* **Mainnet:** [`0x76a8f8a7a901b29a33013b469949f4b08db15756`](https://dora.coz.io/contract/neo3/mainnet/0x76a8f8a7a901b29a33013b469949f4b08db15756)
+
+- **PrivateNet:** Run the command `neoxp contract get "Puppet"`
+- **Testnet:** Not deployed yet
+- **Mainnet:** [`0x76a8f8a7a901b29a33013b469949f4b08db15756`](https://dora.coz.io/contract/neo3/mainnet/0x76a8f8a7a901b29a33013b469949f4b08db15756)
 
 ### Using the puppet contract:
-To use the puppet contract, begin by adding the interface to your smart contract.  Below, we provide an example.  Make sure to also include the methods you would like to use. For `SCRIPT_HASH`, refer to the [Where am I?](#where-am-i) section.
+
+To use the puppet contract, begin by adding the interface to your smart contract. Below, we provide an example. Make sure to also include the methods you would like to use. For `SCRIPT_HASH`, refer to the [Where am I?](#where-am-i) section.
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -31,9 +34,118 @@ from boa3.builtin import contract
 class Puppet:
 
     @staticmethod
+    def symbol() -> str:
+        pass
+
+
+    @staticmethod
+    def decimals() -> int:
+        pass
+
+
+    @staticmethod
+    def totalSupply() -> int:
+        pass
+
+
+    @staticmethod
+    def balanceOf(owner: UInt160) -> int:
+        pass
+
+
+    @staticmethod
+    def tokensOf(owner: UInt160) -> Iterator:
+        pass
+
+
+    @staticmethod
+    def transfer(to: UInt160, token_id: ByteString, data: Any) -> bool:
+        pass
+
+
+    @staticmethod
+    def ownerOf(token_id: ByteString) -> UInt160:
+        pass
+
+
+    @staticmethod
+    def tokens() -> Iterator:
+        pass
+
+
+    @staticmethod
+    def properties(token_id: ByteString) -> Dict[Any, Any]:
+        pass
+
+
+    @staticmethod
+    def total_accounts() -> int:
+        pass
+
+
+    @staticmethod
+    def offline_mint(epoch_id: bytes, account: UInt160) -> bytes:
+        pass
+
+
+    @staticmethod
+    def set_mint_fee(epoch_id: bytes, amount: int) -> bool:
+        pass
+
+
+    @staticmethod
+    def get_user_json(address: UInt160) -> Dict[str, Any]:
+        pass
+
+
+    @staticmethod
+    def get_user(address: UInt160) -> User:
+        pass
+
+
+    @staticmethod
+    def set_user_permissions(user: UInt160, permissions: Dict[str, bool]) -> bool:
+        pass
+
+
+    @staticmethod
+    def create_epoch(label: bytes, generator_instance_id: bytes,  initial_roll_collection_id: bytes, mint_fee: int, sys_fee: int, max_supply: int) -> int:
+        pass
+
+
+    @staticmethod
+    def get_epoch_json(epoch_id: bytes) -> Dict[str, Any]:
+        pass
+
+
+    @staticmethod
+    def get_epoch(epoch_id: bytes) -> Epoch:
+        pass
+
+
+    @staticmethod
+    def total_epochs() -> int:
+        pass
+
+
+    @staticmethod
+    def get_attribute_mod(attribute_value: int) -> int:
+        pass
+
+
+    @staticmethod
+    def get_puppet(token_id: bytes) -> Puppet:
+        pass
+
+
+    @staticmethod
     def get_puppet_json(token_id: bytes) -> Dict[str, Any]:
         pass
 
+
+    @staticmethod
+    def get_puppet_json_flat(token_id: bytes) -> Dict[str, Any]:
+        pass
 ```
 
 </TabItem>
@@ -54,7 +166,6 @@ To be Implemented
 
 </TabItem>
 
-
 <TabItem value="java" label="Java">
 
 ```
@@ -64,8 +175,3 @@ To be Implemented
 </TabItem>
 
 </Tabs>
-
-
-
-
-

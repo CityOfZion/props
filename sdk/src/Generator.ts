@@ -1,131 +1,448 @@
-import { merge } from 'lodash'
-import {rpc, wallet} from '@cityofzion/neon-core'
-import {GeneratorAPI} from './api'
-import {
-  GeneratorType,
-  InstanceAccessMode,
-  InstanceAuthorizedContracts, NetworkOption,
-  PropConstructorOptions,
-  TraitType
-} from "./interface";
-import {sleep, txDidComplete} from "./helpers";
+import { EventCollectionPointer, EventCollectionSampleFrom, EventInstanceCall, EventTypeEnum, EventValue, GeneratorType, InstanceAccessMode, InstanceAuthorizedContracts, SmartContractConfig, TraitType } from './types'
+import { ContractInvocation } from '@cityofzion/neo3-invoker'
 import fs from "fs";
 
-const DEFAULT_OPTIONS: PropConstructorOptions = {
-  network: NetworkOption.LocalNet
-}
 
 export class Generator {
-  private options: PropConstructorOptions = DEFAULT_OPTIONS
-  private networkMagic: number = -1
+  
+  static MAINNET = '0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9'
+  static TESTNET = ''
 
-  constructor(options: PropConstructorOptions = {}) {
-    switch(options.network) {
-      case NetworkOption.TestNet:
-        this.options.node = 'https://testnet1.neo.coz.io:443'
-        this.options.scriptHash = '0xdda8055789f0eb3c1d092c714a68ba3e631586c7'
-        break
-      case NetworkOption.MainNet:
-        this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = '0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9'
-        break
-      default:
-        this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0xa3e59ddc61b2d8ac42c519cee5ddaac83c7df276'
-        break
-    }
-    this.options = merge({}, this.options, options)
+  node: any
+  
+  constructor(
+    private config: SmartContractConfig
+  ) {}
+
+  async createGenerator(options: {label: string, baseGeneratorFee: number}): Promise<string> {    
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildCreateGeneratorInvocation(
+          this.config.scriptHash, {label: options.label, baseGeneratorFee: options.baseGeneratorFee}
+        )
+      ],
+      signers: [],
+    })
   }
 
-  async init() {
-    const getVersionRes = await this.node.getVersion()
-    this.networkMagic = getVersionRes.protocol.network
-  }
-
-  get node(): rpc.RPCClient {
-    if (this.options.node) {
-      return new rpc.RPCClient(this.options.node)
-    }
-    throw new Error('no node selected!')
-  }
-
-  get scriptHash() : string {
-    if (this.options.scriptHash) {
-      return this.options.scriptHash
-    }
-    throw new Error('node scripthash defined')
-  }
-
-  async createGenerator(generator: GeneratorType, signer: wallet.Account, timeConstantMS: number): Promise<string[]> {
-    const txids = []
-    let txid = await GeneratorAPI.createGenerator(this.node.url, this.networkMagic, this.scriptHash, generator.label, generator.baseGeneratorFee, signer)
-    txids.push(txid)
-    await sleep(timeConstantMS)
-    const res = await txDidComplete(this.node.url, txid, false)
-    for await (let trait of generator.traits) {
-      trait = trait as TraitType
-      txid = await GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, res[0], trait.label, trait.slots, trait.traitLevels, signer)
-      txids.push(txid)
-      await sleep(timeConstantMS)
-    }
-    return txids
-  }
-
-  async createGeneratorFromFile(path: string, signer: wallet.Account, timeConstantMS: number): Promise<string[]> {
+  async createGeneratorFromFile(path: string): Promise<[string, GeneratorType]> {    
     const localGenerator = JSON.parse(fs.readFileSync(path).toString()) as GeneratorType
-    return this.createGenerator(localGenerator, signer, timeConstantMS)
+
+    return [ await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildCreateGeneratorInvocation(
+          this.config.scriptHash, {label: localGenerator.label, baseGeneratorFee: localGenerator.baseGeneratorFee}
+        )
+      ],
+      signers: [],
+    }), 
+    localGenerator]
   }
 
-  async createTrait(generatorId: number, trait: TraitType, signer: wallet.Account): Promise<string> {
-    return GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, generatorId, trait.label, trait.slots, trait.traitLevels, signer)
+  async createTraits(options: {generatorId: number, traits: TraitType[]}): Promise<string>{    
+
+    return await this.config.invoker.invokeFunction({
+      invocations: options.traits.map(
+        (trait)=>{
+          return Generator.buildCreateTraitInvocation(
+            this.config.scriptHash, { generatorId: options.generatorId, trait }
+          )
+        }
+      ),
+      signers: [],
+    })
   }
 
-  async getGeneratorJSON(generatorId: number, signer?: wallet.Account): Promise<GeneratorType | string> {
-    const generator = await GeneratorAPI.getGeneratorJSON(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer)
+  async getGeneratorJSON(options: {generatorId: number}): Promise<GeneratorType> {
+    const res = await this.config.invoker.testInvoke({
+			invocations: [
+				Generator.buildGetGeneratorJSONInvocation(
+					this.config.scriptHash, {generatorId: options.generatorId}
+				)
+			],
+			signers: [],
+		})
+
+		if (res.stack.length === 0) {
+			throw new Error(res.exception ?? 'unrecognized response')
+		}
+
+		const generator = this.config.parser.parseRpcResponse(res.stack[0])
     const gType = generator as GeneratorType
 
     const traits: TraitType[] = []
-    for (let i = 0; i < gType.traits.length; i++) {
-      let trait = await GeneratorAPI.getTraitJSON(this.node.url, this.networkMagic, this.scriptHash, gType.traits[i] as string)
-      traits.push(trait as TraitType)
+    for (let i = 0; i< gType.traits.length; i++){
+      const trait = await this.config.invoker.testInvoke({
+        invocations: [
+          Generator.buildGetTraitJSONInvocation(
+            this.config.scriptHash, {traitId: gType.traits[i] as string}
+          )
+        ],
+        signers: [],
+      })
+
+      if (res.stack.length === 0) {
+        throw new Error(res.exception ?? 'unrecognized response')
+      }
+    
+      traits.push(this.config.parser.parseRpcResponse(res.stack[0]) as TraitType)
     }
     gType.traits = traits
     return gType
+
   }
 
-  async getGeneratorInstanceJSON(instanceId: number, signer?: wallet.Account): Promise<any> {
-   return GeneratorAPI.getGeneratorInstanceJSON(this.node.url, this.networkMagic, this.scriptHash, instanceId, signer)
+  async createTrait(options: {generatorId: number, trait: TraitType}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildCreateTraitInvocation(
+          this.config.scriptHash, {generatorId: options.generatorId, trait: options.trait}
+        )
+      ],
+      signers: [],
+    })
   }
 
-  async createInstance(generatorId: number, signer: wallet.Account): Promise<string> {
-    return GeneratorAPI.createInstance(this.node.url, this.networkMagic, this.scriptHash, generatorId, signer)
-  }
+  async getGeneratorInstanceJSON(options: {instanceId: number}): Promise<any> {
+		const res = await this.config.invoker.testInvoke({
+			invocations: [
+				Generator.buildGetGeneratorInstanceJSONInvocation(
+					this.config.scriptHash, {instanceId: options.instanceId}
+				)
+			],
+			signers: [],
+		})
 
-  async mintFromInstance(instanceId: number, signer: wallet.Account): Promise<string> {
-    return GeneratorAPI.mintFromInstance(this.node.url, this.networkMagic, this.scriptHash, instanceId, signer)
-  }
+		if (res.stack.length === 0) {
+			throw new Error(res.exception ?? 'unrecognized response')
+		}
 
-  async setInstanceAccessMode(instanceId: number, accessMode: InstanceAccessMode, signer: wallet.Account): Promise<string> {
-    return GeneratorAPI.setInstanceAccessMode(this.node.url, this.networkMagic, this.scriptHash, instanceId, accessMode, signer)
+		return this.config.parser.parseRpcResponse(res.stack[0])
   }
+ 
+  async createInstance(options: {generatorId: number}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildCreateInstanceInvocation(
+          this.config.scriptHash, {generatorId: options.generatorId}
+        )
+      ],
+      signers: [],
+    })
+  }
+ 
+  async mintFromInstance(options: {instanceId: number}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildMintFromInstanceInvocation(
+          this.config.scriptHash, {instanceId: options.instanceId}
+        )
+      ],
+      signers: [],
+    })
+  }
+ 
+  async setInstanceAccessMode(options: {instanceId: number, accessMode: InstanceAccessMode}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildSetInstanceAccessModeInvocation(
+          this.config.scriptHash, {instanceId: options.instanceId, accessMode: options.accessMode}
+        )
+      ],
+      signers: [],
+    })
+  }
+ 
+  async setInstanceAuthorizedUsers(options: {instanceId: number, authorizedUsers: string[]}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildSetInstanceAuthorizedUsersInvocation(
+          this.config.scriptHash, {instanceId: options.instanceId, authorizedUsers: options.authorizedUsers}
+        )
+      ],
+      signers: [],
+    })
+  }
+ 
+  async setInstanceAuthorizedContracts(options: {instanceId: number, authorizedContracts: InstanceAuthorizedContracts[]}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildSetInstanceAuthorizedContractsInvocation(
+          this.config.scriptHash, {instanceId: options.instanceId, authorizedContracts: options.authorizedContracts}
+        )
+      ],
+      signers: [],
+    })
+  }
+ 
+  async setInstanceFee(options: {instanceId: number, fee: number}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Generator.buildSetInstanceFeeInvocation(
+          this.config.scriptHash, {instanceId: options.instanceId, fee: options.fee}
+        )
+      ],
+      signers: [],
+    })
+  }
+ 
+  async totalGenerators(): Promise<number> {
+		const res = await this.config.invoker.testInvoke({
+			invocations: [
+        Generator.buildTotalGeneratorsInvocation(this.config.scriptHash)
+			],
+			signers: [],
+		})
 
-  async setInstanceAuthorizedUsers(instanceId: number, authorizedUsers: string[], signer: wallet.Account): Promise<string> {
-    return GeneratorAPI.setInstanceAuthorizedUsers(this.node.url, this.networkMagic, this.scriptHash, instanceId, authorizedUsers, signer)
-  }
+		if (res.stack.length === 0) {
+			throw new Error(res.exception ?? 'unrecognized response')
+		}
 
-  async setInstanceAuthorizedContracts(instanceId: number, authorizedContracts: InstanceAuthorizedContracts[], signer: wallet.Account): Promise<string> {
-    return GeneratorAPI.setInstanceAuthorizedContracts(this.node.url, this.networkMagic, this.scriptHash, instanceId, authorizedContracts, signer)
+		return this.config.parser.parseRpcResponse(res.stack[0])
   }
+ 
+  async totalGeneratorInstances(): Promise<number> {
+		const res = await this.config.invoker.testInvoke({
+			invocations: [
+        Generator.buildTotalGeneratorInstancesInvocation(this.config.scriptHash)
+			],
+			signers: [],
+		})
 
-  async setInstanceFee(instanceId: number, fee: number, signer: wallet.Account): Promise<string> {
-    return GeneratorAPI.setInstanceFee(this.node.url, this.networkMagic, this.scriptHash, instanceId, fee, signer)
-  }
+		if (res.stack.length === 0) {
+			throw new Error(res.exception ?? 'unrecognized response')
+		}
 
-  async totalGenerators(signer?: wallet.Account): Promise<number | string> {
-    return GeneratorAPI.totalGenerators(this.node.url, this.networkMagic, this.scriptHash, signer)
+		return this.config.parser.parseRpcResponse(res.stack[0])
   }
+ 
 
-  async totalGeneratorInstances(signer?: wallet.Account): Promise<number | string> {
-    return GeneratorAPI.totalGeneratorInstances(this.node.url, this.networkMagic, this.scriptHash, signer)
+  static buildCreateGeneratorInvocation(scriptHash: string, params: {label: string, baseGeneratorFee: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'create_generator',
+      args: [
+        {type: 'String', value: params.label},
+        {type: 'Integer', value: params.baseGeneratorFee},	
+      ]
+    }
   }
+  
+  static buildGetGeneratorJSONInvocation(scriptHash: string, params: {generatorId: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'get_generator_json',
+      args: [
+        {type: 'Integer', value: params.generatorId},	
+      ]
+    }
+  }
+  
+  static buildGetTraitJSONInvocation(scriptHash: string, params: {traitId: string}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'get_trait_json',
+      args: [
+        {type: 'String', value: params.traitId},	
+      ]
+    }
+  }
+  
+  static buildCreateTraitInvocation(scriptHash: string, params: {generatorId: number, trait: TraitType}): ContractInvocation{
+    
+    const traitLevelsBuffer = {
+      type: 'Array', 
+      value: params.trait.traitLevels.map(
+        (traitLevel)=>({
+          type: 'Array', 
+          value: [
+            { 
+              type: 'Integer',
+              value: traitLevel.dropScore
+            },
+            {
+              type: 'Integer',
+              value: traitLevel.mintMode
+            },
+            {
+              type: 'Array',
+              value: traitLevel.traits.map(
+                (eventTypeWrapper) => {
+                  const argsBuffer: {type: string, value: any}[] = []
+                  
+                  switch (eventTypeWrapper.type){
+                    case EventTypeEnum.CollectionPointer:
+                      argsBuffer.push({
+                        type: 'Integer',
+                        value: (eventTypeWrapper.args as EventCollectionPointer).collectionId
+                      })
+                      argsBuffer.push({
+                        type: 'Integer',
+                        value: (eventTypeWrapper.args as EventCollectionPointer).index
+                      })
+                      break
+                    case EventTypeEnum.InstanceCall:
+                      argsBuffer.push({
+                        type: 'String',
+                        value: (eventTypeWrapper.args as EventInstanceCall).scriptHash
+                      })
+                      argsBuffer.push({
+                        type: 'String',
+                        value: (eventTypeWrapper.args as EventInstanceCall).method
+                      })
+                      argsBuffer.push({
+                        type: 'Array',
+                        value: (eventTypeWrapper.args as EventInstanceCall).param
+                      })
+                      break
+                    case EventTypeEnum.Value:
+                      argsBuffer.push({
+                        type: 'String',
+                        value: (eventTypeWrapper.args as EventValue).value
+                      })
+                      break
+                    case EventTypeEnum.CollectionSampleFrom:
+                      argsBuffer.push({
+                        type: 'String',
+                        value: (eventTypeWrapper.args as EventCollectionSampleFrom).collectionId
+                      })
+                  }
+                
+                  return (
+                    {
+                      type: 'Array',
+                      value: [
+                        {
+                          type: 'Integer',
+                          value: eventTypeWrapper.type 
+                        },
+                        {
+                          type: 'Integer',
+                          value: eventTypeWrapper.maxMint 
+                        },
+                        {
+                          type: 'Array',
+                          value: argsBuffer
+                        }
+                      ]
+                    }
+                  )
+                }
+              )
+            }
+          ]
+        })
+      )
+    }
+  
+    return {
+      scriptHash,
+      operation: 'create_trait',
+      args: [
+        {type: 'Integer', value: params.generatorId},
+        {type: 'String', value: params.trait.label},
+        {type: 'Integer', value: params.trait.slots},
+        traitLevelsBuffer
+      ]
+    }
+  }
+  
+  static buildGetGeneratorInstanceJSONInvocation(scriptHash: string, params: {instanceId: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'get_generator_instance_json',
+      args: [
+        {type: 'Integer', value: params.instanceId},
+      ]
+    }
+  }
+  
+  static buildCreateInstanceInvocation(scriptHash: string, params: {generatorId: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'create_instance',
+      args: [
+        {type: 'Integer', value: params.generatorId},
+      ]
+    }
+  }
+  
+  static buildMintFromInstanceInvocation(scriptHash: string, params: {instanceId: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'mint_from_instance',
+      args: [
+        {type: 'String', value: ""},
+        {type: 'Integer', value: params.instanceId},
+      ]
+    }
+  }
+  
+  static buildSetInstanceAccessModeInvocation(scriptHash: string, params: {instanceId: number, accessMode: InstanceAccessMode}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'set_instance_access_mode',
+      args: [
+        {type: 'Integer', value: params.instanceId},
+        {type: 'Integer', value: params.accessMode},
+      ]
+    }
+  }
+  
+  static buildSetInstanceAuthorizedUsersInvocation(scriptHash: string, params: {instanceId: number, authorizedUsers: string[]}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'set_instance_authorized_users',
+      args: [
+        {type: 'Integer', value: params.instanceId},
+        {type: 'Array', value: params.authorizedUsers.map(authorizedUser => ({type: 'Hash160', value: authorizedUser}))},
+      ]
+    }
+  }
+  
+  static buildSetInstanceAuthorizedContractsInvocation(scriptHash: string, params: {instanceId: number, authorizedContracts: InstanceAuthorizedContracts[]}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'set_instance_authorized_contracts',
+      args: [
+        {type: 'Integer', value: params.instanceId},
+        {type: 'Array', value: params.authorizedContracts.map(
+          authorizedContract => (
+            {type: 'Array', value: [
+              {type: 'Hash160', value: authorizedContract.scriptHash},
+              {type: 'Integer', value: authorizedContract.code},
+            ]}
+          ))
+        },
+      ]
+    }
+  }
+  
+  static buildSetInstanceFeeInvocation(scriptHash: string, params: {instanceId: number, fee: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'set_instance_fee',
+      args: [
+        {type: 'Integer', value: params.instanceId},
+        {type: 'Integer', value: params.fee},
+      ]
+    }
+  }
+  
+  static buildTotalGeneratorsInvocation(scriptHash: string): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'total_generators',
+      args: []
+    }
+  }
+  
+  static buildTotalGeneratorInstancesInvocation(scriptHash: string): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'total_generator_instances',
+      args: []
+    }
+  }
+  
 }

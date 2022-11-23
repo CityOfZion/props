@@ -93,7 +93,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 646,
+                "offset": 656,
                 "parameters": [
                     {
                         "name": "data",
@@ -109,7 +109,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 684,
+                "offset": 694,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

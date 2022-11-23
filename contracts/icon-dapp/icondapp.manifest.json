@@ -1,0 +1,199 @@
+{
+    "name": "Icon DApp by COZ & NNT",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "_deploy",
+                "offset": 2482,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 0,
+                "parameters": [
+                    {
+                        "name": "nef_file",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "name",
+                "offset": 77,
+                "parameters": [],
+                "returntype": "String",
+                "safe": false
+            },
+            {
+                "name": "getOwner",
+                "offset": 89,
+                "parameters": [],
+                "returntype": "Hash160",
+                "safe": true
+            },
+            {
+                "name": "addProperty",
+                "offset": 169,
+                "parameters": [
+                    {
+                        "name": "property_name",
+                        "type": "String"
+                    },
+                    {
+                        "name": "description",
+                        "type": "String"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "updateProperty",
+                "offset": 502,
+                "parameters": [
+                    {
+                        "name": "property_name",
+                        "type": "String"
+                    },
+                    {
+                        "name": "description",
+                        "type": "String"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "getProperties",
+                "offset": 832,
+                "parameters": [],
+                "returntype": "Map",
+                "safe": true
+            },
+            {
+                "name": "setMetaData",
+                "offset": 923,
+                "parameters": [
+                    {
+                        "name": "script_hash",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "property_name",
+                        "type": "String"
+                    },
+                    {
+                        "name": "value",
+                        "type": "String"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "getMetaData",
+                "offset": 1226,
+                "parameters": [
+                    {
+                        "name": "script_hash",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": true
+            },
+            {
+                "name": "getMultipleMetaData",
+                "offset": 1379,
+                "parameters": [
+                    {
+                        "name": "contract_hashes",
+                        "type": "Array"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": true
+            },
+            {
+                "name": "setContractParent",
+                "offset": 1423,
+                "parameters": [
+                    {
+                        "name": "child_hash",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "parent_hash",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "getContractParent",
+                "offset": 1687,
+                "parameters": [
+                    {
+                        "name": "child_hash",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Any",
+                "safe": true
+            },
+            {
+                "name": "setOwnership",
+                "offset": 1877,
+                "parameters": [
+                    {
+                        "name": "script_hash",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "contract_owner",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            }
+        ],
+        "events": []
+    },
+    "permissions": [
+        {
+            "contract": "0xfffdc93764dbaddd97c48f252a53ea4643faa3fd",
+            "methods": [
+                "update",
+                "destroy"
+            ]
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [],
+    "extra": {
+        "Description": "Smart Contract icon management prop. Made by meevee98, lock9, luc10921. Visit ndapp.org to discover more of the ecosystem.",
+        "Author": "COZ in partnership with NNT",
+        "Email": "contact@coz.io"
+    }
+}

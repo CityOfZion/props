@@ -11,19 +11,22 @@ in contracts is very expensive and inefficient, especially for new projects.  Th
 library for static data. This class exposes the interface along with a number of helpful features to make the smart
 contract easy to use for typescript developers.
 
-All of the prop helper classes will auto-configure your network settings.  The default configuration will interface with
-the contract compiled with this project and deployed locally at http://localhost:50012.  For more information on deploying
-contract packages, refer to the quickstart.
-
-All methods support a signer.  If the method can be run as a test-invoke, optionally populating the signer parameter
-will publish the invocation and return the txid instead of the method response.
+All of the props smart contract interface classes will need a scripthash, and a `Neo3-Invoker` and `Neo3Parser` to be initialized.  For more information on deploying
+contract packages, refer to the [quickstart](https://props.coz.io/d/docs/sdk/ts/#quickstart).
 
 To use this class:
 ```typescript
-import {Collection} from "../../dist" //import {Collection} from "@cityofzion/props
+import { Collection } from "@cityofzion/props"
 
-const collection: Collection = new Collection()
-await collection.init() // interfaces with the node to resolve network magic
+const node = //refer to dora.coz.io/monitor for a list of nodes.
+const scriptHash = //refer to the scriptHashes section above
+const neo3Invoker = await NeonInvoker.init(node) // need to instantiate a Neo3Invoker, currently only NeonInvoker implements this interface
+const neo3Parser = NeonParser // need to use a Neo3Parser, currently only NeonParser implements this interface
+const puppet = await new Collection({
+      scriptHash,
+      invoker: neo3Invoker,
+      parser: neo3Parser,
+})
 
 const total = await collection.totalCollections()
 console.log(total) // outputs the total collection count in the contract
@@ -33,75 +36,53 @@ console.log(total) // outputs the total collection count in the contract
 
 ### constructor
 
-• **new Collection**(`options?`)
+• **new Collection**(`config`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md) |
+| `config` | [`SmartContractConfig`](../modules.md#smartcontractconfig) |
 
 #### Defined in
 
-[Collection.ts:41](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L41)
+[Collection.ts:39](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L39)
 
 ## Properties
 
-### networkMagic
+### config
 
-• `Private` **networkMagic**: `number` = `-1`
+• `Private` **config**: [`SmartContractConfig`](../modules.md#smartcontractconfig)
 
 #### Defined in
 
-[Collection.ts:39](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L39)
+[Collection.ts:40](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L40)
 
 ___
 
-### options
+### MAINNET
 
-• `Private` **options**: [`PropConstructorOptions`](../interfaces/types.PropConstructorOptions.md) = `DEFAULT_OPTIONS`
-
-#### Defined in
-
-[Collection.ts:38](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L38)
-
-## Accessors
-
-### node
-
-• `get` **node**(): `RPCClient`
-
-The the node that the instance is connected to.
-
-#### Returns
-
-`RPCClient`
+▪ `Static` **MAINNET**: `string` = `'0xf05651bc505fd5c7d36593f6e8409932342f9085'`
 
 #### Defined in
 
-[Collection.ts:70](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L70)
+[Collection.ts:36](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L36)
 
 ___
 
-### scriptHash
+### TESTNET
 
-• `get` **scriptHash**(): `string`
-
-The contract script hash that is being interfaced with.
-
-#### Returns
-
-`string`
+▪ `Static` **TESTNET**: `string` = `''`
 
 #### Defined in
 
-[Collection.ts:80](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L80)
+[Collection.ts:37](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L37)
 
 ## Methods
 
 ### createCollection
 
-▸ **createCollection**(`description`, `collectionType`, `extra`, `values`, `signer`): `Promise`<`string`\>
+▸ **createCollection**(`options`): `Promise`<`string`\>
 
 Publishes an array of immutable data to the smart contract along with some useful metadata.
 
@@ -109,52 +90,51 @@ Publishes an array of immutable data to the smart contract along with some usefu
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `description` | `string` | A useful description of the collection. |
-| `collectionType` | `string` | The type of the data being store.  This is an unregulated field.  Standard NVM datatypes should adhere to existing naming conventions. |
-| `extra` | `string` | An unregulated field for unplanned feature development. |
-| `values` | `string`[] | An array of values that represent the body of the collection. |
-| `signer` | `Account` | The signer of the transaction. |
+| `options` | `Object` | - |
+| `options.collectionType` | `string` | The type of the data being store.  This is an unregulated field.  Standard NVM datatypes should  adhere to existing naming conventions. |
+| `options.description` | `string` | A useful description of the collection. |
+| `options.extra` | `string` | An unregulated field for unplanned feature development. |
+| `options.values` | (`string` \| `number`)[] | An array of values that represent the body of the collection. |
 
 #### Returns
 
 `Promise`<`string`\>
 
-A transaction ID.  Refer to [helpers.txDidComplete](../namespaces/helpers.md#txdidcomplete) for parsing.
+The transaction id of a transaction that will return the new collection id.
 
 #### Defined in
 
-[Collection.ts:99](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L99)
+[Collection.ts:56](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L56)
 
 ___
 
 ### createFromFile
 
-▸ **createFromFile**(`path`, `signer`): `Promise`<`string`\>
+▸ **createFromFile**(`path`): `Promise`<`string`\>
 
-Loads a [CollectionType](../interfaces/types.CollectionType.md) formatted JSON file and pushes it to the smart contract.
+Loads a [CollectionType](../interfaces/CollectionType.md) formatted JSON file and pushes it to the smart contract.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `path` | `string` | The path to the file. |
-| `signer` | `Account` | The signer of the transaction. |
 
 #### Returns
 
 `Promise`<`string`\>
 
-A transaction ID. Refer to {@link helper.txDidComplete} for parsing.
+The transaction id of a transaction that will return the new collection id.
 
 #### Defined in
 
-[Collection.ts:111](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L111)
+[Collection.ts:82](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L82)
 
 ___
 
 ### getCollection
 
-▸ **getCollection**(`collectionId`, `signer?`): `Promise`<`string`\>
+▸ **getCollection**(`options`): `Promise`<`string`\>
 
 Gets the bytestring representation of the collection.  This is primarilly used for inter-contract interfacing,
 but we include it here for completeness.
@@ -163,24 +143,24 @@ but we include it here for completeness.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
-| `signer?` | `Account` | An optional signer. Populating this field will publish the transaction and return a txid instead of running the invocation as a test invoke. |
+| `options` | `Object` | - |
+| `options.collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
 
 #### Returns
 
 `Promise`<`string`\>
 
-The bytestring representation of the collection. **OR** a txid if the signer parameter is populated.
+The requested collection.
 
 #### Defined in
 
-[Collection.ts:147](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L147)
+[Collection.ts:136](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L136)
 
 ___
 
 ### getCollectionElement
 
-▸ **getCollectionElement**(`collectionId`, `index`, `signer?`): `Promise`<`string`\>
+▸ **getCollectionElement**(`options`): `Promise`<`string`\>
 
 Returns the value of a collection from a requested index.
 
@@ -188,25 +168,25 @@ Returns the value of a collection from a requested index.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
-| `index` | `number` | The index of the array element being requested. |
-| `signer?` | `Account` | An optional signer. Populating this field will publish the transaction and return a txid instead of running the invocation as a test invoke. |
+| `options` | `Object` | - |
+| `options.collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
+| `options.index` | `number` | The index of the array element being requested. |
 
 #### Returns
 
 `Promise`<`string`\>
 
-The value of the collection element **OR** a txid if the signer parameter is populated.
+The value of the collection element.
 
 #### Defined in
 
-[Collection.ts:161](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L161)
+[Collection.ts:162](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L162)
 
 ___
 
 ### getCollectionJSON
 
-▸ **getCollectionJSON**(`collectionId`, `signer?`): `Promise`<`string` \| [`CollectionType`](../interfaces/types.CollectionType.md)\>
+▸ **getCollectionJSON**(`options`): `Promise`<[`CollectionType`](../interfaces/CollectionType.md)\>
 
 Gets a JSON formatting collection from the smart contract.
 
@@ -214,24 +194,24 @@ Gets a JSON formatting collection from the smart contract.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
-| `signer?` | `Account` | An optional signer. Populating this field will publish the transaction and return a txid instead of running the invocation as a test invoke. |
+| `options` | `Object` | - |
+| `options.collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
 
 #### Returns
 
-`Promise`<`string` \| [`CollectionType`](../interfaces/types.CollectionType.md)\>
+`Promise`<[`CollectionType`](../interfaces/CollectionType.md)\>
 
-The requested collection **OR** a txid if the signer parameter is populated.
+The requested collection.
 
 #### Defined in
 
-[Collection.ts:133](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L133)
+[Collection.ts:110](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L110)
 
 ___
 
 ### getCollectionLength
 
-▸ **getCollectionLength**(`collectionId`, `signer?`): `Promise`<`number`\>
+▸ **getCollectionLength**(`options`): `Promise`<`number`\>
 
 Gets the array length of a requested collection.
 
@@ -239,24 +219,24 @@ Gets the array length of a requested collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
-| `signer?` | `Account` | An optional signer. Populating this field will publish the transaction and return a txid instead of running the invocation as a test invoke. |
+| `options` | `Object` | - |
+| `options.collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
 
 #### Returns
 
 `Promise`<`number`\>
 
-The length of the collection **OR** a txid if the signer parameter is populated.
+The length of the collection.
 
 #### Defined in
 
-[Collection.ts:174](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L174)
+[Collection.ts:187](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L187)
 
 ___
 
 ### getCollectionValues
 
-▸ **getCollectionValues**(`collectionId`, `signer?`): `Promise`<`any`\>
+▸ **getCollectionValues**(`options`): `Promise`<(`string` \| `number`)[]\>
 
 Gets the values of a collection, omitting the metadata.
 
@@ -264,40 +244,24 @@ Gets the values of a collection, omitting the metadata.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
-| `signer?` | `Account` | An optional signer. Populating this field will publish the transaction and return a txid instead of running the invocation as a test invoke. |
+| `options` | `Object` | - |
+| `options.collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`<(`string` \| `number`)[]\>
 
-The values in the collection **OR** a txid if the signer parameter is populated.
-
-#### Defined in
-
-[Collection.ts:187](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L187)
-
-___
-
-### init
-
-▸ **init**(): `Promise`<`void`\>
-
-Gets the magic number for the network and configures the class instance.
-
-#### Returns
-
-`Promise`<`void`\>
+The values in the collection.
 
 #### Defined in
 
-[Collection.ts:62](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L62)
+[Collection.ts:212](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L212)
 
 ___
 
 ### mapBytesOntoCollection
 
-▸ **mapBytesOntoCollection**(`collectionId`, `entropy`, `signer?`): `Promise`<`string`\>
+▸ **mapBytesOntoCollection**(`options`): `Promise`<`string`\>
 
 Maps byte entropy onto a collection's values and returns the index of the result.  The mapping is made as follows:
 
@@ -311,25 +275,25 @@ sampling from a distribution, use [getCollectionLength](Collection.md#getcollect
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
-| `entropy` | `string` | Bytes to use for the mapping. |
-| `signer?` | `Account` | An optional signer. Populating this field will publish the transaction and return a txid instead of running the invocation as a test invoke. |
+| `options` | `Object` | - |
+| `options.collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
+| `options.entropy` | `string` | Bytes to use for the mapping. |
 
 #### Returns
 
 `Promise`<`string`\>
 
-The element from the mapping **OR** a txid if the signer parameter is populated.
+The element from the mapping.
 
 #### Defined in
 
-[Collection.ts:207](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L207)
+[Collection.ts:244](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L244)
 
 ___
 
 ### sampleFromCollection
 
-▸ **sampleFromCollection**(`collectionId`, `samples`, `signer?`): `Promise`<`string`\>
+▸ **sampleFromCollection**(`options`): `Promise`<`string`\>
 
 Samples a uniform random value from the collection using a Contract.Call to the [Dice](Dice.md) contract.
 
@@ -337,27 +301,28 @@ Samples a uniform random value from the collection using a Contract.Call to the 
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
-| `samples` | `number` | The number of samples to return |
-| `signer?` | `Account` | An optional signer. Populating this field will publish the transaction and return a txid instead of running the invocation as a test invoke. |
+| `options` | `Object` | - |
+| `options.collectionId` | `number` | The collectionID being requested.  Refer to [https://props.coz.io](https://props.coz.io) for a formatted list. |
+| `options.samples` | `number` | The number of samples to return |
 
 #### Returns
 
 `Promise`<`string`\>
 
-A uniform random sample from the collection. **OR** a txid if the signer parameter is populated.
+The transaction id of a transaction that will return a uniform random sample from the collection.
+
 **Note:** This method will not randomly generate unless the transaction is published so use the signer field for
 testing.
 
 #### Defined in
 
-[Collection.ts:223](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L223)
+[Collection.ts:276](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L276)
 
 ___
 
 ### sampleFromRuntimeCollection
 
-▸ **sampleFromRuntimeCollection**(`values`, `samples`, `pick`, `signer`): `Promise`<`string`\>
+▸ **sampleFromRuntimeCollection**(`options`): `Promise`<`string`\>
 
 Samples uniformly from a collection provided at the time of invocation.  Users have the option to 'pick', which
 prevents a value from being selected multiple times.  The results are published as outputs on the transaction.
@@ -366,10 +331,57 @@ prevents a value from being selected multiple times.  The results are published 
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `values` | `string`[] | an array of values to sample from |
-| `samples` | `number` | the number of samples to fairly select from the values |
-| `pick` | `boolean` | Are selected values removed from the list of options for future samples? |
-| `signer` | `Account` | The signer of the transaction. |
+| `options` | `Object` | - |
+| `options.pick` | `boolean` | Are selected values removed from the list of options for future samples? |
+| `options.samples` | `number` | the number of samples to fairly select from the values |
+| `options.values` | `string`[] | an array of values to sample from |
+
+#### Returns
+
+`Promise`<`string`\>
+
+The transaction id of a transaction that will return a uniform random sample from the collection.
+
+**Note:** This method will not randomly generate unless the transaction is published so use the signer field for
+testing.
+
+#### Defined in
+
+[Collection.ts:304](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L304)
+
+___
+
+### totalCollections
+
+▸ **totalCollections**(): `Promise`<`number`\>
+
+Gets the total collections.  Collection IDs are autogenerated on range [1 -> totalCollections] inclusive if you are
+planning to iterate of their collection IDs.
+
+#### Returns
+
+`Promise`<`number`\>
+
+The total number of collections stored in the contract.
+
+#### Defined in
+
+[Collection.ts:322](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L322)
+
+___
+
+### update
+
+▸ **update**(`options`): `Promise`<`string`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `options` | `Object` |
+| `options.data?` | `any` |
+| `options.manifest` | `string` |
+| `options.script` | `string` |
 
 #### Returns
 
@@ -377,51 +389,254 @@ prevents a value from being selected multiple times.  The results are published 
 
 #### Defined in
 
-[Collection.ts:235](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L235)
+[Collection.ts:339](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L339)
 
 ___
 
-### totalCollections
+### buildCreateCollectionInvocation
 
-▸ **totalCollections**(`signer?`): `Promise`<`undefined` \| `number`\>
-
-Gets the total collections.  Collection IDs are autogenerated on range [1 -> totalCollections] inclusive if you are
-planning to iterate of their collection IDs.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `signer?` | `Account` | An optional signer. Populating this field will publish the transaction and return a txid instead of running the invocation as a test invoke. |
-
-#### Returns
-
-`Promise`<`undefined` \| `number`\>
-
-The total number of collections stored in the contract. **OR** a txid if the signer parameter is populated.
-
-#### Defined in
-
-[Collection.ts:248](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L248)
-
-___
-
-### update
-
-▸ **update**(`script`, `manifest`, `signer`): `Promise`<`undefined` \| `string`\>
+▸ `Static` **buildCreateCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `script` | `string` |
-| `manifest` | `string` |
-| `signer` | `Account` |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionType` | `string` |
+| `params.description` | `string` |
+| `params.extra` | `string` |
+| `params.values` | (`string` \| `number`)[] |
 
 #### Returns
 
-`Promise`<`undefined` \| `string`\>
+`ContractInvocation`
 
 #### Defined in
 
-[Collection.ts:252](https://github.com/CityOfZion/isengard/blob/98f6c55/sdk/src/Collection.ts#L252)
+[Collection.ts:354](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L354)
+
+___
+
+### buildGetCollectionElementInvocation
+
+▸ `Static` **buildGetCollectionElementInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+| `params.index` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:387](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L387)
+
+___
+
+### buildGetCollectionInvocation
+
+▸ `Static` **buildGetCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:377](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L377)
+
+___
+
+### buildGetCollectionJSONInvocation
+
+▸ `Static` **buildGetCollectionJSONInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:367](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L367)
+
+___
+
+### buildGetCollectionLengthInvocation
+
+▸ `Static` **buildGetCollectionLengthInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:398](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L398)
+
+___
+
+### buildGetCollectionValuesInvocation
+
+▸ `Static` **buildGetCollectionValuesInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:408](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L408)
+
+___
+
+### buildMapBytesOntoCollectionInvocation
+
+▸ `Static` **buildMapBytesOntoCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+| `params.entropy` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:418](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L418)
+
+___
+
+### buildSampleFromCollectionInvocation
+
+▸ `Static` **buildSampleFromCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.collectionId` | `number` |
+| `params.samples` | `number` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:429](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L429)
+
+___
+
+### buildSampleFromRuntimeCollectionInvocation
+
+▸ `Static` **buildSampleFromRuntimeCollectionInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.pick` | `boolean` |
+| `params.samples` | `number` |
+| `params.values` | `string`[] |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:440](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L440)
+
+___
+
+### buildTotalCollectionsInvocation
+
+▸ `Static` **buildTotalCollectionsInvocation**(`scriptHash`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:452](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L452)
+
+___
+
+### buildUpdateInvocation
+
+▸ `Static` **buildUpdateInvocation**(`scriptHash`, `params`): `ContractInvocation`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `scriptHash` | `string` |
+| `params` | `Object` |
+| `params.data` | `any` |
+| `params.manifest` | `string` |
+| `params.script` | `string` |
+
+#### Returns
+
+`ContractInvocation`
+
+#### Defined in
+
+[Collection.ts:460](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L460)

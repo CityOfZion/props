@@ -1,152 +1,184 @@
-import {merge} from 'lodash'
-import {rpc, wallet} from '@cityofzion/neon-core'
-import {DiceAPI} from './api'
-import {NetworkOption, PropConstructorOptions} from "./interface";
+import { SmartContractConfig } from './types'
+import { ContractInvocation } from '@cityofzion/neo3-invoker'
+import { Neo3Parser } from '@cityofzion/neo3-parser'
 
-const DEFAULT_OPTIONS: PropConstructorOptions = {
-  network: NetworkOption.LocalNet
-}
+
+
 
 /**
  * The dice prop normalizes a lot of behaviors associated with random number generation to improve usability within
  * projects.
  *
- * All of the prop helper classes will auto-configure your network settings.  The default configuration will interface with
- * the contract compiled with this project and deployed locally at http://localhost:50012.  For more information on deploying
- * contract packages, refer to the quickstart.
- *
- * All methods support a signer.  If the method can be run as a test-invoke, optionally populating the signer parameter
- * will publish the invocation and return the txid instead of the method response.
+ * All of the props smart contract interface classes will need a scripthash, and a `Neo3-Invoker` and `Neo3Parser` to be initialized.  For more information on deploying
+ * contract packages, refer to the [quickstart](https://props.coz.io/d/docs/sdk/ts/#quickstart).
  *
  * To use this class:
  * ```typescript
- * import {Dice} from "../../dist" //import {Dice} from "@cityofzion/props
+ * import { Dice } from "@cityofzion/props"
  *
- * const dice: Dice = new Dice()
- * await dice.init() // interfaces with the node to resolve network magic
+ * const node = //refer to dora.coz.io/monitor for a list of nodes.
+ * const scriptHash = //refer to the scriptHashes section above
+ * const account = // need to send either an wallet.Account() or undefined, testInvokes don't need an account
+ * const neo3Invoker = await NeonInvoker.init(node, account) // need to instantiate a Neo3Invoker, currently only NeonInvoker implements this interface
+ * const neo3Parser = NeonParser // need to use a Neo3Parser, currently only NeonParser implements this interface
+ * const dice = await new Dice({
+ *       scriptHash,
+ *       invoker: neo3Invoker,
+ *       parser: neo3Parser,
+ * })
  *
- * const randomNumber = await dice.randBetween(0, 100)
- * console.log(randomNumber) // outputs the random number. You should include a signer to the method above
- * for a truly random number.
+ * const randomNumber = await dice.randBetween({ start: 0, end: 100 })
+ * console.log(randomNumber)
  * ```
  */
-
 export class Dice {
-  private options: PropConstructorOptions = DEFAULT_OPTIONS
-  private networkMagic: number = -1
+  static MAINNET = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
+  static TESTNET = ''
 
-  constructor(options: PropConstructorOptions = {}) {
-    switch(options.network) {
-      case NetworkOption.TestNet:
-        this.options.node = 'https://testnet1.neo.coz.io:443'
-        this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
-        break
-      case NetworkOption.MainNet:
-        this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
-        break
-      case NetworkOption.LocalNet:
-        this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0x16d6a0be0506b26e0826dd352724cda0defa7131'
-        break
-    }
-    this.options = merge({}, this.options, options)
-  }
+	private config: SmartContractConfig
 
-  /**
-   * Gets the magic number for the network and configures the class instance.
-   */
-  async init() {
-    const getVersionRes = await this.node.getVersion()
-    this.networkMagic = getVersionRes.protocol.network
-  }
-
-  /**
-   * The the node that the instance is connected to.
-   */
-  get node(): rpc.RPCClient {
-    if (this.options.node) {
-      return new rpc.RPCClient(this.options.node)
-    }
-    throw new Error('no node selected!')
-  }
-
-  /**
-   * The contract script hash that is being interfaced with.
-   */
-  get scriptHash() : string {
-    if (this.options.scriptHash) {
-      return this.options.scriptHash
-    }
-    throw new Error('node scripthash defined')
-  }
-
+	constructor(configOptions: SmartContractConfig) {
+			this.config = configOptions
+	}
+    
+  
   /**
    * Gets a random number of range [start -> end] inclusive. This method supports negative integer ranges.
    *
    * **Note:**
-   * This method must include a  signer to produce truly random numbers.
+   * This method must include a signer to produce truly random numbers.
    *
-   * @param start the minimum value for the selection range.
-   * @param end the maximum value for the selection range.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.start the minimum value for the selection range.
+   * @param options.end the maximum value for the selection range.
    *
-   * @returns The pseudo-random number. **OR** a txid if the signer parameter is populated.
+   * @returns The transaction id of a transaction that will return the random number.
    */
-  async randBetween(start: number, end: number, signer?: wallet.Account): Promise<number | string> {
-    return DiceAPI.randBetween(this.node.url, this.networkMagic, this.scriptHash, start, end, signer)
+	async randBetween(options: {start: number, end: number}): Promise<string> {
+    const res = await this.config.invoker.invokeFunction({
+      invocations: [
+        Dice.buildRandBetweenInvocation(
+					this.config.scriptHash, 
+					{start: options.start, end: options.end}
+				)
+      ],
+      signers: [],
+    })
+
+    return res
   }
 
-  /**
+
+	/**
    * Maps bytes onto a range of numbers:
    *
    * [0 -> Max(entropy.length)][entropy] --> [start, end]
    *
-   * @param start the minimum value for the selection range.
-   * @param end the maximum value for the selection range.
-   * @param entropy the bytes used in the sampling.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.start the minimum value for the selection range.
+   * @param options.end the maximum value for the selection range.
+   * @param options.entropy the bytes used in the sampling.
    *
-   * @returns The resulting number from the mapping. **OR** a txid if the signer parameter is populated.
+   * @returns The resulting number from the mapping.
    */
-  async mapBytesOntoRange(start: number, end: number, entropy: string, signer?: wallet.Account): Promise<number | string> {
-    return DiceAPI.mapBytesOntoRange(this.node.url, this.networkMagic, this.scriptHash, start, end, entropy, signer)
-  }
+	async mapBytesOntoRange(options: {start: number, end: number, entropy: string}): Promise<number | string> {
+		const res = await this.config.invoker.testInvoke({
+			invocations: [
+				Dice.buildRandBetweenInvocation(
+					this.config.scriptHash, 
+					{start: options.start, end: options.end}
+				)
+			],
+			signers: [],
+		})
 
-  /**
+		if (res.stack.length === 0) {
+			throw new Error(res.exception ?? 'unrecognized response')
+		}
+
+		return this.config.parser.parseRpcResponse(res.stack[0])
+	}
+
+	/**
    * Rolls for a `dX` formatted random number.
    *
    * **Note:**
-   * This method must include a  signer to produce truly random numbers.
+   * This method must include a signer to produce truly random numbers.
    *
-   * @param die The die to roll. The input format can support arbitarilly large dice which are effectively spherical..
+   * @param options.die The die to roll. The input format can support arbitarilly large dice which are effectively spherical..
    * or more traditional ones. e.g. 'd6'
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
    *
-   * @returns The result of the die roll **OR** a txid if the signer parameter is populated.
+   * @returns The transaction id of a transaction that will return the result of the die roll.
    */
-  async rollDie(die: string, signer?: wallet.Account): Promise<number | string> {
-    return DiceAPI.rollDie(this.node.url, this.networkMagic, this.scriptHash, die, signer)
-  }
+	async rollDie(options: {die: string}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Dice.buildRollDieInvocation(this.config.scriptHash, {die: options.die})
+      ],
+      signers: [],
+    })
+	}
 
-  /**
+	/**
    * Calculates dice rolls using provided entropy.  This method will return and array of length `entropy.length / precision`.
    *
-   * @param die The die to roll. The input format can support arbitarilly large dice which are effectively spherical..
+   * @param options.die The die to roll. The input format can support arbitarilly large dice which are effectively spherical..
    * or more traditional ones. e.g. 'd6'
-   * @param precision The number of bytes to use for each sample.  Sampling at a precision below the fidelity of your range
+   * @param options.precision The number of bytes to use for each sample.  Sampling at a precision below the fidelity of your range
    * will succeed, but your results will be overly-discrete.
-   * @param entropy The bytes of data used to seed the sampling.
-   * @param signer An optional signer. Populating this field will publish the transaction and return a txid instead of
-   * running the invocation as a test invoke.
+   * @param options.entropy The bytes of data used to seed the sampling.
    *
-   * @returns An array of dice rolls. **OR** a txid if the signer parameter is populated.
+   * @returns The transaction id of a transaction that will return the result an array of dice rolls.
    */
-  async rollDiceWithEntropy(die: string, precision: number, entropy: string, signer?: wallet.Account): Promise<any> {
-    return DiceAPI.rollDiceWithEntropy(this.node.url, this.networkMagic, this.scriptHash, die, precision, entropy, signer)
-  }
+	async rollDiceWithEntropy(options: {die: string, precision: number, entropy: string}): Promise<string> {
+    return await this.config.invoker.invokeFunction({
+      invocations: [
+        Dice.buildRollDieInvocation(this.config.scriptHash, {die: options.die})
+      ],
+      signers: [],
+    })
+	}
+	
 
+  static buildRandBetweenInvocation(scriptHash: string, params: {start: number, end: number}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'rand_between',
+      args: [
+        {type: 'Integer', value: params.start},
+        {type: 'Integer', value: params.end},
+      ]
+    }
+  }
+  
+  static buildMapBytesOntoRangeInvocation(scriptHash: string, params: {start: number, end: number, entropy: string}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'map_bytes_onto_range',
+      args: [
+        {type: 'Integer', value: params.start},
+        {type: 'Integer', value: params.end},
+        {type: 'String', value: params.entropy},
+      ]
+    }
+  }
+  
+  static buildRollDieInvocation(scriptHash: string, params: {die: string}): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'roll_die',
+      args: [
+        {type: 'String', value: params.die},
+      ]
+    }
+  }
+  
+  static buildRollDieWithEntropyInvocation(scriptHash: string, parser: Neo3Parser, params: {die: string, precision: number, }): ContractInvocation{
+    return {
+      scriptHash,
+      operation: 'roll_die',
+      args: [
+        {type: 'ByteArray', value: parser.strToBase64(params.die)},
+      ]
+    }
+  }
+  
 }

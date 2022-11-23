@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any, List, cast 
 from boa3.builtin.type import UInt160
 from boa3.builtin.interop.blockchain import Transaction
 from boa3.builtin.interop.runtime import script_container
@@ -60,7 +60,7 @@ def roll_die(die: str) -> int:
 
 
 @public
-def roll_dice_with_entropy(die: str, precision: int, entropy: bytes) -> [int]:
+def roll_dice_with_entropy(die: str, precision: int, entropy: bytes) -> List[int]:
     """
     Rolls multiple dice using the entropy provided.  This method will return floor(len(entropy)/precision) integers
     representing dice roles on a dX formatted die

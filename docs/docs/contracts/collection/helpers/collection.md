@@ -8,7 +8,7 @@ title: collection.helpers.collection
 ```python
 def create_collection_internal(author: UInt160, description: bytes,
                                collection_type: bytes, extra: bytes,
-                               values: [bytes]) -> bytes
+                               values: List[bytes]) -> bytes
 ```
 
 Creates a new collection

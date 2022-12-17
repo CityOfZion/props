@@ -16,7 +16,7 @@ class CollectionAPI {
             neon_js_1.sc.ContractParam.string(extra),
             neon_js_1.sc.ContractParam.array(...raw_traits)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -30,7 +30,7 @@ class CollectionAPI {
             neon_js_1.sc.ContractParam.string(extra),
             neon_js_1.sc.ContractParam.array(...values)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -41,7 +41,7 @@ class CollectionAPI {
         const param = [
             neon_js_1.sc.ContractParam.integer(collectionId)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -74,12 +74,12 @@ class CollectionAPI {
         switch (result.type) {
             case "string":
                 result.values = result.valuesRaw.map((value) => {
-                    return helpers_1.formatter(value);
+                    return (0, helpers_1.formatter)(value);
                 });
                 break;
             case "int":
                 result.values = result.valuesRaw.map((value) => {
-                    let bytes = helpers_1.formatter(value);
+                    let bytes = (0, helpers_1.formatter)(value);
                     return parseInt(bytes, 16);
                 });
                 break;
@@ -91,7 +91,7 @@ class CollectionAPI {
         const param = [
             neon_js_1.sc.ContractParam.integer(collectionId)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -103,7 +103,7 @@ class CollectionAPI {
             neon_js_1.sc.ContractParam.integer(collectionId),
             neon_js_1.sc.ContractParam.integer(index)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -114,7 +114,7 @@ class CollectionAPI {
         const param = [
             neon_js_1.sc.ContractParam.integer(collectionId)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -125,7 +125,7 @@ class CollectionAPI {
         const param = [
             neon_js_1.sc.ContractParam.integer(collectionId)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -139,7 +139,7 @@ class CollectionAPI {
             neon_js_1.sc.ContractParam.integer(collectionId),
             neon_js_1.sc.ContractParam.string(entropy)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -151,7 +151,7 @@ class CollectionAPI {
             neon_js_1.sc.ContractParam.integer(collectionId),
             neon_js_1.sc.ContractParam.integer(samples)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -167,7 +167,7 @@ class CollectionAPI {
             neon_js_1.sc.ContractParam.integer(samples),
             neon_js_1.sc.ContractParam.boolean(pick)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -175,7 +175,7 @@ class CollectionAPI {
     }
     static async totalCollections(node, networkMagic, contractHash, signer) {
         const method = "total_collections";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
@@ -191,11 +191,11 @@ class CollectionAPI {
             neon_js_1.sc.ContractParam.string(manifest),
             neon_js_1.sc.ContractParam.any(data)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res);
+        return (0, helpers_1.formatter)(res);
     }
 }
 exports.CollectionAPI = CollectionAPI;

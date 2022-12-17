@@ -18,9 +18,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NeoInterface = void 0;
 const neon_js_1 = __importStar(require("@cityofzion/neon-js"));
+const axios_1 = __importDefault(require("axios"));
 class NeoInterface {
     /**
      * A method for executing test invocations on the Neo blockchain
@@ -35,6 +39,29 @@ class NeoInterface {
         const res = await new neon_js_1.rpc.RPCClient(rpcAddress).invokeFunction(scriptHash, operation, args);
         if (res.exception) {
             throw new Error("Invocation Error: " + res.exception);
+        }
+        if (res.stack[0].type === 'InteropInterface') {
+            // @ts-ignore
+            // @ts-ignore
+            const ijson = {
+                // @ts-ignore
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "traverseiterator",
+                "params": [
+                    // @ts-ignore
+                    res.session,
+                    // @ts-ignore
+                    res.stack[0].id,
+                    100
+                ]
+            };
+            const { data } = await (0, axios_1.default)({
+                method: 'post',
+                url: rpcAddress,
+                data: ijson,
+            });
+            return data.result;
         }
         return res.stack;
     }

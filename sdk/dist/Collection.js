@@ -55,7 +55,7 @@ class Collection {
                 this.options.scriptHash = '0xacf2aa5d0899e860eebd8b8a5454aa3017543848';
                 break;
         }
-        this.options = lodash_1.merge({}, this.options, options);
+        this.options = (0, lodash_1.merge)({}, this.options, options);
     }
     /**
      * Gets the magic number for the network and configures the class instance.

@@ -35,7 +35,7 @@ class Chest {
                 this.options.scriptHash = '0x3fb4df29c0c200eff40f465cd028647b8a82f002';
                 break;
         }
-        this.options = lodash_1.merge({}, this.options, options);
+        this.options = (0, lodash_1.merge)({}, this.options, options);
     }
     /**
      * DO NOT EDIT ME
@@ -89,13 +89,12 @@ class Chest {
         const txid = await api_1.ChestAPI.lootChestWithPuppet(this.node.url, this.networkMagic, this.scriptHash, chestId, puppetId, signer);
         while (timeout >= age) {
             try {
-                let res = await helpers_1.txDidComplete(this.node.url, txid, true);
-                let formattedRes = helpers_1.formatter(res[0]);
-                formattedRes.scriptHash = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(formattedRes.scripHash));
-                return formattedRes;
+                let res = await (0, helpers_1.txDidComplete)(this.node.url, txid, true);
+                res[0].scriptHash = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(res[0].scriptHash));
+                return res;
             }
             catch (e) {
-                await helpers_1.sleep(1000);
+                await (0, helpers_1.sleep)(1000);
                 age += 1000;
             }
         }

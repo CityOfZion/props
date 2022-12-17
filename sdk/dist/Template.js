@@ -34,7 +34,7 @@ class Template {
                 this.options.scriptHash = '0x16d6a0be0506b26e0826dd352724cda0defa7131';
                 break;
         }
-        this.options = lodash_1.merge({}, this.options, options);
+        this.options = (0, lodash_1.merge)({}, this.options, options);
     }
     /**
      * DO NOT EDIT ME

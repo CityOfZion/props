@@ -220,15 +220,6 @@
                         "type": "ByteArray"
                     }
                 ]
-            },
-            {
-                "name": "Debug",
-                "parameters": [
-                    {
-                        "name": "debug",
-                        "type": "Any"
-                    }
-                ]
             }
         ]
     },

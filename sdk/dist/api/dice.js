@@ -9,7 +9,7 @@ class DiceAPI {
         const param = [
             neon_js_1.sc.ContractParam.string(die)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -22,7 +22,7 @@ class DiceAPI {
             neon_js_1.sc.ContractParam.integer(precision),
             neon_js_1.sc.ContractParam.string(entropy)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -34,7 +34,7 @@ class DiceAPI {
             neon_js_1.sc.ContractParam.integer(start),
             neon_js_1.sc.ContractParam.integer(end)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
@@ -47,7 +47,7 @@ class DiceAPI {
             neon_js_1.sc.ContractParam.integer(end),
             neon_js_1.sc.ContractParam.string(entropy)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }

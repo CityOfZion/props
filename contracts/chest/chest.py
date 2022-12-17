@@ -547,7 +547,7 @@ def _deploy(data: Any, update: bool):
         put(OWNER_KEY, signer)
 
 
-@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
+@contract('0x4380f2c1de98bb267d3ea821897ec571a04fe3e0')
 class ContractDice:
 
     @staticmethod
@@ -555,7 +555,7 @@ class ContractDice:
         pass
 
 
-@contract('0xfefe63f07478394fbe514fda386ad8c7e2a485a0')
+@contract('0x76a8f8a7a901b29a33013b469949f4b08db15756')
 class ContractPuppet:
 
     @staticmethod

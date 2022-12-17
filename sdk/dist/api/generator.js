@@ -11,14 +11,14 @@ class GeneratorAPI {
             neon_js_1.sc.ContractParam.string(label),
             neon_js_1.sc.ContractParam.integer(baseGeneratorFee)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
     }
     static async createInstance(node, networkMagic, contractHash, generatorId, signer) {
         const method = "create_instance";
         const param = [
             neon_js_1.sc.ContractParam.integer(generatorId)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
     }
     static async createTrait(node, networkMagic, contractHash, generatorId, label, slots, levels, signer) {
         const method = "create_trait";
@@ -49,7 +49,7 @@ class GeneratorAPI {
             neon_js_1.sc.ContractParam.integer(slots),
             neon_js_1.sc.ContractParam.array(...traitLevelsFormatted)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
     }
     //getGenerator
     static async getGeneratorJSON(node, networkMagic, contractHash, generatorId, signer) {
@@ -57,22 +57,22 @@ class GeneratorAPI {
         const param = [
             neon_js_1.sc.ContractParam.integer(generatorId)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async getTraitJSON(node, networkMagic, contractHash, traitId, signer) {
         const method = "get_trait_json";
         const param = [
             neon_js_1.sc.ContractParam.string(traitId)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
     //getGeneratorInstance
     static async getGeneratorInstanceJSON(node, networkMagic, contractHash, instanceId, signer) {
@@ -80,11 +80,11 @@ class GeneratorAPI {
         const param = [
             neon_js_1.sc.ContractParam.integer(instanceId)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async mintFromInstance(node, networkMagic, contractHash, instanceId, signer) {
         const method = "mint_from_instance";
@@ -92,7 +92,7 @@ class GeneratorAPI {
             neon_js_1.sc.ContractParam.string(''),
             neon_js_1.sc.ContractParam.integer(instanceId)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
     }
     static async setInstanceAccessMode(node, networkMagic, contractHash, instanceId, accessMode, signer) {
         const method = "set_instance_access_mode";
@@ -100,7 +100,7 @@ class GeneratorAPI {
             neon_js_1.sc.ContractParam.integer(instanceId),
             neon_js_1.sc.ContractParam.integer(accessMode)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
     }
     static async setInstanceAuthorizedUsers(node, networkMagic, contractHash, instanceId, authorizedUsers, signer) {
         const method = "set_instance_authorized_users";
@@ -111,7 +111,7 @@ class GeneratorAPI {
             neon_js_1.sc.ContractParam.integer(instanceId),
             neon_js_1.sc.ContractParam.array(...usersFormatted)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
     }
     static async setInstanceAuthorizedContracts(node, networkMagic, contractHash, instanceId, authorizedContracts, signer) {
         const method = "set_instance_authorized_contracts";
@@ -122,7 +122,7 @@ class GeneratorAPI {
             neon_js_1.sc.ContractParam.integer(instanceId),
             neon_js_1.sc.ContractParam.array(...contractsFormatted)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
     }
     static async setInstanceFee(node, networkMagic, contractHash, instanceId, fee, signer) {
         const method = "set_instance_fee";
@@ -130,11 +130,11 @@ class GeneratorAPI {
             neon_js_1.sc.ContractParam.integer(instanceId),
             neon_js_1.sc.ContractParam.integer(fee)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
     }
     static async totalGenerators(node, networkMagic, contractHash, signer) {
         const method = "total_generators";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
@@ -142,7 +142,7 @@ class GeneratorAPI {
     }
     static async totalGeneratorInstances(node, networkMagic, contractHash, signer) {
         const method = "total_generator_instances";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }

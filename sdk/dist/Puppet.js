@@ -27,7 +27,7 @@ class Puppet {
                 this.options.scriptHash = '0xfefe63f07478394fbe514fda386ad8c7e2a485a0';
                 break;
         }
-        this.options = lodash_1.merge({}, this.options, options);
+        this.options = (0, lodash_1.merge)({}, this.options, options);
     }
     async init() {
         const getVersionRes = await this.node.getVersion();

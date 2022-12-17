@@ -31,7 +31,7 @@ class Generator {
                 this.options.scriptHash = '0xa3e59ddc61b2d8ac42c519cee5ddaac83c7df276';
                 break;
         }
-        this.options = lodash_1.merge({}, this.options, options);
+        this.options = (0, lodash_1.merge)({}, this.options, options);
     }
     async init() {
         const getVersionRes = await this.node.getVersion();
@@ -53,13 +53,13 @@ class Generator {
         const txids = [];
         let txid = await api_1.GeneratorAPI.createGenerator(this.node.url, this.networkMagic, this.scriptHash, generator.label, generator.baseGeneratorFee, signer);
         txids.push(txid);
-        await helpers_1.sleep(timeConstantMS);
-        const res = await helpers_1.txDidComplete(this.node.url, txid, false);
+        await (0, helpers_1.sleep)(timeConstantMS);
+        const res = await (0, helpers_1.txDidComplete)(this.node.url, txid, false);
         for await (let trait of generator.traits) {
             trait = trait;
             txid = await api_1.GeneratorAPI.createTrait(this.node.url, this.networkMagic, this.scriptHash, res[0], trait.label, trait.slots, trait.traitLevels, signer);
             txids.push(txid);
-            await helpers_1.sleep(timeConstantMS);
+            await (0, helpers_1.sleep)(timeConstantMS);
         }
         return txids;
     }

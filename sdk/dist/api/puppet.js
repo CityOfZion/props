@@ -35,7 +35,7 @@ class PuppetAPI {
     static async balanceOf(node, networkMagic, contractHash, address, signer) {
         const method = "balanceOf";
         const params = [neon_js_1.sc.ContractParam.hash160(address)];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
@@ -51,7 +51,7 @@ class PuppetAPI {
             neon_js_1.sc.ContractParam.integer(sysFee),
             neon_js_1.sc.ContractParam.integer(maxSupply)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
     }
     /**
      * Returns the decimals of the token
@@ -62,7 +62,7 @@ class PuppetAPI {
      */
     static async decimals(node, networkMagic, contractHash, signer) {
         const method = "decimals";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
@@ -77,14 +77,14 @@ class PuppetAPI {
      */
     static async deploy(node, networkMagic, contractHash, signer) {
         const method = "deploy";
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
     }
     static async getAttributeMod(node, networkMagic, contractHash, attributeValue, signer) {
         const method = "roll_initial_stat";
         const params = [
             neon_js_1.sc.ContractParam.integer(attributeValue)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
@@ -93,25 +93,25 @@ class PuppetAPI {
     static async getPuppetJSON(node, networkMagic, contractHash, tokenId, signer) {
         const method = "get_puppet_json";
         const param = [neon_js_1.sc.ContractParam.string(tokenId)];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async getPuppetJSONFlat(node, networkMagic, contractHash, tokenId, signer) {
         const method = "get_puppet_json_flat";
         const params = [neon_js_1.sc.ContractParam.string(tokenId)];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async getPuppetRaw(node, networkMagic, contractHash, tokenId, signer) {
         const method = "get_puppet_raw";
         const params = [neon_js_1.sc.ContractParam.string(tokenId)];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
@@ -128,7 +128,7 @@ class PuppetAPI {
     static async ownerOf(node, networkMagic, contractHash, tokenId, signer) {
         const method = "ownerOf";
         const params = [neon_js_1.sc.ContractParam.string(tokenId)];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
@@ -141,7 +141,7 @@ class PuppetAPI {
             neon_js_1.sc.ContractParam.integer(epochId),
             neon_js_1.sc.ContractParam.hash160(owner)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
     }
     /**
      * Gets the properties of a token
@@ -154,11 +154,11 @@ class PuppetAPI {
     static async properties(node, networkMagic, contractHash, tokenId, signer) {
         const method = "properties";
         const params = [neon_js_1.sc.ContractParam.string(tokenId)];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async setMintFee(node, networkMagic, contractHash, epochId, fee, signer) {
         const method = "set_mint_fee";
@@ -166,7 +166,7 @@ class PuppetAPI {
             neon_js_1.sc.ContractParam.integer(epochId),
             neon_js_1.sc.ContractParam.integer(fee)
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
     }
     /**
      * Returns the token symbol
@@ -177,7 +177,7 @@ class PuppetAPI {
      */
     static async symbol(node, networkMagic, contractHash, signer) {
         const method = "symbol";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
@@ -192,7 +192,7 @@ class PuppetAPI {
      */
     static async tokens(node, networkMagic, contractHash, signer) {
         const method = "tokens";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
@@ -203,7 +203,7 @@ class PuppetAPI {
         if (iterator.iterator && iterator.iterator.length > 0 && iterator.iterator[0].value) {
             return iterator.iterator.map((token) => {
                 const attrs = token.value;
-                return helpers_1.formatter(attrs[0]);
+                return (0, helpers_1.formatter)(attrs[0]);
             });
         }
         if (iterator.iterator && iterator.iterator.length === 0) {
@@ -222,18 +222,21 @@ class PuppetAPI {
     static async tokensOf(node, networkMagic, contractHash, address, signer) {
         const method = "tokensOf";
         const params = [neon_js_1.sc.ContractParam.hash160(address)];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
-        const iterator = res[0];
-        if (iterator.iterator && iterator.iterator.length >= 0) {
-            return iterator.iterator.map((token) => {
-                const attrs = token.value;
-                return helpers_1.formatter(attrs[1]);
-            });
-        }
-        throw new Error("unable to resolve respond format");
+        // @ts-ignore
+        const tokens = [];
+        res.forEach((token) => {
+            if (token.value.length === 2) {
+                tokens.push((0, helpers_1.formatter)(token.value[1]));
+            }
+            else {
+                tokens.push((0, helpers_1.formatter)(token));
+            }
+        });
+        return tokens;
     }
     /**
      * Gets the total number of accounts stored in the contract
@@ -244,7 +247,7 @@ class PuppetAPI {
      */
     static async totalAccounts(node, networkMagic, contractHash, signer) {
         const method = "total_accounts";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
@@ -252,7 +255,7 @@ class PuppetAPI {
     }
     static async totalEpochs(node, networkMagic, contractHash, signer) {
         const method = "total_epochs";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
@@ -267,7 +270,7 @@ class PuppetAPI {
      */
     static async totalSupply(node, networkMagic, contractHash, signer) {
         const method = "totalSupply";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
@@ -290,7 +293,7 @@ class PuppetAPI {
             neon_js_1.sc.ContractParam.string(tokenId),
             data,
         ];
-        return await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
     }
     static async update(node, networkMagic, contractHash, script, manifest, data, signer) {
         const method = "update";
@@ -299,21 +302,21 @@ class PuppetAPI {
             neon_js_1.sc.ContractParam.string(manifest),
             neon_js_1.sc.ContractParam.any(data)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, params, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res);
+        return (0, helpers_1.formatter)(res);
     }
     //setUserPermissions
     static async getEpochJSON(node, networkMagic, contractHash, epochId, signer) {
         const method = "get_epoch_json";
         const param = [neon_js_1.sc.ContractParam.integer(epochId)];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res);
+        return (0, helpers_1.formatter)(res);
     }
 }
 exports.PuppetAPI = PuppetAPI;

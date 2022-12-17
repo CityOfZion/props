@@ -19,11 +19,11 @@ class ChestAPI {
             neon_js_1.sc.ContractParam.array(...epochs),
             neon_js_1.sc.ContractParam.array(...traits)
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async isPuppetEligible(node, networkMagic, contractHash, chestId, puppetId, signer) {
         const method = "is_puppet_eligible";
@@ -31,11 +31,11 @@ class ChestAPI {
             neon_js_1.sc.ContractParam.string(chestId),
             neon_js_1.sc.ContractParam.string(puppetId),
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async lootChestWithPuppet(node, networkMagic, contractHash, chestId, puppetId, signer) {
         const method = "loot_chest_with_puppet";
@@ -43,48 +43,44 @@ class ChestAPI {
             neon_js_1.sc.ContractParam.string(chestId),
             neon_js_1.sc.ContractParam.string(puppetId),
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        let formattedRes = helpers_1.formatter(res[0]);
-        formattedRes.scriptHash = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(formattedRes.scripHash));
-        return formattedRes;
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async lootChestAsOwner(node, networkMagic, contractHash, chestId, signer) {
         const method = "loot_chest_as_owner";
         const param = [
             neon_js_1.sc.ContractParam.string(chestId),
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        let formattedRes = helpers_1.formatter(res[0]);
-        formattedRes.scriptHash = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(formattedRes.scripHash));
-        return formattedRes;
+        return (0, helpers_1.formatter)(res[0]);
     }
     static async getChestJSON(node, networkMagic, contractHash, chestId, signer) {
         const method = "get_chest_json";
         const param = [
             neon_js_1.sc.ContractParam.string(chestId),
         ];
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, param, signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, param, signer);
         if (signer) {
             return res;
         }
-        let formattedRes = helpers_1.formatter(res[0]);
+        let formattedRes = (0, helpers_1.formatter)(res[0]);
         const author = neon_core_1.u.reverseHex(neon_core_1.u.str2hexstring(formattedRes.author));
         formattedRes.author = new neon_core_1.wallet.Account(author);
         return formattedRes;
     }
     static async totalChests(node, networkMagic, contractHash, signer) {
         const method = "total_chests";
-        const res = await helpers_1.variableInvoke(node, networkMagic, contractHash, method, [], signer);
+        const res = await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, [], signer);
         if (signer) {
             return res;
         }
-        return helpers_1.formatter(res[0]);
+        return (0, helpers_1.formatter)(res[0]);
     }
 }
 exports.ChestAPI = ChestAPI;

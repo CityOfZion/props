@@ -1,6 +1,7 @@
 import Neon, {rpc, u} from "@cityofzion/neon-js";
 import StackItemJson, { wallet, tx } from "@cityofzion/neon-core";
 import {BigInteger} from "@cityofzion/neon-core/lib/u";
+import axios from 'axios'
 
 
 export interface InteropInterface {
@@ -35,6 +36,29 @@ export class NeoInterface {
     )
     if (res.exception) {
       throw new Error("Invocation Error: " + res.exception)
+    }
+    if (res.stack[0].type === 'InteropInterface'){
+      // @ts-ignore
+      // @ts-ignore
+      const ijson = {
+        // @ts-ignore
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "traverseiterator",
+        "params": [
+          // @ts-ignore
+          res.session,
+          // @ts-ignore
+          res.stack[0].id,
+          100
+        ]
+      }
+      const {data} = await axios({
+        method: 'post',
+        url: rpcAddress,
+        data: ijson,
+      })
+      return data.result
     }
     return res.stack;
   }

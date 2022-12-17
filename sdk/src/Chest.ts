@@ -98,9 +98,8 @@ export class Chest {
     while (timeout >= age) {
       try {
         let res = await txDidComplete(this.node.url, txid, true)
-        let formattedRes = formatter(res[0])
-        formattedRes.scriptHash = u.reverseHex(u.str2hexstring(formattedRes.scripHash))
-        return formattedRes
+        res[0].scriptHash = u.reverseHex(u.str2hexstring(res[0].scriptHash))
+        return res
       } catch (e) {
         await sleep(1000)
         age += 1000

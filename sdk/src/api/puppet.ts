@@ -330,18 +330,17 @@ export class PuppetAPI {
     if (signer) {
       return res
     }
-    const iterator: InteropInterface = res[0] as InteropInterface
-    if (iterator.iterator && iterator.iterator.length >= 0) {
-      return iterator.iterator.map( (token: StackItemJson) => {
-        const attrs: StackItemJson[] = token.value as StackItemJson[]
-        return formatter(attrs[1])
-      })
-    }
 
-
-    throw new Error("unable to resolve respond format")
-
-
+    // @ts-ignore
+    const tokens: string[] = []
+    res.forEach((token: any) => {
+      if (token.value.length === 2) {
+        tokens.push(formatter(token.value[1]))
+      } else {
+        tokens.push(formatter(token))
+      }
+    })
+    return tokens
   }
 
   /**

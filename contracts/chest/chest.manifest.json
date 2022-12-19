@@ -16,39 +16,39 @@
                         "type": "Integer"
                     },
                     {
-                        "name": "eligible_epochs",
-                        "type": "Array"
-                    },
-                    {
-                        "name": "puppet_traits",
+                        "name": "eligibility_cases",
                         "type": "Array"
                     }
                 ],
-                "returntype": "ByteArray",
-                "safe": false
-            },
-            {
-                "name": "loot_chest_with_puppet",
-                "offset": 283,
-                "parameters": [
-                    {
-                        "name": "chest_id",
-                        "type": "ByteArray"
-                    },
-                    {
-                        "name": "puppet_id",
-                        "type": "ByteArray"
-                    }
-                ],
-                "returntype": "Map",
+                "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "loot_chest_as_owner",
-                "offset": 473,
+                "offset": 314,
                 "parameters": [
                     {
                         "name": "chest_id",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "loot_chest",
+                "offset": 427,
+                "parameters": [
+                    {
+                        "name": "chest_id",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "nft_script_hash",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "token_id",
                         "type": "ByteArray"
                     }
                 ],
@@ -56,15 +56,19 @@
                 "safe": false
             },
             {
-                "name": "is_puppet_eligible",
-                "offset": 584,
+                "name": "is_eligible",
+                "offset": 601,
                 "parameters": [
                     {
                         "name": "chest_id",
-                        "type": "ByteArray"
+                        "type": "Integer"
                     },
                     {
-                        "name": "puppet_id",
+                        "name": "nft_script_hash",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "token_id",
                         "type": "ByteArray"
                     }
                 ],
@@ -73,11 +77,11 @@
             },
             {
                 "name": "get_chest_json",
-                "offset": 803,
+                "offset": 789,
                 "parameters": [
                     {
                         "name": "chest_id",
-                        "type": "ByteArray"
+                        "type": "Integer"
                     }
                 ],
                 "returntype": "Map",
@@ -85,11 +89,11 @@
             },
             {
                 "name": "get_chest",
-                "offset": 817,
+                "offset": 803,
                 "parameters": [
                     {
                         "name": "chest_id",
-                        "type": "ByteArray"
+                        "type": "Integer"
                     }
                 ],
                 "returntype": "Array",
@@ -97,11 +101,11 @@
             },
             {
                 "name": "get_chest_raw",
-                "offset": 880,
+                "offset": 866,
                 "parameters": [
                     {
                         "name": "chest_id",
-                        "type": "ByteArray"
+                        "type": "Integer"
                     }
                 ],
                 "returntype": "ByteArray",
@@ -109,14 +113,14 @@
             },
             {
                 "name": "total_chests",
-                "offset": 908,
+                "offset": 906,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "onNEP11Payment",
-                "offset": 962,
+                "offset": 975,
                 "parameters": [
                     {
                         "name": "from_address",
@@ -140,7 +144,7 @@
             },
             {
                 "name": "onNEP17Payment",
-                "offset": 1061,
+                "offset": 1074,
                 "parameters": [
                     {
                         "name": "from_address",
@@ -160,7 +164,7 @@
             },
             {
                 "name": "update",
-                "offset": 1292,
+                "offset": 1305,
                 "parameters": [
                     {
                         "name": "script",
@@ -180,7 +184,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 1416,
+                "offset": 1429,
                 "parameters": [
                     {
                         "name": "data",
@@ -196,7 +200,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 1454,
+                "offset": 1467,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false
@@ -204,20 +208,20 @@
         ],
         "events": [
             {
-                "name": "NewChest",
-                "parameters": [
-                    {
-                        "name": "ChestId",
-                        "type": "ByteArray"
-                    }
-                ]
-            },
-            {
                 "name": "ChestOpened",
                 "parameters": [
                     {
                         "name": "ChestId",
-                        "type": "ByteArray"
+                        "type": "Integer"
+                    }
+                ]
+            },
+            {
+                "name": "NewChest",
+                "parameters": [
+                    {
+                        "name": "ChestId",
+                        "type": "Integer"
                     }
                 ]
             }

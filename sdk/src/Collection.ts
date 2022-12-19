@@ -49,7 +49,7 @@ export class Collection {
         this.options.scriptHash = '0xf05651bc505fd5c7d36593f6e8409932342f9085'
         break
       default:
-        this.options.node = 'http://localhost:50012'
+        this.options.node = 'http://127.0.0.1:50012'
         this.options.scriptHash = '0xacf2aa5d0899e860eebd8b8a5454aa3017543848'
         break
     }

@@ -770,14 +770,12 @@ class Token:
 
         return True
 
-
     def get_owner(self) -> UInt160:
         """
         Getter for the puppet owner
         @return: bytes representing the owner of the puppet
         """
         return UInt160(self._owner)
-
 
     def get_state(self) -> Dict[str, Any]:
         """

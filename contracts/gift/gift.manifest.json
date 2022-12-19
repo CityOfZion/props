@@ -1,0 +1,408 @@
+{
+    "name": "gift",
+    "groups": [],
+    "abi": {
+        "methods": [
+            {
+                "name": "symbol",
+                "offset": 0,
+                "parameters": [],
+                "returntype": "String",
+                "safe": true
+            },
+            {
+                "name": "decimals",
+                "offset": 2,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": true
+            },
+            {
+                "name": "totalSupply",
+                "offset": 4,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": true
+            },
+            {
+                "name": "balanceOf",
+                "offset": 40,
+                "parameters": [
+                    {
+                        "name": "owner",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": true
+            },
+            {
+                "name": "tokensOf",
+                "offset": 98,
+                "parameters": [
+                    {
+                        "name": "owner",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "InteropInterface",
+                "safe": true
+            },
+            {
+                "name": "transfer",
+                "offset": 156,
+                "parameters": [
+                    {
+                        "name": "to",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "ownerOf",
+                "offset": 420,
+                "parameters": [
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Hash160",
+                "safe": true
+            },
+            {
+                "name": "tokens",
+                "offset": 439,
+                "parameters": [],
+                "returntype": "InteropInterface",
+                "safe": true
+            },
+            {
+                "name": "properties",
+                "offset": 460,
+                "parameters": [
+                    {
+                        "name": "tokenId",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": true
+            },
+            {
+                "name": "_deploy",
+                "offset": 1938,
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "update",
+                        "type": "Boolean"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "onNEP11Payment",
+                "offset": 508,
+                "parameters": [
+                    {
+                        "name": "from_address",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "onNEP17Payment",
+                "offset": 513,
+                "parameters": [
+                    {
+                        "name": "from_address",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "total_accounts",
+                "offset": 518,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "offline_mint",
+                "offset": 554,
+                "parameters": [
+                    {
+                        "name": "epoch_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "account",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "ByteArray",
+                "safe": false
+            },
+            {
+                "name": "update",
+                "offset": 628,
+                "parameters": [
+                    {
+                        "name": "script",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "manifest",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "data",
+                        "type": "Any"
+                    }
+                ],
+                "returntype": "Void",
+                "safe": false
+            },
+            {
+                "name": "set_mint_fee",
+                "offset": 739,
+                "parameters": [
+                    {
+                        "name": "epoch_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "get_user_json",
+                "offset": 1085,
+                "parameters": [
+                    {
+                        "name": "address",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "get_user",
+                "offset": 1099,
+                "parameters": [
+                    {
+                        "name": "address",
+                        "type": "Hash160"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "set_user_permissions",
+                "offset": 1320,
+                "parameters": [
+                    {
+                        "name": "user",
+                        "type": "Hash160"
+                    },
+                    {
+                        "name": "permissions",
+                        "type": "Map"
+                    }
+                ],
+                "returntype": "Boolean",
+                "safe": false
+            },
+            {
+                "name": "create_epoch",
+                "offset": 1413,
+                "parameters": [
+                    {
+                        "name": "label",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "generator_instance_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "initial_roll_collection_id",
+                        "type": "ByteArray"
+                    },
+                    {
+                        "name": "mint_fee",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "sys_fee",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "max_supply",
+                        "type": "Integer"
+                    }
+                ],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "get_epoch_json",
+                "offset": 1535,
+                "parameters": [
+                    {
+                        "name": "epoch_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "get_epoch",
+                "offset": 1549,
+                "parameters": [
+                    {
+                        "name": "epoch_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "total_epochs",
+                "offset": 1632,
+                "parameters": [],
+                "returntype": "Integer",
+                "safe": false
+            },
+            {
+                "name": "get_token",
+                "offset": 1749,
+                "parameters": [
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Array",
+                "safe": false
+            },
+            {
+                "name": "get_token_json",
+                "offset": 1803,
+                "parameters": [
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "get_token_json_flat",
+                "offset": 1817,
+                "parameters": [
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    }
+                ],
+                "returntype": "Map",
+                "safe": false
+            },
+            {
+                "name": "_initialize",
+                "offset": 2123,
+                "parameters": [],
+                "returntype": "Void",
+                "safe": false
+            }
+        ],
+        "events": [
+            {
+                "name": "Transfer",
+                "parameters": [
+                    {
+                        "name": "from_addr",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "to_addr",
+                        "type": "Any"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "Integer"
+                    },
+                    {
+                        "name": "token_id",
+                        "type": "ByteArray"
+                    }
+                ]
+            }
+        ]
+    },
+    "permissions": [
+        {
+            "contract": "*",
+            "methods": "*"
+        }
+    ],
+    "trusts": [],
+    "features": {},
+    "supportedstandards": [
+        "NEP-11"
+    ],
+    "extra": {
+        "Author": "COZ, Inc.",
+        "Description": "An NFT for giving thanks",
+        "Email": "contact@coz.io"
+    }
+}

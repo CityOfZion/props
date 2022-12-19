@@ -1,0 +1,31 @@
+import { rpc, wallet } from '@cityofzion/neon-core';
+import { EpochType, PropConstructorOptions, PuppetType } from "./interface";
+export declare class Puppet {
+    private options;
+    private networkMagic;
+    constructor(options?: PropConstructorOptions);
+    init(): Promise<void>;
+    get node(): rpc.RPCClient;
+    get scriptHash(): string;
+    balanceOf(address: string, signer?: wallet.Account): Promise<number>;
+    createEpoch(label: string, generatorInstanceId: number, initialRollCollectionId: number, mintFee: number, sysFee: number, maxSupply: number, signer: wallet.Account): Promise<string>;
+    decimals(signer?: wallet.Account): Promise<number>;
+    deploy(signer: wallet.Account): Promise<string>;
+    getAttributeMod(attributeValue: number, signer?: wallet.Account): Promise<number | string>;
+    getEpochJSON(epochId: number, signer?: wallet.Account): Promise<EpochType | string>;
+    getPuppetJSON(tokenId: string, signer?: wallet.Account): Promise<PuppetType | string>;
+    getPuppetRaw(tokenId: string, signer?: wallet.Account): Promise<string>;
+    ownerOf(tokenId: string, signer?: wallet.Account): Promise<wallet.Account | string>;
+    offlineMint(epochId: number, owner: string, signer: wallet.Account): Promise<string>;
+    properties(tokenId: string, signer?: wallet.Account): Promise<PuppetType | string>;
+    purchase(epochId: number, signer: wallet.Account): Promise<string | undefined>;
+    setMintFee(epochId: number, fee: number, signer: wallet.Account): Promise<string>;
+    symbol(signer?: wallet.Account): Promise<string>;
+    tokens(signer?: wallet.Account): Promise<number[] | string>;
+    tokensOf(address: string, signer?: wallet.Account): Promise<string[] | string>;
+    totalAccounts(signer?: wallet.Account): Promise<number | string>;
+    totalEpochs(signer?: wallet.Account): Promise<number | string>;
+    totalSupply(signer?: wallet.Account): Promise<number | string>;
+    transfer(to: string, tokenId: string, signer: wallet.Account, data: any): Promise<string>;
+    update(script: string, manifest: string, signer: wallet.Account): Promise<string>;
+}

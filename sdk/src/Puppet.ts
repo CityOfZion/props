@@ -23,7 +23,7 @@ export class Puppet {
         this.options.scriptHash = '0x76a8f8a7a901b29a33013b469949f4b08db15756'
         break
       default:
-        this.options.node = 'http://localhost:50012'
+        this.options.node = 'http://127.0.0.1:50012'
         this.options.scriptHash = '0xfefe63f07478394fbe514fda386ad8c7e2a485a0'
         break
     }

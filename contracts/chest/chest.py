@@ -30,14 +30,14 @@ def manifest_metadata() -> NeoMetadata:
 
 NewChest = CreateNewEvent(
     [
-        ('ChestId', bytes),
+        ('ChestId', int),
     ],
     'NewChest'
 )
 
 ChestOpened = CreateNewEvent(
     [
-        ('ChestId', bytes),
+        ('ChestId', int),
         ('Contents', [Dict[str, Any]])
     ],
     'ChestOpened'
@@ -94,6 +94,7 @@ class ReservoirItem:
             'quantity': self._quantity
         }
 
+
 def create_reservoir_item(type: str, script_hash: UInt160, quantity: int, token_id: bytes ) -> bytes:
     """
     creates a new chest
@@ -125,48 +126,43 @@ def reservoir_write_pointer() -> int:
 
 
 @public
-def create_chest(name: bytes, chest_type: int, eligible_epochs: [int], puppet_traits: [bytes]) -> bytes:
+def create_chest(name: bytes, chest_type: int, eligibility_cases: List) -> int:
     """
     Creates a new collection
     :param name: The name of the chest
     :param chest_type: The type of chest to create
+    :param eligibility_cases: The set of cases which will be evaluated to determine whether a token is eligible
     :return: The chest id
     """
     tx = cast(Transaction, script_container)
     owner: UInt160 = tx.sender
 
-    traits: Dict[str, str] = {}
-    for raw_trait in puppet_traits:
-        raw_trait_str: [str] = cast(List[str], raw_trait)
-        traits[raw_trait_str[0]] = raw_trait_str[1]
+    eligibility_cases_typed: [EligibilityCase] = []
+    for eligibility_case in eligibility_cases:
+        case_raw: List = cast(List, eligibility_case)
+        script_hash: UInt160 = cast(UInt160, case_raw[0])
+        attributes: List[List] = cast(List[List], case_raw[1])
+        eligibility_cases_typed.append(EligibilityCase(script_hash, attributes))
 
-    chest_id: bytes = create_chest_internal(owner, name, chest_type, eligible_epochs, traits)
+    chest_id: int = create_chest_internal(owner, name, chest_type, eligibility_cases_typed)
     NewChest(chest_id)
     return chest_id
 
-
+#TODO Method: set_chest_eligibility - mutable chest eligibility
+'''
 @public
-def loot_chest_with_puppet(chest_id: bytes, puppet_id: bytes) -> Dict[str, Any]:
-
-    chest: Chest = get_chest(chest_id)
-
-    tx = cast(Transaction, script_container)
-    signer: UInt160 = tx.sender
-
-    puppet_json: Dict[str, Any] = ContractPuppet.get_puppet_json(puppet_id)
-    owner_uint: UInt160 = cast(UInt160, puppet_json['owner'])
-    assert owner_uint == signer, "You do not own this puppet"
-
-    assert chest.is_puppet_eligible(puppet_json), "Ineligible Puppet"
-
-    proceeds: ReservoirItem = chest.loot(signer, cast(bytes, puppet_json['tokenId']))
-
-    # return the loot proceeds here
-    return proceeds.format()
+def set_chest_eligibility(chest_id: bytes, eligibility: Dict[str, Any]) -> bool:
+    TODO Nest attributes (like on puppets)
+    [{
+      sriptHash: "",
+      properties: "",
+    }]
+    return False
+'''
 
 
 @public
-def loot_chest_as_owner(chest_id: bytes) -> Dict[str, Any]:
+def loot_chest_as_owner(chest_id: int) -> Dict[str, Any]:
     chest: Chest = get_chest(chest_id)
     owner: UInt160 = chest.get_author()
 
@@ -175,16 +171,119 @@ def loot_chest_as_owner(chest_id: bytes) -> Dict[str, Any]:
 
     assert signer == owner, "Signer is not the current owner of this chest"
 
-    proceeds: ReservoirItem = chest.loot(signer, owner)
+    proceeds: ReservoirItem = chest.loot(signer, owner, b'')
 
     return proceeds.format()
 
 
 @public
-def is_puppet_eligible(chest_id: bytes, puppet_id: bytes) -> bool:
+def loot_chest(chest_id: int, nft_script_hash: UInt160, token_id: bytes) -> Dict[str, Any]:
     chest: Chest = get_chest(chest_id)
-    puppet_json: Dict[str, Any] = ContractPuppet.get_puppet_json(puppet_id)
-    return chest.is_puppet_eligible(puppet_json)
+
+    tx = cast(Transaction, script_container)
+    signer: UInt160 = tx.sender
+
+    nft_properties_json: Dict[str, Any] = call_contract(nft_script_hash, 'properties', [token_id])
+    owner_uint: UInt160 = call_contract(nft_script_hash, 'ownerOf', [token_id])
+
+    assert owner_uint == signer, "You do not own this token"
+    assert chest.is_eligible(nft_script_hash, nft_properties_json), "Ineligible token"
+
+    proceeds: ReservoirItem = chest.loot(signer, nft_script_hash, cast(bytes, nft_properties_json['tokenId']))
+
+    return proceeds.format()
+
+@public
+def is_eligible(chest_id: int, nft_script_hash: UInt160, token_id: bytes) -> bool:
+    chest: Chest = get_chest(chest_id)
+    nft_properties_json: Dict[str, Any] = call_contract(nft_script_hash, 'properties', [token_id])
+    return chest.is_eligible(nft_script_hash, nft_properties_json)
+
+################################
+class Attribute:
+
+    def __init__(self, logic: str, key: str, value: Any):
+        self._logic: str = logic
+        self._key: str = key
+        self._value: Any = value
+
+    def evaluate(self, attr: Dict[str, Any]) -> bool:
+
+        if attr["trait_type"] != self._key:
+            return False
+        value = attr["value"]
+
+        if self._logic == 'e':
+            return cast(bytes, value) == cast(bytes, self._value)
+        if self._logic == 'gt':
+            return cast(int, value) > cast(int, self._value)
+        if self._logic == 'gte':
+            return cast(int, value) >= cast(int, self._value)
+        if self._logic == 'lt':
+            return cast(int, value) < cast(int, self._value)
+        if self._logic == 'lte':
+            return cast(int, value) <= cast(int, self._value)
+        if self._logic == 'ne':
+            return value != self._value
+        return False
+
+    def export(self) -> Dict[str, Any]:
+        return {
+            'logic': self._logic,
+            'key': self._key,
+            'value': self._value
+        }
+
+    def get_key(self) -> str:
+        return self._key
+
+
+class EligibilityCase:
+
+    def __init__(self, script_hash: UInt160, attributes_raw: List[List]):
+        self._script_hash: UInt160 = script_hash
+        self._attributes: [Attribute] = []
+
+        for attr in attributes_raw:
+            logic: str = cast(str, attr[0])
+            key: str = cast(str, attr[1])
+            value: Any = attr[2]
+
+            self._attributes.append(Attribute(logic, key, value))
+
+
+    def evaluateCase(self, script_hash: UInt160, nft_props: Dict[str, Any]) -> bool:
+        if script_hash != self._script_hash:
+            return False
+
+        nft_attrs: List[Dict[str, Dict]] = cast(List[Dict[str, Dict]], nft_props["attributes"])
+
+        eval_case_closed: bool = True
+        for attr_case in self._attributes:
+            attr_key: str = attr_case.get_key()
+            attr_case_closed: bool = False
+            for nft_attr in nft_attrs:
+                trait_type: str = cast(str, nft_attr["trait_type"])
+                if attr_key == trait_type:
+                    attr_case_closed = attr_case.evaluate(nft_attr)
+                    break
+
+            eval_case_closed = eval_case_closed and attr_case_closed
+            if eval_case_closed == False:
+                break
+        return eval_case_closed
+
+    def export(self) -> Dict[str, Any]:
+        attributes: List[Dict] = []
+        for attr in self._attributes:
+            attr_json: Dict[str, Any] = attr.export()
+            attributes.append(attr_json)
+
+        return {
+            'script_hash': self._script_hash,
+            'attributes': attributes
+        }
+
 
 ################################
 
@@ -219,8 +318,7 @@ class Chest:
         self._type: int = 0
 
         # eligibility
-        self._eligible_epochs: [int] = []
-        self._puppet_traits: Dict[str, str] = {}
+        self._eligibility_cases: List[EligibilityCase] = []
 
         # looting
         self._loot_available: int = 0
@@ -289,12 +387,8 @@ class Chest:
         self._id = chest_id
         return True
 
-    def set_eligible_epochs(self, eligible_epochs: [int]) -> bool:
-        self._eligible_epochs = eligible_epochs
-        return True
-
-    def set_puppet_traits(self, puppet_traits: Dict[str, str]) -> bool:
-        self._puppet_traits = puppet_traits
+    def set_eligibility(self, eligibility: List[EligibilityCase]) -> bool:
+        self._eligibility_cases = eligibility
         return True
 
     def set_name(self, name: bytes) -> bool:
@@ -307,71 +401,63 @@ class Chest:
 
     def export(self) -> Dict[str, Any]:
         exported = {
-            'id': self._id,
+            'id': self._id.to_int(),
             'author': self._author,
             'name': self._name,
             'type': self._type,
-            'eligible_epochs': self._eligible_epochs,
-            'puppet_traits': self._puppet_traits,
+            'eligibility_cases': self._eligibility_cases,
             'loot_available': self._loot_available
         }
         return exported
 
-    def loot(self, destination: UInt160, looter_id: bytes) -> ReservoirItem:
+    def loot(self, destination: UInt160, nft_script_hash: UInt160, token_id: bytes) -> ReservoirItem:
         assert self._loot_available > 0
         loot_id: int = ContractDice.rand_between(0, self._loot_available - 1)
         loot_id_bytes: bytes = loot_id.to_bytes()
 
         chest_loot: ReservoirItem = self.get_reservoir_value_from_loot_id(loot_id_bytes)
 
-        ChestOpened(self._id)
+        ChestOpened(self._id.to_int())
 
         # replace the sampled loot_id pointer with the last loot_id pointer to defrag the storage
         last_reservoir_id: bytes = self.get_reservoir_id_from_loot_id((self._loot_available - 1).to_bytes())
-        self.set_loot_id(loot_id.to_bytes(), last_reservoir_id)
+        loot_id_bytes: bytes = loot_id.to_bytes()
+        self.set_loot_id(loot_id_bytes, last_reservoir_id)
 
         # decrement loot available write pointer
         self.set_loot_available(self._loot_available - 1)
 
         # update looter yield
+        looter_id: bytes = mk_looter_id(nft_script_hash, token_id)
         yield_amount: int = self.get_looter_yield(looter_id)
         self.set_looter_yield(looter_id, yield_amount + 1)
         x: bool = chest_loot.transfer(destination)
         return chest_loot
 
-    def is_puppet_eligible(self, puppet: Dict[str, Any]) -> bool:
+    def is_eligible(self, nft_script_hash: UInt160, nft_properties: Dict[str, Any]) -> bool:
 
-        epoch: int = cast(int, puppet['epochId'])
-
-        # verify the puppet epoch is eligible
-        if epoch not in self._eligible_epochs:
-            return False
-
-        traits: Dict[str, Any] = cast(Dict[str, Any], puppet['traits'])
-
-        # check all the trait requirements for the chest
-        # this currently only supports a byte match for the entire trait field
-        for challenge_key in self._puppet_traits.keys():
-            if self._puppet_traits[challenge_key] != traits[challenge_key]:
-                return False
-
-        # type 0 only allows a single loot per puppet
         if self._type == 0:
-            looter_id: bytes = cast(bytes, puppet['tokenId'])
+            looter_id: bytes = mk_looter_id(nft_script_hash, cast(bytes, nft_properties["tokenId"]))
             looter_yield: int = self.get_looter_yield(looter_id)
             if looter_yield != 0:
                 return False
 
-        return True
+        for case in self._eligibility_cases:
+            case_result: bool = case.evaluateCase(nft_script_hash, nft_properties)
+            if case_result:
+                return True
+        return False
+
 
     def fill_chest(self, reservoir_id: bytes) -> bool:
         loot_available: int = self._loot_available
         self.set_loot_available(loot_available + 1)
-        self.set_loot_id(loot_available.to_bytes(), reservoir_id)
+        loot_available_bytes: bytes  = loot_available.to_bytes()
+        self.set_loot_id(loot_available_bytes, reservoir_id)
         return True
 
 
-def create_chest_internal(author: UInt160, name: bytes, chest_type: int, eligible_epochs: [int], puppet_traits: Dict[str, str]) -> bytes:
+def create_chest_internal(author: UInt160, name: bytes, chest_type: int, eligibility_cases: [EligibilityCase]) -> int:
     """
     creates a new chest
     :param author: The author of the chest
@@ -385,17 +471,16 @@ def create_chest_internal(author: UInt160, name: bytes, chest_type: int, eligibl
     chest.set_author(author)
     chest.set_name(name)
     chest.set_type(chest_type)
-    chest.set_eligible_epochs(eligible_epochs)
-    chest.set_puppet_traits(puppet_traits)
+    chest.set_eligibility(eligibility_cases)
 
     key: bytes = mk_chest_key(chest_id)
     put(key, serialize(chest))
     put(TOTAL_CHESTS, chest_id)
-    return chest_id
+    return chest_id.to_int()
 
 
 @public
-def get_chest_json(chest_id: bytes) -> Dict[str, Any]:
+def get_chest_json(chest_id: int) -> Dict[str, Any]:
     """
     Gets a JSON formatted collection
     :param chest_id: The chest_id being requested
@@ -406,7 +491,7 @@ def get_chest_json(chest_id: bytes) -> Dict[str, Any]:
 
 
 @public
-def get_chest(chest_id: bytes) -> Chest:
+def get_chest(chest_id: int) -> Chest:
     """
     Gets a Collection instance
     :param chest_id: The chest_id being requested
@@ -419,13 +504,13 @@ def get_chest(chest_id: bytes) -> Chest:
 
 
 @public
-def get_chest_raw(chest_id: bytes) -> bytes:
+def get_chest_raw(chest_id: int) -> bytes:
     """
     Gets the raw bytes of a collection
     :param chest_id: The chest_id being requested
     :return: The serialized Collection class instance
     """
-    key: bytes = mk_chest_key(chest_id)
+    key: bytes = mk_chest_key(chest_id.to_bytes())
     return get(key)
 
 
@@ -443,6 +528,11 @@ def total_chests() -> int:
 
 def mk_chest_key(chest_id: bytes) -> bytes:
     return CHEST_KEY + chest_id
+
+
+def mk_looter_id(nft_script_hash: UInt160, token_id: bytes) -> bytes:
+    return nft_script_hash + b'_' + token_id
+
 
 
 def mk_reservoir_key(reservoir_id: bytes) -> bytes:
@@ -471,7 +561,7 @@ def onNEP11Payment(from_address: UInt160, amount: int, token_id: bytes, data: An
     ]
     '''
 
-    data_payload: [bytes] = cast(List[bytes], data)
+    data_payload: List[int] = cast(List[int], data)
     chest: Chest = get_chest(data_payload[0])
     author: UInt160 = chest.get_author()
 
@@ -488,7 +578,7 @@ def onNEP17Payment(from_address: UInt160, amount: int, data: Any):
     """
     :param from_address: the address of the one who is trying to send cryptocurrency to this smart contract
     :type from_address: UInt160
-    :param amount: the amount of cryptocurrency that is being sent to the this smart contract
+    :param amount: the amount of cryptocurrency that is being sent to this smart contract
     :type amount: int
     :param data: any pertinent data that might validate the transaction
     :type data: Any
@@ -500,12 +590,12 @@ def onNEP17Payment(from_address: UInt160, amount: int, data: Any):
         amount_per_reservoir_item
     ]
     """
-    data_payload: [bytes] = cast(List[bytes], data)
+    data_payload: List[int] = cast(List[int], data)
     chest: Chest = get_chest(data_payload[0])
     author: UInt160 = chest.get_author()
     assert from_address == author, "You don't have the right."
 
-    amount_per_reservoir_item: int = cast(int, data_payload[1])
+    amount_per_reservoir_item: int = data_payload[1]
     assert amount >= amount_per_reservoir_item, "transfer amount is less than the amount_per_reservoir_item"
 
 
@@ -547,17 +637,9 @@ def _deploy(data: Any, update: bool):
         put(OWNER_KEY, signer)
 
 
-@contract('0x4380f2c1de98bb267d3ea821897ec571a04fe3e0')
+@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
 class ContractDice:
 
     @staticmethod
     def rand_between(start: int, end: int) -> int:
-        pass
-
-
-@contract('0x76a8f8a7a901b29a33013b469949f4b08db15756')
-class ContractPuppet:
-
-    @staticmethod
-    def get_puppet_json(token_id: bytes) -> Dict[str, Any]:
         pass

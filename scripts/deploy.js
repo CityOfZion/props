@@ -29,7 +29,7 @@ async function NEFHunter(dirPath) {
 
 const network = JSON.parse(fs.readFileSync("default.neo-express").toString());
 const basePath = process.argv[2] || 'contracts'
-const NODE = process.argv[3] || 'http://localhost:50012'
+const NODE = process.argv[3] || 'http://127.0.0.1:50012'
 const PRIVATE_KEY = process.argv[4] || network.wallets[0].accounts[0]['private-key']
 const SIGNER = new Neon.wallet.Account(PRIVATE_KEY)
 const TIME_CONSTANT = process.argv[5] || 5000

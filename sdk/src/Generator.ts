@@ -30,7 +30,7 @@ export class Generator {
         this.options.scriptHash = '0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9'
         break
       default:
-        this.options.node = 'http://localhost:50012'
+        this.options.node = 'http://127.0.0.1:50012'
         this.options.scriptHash = '0xa3e59ddc61b2d8ac42c519cee5ddaac83c7df276'
         break
     }

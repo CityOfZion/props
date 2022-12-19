@@ -31,7 +31,7 @@ export class Template {
         this.options.scriptHash = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
         break
       default:
-        this.options.node = 'http://localhost:50012'
+        this.options.node = 'http://127.0.0.1:50012'
         this.options.scriptHash = '0x16d6a0be0506b26e0826dd352724cda0defa7131'
         break
     }

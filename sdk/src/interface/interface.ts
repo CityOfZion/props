@@ -74,6 +74,18 @@ export interface GeneratorType {
   traits: TraitType[] | string[]
 }
 
+export interface GiftType {
+  description: string
+  epoch: number
+  image: string
+  name: string
+  owner: wallet.Account
+  seed: string
+  traits: {}
+  tokenId: number
+  tokenURI: string
+}
+
 export interface InstanceAuthorizedContracts {
   scriptHash: string,
   code: number
@@ -124,4 +136,15 @@ export interface PropConstructorOptions {
   network?: NetworkOption
   node?: string
   scriptHash?: string
+}
+
+export interface EligibilityAttribute {
+  logic: string,
+  key: string,
+  value: any
+}
+
+export interface EligibilityCase {
+  scriptHash: string,
+  attributes: [EligibilityAttribute]
 }

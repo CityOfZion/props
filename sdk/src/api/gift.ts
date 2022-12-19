@@ -2,10 +2,10 @@ import {InteropInterface} from "./interface";
 import Neon, { sc, u } from "@cityofzion/neon-js";
 import { wallet } from "@cityofzion/neon-core";
 import {StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
-import {EpochType, PuppetType} from "../interface";
+import {EpochType, GiftType} from "../interface";
 import {formatter, variableInvoke} from "../helpers";
 
-export class PuppetAPI {
+export class GiftAPI {
 
   /**
    * Returns the balance of an account
@@ -96,32 +96,14 @@ export class PuppetAPI {
     return await variableInvoke(node, networkMagic, contractHash, method, [], signer)
   }
 
-  static async getAttributeMod(
-    node: string,
-    networkMagic: number,
-    contractHash: string,
-    attributeValue: number,
-    signer?: wallet.Account
-  ): Promise<number | string> {
-    const method = "roll_initial_stat";
-    const params = [
-      sc.ContractParam.integer(attributeValue)
-    ]
-    const res = await variableInvoke(node, networkMagic, contractHash, method, params, signer)
-    if (signer) {
-      return res
-    }
-    return parseInt(res[0].value as string);
-  }
-
-  static async getPuppetJSON(
+  static async getTokenJSON(
     node: string,
     networkMagic: number,
     contractHash: string,
     tokenId: string,
     signer?: wallet.Account
-  ): Promise<PuppetType | string> {
-    const method = "get_puppet_json";
+  ): Promise<GiftType | string> {
+    const method = "get_token_json";
     const param = [sc.ContractParam.string(tokenId)];
 
     const res = await variableInvoke(node, networkMagic, contractHash, method, param, signer)
@@ -129,17 +111,17 @@ export class PuppetAPI {
       return res
     }
 
-    return formatter(res[0]) as PuppetType
+    return formatter(res[0]) as GiftType
   }
 
-  static async getPuppetJSONFlat(
+  static async getTokenJSONFlat(
     node: string,
     networkMagic: number,
     contractHash: string,
     tokenId: string,
     signer?: wallet.Account
-  ): Promise<PuppetType | string> {
-    const method = "get_puppet_json_flat";
+  ): Promise<GiftType | string> {
+    const method = "get_token_json_flat";
     const params = [sc.ContractParam.string(tokenId)];
     const res = await variableInvoke(node, networkMagic, contractHash, method, params, signer)
     if (signer) {
@@ -148,14 +130,14 @@ export class PuppetAPI {
     return formatter(res[0])
   }
 
-  static async getPuppetRaw(
+  static async getTokenRaw(
     node: string,
     networkMagic: number,
     contractHash: string,
     tokenId: string,
     signer?: wallet.Account
   ): Promise<string> {
-    const method = "get_puppet_raw";
+    const method = "get_token_raw";
 
     const params = [sc.ContractParam.string(tokenId)];
     const res = await variableInvoke(node, networkMagic, contractHash, method, params, signer)
@@ -222,7 +204,7 @@ export class PuppetAPI {
     contractHash: string,
     tokenId: string,
     signer?: wallet.Account
-  ): Promise<PuppetType | string> {
+  ): Promise<GiftType | string> {
     const method = "properties";
     const params = [sc.ContractParam.string(tokenId)];
     const res = await variableInvoke(node, networkMagic, contractHash, method, params, signer)

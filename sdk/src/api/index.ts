@@ -4,4 +4,5 @@ export * from "./puppet";
 export * from "./interface"
 export * from "./collection"
 export * from "./generator"
+export * from "./gift"
 export * from "./template"

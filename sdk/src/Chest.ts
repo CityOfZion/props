@@ -1,7 +1,7 @@
 import {merge} from 'lodash'
 import {rpc, u, wallet} from '@cityofzion/neon-core'
 import {ChestAPI, TemplateAPI} from './api'
-import {NetworkOption, PropConstructorOptions} from "./interface";
+import {EligibilityCase, NetworkOption, PropConstructorOptions} from "./interface";
 import {formatter, sleep, txDidComplete} from "./helpers";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
@@ -32,8 +32,8 @@ export class Chest {
         this.options.scriptHash = '0xb94e721f5425ba1d8830ad752e50e0474f989da5'
         break
       default:
-        this.options.node = 'http://localhost:50012'
-        this.options.scriptHash = '0x3fb4df29c0c200eff40f465cd028647b8a82f002'
+        this.options.node = 'http://127.0.0.1:50012'
+        this.options.scriptHash = '0x343a49b4e39fc826f5ad6bdc64cc198a973511d3'
         break
     }
     this.options = merge({}, this.options, options)
@@ -79,25 +79,25 @@ export class Chest {
    * Create one of these pass throughs for each method you expose in your smart contract. The goal of this entire class is to
    * simplify the network configuration steps which can be complicated.
    */
-  async createChest(name: string, type: number, eligibleEpochs: [number], puppetTraits: any, signer: wallet.Account): Promise<number | string> {
-    return ChestAPI.createChest(this.node.url, this.networkMagic, this.scriptHash, name, type, eligibleEpochs, puppetTraits, signer)
+  async createChest(name: string, type: number, eligibilityCases: [EligibilityCase], signer: wallet.Account): Promise<number | string> {
+    return ChestAPI.createChest(this.node.url, this.networkMagic, this.scriptHash, name, type, eligibilityCases, signer)
   }
 
-  async isPuppetEligible(chestId: string, puppetId: string, signer?: wallet.Account): Promise<number | string> {
-    return ChestAPI.isPuppetEligible(this.node.url, this.networkMagic, this.scriptHash, chestId, puppetId, signer)
+  async isEligible(chestId: number, nftScriptHash: string, tokenId: string, signer?: wallet.Account): Promise<boolean> {
+    return ChestAPI.isEligible(this.node.url, this.networkMagic, this.scriptHash, chestId, nftScriptHash, tokenId, signer)
   }
 
-  async lootChestWithPuppet(chestId: string, puppetId: string, signer: wallet.Account): Promise<number | string> {
-    return ChestAPI.lootChestWithPuppet(this.node.url, this.networkMagic, this.scriptHash, chestId, puppetId, signer)
+  async lootChest(chestId: number, nftScriptHash: string, tokenId: string, signer: wallet.Account): Promise<number | string> {
+    return ChestAPI.lootChest(this.node.url, this.networkMagic, this.scriptHash, chestId, nftScriptHash, tokenId, signer)
   }
 
-  async lootChestWithPuppetVerified(chestId: string, puppetId: string, signer: wallet.Account): Promise<any> {
+  async lootChestVerified(chestId: number, nftScriptHash: string, tokenId: string, signer: wallet.Account): Promise<any> {
     const timeout = 60000
     let age = 0
-    const txid = await ChestAPI.lootChestWithPuppet(this.node.url, this.networkMagic, this.scriptHash, chestId, puppetId, signer)
+    const txid = await ChestAPI.lootChest(this.node.url, this.networkMagic, this.scriptHash, chestId, nftScriptHash, tokenId, signer)
     while (timeout >= age) {
       try {
-        let res = await txDidComplete(this.node.url, txid, true)
+        let res = await txDidComplete(this.node.url, txid, false)
         res[0].scriptHash = u.reverseHex(u.str2hexstring(res[0].scriptHash))
         return res
       } catch (e) {
@@ -108,11 +108,11 @@ export class Chest {
     throw new Error("timeout exceeded")
   }
 
-  async lootChestAsOwner(chestId: string, signer: wallet.Account): Promise<number | string> {
+  async lootChestAsOwner(chestId: number, signer: wallet.Account): Promise<number | string> {
     return ChestAPI.lootChestAsOwner(this.node.url, this.networkMagic, this.scriptHash, chestId, signer)
   }
 
-  async getChestJSON(chestId: string, signer?: wallet.Account): Promise<number | string> {
+  async getChestJSON(chestId: number, signer?: wallet.Account): Promise<number | string> {
     return ChestAPI.getChestJSON(this.node.url, this.networkMagic, this.scriptHash, chestId, signer)
   }
 

@@ -34,7 +34,6 @@ describe("Basic Chest Test Suite", function() {
         })
     })
 
-
     it("should get the total supply", async () => {
         const totalSupply = await chest.totalChests()
         console.log(totalSupply)
@@ -48,22 +47,30 @@ describe("Basic Chest Test Suite", function() {
         const oldChestCount = await chest.totalChests()
 
         // create a chest and get the json
+        const eligibilityCases = [
+            {
+                scriptHash: puppet.scriptHash.slice(2),
+                attributes: [{
+                    logic: 'e',
+                    key: 'traits.color',
+                    value: 'blue'
+                }]
+            }
+        ]
+
         const txid = await chest.createChest("A test chest",
             0,
-            [1],
-            {
-                color: 'blue'
-            },
+            eligibilityCases,
             cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
         const res = await sdk.helpers.txDidComplete(chest.node.url, txid, true)
         console.log(res[0])
-        assert(res[0].length > 0)
 
         const chestJSON = await chest.getChestJSON(res[0])
-        console.log(chestJSON)
+        console.log(JSON.stringify(chestJSON, null, 2))
 
         const newChestCount = await chest.totalChests()
+        console.log(oldChestCount, newChestCount)
         assert(newChestCount === oldChestCount + 1)
     })
 
@@ -74,15 +81,22 @@ describe("Basic Chest Test Suite", function() {
         const contractAddress = Neon.wallet.getAddressFromScriptHash(chest.scriptHash.slice(2))
         let puppetTokens = await puppet.tokensOf(cozWallet.address)
         const oldBalance = await puppet.balanceOf(cozWallet.address)
+        const eligibilityCases = [
+            {
+                scriptHash: puppet.scriptHash.slice(2),
+                attributes: [{
+                    logic: 'e',
+                    key: 'traits.color',
+                    value: 'blue'
+                }]
+            }
+        ]
 
         console.log("puppet balance: ", oldBalance)
 
         let txid = await chest.createChest("A test chest",
             1,
-            [1],
-            {
-                color: 'blue'
-            },
+            eligibilityCases,
             cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
         let res = await sdk.helpers.txDidComplete(chest.node.url, txid, true)
@@ -117,22 +131,28 @@ describe("Basic Chest Test Suite", function() {
 
         const contractAddress = Neon.wallet.getAddressFromScriptHash(chest.scriptHash.slice(2))
 
-        const transferAmount = 1000 * 10**8
+        const transferAmount = 10 * 10**8
         const amountPerReservoirItem = 1 * 10**8
+        const eligibilityCases = [
+            {
+                scriptHash: puppet.scriptHash.slice(2),
+                attributes: [{
+                    logic: 'e',
+                    key: 'traits.color',
+                    value: 'blue'
+                }]
+            }
+        ]
 
         let txid = await chest.createChest("A test chest",
-            1,
-            [1],
-            {
-                color: 'blue'
-            },
+            0,
+            eligibilityCases,
             cozWallet)
         await sdk.helpers.sleep(TIME_CONSTANT)
         let res = await sdk.helpers.txDidComplete(chest.node.url, txid, true)
         console.log(`new chest: ${res[0]}`)
         let chestJSON = await chest.getChestJSON(res[0])
         console.log(chestJSON)
-
 
         //transfer some GAS
         const params = [
@@ -141,7 +161,7 @@ describe("Basic Chest Test Suite", function() {
             Neon.sc.ContractParam.integer(transferAmount),
             //Neon.sc.ContractParam.any('')
             Neon.sc.ContractParam.array(
-                Neon.sc.ContractParam.string(res[0]),
+                Neon.sc.ContractParam.integer(res[0]),
                 Neon.sc.ContractParam.integer(amountPerReservoirItem)
             )
         ]
@@ -159,6 +179,8 @@ describe("Basic Chest Test Suite", function() {
         console.log(chestJSON)
 
     })
+
+    //verify eligibility
 
     it("should attempt to loot an empty chest as the author", async () => {
         this.timeout(0)
@@ -183,7 +205,6 @@ describe("Basic Chest Test Suite", function() {
         } catch {}
     })
 
-    //attempt to loot an empty chest with a puppet
     it("should attempt to loot an empty chest with a puppet", async () => {
         this.timeout(0)
         const cozWallet = network.wallets[0].wallet
@@ -212,11 +233,10 @@ describe("Basic Chest Test Suite", function() {
         } catch {}
     })
 
-    //attempt to loot a full chest as owner
     it("should loot a chest as the owner (NEP-11)", async() => {
         this.timeout(0)
         const cozWallet = network.wallets[0].wallet
-        const chestId = "\u0001"
+        const chestId = 2
 
         //get the original puppet balance and chest balance
         let puppetBalance = await puppet.balanceOf(cozWallet.address)
@@ -239,7 +259,7 @@ describe("Basic Chest Test Suite", function() {
     it("should loot a chest as the owner (NEP-17)", async() => {
         this.timeout(0)
         const cozWallet = network.wallets[0].wallet
-        const chestId = "\u0002"
+        const chestId = 1
 
         const rpcClient = new Neon.rpc.RPCClient(chest.node.url);
 
@@ -265,12 +285,10 @@ describe("Basic Chest Test Suite", function() {
         assert(chestJSON.loot_available > newChestJSON.loot_available)
     })
 
-    //attempt to loot a full chest with an eligible puppet (both owned and not owned)
-
     it("should loot a chest using an eligible puppet", async() => {
         this.timeout(0)
         const cozWallet = network.wallets[0].wallet
-        const chestId = "\u0002"
+        const chestId = 1
 
         const rpcClient = new Neon.rpc.RPCClient(chest.node.url);
 
@@ -279,22 +297,25 @@ describe("Basic Chest Test Suite", function() {
         //test puppets with blue and green traits
         for (let p of puppets) {
             let props = await puppet.getPuppetJSON(p.toString())
-            let eligibility = await chest.isPuppetEligible(chestId, p.toString())
             let absoluteEligibility = props.traits.color === 'blue'
-            console.log(props.traits.color, eligibility, absoluteEligibility)
-            assert(eligibility === absoluteEligibility)
-
-            if (eligibility) {
-                let res = await chest.lootChestWithPuppetVerified(chestId, p.toString(), cozWallet)
-                assert(res)
+            if (absoluteEligibility) {
+                console.log('found one', props)
+                let txid = await chest.lootChest(chestId, puppet.scriptHash.slice(2), p.toString(), cozWallet)
+                await sdk.helpers.sleep(TIME_CONSTANT)
+                let res = await sdk.helpers.txDidComplete(chest.node.url, txid, true)
+                break
+            }
+            else {
+                console.log("miss")
             }
         }
     })
 
+    //verify
     it("should loot a chest using an ineligible puppet", async() => {
         this.timeout(0)
         const cozWallet = network.wallets[0].wallet
-        const chestId = '\x03'
+        const chestId = 1
 
         const rpcClient = new Neon.rpc.RPCClient(chest.node.url);
 
@@ -303,13 +324,13 @@ describe("Basic Chest Test Suite", function() {
         //test puppets with blue and green traits
         for (let p of puppets) {
             let props = await puppet.getPuppetJSON(p.toString())
-            let eligibility = await chest.isPuppetEligible(chestId, p.toString())
+            let eligibility = await chest.isEligible(chestId, p.toString())
             let absoluteEligibility = props.traits.color === 'blue'
             console.log(props.traits.color, eligibility, absoluteEligibility)
             assert(eligibility === absoluteEligibility)
 
             if (!eligibility) {
-                let txid = await chest.lootChestWithPuppet(chestId, p.toString(), cozWallet)
+                let txid = await chest.lootChest(chestId, p.toString(), cozWallet)
                 txids.push(txid)
             }
         }
@@ -323,12 +344,8 @@ describe("Basic Chest Test Suite", function() {
         }
     })
 
-    //attempt to loot a full chest with an ineligible puppet
-    // verify the response
-    // verify the chest json
-
-    //attempt to loot a full chest as an eligible puppet who has already minted
-    it("should loot a chest using an eligible puppet which has already minted", async() => {
+    //verify
+    it("should loot a chest using an eligible token which has already minted", async() => {
         this.timeout(0)
         const cozWallet = network.wallets[0].wallet
         const chestId = "\u0001"

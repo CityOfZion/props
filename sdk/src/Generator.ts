@@ -23,7 +23,7 @@ export class Generator {
     switch(options.network) {
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
-        this.options.scriptHash = '0xdda8055789f0eb3c1d092c714a68ba3e631586c7'
+        this.options.scriptHash = '0x9e0faf9257d55dc3b5aacd5354dbed3183968561'
         break
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'

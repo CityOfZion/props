@@ -25,11 +25,11 @@ export class Chest {
     switch(options.network) {
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
-        this.options.scriptHash = ''
+        this.options.scriptHash = '0x9378d9f8add6e1d47e7af4d75c121a11a5e9f929'
         break
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
-        this.options.scriptHash = '0xb94e721f5425ba1d8830ad752e50e0474f989da5'
+        this.options.scriptHash = '0x9378d9f8add6e1d47e7af4d75c121a11a5e9f929'
         break
       default:
         this.options.node = 'http://127.0.0.1:50012'

@@ -74,7 +74,7 @@ export interface GeneratorType {
   traits: TraitType[] | string[]
 }
 
-export interface GiftType {
+export interface PackageType {
   description: string
   epoch: number
   image: string

@@ -6,4 +6,5 @@ export * from "./Collection";
 export * from "./Dice";
 export * from "./Puppet";
 export * from "./Generator";
+export * from "./Package";
 export * from "./Template";

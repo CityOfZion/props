@@ -42,7 +42,7 @@ export class Collection {
     switch(options.network) {
       case NetworkOption.TestNet:
         this.options.node = 'https://testnet1.neo.coz.io:443'
-        this.options.scriptHash = '0x429ba9252c761b6119ab9442d9fbe2e60f3c6f3e'
+        this.options.scriptHash = '0xe246d4c03d4d8c3fb529add124289e81a8eb6b6a'
         break
       case NetworkOption.MainNet:
         this.options.node = 'https://mainnet1.neo.coz.io:443'
@@ -50,7 +50,7 @@ export class Collection {
         break
       default:
         this.options.node = 'http://127.0.0.1:50012'
-        this.options.scriptHash = '0xacf2aa5d0899e860eebd8b8a5454aa3017543848'
+        this.options.scriptHash = '0xffa8d18f1feec460d301bd755fabab793be4b7cb'
         break
     }
     this.options = merge({}, this.options, options)

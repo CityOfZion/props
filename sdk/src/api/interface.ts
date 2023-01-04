@@ -94,7 +94,6 @@ export class NeoInterface {
     try {
       result = await contract.invoke(operation, args);
     } catch (e) {
-      console.log("errored here");
       console.log(e);
     }
 

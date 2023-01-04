@@ -3,7 +3,7 @@ from boa3.builtin import contract, CreateNewEvent, NeoMetadata, metadata, public
 from boa3.builtin.contract import abort
 from boa3.builtin.interop.blockchain import get_contract, Transaction
 from boa3.builtin.interop.contract import call_contract, update_contract, GAS
-from boa3.builtin.interop.runtime import get_random, get_network, burn_gas, gas_left, check_witness, script_container, calling_script_hash
+from boa3.builtin.interop.runtime import get_random, get_network, burn_gas, gas_left, check_witness, script_container, calling_script_hash, entry_script_hash, executing_script_hash
 from boa3.builtin.interop.stdlib import serialize, deserialize, itoa
 from boa3.builtin.interop.storage import delete, get, put, find, get_context
 from boa3.builtin.interop.storage.findoptions import FindOptions
@@ -22,7 +22,7 @@ def manifest_metadata() -> NeoMetadata:
     """
     meta = NeoMetadata()
     meta.author = 'COZ, Inc.'
-    meta.description = 'An NFT for giving thanks'
+    meta.description = 'A package containing something'
     meta.email = 'contact@coz.io'
     meta.supported_standards = ['NEP-11']
     return meta
@@ -33,7 +33,7 @@ def manifest_metadata() -> NeoMetadata:
 # -------------------------------------------
 
 # Symbol of the Token
-TOKEN_SYMBOL = 'GIFT'
+TOKEN_SYMBOL = 'PACKAGE'
 
 # Number of decimal places
 TOKEN_DECIMALS = 0
@@ -593,12 +593,12 @@ EPOCH_PREFIX = b'e'
 
 
 class Epoch:
-    def __init__(self, label: bytes, generator_instance_id: bytes, initial_roll_collection_id: bytes, mint_fee: int, sys_fee: int, max_supply: int, author: UInt160):
+    def __init__(self, label: bytes, generator_instance_id: bytes, chest_id: int, mint_fee: int, sys_fee: int, max_supply: int, author: UInt160):
         self._author: UInt160 = author
         self._label: bytes = label
         self._epoch_id: bytes = (total_epochs() + 1).to_bytes()
         self._generator_instance_id: bytes = generator_instance_id
-        self._initial_roll_collection_id: bytes = initial_roll_collection_id
+        self._chest_id: int = chest_id
         self._mint_fee: int = mint_fee
         self._sys_fee: int = sys_fee
         self._max_supply: int = max_supply
@@ -616,8 +616,8 @@ class Epoch:
     def get_generator_instance_id(self) -> bytes:
         return self._generator_instance_id
 
-    def get_initial_roll_collection_id(self) -> bytes:
-        return self._initial_roll_collection_id
+    def get_chest_id(self) -> int:
+        return self._chest_id
 
     def get_label(self) -> bytes:
         return self._label
@@ -640,7 +640,7 @@ class Epoch:
             'label': self._label,
             'epochId': self._epoch_id,
             'generatorInstanceId': self._generator_instance_id,
-            'initialRollCollectionId': self._initial_roll_collection_id,
+            'chest_id': self._chest_id,
             'mintFee': self._mint_fee,
             'sysFee': self._sys_fee,
             'maxSupply': self._max_supply,
@@ -658,14 +658,14 @@ class Epoch:
 
 
 @public
-def create_epoch(label: bytes, generator_instance_id: bytes,  initial_roll_collection_id: bytes, mint_fee: int, sys_fee: int, max_supply: int) -> int:
+def create_epoch(label: bytes, generator_instance_id: bytes,  chest_id: int, mint_fee: int, sys_fee: int, max_supply: int) -> int:
     tx = cast(Transaction, script_container)
     author: UInt160 = tx.sender
 
     user: User = get_user(author)
     assert user.get_create_epoch(), 'User Permission Denied'
 
-    new_epoch: Epoch = Epoch(label, generator_instance_id, initial_roll_collection_id, mint_fee, sys_fee, max_supply, author)
+    new_epoch: Epoch = Epoch(label, generator_instance_id, chest_id, mint_fee, sys_fee, max_supply, author)
     epoch_id: bytes = new_epoch.get_id()
     epoch_id_int: int = epoch_id.to_int()
 
@@ -716,7 +716,7 @@ def mk_epoch_key(epoch_id: bytes) -> bytes:
 
 
 # #############################
-# ########## Puppet ###########
+# ########## PACKAGE ###########
 # #############################
 # #############################
 
@@ -790,23 +790,29 @@ class Token:
         epoch_id_int: int = epoch_id_bytes.to_int()
         epoch: Epoch = get_epoch(epoch_id_bytes)
         epoch_label: bytes = epoch.get_label()
+        epoch_chest_id: int = epoch.get_chest_id()
         epoch_max_supply: int = epoch.get_max_supply()
 
         network_magic: int = get_network
         network_magic_string: str = itoa(network_magic)
 
-        state: str = 'closed'
-        #TODO -  if get eligibility is false, set state = `opened`
+        state: str = 'opened'
+        # prevent infinite loop by only allowing entries to call for eligibility
+        if entry_script_hash == calling_script_hash:
+            eligibility: bool = Chest.is_eligible(epoch_chest_id, executing_script_hash, self.get_token_id())
+            if eligibility:
+                state = 'closed'
 
         exported: Dict[str, Any] = {
-            'description': state + ' gift',
+            'description': state + ' package',
             'epochId': epoch_id_int,
-            'image': 'https://props.coz.io/img/gift/neo/' + state + '.png',
-            'name': 'gift',
+            'image': 'https://props.coz.io/img/package/neo/' + state + '.png',
+            'name': 'package',
             'owner': self._owner,
             'seed': self._seed,
-            'tokenId': token_id_bytes,
-            'tokenURI': 'https://props.coz.io/tok/gift/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
+            'state': state,
+            'tokenId': token_id_bytes.to_str(),
+            'tokenURI': 'https://props.coz.io/tok/package/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
             'traits': self._traits,
         }
         return exported
@@ -823,6 +829,7 @@ class Token:
         epoch_id_int: int = epoch_id_bytes.to_int()
         epoch: Epoch = get_epoch(epoch_id_bytes)
         epoch_label: bytes = epoch.get_label()
+        epoch_chest_id: int = epoch.get_chest_id()
         epoch_max_supply: int = epoch.get_max_supply()
 
         network_magic: int = get_network
@@ -844,17 +851,28 @@ class Token:
                 }
             )
 
-        state: str = 'closed'
-        # TODO -  if get eligibility is false, set state = `opened`
+        state: str = 'opened'
+        # prevent infinite loop by only allowing entries to call for eligibility
+        if entry_script_hash == calling_script_hash:
+            eligibility: bool = Chest.is_eligible(epoch_chest_id, executing_script_hash, self.get_token_id())
+            if eligibility:
+                state = 'closed'
+
+        token_attrs.append(
+            {
+                'trait_type': 'state',
+                'value': state
+            })
+
 
         exported: Dict[str, Any] = {
-            'name': 'gift',
-            'image': 'https://props.coz.io/img/puppets/neo/' + state + '.png',
-            'tokenURI': 'https://props.coz.io/tok/puppets/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
+            'name': 'package',
+            'image': 'https://props.coz.io/img/package/neo/' + state + '.png',
+            'tokenURI': 'https://props.coz.io/tok/package/neo/' + network_magic_string + '/' + token_id_bytes.to_str(),
             'owner': self._owner,
             'seed': self._seed,
             'tokenId': token_id_bytes.to_str(),
-            'description': state + ' gift',
+            'description': state + ' package',
             'attributes': token_attrs
         }
         return exported
@@ -944,16 +962,14 @@ def mk_token_key(token_id: bytes) -> bytes:
 # ############INTERFACES###########
 # ############INTERFACES###########
 
-
-@contract('0xacf2aa5d0899e860eebd8b8a5454aa3017543848')
-class Collection:
+@contract('0x9378d9f8add6e1d47e7af4d75c121a11a5e9f929')
+class Chest:
 
     @staticmethod
-    def sample_from_collection(collection_id: int, samples: int) -> List[bytes]:
+    def is_eligible(chest_id: int, script_hash: UInt160, token_id: bytes) -> bool:
         pass
 
-
-@contract('0x16d6a0be0506b26e0826dd352724cda0defa7131')
+@contract('0x4380f2c1de98bb267d3ea821897ec571a04fe3e0')
 class Dice:
 
     @staticmethod
@@ -961,7 +977,7 @@ class Dice:
         pass
 
 
-@contract('0xa3e59ddc61b2d8ac42c519cee5ddaac83c7df276')
+@contract('0x0e312c70ce6ed18d5702c6c5794c493d9ef46dc9')
 class Generator:
 
     @staticmethod

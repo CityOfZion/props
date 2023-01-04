@@ -1,6 +1,6 @@
 import { rpc, wallet } from '@cityofzion/neon-core';
-import { EpochType, PropConstructorOptions, GiftType } from "./interface";
-export declare class Gift {
+import { EpochType, PropConstructorOptions, PackageType } from "./interface";
+export declare class Package {
     private options;
     private networkMagic;
     constructor(options?: PropConstructorOptions);
@@ -12,11 +12,11 @@ export declare class Gift {
     decimals(signer?: wallet.Account): Promise<number>;
     deploy(signer: wallet.Account): Promise<string>;
     getEpochJSON(epochId: number, signer?: wallet.Account): Promise<EpochType | string>;
-    getTokenJSON(tokenId: string, signer?: wallet.Account): Promise<GiftType | string>;
+    getTokenJSON(tokenId: string, signer?: wallet.Account): Promise<PackageType | string>;
     getTokenRaw(tokenId: string, signer?: wallet.Account): Promise<string>;
     ownerOf(tokenId: string, signer?: wallet.Account): Promise<wallet.Account | string>;
     offlineMint(epochId: number, owner: string, signer: wallet.Account): Promise<string>;
-    properties(tokenId: string, signer?: wallet.Account): Promise<GiftType | string>;
+    properties(tokenId: string, signer?: wallet.Account): Promise<PackageType | string>;
     purchase(epochId: number, signer: wallet.Account): Promise<string | undefined>;
     setMintFee(epochId: number, fee: number, signer: wallet.Account): Promise<string>;
     symbol(signer?: wallet.Account): Promise<string>;

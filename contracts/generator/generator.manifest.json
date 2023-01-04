@@ -49,7 +49,7 @@
             },
             {
                 "name": "set_instance_authorized_contracts",
-                "offset": 311,
+                "offset": 313,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -65,7 +65,7 @@
             },
             {
                 "name": "set_instance_access_mode",
-                "offset": 515,
+                "offset": 519,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -81,7 +81,7 @@
             },
             {
                 "name": "set_instance_fee",
-                "offset": 627,
+                "offset": 633,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -97,7 +97,7 @@
             },
             {
                 "name": "get_generator_instance_json",
-                "offset": 736,
+                "offset": 744,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -109,7 +109,7 @@
             },
             {
                 "name": "get_generator_instance",
-                "offset": 750,
+                "offset": 758,
                 "parameters": [
                     {
                         "name": "instance_id",
@@ -121,14 +121,14 @@
             },
             {
                 "name": "total_generator_instances",
-                "offset": 833,
+                "offset": 841,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "create_trait",
-                "offset": 941,
+                "offset": 951,
                 "parameters": [
                     {
                         "name": "generator_id",
@@ -152,7 +152,7 @@
             },
             {
                 "name": "get_trait_json",
-                "offset": 1181,
+                "offset": 1203,
                 "parameters": [
                     {
                         "name": "trait_id",
@@ -164,7 +164,7 @@
             },
             {
                 "name": "get_trait",
-                "offset": 1195,
+                "offset": 1217,
                 "parameters": [
                     {
                         "name": "trait_id",
@@ -176,14 +176,14 @@
             },
             {
                 "name": "total_generators",
-                "offset": 1293,
+                "offset": 1315,
                 "parameters": [],
                 "returntype": "Integer",
                 "safe": false
             },
             {
                 "name": "create_generator",
-                "offset": 1329,
+                "offset": 1351,
                 "parameters": [
                     {
                         "name": "label",
@@ -199,7 +199,7 @@
             },
             {
                 "name": "get_generator_json",
-                "offset": 1429,
+                "offset": 1451,
                 "parameters": [
                     {
                         "name": "generator_id",
@@ -211,7 +211,7 @@
             },
             {
                 "name": "get_generator",
-                "offset": 1443,
+                "offset": 1465,
                 "parameters": [
                     {
                         "name": "generator_id",
@@ -223,7 +223,7 @@
             },
             {
                 "name": "update",
-                "offset": 1598,
+                "offset": 1622,
                 "parameters": [
                     {
                         "name": "script",
@@ -243,7 +243,7 @@
             },
             {
                 "name": "_deploy",
-                "offset": 1749,
+                "offset": 1773,
                 "parameters": [
                     {
                         "name": "data",
@@ -259,7 +259,7 @@
             },
             {
                 "name": "_initialize",
-                "offset": 1787,
+                "offset": 1811,
                 "parameters": [],
                 "returntype": "Void",
                 "safe": false

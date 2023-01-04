@@ -424,7 +424,7 @@ export class PuppetAPI {
     const method = "transfer";
     const params = [
       sc.ContractParam.hash160(toAddress),
-      sc.ContractParam.string(tokenId),
+      sc.ContractParam.byteArray(tokenId),
       data,
     ];
 

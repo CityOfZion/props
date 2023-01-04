@@ -2,10 +2,10 @@ import {InteropInterface} from "./interface";
 import Neon, { sc, u } from "@cityofzion/neon-js";
 import { wallet } from "@cityofzion/neon-core";
 import {StackItemJson, StackItemMapLike} from "@cityofzion/neon-core/lib/sc";
-import {EpochType, GiftType} from "../interface";
+import {EpochType, PackageType} from "../interface";
 import {formatter, variableInvoke} from "../helpers";
 
-export class GiftAPI {
+export class PackageAPI {
 
   /**
    * Returns the balance of an account
@@ -38,7 +38,7 @@ export class GiftAPI {
     contractHash: string,
     label: string,
     generatorInstanceId: number,
-    initialRollCollectionId: number,
+    chestId: number,
     mintFee: number,
     sysFee: number,
     maxSupply: number,
@@ -48,7 +48,7 @@ export class GiftAPI {
     const params = [
       sc.ContractParam.string(label),
       sc.ContractParam.integer(generatorInstanceId),
-      sc.ContractParam.integer(initialRollCollectionId),
+      sc.ContractParam.integer(chestId),
       sc.ContractParam.integer(mintFee),
       sc.ContractParam.integer(sysFee),
       sc.ContractParam.integer(maxSupply)
@@ -102,7 +102,7 @@ export class GiftAPI {
     contractHash: string,
     tokenId: string,
     signer?: wallet.Account
-  ): Promise<GiftType | string> {
+  ): Promise<PackageType | string> {
     const method = "get_token_json";
     const param = [sc.ContractParam.string(tokenId)];
 
@@ -111,7 +111,7 @@ export class GiftAPI {
       return res
     }
 
-    return formatter(res[0]) as GiftType
+    return formatter(res[0]) as PackageType
   }
 
   static async getTokenJSONFlat(
@@ -120,7 +120,7 @@ export class GiftAPI {
     contractHash: string,
     tokenId: string,
     signer?: wallet.Account
-  ): Promise<GiftType | string> {
+  ): Promise<PackageType | string> {
     const method = "get_token_json_flat";
     const params = [sc.ContractParam.string(tokenId)];
     const res = await variableInvoke(node, networkMagic, contractHash, method, params, signer)
@@ -204,7 +204,7 @@ export class GiftAPI {
     contractHash: string,
     tokenId: string,
     signer?: wallet.Account
-  ): Promise<GiftType | string> {
+  ): Promise<PackageType | string> {
     const method = "properties";
     const params = [sc.ContractParam.string(tokenId)];
     const res = await variableInvoke(node, networkMagic, contractHash, method, params, signer)

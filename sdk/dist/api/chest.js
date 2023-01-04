@@ -9,7 +9,14 @@ class ChestAPI {
         const method = "create_chest";
         const cases = eligibilityCases.map((eligibilityCase) => {
             const attributes = eligibilityCase.attributes.map((attr) => {
-                return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.string(attr.logic), neon_js_1.sc.ContractParam.string(attr.key), neon_js_1.sc.ContractParam.string(attr.value));
+                let value = neon_js_1.sc.ContractParam.byteArray('');
+                switch (typeof attr.value) {
+                    case "string":
+                        value = neon_js_1.sc.ContractParam.string(attr.value);
+                    case "number":
+                        value = neon_js_1.sc.ContractParam.integer(attr.value);
+                }
+                return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.string(attr.logic), neon_js_1.sc.ContractParam.string(attr.key), value);
             });
             return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.hash160(eligibilityCase.scriptHash), neon_js_1.sc.ContractParam.array(...attributes));
         });

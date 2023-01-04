@@ -1,6 +1,6 @@
 import { wallet } from "@cityofzion/neon-core";
-import { EpochType, GiftType } from "../interface";
-export declare class GiftAPI {
+import { EpochType, PackageType } from "../interface";
+export declare class PackageAPI {
     /**
      * Returns the balance of an account
      * @param node
@@ -27,8 +27,8 @@ export declare class GiftAPI {
      * @param signer The signing account, which will become the first admin if upgrade == false
      */
     static deploy(node: string, networkMagic: number, contractHash: string, signer: wallet.Account): Promise<string>;
-    static getTokenJSON(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<GiftType | string>;
-    static getTokenJSONFlat(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<GiftType | string>;
+    static getTokenJSON(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<PackageType | string>;
+    static getTokenJSONFlat(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<PackageType | string>;
     static getTokenRaw(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<string>;
     /**
      * Gets the owner account of a tokenId
@@ -48,7 +48,7 @@ export declare class GiftAPI {
      * @param tokenId The tokenId of the token being requested
      * @param signer An optional signer.  Populating this value will publish a transaction and return a txid
      */
-    static properties(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<GiftType | string>;
+    static properties(node: string, networkMagic: number, contractHash: string, tokenId: string, signer?: wallet.Account): Promise<PackageType | string>;
     static setMintFee(node: string, networkMagic: number, contractHash: string, epochId: number, fee: number, signer: wallet.Account): Promise<string>;
     /**
      * Returns the token symbol

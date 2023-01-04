@@ -5,7 +5,7 @@ from boa3.builtin.interop.blockchain import Transaction
 from boa3.builtin.interop.runtime import script_container
 from boa3.builtin.interop.contract import update_contract
 from boa3.builtin.interop.storage import get, put
-from helpers.collection import Collection, create_collection_internal, get_collection_json_internal, \
+from collection.helpers.collection import Collection, create_collection_internal, get_collection_json_internal, \
     get_collection_internal, total_collections_internal
 
 

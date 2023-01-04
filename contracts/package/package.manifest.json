@@ -1,5 +1,5 @@
 {
-    "name": "gift",
+    "name": "package",
     "groups": [],
     "abi": {
         "methods": [
@@ -271,8 +271,8 @@
                         "type": "ByteArray"
                     },
                     {
-                        "name": "initial_roll_collection_id",
-                        "type": "ByteArray"
+                        "name": "chest_id",
+                        "type": "Integer"
                     },
                     {
                         "name": "mint_fee",
@@ -402,7 +402,7 @@
     ],
     "extra": {
         "Author": "COZ, Inc.",
-        "Description": "An NFT for giving thanks",
+        "Description": "A package containing something",
         "Email": "contact@coz.io"
     }
 }

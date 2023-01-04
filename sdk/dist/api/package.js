@@ -23,11 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GiftAPI = void 0;
+exports.PackageAPI = void 0;
 const neon_js_1 = __importStar(require("@cityofzion/neon-js"));
 const neon_core_1 = require("@cityofzion/neon-core");
 const helpers_1 = require("../helpers");
-class GiftAPI {
+class PackageAPI {
     /**
      * Returns the balance of an account
      * @param node
@@ -312,5 +312,5 @@ class GiftAPI {
         return (0, helpers_1.formatter)(res);
     }
 }
-exports.GiftAPI = GiftAPI;
-//# sourceMappingURL=gift.js.map
+exports.PackageAPI = PackageAPI;
+//# sourceMappingURL=package.js.map

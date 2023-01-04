@@ -65,7 +65,7 @@ export interface GeneratorType {
     baseGeneratorFee: number;
     traits: TraitType[] | string[];
 }
-export interface GiftType {
+export interface PackageType {
     description: string;
     epoch: number;
     image: string;

@@ -294,7 +294,7 @@ class PuppetAPI {
         const method = "transfer";
         const params = [
             neon_js_1.sc.ContractParam.hash160(toAddress),
-            neon_js_1.sc.ContractParam.string(tokenId),
+            neon_js_1.sc.ContractParam.byteArray(tokenId),
             data,
         ];
         return await (0, helpers_1.variableInvoke)(node, networkMagic, contractHash, method, params, signer);

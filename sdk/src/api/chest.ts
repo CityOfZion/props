@@ -19,10 +19,19 @@ export class ChestAPI {
     const cases = eligibilityCases.map( (eligibilityCase: EligibilityCase) => {
 
       const attributes = eligibilityCase.attributes.map( (attr: EligibilityAttribute) => {
+
+        let value = sc.ContractParam.byteArray('')
+        switch (typeof attr.value) {
+          case "string":
+            value = sc.ContractParam.string(attr.value)
+          case "number":
+            value = sc.ContractParam.integer(attr.value)
+        }
+
         return sc.ContractParam.array(
             sc.ContractParam.string(attr.logic),
             sc.ContractParam.string(attr.key),
-            sc.ContractParam.string(attr.value)
+            value
         )
       })
 

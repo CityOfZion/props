@@ -24,15 +24,15 @@ class Chest {
         switch (options.network) {
             case interface_1.NetworkOption.TestNet:
                 this.options.node = 'https://testnet1.neo.coz.io:443';
-                this.options.scriptHash = '';
+                this.options.scriptHash = '0x9378d9f8add6e1d47e7af4d75c121a11a5e9f929';
                 break;
             case interface_1.NetworkOption.MainNet:
                 this.options.node = 'https://mainnet1.neo.coz.io:443';
-                this.options.scriptHash = '0xb94e721f5425ba1d8830ad752e50e0474f989da5';
+                this.options.scriptHash = '0x9378d9f8add6e1d47e7af4d75c121a11a5e9f929';
                 break;
             default:
                 this.options.node = 'http://127.0.0.1:50012';
-                this.options.scriptHash = '0x56f1d90192dba1088580ed3e34685a8695934b44';
+                this.options.scriptHash = '0x343a49b4e39fc826f5ad6bdc64cc198a973511d3';
                 break;
         }
         this.options = (0, lodash_1.merge)({}, this.options, options);

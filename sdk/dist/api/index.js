@@ -20,6 +20,6 @@ __exportStar(require("./puppet"), exports);
 __exportStar(require("./interface"), exports);
 __exportStar(require("./collection"), exports);
 __exportStar(require("./generator"), exports);
-__exportStar(require("./gift"), exports);
+__exportStar(require("./package"), exports);
 __exportStar(require("./template"), exports);
 //# sourceMappingURL=index.js.map

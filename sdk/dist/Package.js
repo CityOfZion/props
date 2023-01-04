@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Gift = void 0;
+exports.Package = void 0;
 const lodash_1 = require("lodash");
 const neon_core_1 = require("@cityofzion/neon-core");
 const api_1 = require("./api");
@@ -9,7 +9,7 @@ const interface_1 = require("./interface");
 const DEFAULT_OPTIONS = {
     network: interface_1.NetworkOption.LocalNet
 };
-class Gift {
+class Package {
     constructor(options = {}) {
         this.options = DEFAULT_OPTIONS;
         this.networkMagic = -1;
@@ -20,7 +20,7 @@ class Gift {
                 break;
             case interface_1.NetworkOption.MainNet:
                 this.options.node = 'https://mainnet1.neo.coz.io:443';
-                this.options.scriptHash = '0x76a8f8a7a901b29a33013b469949f4b08db15756';
+                this.options.scriptHash = '0x5728017130c213cbc369c738f470d66628e5acf2';
                 break;
             default:
                 this.options.node = 'http://127.0.0.1:50012';
@@ -46,39 +46,39 @@ class Gift {
         throw new Error('node scripthash defined');
     }
     async balanceOf(address, signer) {
-        return api_1.GiftAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address, signer);
+        return api_1.PackageAPI.balanceOf(this.node.url, this.networkMagic, this.scriptHash, address, signer);
     }
     async createEpoch(label, generatorInstanceId, chestId, mintFee, sysFee, maxSupply, signer) {
-        return api_1.GiftAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorInstanceId, chestId, mintFee, sysFee, maxSupply, signer);
+        return api_1.PackageAPI.createEpoch(this.node.url, this.networkMagic, this.scriptHash, label, generatorInstanceId, chestId, mintFee, sysFee, maxSupply, signer);
     }
     async decimals(signer) {
-        return api_1.GiftAPI.decimals(this.node.url, this.networkMagic, this.scriptHash, signer);
+        return api_1.PackageAPI.decimals(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async deploy(signer) {
-        return api_1.GiftAPI.deploy(this.node.url, this.networkMagic, this.scriptHash, signer);
+        return api_1.PackageAPI.deploy(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async getEpochJSON(epochId, signer) {
-        return api_1.GiftAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId, signer);
+        return api_1.PackageAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId, signer);
     }
     async getTokenJSON(tokenId, signer) {
-        return api_1.GiftAPI.getTokenJSON(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
+        return api_1.PackageAPI.getTokenJSON(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
     }
     async getTokenRaw(tokenId, signer) {
-        return api_1.GiftAPI.getTokenRaw(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
+        return api_1.PackageAPI.getTokenRaw(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
     }
     async ownerOf(tokenId, signer) {
-        return api_1.GiftAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
+        return api_1.PackageAPI.ownerOf(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
     }
     async offlineMint(epochId, owner, signer) {
-        return api_1.GiftAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, epochId, owner, signer);
+        return api_1.PackageAPI.offlineMint(this.node.url, this.networkMagic, this.scriptHash, epochId, owner, signer);
     }
     async properties(tokenId, signer) {
-        return api_1.GiftAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
+        return api_1.PackageAPI.properties(this.node.url, this.networkMagic, this.scriptHash, tokenId, signer);
     }
     async purchase(epochId, signer) {
         const method = "transfer";
         const GASScriptHash = "0xd2a4cff31913016155e38e474a2c06d08be276cf";
-        const epoch = await api_1.GiftAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId);
+        const epoch = await api_1.PackageAPI.getEpochJSON(this.node.url, this.networkMagic, this.scriptHash, epochId);
         const EpochTyped = epoch;
         if (EpochTyped.totalSupply === EpochTyped.maxSupply) {
             throw new Error(`Epoch is out of Tokens: ${EpochTyped.totalSupply} / ${EpochTyped.maxSupply}`);
@@ -98,32 +98,32 @@ class Gift {
         }
     }
     async setMintFee(epochId, fee, signer) {
-        return api_1.GiftAPI.setMintFee(this.node.url, this.networkMagic, this.scriptHash, epochId, fee, signer);
+        return api_1.PackageAPI.setMintFee(this.node.url, this.networkMagic, this.scriptHash, epochId, fee, signer);
     }
     async symbol(signer) {
-        return api_1.GiftAPI.symbol(this.node.url, this.networkMagic, this.scriptHash, signer);
+        return api_1.PackageAPI.symbol(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async tokens(signer) {
-        return api_1.GiftAPI.tokens(this.node.url, this.networkMagic, this.scriptHash, signer);
+        return api_1.PackageAPI.tokens(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async tokensOf(address, signer) {
-        return api_1.GiftAPI.tokensOf(this.node.url, this.networkMagic, this.scriptHash, address, signer);
+        return api_1.PackageAPI.tokensOf(this.node.url, this.networkMagic, this.scriptHash, address, signer);
     }
     async totalAccounts(signer) {
-        return api_1.GiftAPI.totalAccounts(this.node.url, this.networkMagic, this.scriptHash, signer);
+        return api_1.PackageAPI.totalAccounts(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async totalEpochs(signer) {
-        return api_1.GiftAPI.totalEpochs(this.node.url, this.networkMagic, this.scriptHash, signer);
+        return api_1.PackageAPI.totalEpochs(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async totalSupply(signer) {
-        return api_1.GiftAPI.totalSupply(this.node.url, this.networkMagic, this.scriptHash, signer);
+        return api_1.PackageAPI.totalSupply(this.node.url, this.networkMagic, this.scriptHash, signer);
     }
     async transfer(to, tokenId, signer, data) {
-        return api_1.GiftAPI.transfer(this.node.url, this.networkMagic, this.scriptHash, to, tokenId, signer, data);
+        return api_1.PackageAPI.transfer(this.node.url, this.networkMagic, this.scriptHash, to, tokenId, signer, data);
     }
     async update(script, manifest, signer) {
-        return api_1.GiftAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, '', signer);
+        return api_1.PackageAPI.update(this.node.url, this.networkMagic, this.scriptHash, script, manifest, '', signer);
     }
 }
-exports.Gift = Gift;
-//# sourceMappingURL=Gift.js.map
+exports.Package = Package;
+//# sourceMappingURL=Package.js.map

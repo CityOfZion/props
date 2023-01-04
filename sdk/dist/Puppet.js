@@ -16,7 +16,7 @@ class Puppet {
         switch (options.network) {
             case interface_1.NetworkOption.TestNet:
                 this.options.node = 'https://testnet1.neo.coz.io:443';
-                this.options.scriptHash = '0x97857c01d64f846b5fe2eca2d09d2d73928b3f43';
+                this.options.scriptHash = '';
                 break;
             case interface_1.NetworkOption.MainNet:
                 this.options.node = 'https://mainnet1.neo.coz.io:443';

@@ -89,7 +89,6 @@ class NeoInterface {
             result = await contract.invoke(operation, args);
         }
         catch (e) {
-            console.log("errored here");
             console.log(e);
         }
         return result;

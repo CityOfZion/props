@@ -16,7 +16,7 @@
 For a more complete set of
 project documentation, visit the [**project documentation**](https://props.coz.io/d).
 
-For SDK specific documentation, visit our [**sdk documentation**](https://props.coz.io/d/docs/sdk/ts/)
+For SDK specific documentation, visit our [**sdk documentation**](https://props.coz.io/d/docs/sdk/ts/).
 
 # Overview
 
@@ -74,13 +74,13 @@ This directory contains all of the smart contracts encompassed by the PROPS proj
 source ([boa](https://github.com/CityOfZion/neo3-boa)) and compiled version of the contracts.
 Contract developers should consider simply adding a new directory for their contract as a way to get started quickly.
 For more information about contract development in the props ecosystem, refer to the contract development
-documentation [here](https://props.coz.io/d/docs/contracts/)
+documentation [here](https://props.coz.io/d/docs/contracts/).
 
 ### sdk
 
 In addition to the smart contracts, this project includes a complete, well documented SDK which outlines best practices for
 integrating with smart contracts in the Neo N3 ecosystem from off-chain applications. The SDK includes many design patterns and parsing examples as well as
-a complete integration with the pre-packaged `PROPS` smart contracts. **Complete SDK documentation is available [here](https://props.coz.io/d/docs/sdk/ts/)**
+a complete integration with the pre-packaged `PROPS` smart contracts. **Complete SDK documentation is available [here](https://props.coz.io/d/docs/sdk/ts/)**.
 Developers who are interested in interfacing with smart contracts off-chain can simply build off the included SDK, expanding it to meet their needs.
 Refer to [here](https://props.coz.io/d/docs/sdk/ts/) for more complete information about how to use the SDK to interface with the existing PROPS or to expand its
 features to meet your needs.
@@ -89,7 +89,7 @@ It is also available on NPM: `@cityofzion/props`
 
 ### parameters
 
-Smart Contracts present a number of unique features when treated as packages. One of these features is the mutability of storage.
+Smart contracts present a number of unique features when treated as packages. One of these features is the mutability of storage.
 Two of the included PROPS: `collection`, and `generator` leverage user-defined constants. The parameters directory includes a number of examples of these constants, which can be
 pre-loaded into the contract using some included setup scripts. They are good references to developers who want to use the collection and generator contracts.
 

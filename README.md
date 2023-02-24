@@ -87,7 +87,7 @@ features to meet your needs.
 
 It is also available on NPM: `@cityofzion/props`
 
-### parameters
+### props_initialize_data
 
 Smart contracts present a number of unique features when treated as packages. One of these features is the mutability of storage.
 Two of the included PROPS: `collection`, and `generator` leverage user-defined constants. The parameters directory includes a number of examples of these constants, which can be

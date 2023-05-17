@@ -18,6 +18,7 @@ describe("Basic Chest Test Suite", function() {
         const targetNetwork = sdk.types.NetworkOption.LocalNet
 
         chest = await new sdk.Chest({
+            scriptHash: "0x9378d9f8add6e1d47e7af4d75c121a11a5e9f929",
             network: targetNetwork
         })
         puppet = await new sdk.Puppet({
@@ -42,26 +43,28 @@ describe("Basic Chest Test Suite", function() {
 
     it("should create a new chest", async () => {
         this.timeout(0)
-        const cozWallet = network.wallets[0].wallet
+        const cozWallet = new Neon.wallet.Account('')
+        const lizard = '0xa6f144d552cc96103393b9ca4e34cc8fd384f4bf'
 
         const oldChestCount = await chest.totalChests()
+        console.log(oldChestCount)
 
         // create a chest and get the json
         const eligibilityCases = [
             {
-                scriptHash: puppet.scriptHash.slice(2),
+                scriptHash: lizard.slice(2),
                 attributes: [{
                     logic: 'e',
                     key: 'traits.color',
-                    value: 'blue'
+                    value: "white"
                 }]
             }
         ]
-
         const txid = await chest.createChest("A test chest",
             0,
             eligibilityCases,
             cozWallet)
+        console.log(txid)
         await sdk.helpers.sleep(TIME_CONSTANT)
         const res = await sdk.helpers.txDidComplete(chest.node.url, txid, true)
         console.log(res[0])

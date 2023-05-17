@@ -11,7 +11,7 @@ export class ChestAPI {
     contractHash: string,
     name: string,
     chestType: number,
-    eligibilityCases: [EligibilityCase],
+    eligibilityCases: EligibilityCase[],
     signer: wallet.Account, //this field can be optional if you are doing a test invocation(you arent changing contract state and dont rely on block entropy)
   ): Promise<number> {
     const method = "create_chest";

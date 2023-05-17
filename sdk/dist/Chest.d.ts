@@ -33,11 +33,12 @@ export declare class Chest {
      * Create one of these pass throughs for each method you expose in your smart contract. The goal of this entire class is to
      * simplify the network configuration steps which can be complicated.
      */
-    createChest(name: string, type: number, eligibilityCases: [EligibilityCase], signer: wallet.Account): Promise<number | string>;
+    createChest(name: string, type: number, eligibilityCases: EligibilityCase[], signer: wallet.Account): Promise<number | string>;
     isEligible(chestId: number, nftScriptHash: string, tokenId: string, signer?: wallet.Account): Promise<boolean>;
     lootChest(chestId: number, nftScriptHash: string, tokenId: string, signer: wallet.Account): Promise<number | string>;
     lootChestVerified(chestId: number, nftScriptHash: string, tokenId: string, signer: wallet.Account): Promise<any>;
     lootChestAsOwner(chestId: number, signer: wallet.Account): Promise<number | string>;
     getChestJSON(chestId: number, signer?: wallet.Account): Promise<number | string>;
-    totalChests(name: string, type: number, signer?: wallet.Account): Promise<number | string>;
+    totalChests(signer?: wallet.Account): Promise<number | string>;
+    loadChestFungible(tokenScriptHash: string, chestId: number, transferAmount: number, amountPerReservoirItem: number, signer: wallet.Account): Promise<any>;
 }

@@ -106,8 +106,19 @@ class Chest {
     async getChestJSON(chestId, signer) {
         return api_1.ChestAPI.getChestJSON(this.node.url, this.networkMagic, this.scriptHash, chestId, signer);
     }
-    async totalChests(name, type, signer) {
+    async totalChests(signer) {
         return api_1.ChestAPI.totalChests(this.node.url, this.networkMagic, this.scriptHash, signer);
+    }
+    async loadChestFungible(tokenScriptHash, chestId, transferAmount, amountPerReservoirItem, signer) {
+        const contractAddress = neon_core_1.wallet.getAddressFromScriptHash(this.scriptHash.slice(2));
+        //transfer some GAS
+        const params = [
+            neon_core_1.sc.ContractParam.hash160(signer.address),
+            neon_core_1.sc.ContractParam.hash160(contractAddress),
+            neon_core_1.sc.ContractParam.integer(transferAmount),
+            neon_core_1.sc.ContractParam.array(neon_core_1.sc.ContractParam.integer(chestId), neon_core_1.sc.ContractParam.integer(amountPerReservoirItem))
+        ];
+        return await (0, helpers_1.variableInvoke)(this.node.url, this.networkMagic, tokenScriptHash, "transfer", params, signer);
     }
 }
 exports.Chest = Chest;

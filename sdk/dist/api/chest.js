@@ -11,9 +11,10 @@ class ChestAPI {
             const attributes = eligibilityCase.attributes.map((attr) => {
                 let value = neon_js_1.sc.ContractParam.byteArray('');
                 switch (typeof attr.value) {
-                    case "string":
+                    case typeof "a":
                         value = neon_js_1.sc.ContractParam.string(attr.value);
-                    case "number":
+                        break;
+                    case typeof 1:
                         value = neon_js_1.sc.ContractParam.integer(attr.value);
                 }
                 return neon_js_1.sc.ContractParam.array(neon_js_1.sc.ContractParam.string(attr.logic), neon_js_1.sc.ContractParam.string(attr.key), value);

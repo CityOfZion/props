@@ -122,5 +122,5 @@ export interface EligibilityAttribute {
 }
 export interface EligibilityCase {
     scriptHash: string;
-    attributes: [EligibilityAttribute];
+    attributes: EligibilityAttribute[];
 }

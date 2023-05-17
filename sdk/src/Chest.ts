@@ -1,8 +1,9 @@
 import {merge} from 'lodash'
-import {rpc, u, wallet} from '@cityofzion/neon-core'
+import {rpc, sc, u, wallet} from '@cityofzion/neon-core'
 import {ChestAPI, TemplateAPI} from './api'
 import {EligibilityCase, NetworkOption, PropConstructorOptions} from "./interface";
-import {formatter, sleep, txDidComplete} from "./helpers";
+import {formatter, sleep, txDidComplete, variableInvoke} from "./helpers";
+import Neon from "@cityofzion/neon-js";
 
 const DEFAULT_OPTIONS: PropConstructorOptions = {
   network: NetworkOption.LocalNet
@@ -79,7 +80,7 @@ export class Chest {
    * Create one of these pass throughs for each method you expose in your smart contract. The goal of this entire class is to
    * simplify the network configuration steps which can be complicated.
    */
-  async createChest(name: string, type: number, eligibilityCases: [EligibilityCase], signer: wallet.Account): Promise<number | string> {
+  async createChest(name: string, type: number, eligibilityCases: EligibilityCase[], signer: wallet.Account): Promise<number | string> {
     return ChestAPI.createChest(this.node.url, this.networkMagic, this.scriptHash, name, type, eligibilityCases, signer)
   }
 
@@ -116,8 +117,28 @@ export class Chest {
     return ChestAPI.getChestJSON(this.node.url, this.networkMagic, this.scriptHash, chestId, signer)
   }
 
-  async totalChests(name: string, type: number, signer?: wallet.Account): Promise<number | string> {
+  async totalChests(signer?: wallet.Account): Promise<number | string> {
     return ChestAPI.totalChests(this.node.url, this.networkMagic, this.scriptHash, signer)
   }
 
+  async loadChestFungible(tokenScriptHash: string, chestId: number, transferAmount: number, amountPerReservoirItem: number, signer: wallet.Account): Promise<any> {
+    const contractAddress = wallet.getAddressFromScriptHash(this.scriptHash.slice(2))
+
+    //transfer some GAS
+    const params = [
+      sc.ContractParam.hash160(signer.address),
+      sc.ContractParam.hash160(contractAddress),
+      sc.ContractParam.integer(transferAmount),
+      sc.ContractParam.array(
+          sc.ContractParam.integer(chestId),
+          sc.ContractParam.integer(amountPerReservoirItem)
+      )
+    ]
+    return await variableInvoke(this.node.url, this.networkMagic,
+        tokenScriptHash,
+        "transfer",
+        params,
+        signer
+    );
+  }
 }

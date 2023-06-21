@@ -60,8 +60,7 @@ get the project: `git clone git@github.com:CityOfZion/props.git`
 4. `npm run deploy` to deploy the contracts
 5. `npm run initialize` to load static data into the contracts
 6. `npm run mintPuppets` to mint a bunch of puppets to the coz account.
-7. `npm run setIconDAppIcons` to set some smart contracts' icons.
-8. start developing; You can reference the sdk tests for usage, to run the sdk tests you also need a checkpoint, you can create it by running `npm run createTestCheckpoint`. To reset the network refer to [Running a Local Private Network](https://props.coz.io/d/docs/contracts/#running-a-local-private-network).
+7. start developing; You can reference the sdk tests for usage, to run the sdk tests you also need a checkpoint, you can create it by running `npm run createTestCheckpoint`. To reset the network refer to [Running a Local Private Network](https://props.coz.io/d/docs/contracts/#running-a-local-private-network).
 
 ## Project Structure
 

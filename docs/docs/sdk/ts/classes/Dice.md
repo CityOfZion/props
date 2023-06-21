@@ -45,7 +45,7 @@ console.log(randomNumber)
 
 #### Defined in
 
-[Dice.ts:40](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L40)
+[Dice.ts:40](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L40)
 
 ## Properties
 
@@ -55,7 +55,7 @@ console.log(randomNumber)
 
 #### Defined in
 
-[Dice.ts:38](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L38)
+[Dice.ts:38](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L38)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[Dice.ts:35](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L35)
+[Dice.ts:35](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L35)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[Dice.ts:36](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L36)
+[Dice.ts:36](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L36)
 
 ## Methods
 
@@ -104,7 +104,7 @@ The resulting number from the mapping.
 
 #### Defined in
 
-[Dice.ts:82](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L82)
+[Dice.ts:82](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L82)
 
 ___
 
@@ -133,7 +133,7 @@ The transaction id of a transaction that will return the random number.
 
 #### Defined in
 
-[Dice.ts:56](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L56)
+[Dice.ts:56](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L56)
 
 ___
 
@@ -160,7 +160,7 @@ The transaction id of a transaction that will return the result an array of dice
 
 #### Defined in
 
-[Dice.ts:131](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L131)
+[Dice.ts:131](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L131)
 
 ___
 
@@ -188,7 +188,7 @@ The transaction id of a transaction that will return the result of the die roll.
 
 #### Defined in
 
-[Dice.ts:111](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L111)
+[Dice.ts:111](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L111)
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-[Dice.ts:152](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L152)
+[Dice.ts:152](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L152)
 
 ___
 
@@ -235,7 +235,7 @@ ___
 
 #### Defined in
 
-[Dice.ts:141](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L141)
+[Dice.ts:141](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L141)
 
 ___
 
@@ -257,7 +257,7 @@ ___
 
 #### Defined in
 
-[Dice.ts:164](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L164)
+[Dice.ts:164](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L164)
 
 ___
 
@@ -281,4 +281,4 @@ ___
 
 #### Defined in
 
-[Dice.ts:174](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Dice.ts#L174)
+[Dice.ts:174](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Dice.ts#L174)

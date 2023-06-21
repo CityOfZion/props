@@ -14,4 +14,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[types/index.ts:78](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L78)
+[types/index.ts:78](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L78)

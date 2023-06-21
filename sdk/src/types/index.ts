@@ -120,8 +120,3 @@ export interface BaseStats {
   strength: number
   wisdom: number
 }
-
-export type IconProperties = {
-  icon288x288: string | null
-  icon25x25: string | null
-}

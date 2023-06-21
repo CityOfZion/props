@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Puppet.ts:10](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L10)
+[Puppet.ts:10](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L10)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Puppet.ts:11](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L11)
+[Puppet.ts:11](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L11)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:7](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L7)
+[Puppet.ts:7](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L7)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:8](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L8)
+[Puppet.ts:8](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L8)
 
 ## Methods
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:15](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L15)
+[Puppet.ts:15](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L15)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:19](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L19)
+[Puppet.ts:19](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L19)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:28](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L28)
+[Puppet.ts:28](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L28)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:32](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L32)
+[Puppet.ts:32](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L32)
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:42](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L42)
+[Puppet.ts:42](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L42)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:57](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L57)
+[Puppet.ts:57](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L57)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:61](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L61)
+[Puppet.ts:61](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L61)
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:65](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L65)
+[Puppet.ts:65](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L65)
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:73](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L73)
+[Puppet.ts:73](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L73)
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:69](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L69)
+[Puppet.ts:69](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L69)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:82](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L82)
+[Puppet.ts:82](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L82)
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:86](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L86)
+[Puppet.ts:86](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L86)
 
 ___
 
@@ -317,7 +317,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:115](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L115)
+[Puppet.ts:115](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L115)
 
 ___
 
@@ -344,7 +344,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:172](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L172)
+[Puppet.ts:172](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L172)
 
 ___
 
@@ -358,7 +358,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:124](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L124)
+[Puppet.ts:124](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L124)
 
 ___
 
@@ -372,7 +372,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:128](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L128)
+[Puppet.ts:128](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L128)
 
 ___
 
@@ -393,7 +393,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:132](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L132)
+[Puppet.ts:132](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L132)
 
 ___
 
@@ -407,7 +407,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:136](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L136)
+[Puppet.ts:136](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L136)
 
 ___
 
@@ -421,7 +421,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:140](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L140)
+[Puppet.ts:140](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L140)
 
 ___
 
@@ -435,7 +435,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:144](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L144)
+[Puppet.ts:144](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L144)
 
 ___
 
@@ -458,7 +458,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:148](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L148)
+[Puppet.ts:148](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L148)
 
 ___
 
@@ -481,7 +481,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:157](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L157)
+[Puppet.ts:157](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L157)
 
 ___
 
@@ -503,7 +503,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:187](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L187)
+[Puppet.ts:187](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L187)
 
 ___
 
@@ -530,7 +530,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:197](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L197)
+[Puppet.ts:197](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L197)
 
 ___
 
@@ -550,7 +550,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:212](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L212)
+[Puppet.ts:212](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L212)
 
 ___
 
@@ -570,7 +570,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:220](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L220)
+[Puppet.ts:220](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L220)
 
 ___
 
@@ -592,7 +592,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:228](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L228)
+[Puppet.ts:228](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L228)
 
 ___
 
@@ -614,7 +614,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:238](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L238)
+[Puppet.ts:238](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L238)
 
 ___
 
@@ -636,7 +636,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:249](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L249)
+[Puppet.ts:249](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L249)
 
 ___
 
@@ -658,7 +658,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:259](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L259)
+[Puppet.ts:259](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L259)
 
 ___
 
@@ -681,7 +681,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:279](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L279)
+[Puppet.ts:279](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L279)
 
 ___
 
@@ -703,7 +703,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:269](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L269)
+[Puppet.ts:269](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L269)
 
 ___
 
@@ -725,7 +725,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:290](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L290)
+[Puppet.ts:290](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L290)
 
 ___
 
@@ -748,7 +748,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:300](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L300)
+[Puppet.ts:300](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L300)
 
 ___
 
@@ -768,7 +768,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:311](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L311)
+[Puppet.ts:311](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L311)
 
 ___
 
@@ -788,7 +788,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:319](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L319)
+[Puppet.ts:319](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L319)
 
 ___
 
@@ -810,7 +810,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:327](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L327)
+[Puppet.ts:327](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L327)
 
 ___
 
@@ -830,7 +830,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:337](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L337)
+[Puppet.ts:337](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L337)
 
 ___
 
@@ -850,7 +850,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:345](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L345)
+[Puppet.ts:345](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L345)
 
 ___
 
@@ -870,7 +870,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:353](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L353)
+[Puppet.ts:353](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L353)
 
 ___
 
@@ -894,7 +894,7 @@ ___
 
 #### Defined in
 
-[Puppet.ts:361](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L361)
+[Puppet.ts:361](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L361)
 
 ___
 
@@ -918,4 +918,4 @@ ___
 
 #### Defined in
 
-[Puppet.ts:373](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Puppet.ts#L373)
+[Puppet.ts:373](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Puppet.ts#L373)

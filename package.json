@@ -10,7 +10,6 @@
     "setup": "node --experimental-specifier-resolution=node scripts/setup.js",
     "configure": "npm run setup && npm run deploy && npm run initialize",
     "mintPuppets": "node --experimental-specifier-resolution=node scripts/mint_puppets.js",
-    "setIconDAppIcons": "node --experimental-specifier-resolution=node scripts/set_icondapp_default_icons.js",
     "createTestCheckpoint": "neoxp checkpoint create -f postSetup"
   },
   "repository": {

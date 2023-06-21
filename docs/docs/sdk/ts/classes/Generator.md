@@ -20,7 +20,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Generator.ts:13](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L13)
+[Generator.ts:13](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L13)
 
 ## Properties
 
@@ -30,7 +30,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[Generator.ts:14](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L14)
+[Generator.ts:14](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L14)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:11](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L11)
+[Generator.ts:11](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L11)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:8](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L8)
+[Generator.ts:8](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L8)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:9](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L9)
+[Generator.ts:9](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L9)
 
 ## Methods
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:17](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L17)
+[Generator.ts:17](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L17)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:28](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L28)
+[Generator.ts:28](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L28)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:123](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L123)
+[Generator.ts:123](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L123)
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:95](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L95)
+[Generator.ts:95](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L95)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:42](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L42)
+[Generator.ts:42](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L42)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:106](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L106)
+[Generator.ts:106](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L106)
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:56](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L56)
+[Generator.ts:56](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L56)
 
 ___
 
@@ -230,7 +230,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:134](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L134)
+[Generator.ts:134](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L134)
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:145](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L145)
+[Generator.ts:145](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L145)
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:167](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L167)
+[Generator.ts:167](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L167)
 
 ___
 
@@ -296,7 +296,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:156](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L156)
+[Generator.ts:156](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L156)
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:178](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L178)
+[Generator.ts:178](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L178)
 
 ___
 
@@ -332,7 +332,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:204](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L204)
+[Generator.ts:204](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L204)
 
 ___
 
@@ -346,7 +346,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:189](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L189)
+[Generator.ts:189](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L189)
 
 ___
 
@@ -369,7 +369,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:220](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L220)
+[Generator.ts:220](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L220)
 
 ___
 
@@ -391,7 +391,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:360](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L360)
+[Generator.ts:360](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L360)
 
 ___
 
@@ -414,7 +414,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:251](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L251)
+[Generator.ts:251](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L251)
 
 ___
 
@@ -436,7 +436,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:350](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L350)
+[Generator.ts:350](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L350)
 
 ___
 
@@ -458,7 +458,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:231](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L231)
+[Generator.ts:231](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L231)
 
 ___
 
@@ -480,7 +480,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:241](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L241)
+[Generator.ts:241](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L241)
 
 ___
 
@@ -502,7 +502,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:370](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L370)
+[Generator.ts:370](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L370)
 
 ___
 
@@ -525,7 +525,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:381](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L381)
+[Generator.ts:381](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L381)
 
 ___
 
@@ -548,7 +548,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:403](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L403)
+[Generator.ts:403](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L403)
 
 ___
 
@@ -571,7 +571,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:392](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L392)
+[Generator.ts:392](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L392)
 
 ___
 
@@ -594,7 +594,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:421](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L421)
+[Generator.ts:421](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L421)
 
 ___
 
@@ -614,7 +614,7 @@ ___
 
 #### Defined in
 
-[Generator.ts:440](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L440)
+[Generator.ts:440](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L440)
 
 ___
 
@@ -634,4 +634,4 @@ ___
 
 #### Defined in
 
-[Generator.ts:432](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Generator.ts#L432)
+[Generator.ts:432](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Generator.ts#L432)

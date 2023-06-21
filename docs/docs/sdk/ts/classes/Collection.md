@@ -46,7 +46,7 @@ console.log(total) // outputs the total collection count in the contract
 
 #### Defined in
 
-[Collection.ts:39](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L39)
+[Collection.ts:39](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L39)
 
 ## Properties
 
@@ -56,7 +56,7 @@ console.log(total) // outputs the total collection count in the contract
 
 #### Defined in
 
-[Collection.ts:40](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L40)
+[Collection.ts:40](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L40)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:36](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L36)
+[Collection.ts:36](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L36)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:37](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L37)
+[Collection.ts:37](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L37)
 
 ## Methods
 
@@ -104,7 +104,7 @@ The transaction id of a transaction that will return the new collection id.
 
 #### Defined in
 
-[Collection.ts:56](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L56)
+[Collection.ts:56](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L56)
 
 ___
 
@@ -128,7 +128,7 @@ The transaction id of a transaction that will return the new collection id.
 
 #### Defined in
 
-[Collection.ts:82](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L82)
+[Collection.ts:82](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L82)
 
 ___
 
@@ -154,7 +154,7 @@ The requested collection.
 
 #### Defined in
 
-[Collection.ts:136](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L136)
+[Collection.ts:136](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L136)
 
 ___
 
@@ -180,7 +180,7 @@ The value of the collection element.
 
 #### Defined in
 
-[Collection.ts:162](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L162)
+[Collection.ts:162](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L162)
 
 ___
 
@@ -205,7 +205,7 @@ The requested collection.
 
 #### Defined in
 
-[Collection.ts:110](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L110)
+[Collection.ts:110](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L110)
 
 ___
 
@@ -230,7 +230,7 @@ The length of the collection.
 
 #### Defined in
 
-[Collection.ts:187](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L187)
+[Collection.ts:187](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L187)
 
 ___
 
@@ -255,7 +255,7 @@ The values in the collection.
 
 #### Defined in
 
-[Collection.ts:212](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L212)
+[Collection.ts:212](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L212)
 
 ___
 
@@ -287,7 +287,7 @@ The element from the mapping.
 
 #### Defined in
 
-[Collection.ts:244](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L244)
+[Collection.ts:244](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L244)
 
 ___
 
@@ -316,7 +316,7 @@ testing.
 
 #### Defined in
 
-[Collection.ts:276](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L276)
+[Collection.ts:276](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L276)
 
 ___
 
@@ -347,7 +347,7 @@ testing.
 
 #### Defined in
 
-[Collection.ts:304](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L304)
+[Collection.ts:304](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L304)
 
 ___
 
@@ -366,7 +366,7 @@ The total number of collections stored in the contract.
 
 #### Defined in
 
-[Collection.ts:322](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L322)
+[Collection.ts:322](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L322)
 
 ___
 
@@ -389,7 +389,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:339](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L339)
+[Collection.ts:339](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L339)
 
 ___
 
@@ -414,7 +414,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:354](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L354)
+[Collection.ts:354](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L354)
 
 ___
 
@@ -437,7 +437,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:387](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L387)
+[Collection.ts:387](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L387)
 
 ___
 
@@ -459,7 +459,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:377](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L377)
+[Collection.ts:377](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L377)
 
 ___
 
@@ -481,7 +481,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:367](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L367)
+[Collection.ts:367](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L367)
 
 ___
 
@@ -503,7 +503,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:398](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L398)
+[Collection.ts:398](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L398)
 
 ___
 
@@ -525,7 +525,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:408](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L408)
+[Collection.ts:408](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L408)
 
 ___
 
@@ -548,7 +548,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:418](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L418)
+[Collection.ts:418](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L418)
 
 ___
 
@@ -571,7 +571,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:429](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L429)
+[Collection.ts:429](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L429)
 
 ___
 
@@ -595,7 +595,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:440](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L440)
+[Collection.ts:440](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L440)
 
 ___
 
@@ -615,7 +615,7 @@ ___
 
 #### Defined in
 
-[Collection.ts:452](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L452)
+[Collection.ts:452](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L452)
 
 ___
 
@@ -639,4 +639,4 @@ ___
 
 #### Defined in
 
-[Collection.ts:460](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/Collection.ts#L460)
+[Collection.ts:460](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/Collection.ts#L460)

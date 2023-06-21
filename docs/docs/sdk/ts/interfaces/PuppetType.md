@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[types/index.ts:101](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L101)
+[types/index.ts:101](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L101)
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:102](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L102)
+[types/index.ts:102](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L102)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:103](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L103)
+[types/index.ts:103](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L103)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:104](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L104)
+[types/index.ts:104](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L104)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:105](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L105)
+[types/index.ts:105](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L105)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:106](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L106)
+[types/index.ts:106](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L106)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:107](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L107)
+[types/index.ts:107](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L107)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:108](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L108)
+[types/index.ts:108](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L108)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:109](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L109)
+[types/index.ts:109](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L109)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:111](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L111)
+[types/index.ts:111](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L111)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:112](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L112)
+[types/index.ts:112](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L112)
 
 ___
 
@@ -124,4 +124,4 @@ ___
 
 #### Defined in
 
-[types/index.ts:110](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L110)
+[types/index.ts:110](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L110)

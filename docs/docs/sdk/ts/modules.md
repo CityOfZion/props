@@ -16,7 +16,6 @@ custom_edit_url: null
 - [Collection](classes/Collection.md)
 - [Dice](classes/Dice.md)
 - [Generator](classes/Generator.md)
-- [IconDApp](classes/IconDApp.md)
 - [Puppet](classes/Puppet.md)
 
 ## Interfaces
@@ -37,23 +36,6 @@ custom_edit_url: null
 
 ## Type Aliases
 
-### IconProperties
-
-Ƭ **IconProperties**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `icon25x25` | `string` \| ``null`` |
-| `icon288x288` | `string` \| ``null`` |
-
-#### Defined in
-
-[types/index.ts:124](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L124)
-
-___
-
 ### SmartContractConfig
 
 Ƭ **SmartContractConfig**: `Object`
@@ -68,4 +50,4 @@ ___
 
 #### Defined in
 
-[types/index.ts:4](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L4)
+[types/index.ts:4](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L4)

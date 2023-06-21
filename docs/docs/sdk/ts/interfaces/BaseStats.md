@@ -14,7 +14,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[types/index.ts:116](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L116)
+[types/index.ts:116](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L116)
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:117](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L117)
+[types/index.ts:117](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L117)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:118](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L118)
+[types/index.ts:118](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L118)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:119](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L119)
+[types/index.ts:119](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L119)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[types/index.ts:120](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L120)
+[types/index.ts:120](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L120)
 
 ___
 
@@ -64,4 +64,4 @@ ___
 
 #### Defined in
 
-[types/index.ts:121](https://github.com/CityOfZion/props/blob/40afa9e/sdk/src/types/index.ts#L121)
+[types/index.ts:121](https://github.com/CityOfZion/props/blob/cdf3f2f/sdk/src/types/index.ts#L121)

@@ -192,5 +192,6 @@ cython_debug/
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,python
 NbnjKGMBJzJ6j5PHeYhjJDaQ5Vy5UYu4Fv.json
 NhGomBpYnKXArr55nHRQ5rzy79TwKVXZbr.json
-*/sdk/node_modules/
+
+**/sdk/node_modules/
 /node_modules/

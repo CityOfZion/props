@@ -1,9 +1,9 @@
 import Neon from '@cityofzion/neon-core'
 import fs from 'fs'
 import assert from 'assert'
-import {Dice} from '../src'
-import {exec as _exec, spawn} from 'child_process'
-import {afterEach} from 'mocha'
+import { Dice } from '../src'
+import { exec as _exec, spawn } from 'child_process'
+import { afterEach } from 'mocha'
 import * as util from 'util'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonParser } from '@cityofzion/neon-parser'
@@ -24,23 +24,29 @@ describe('Basic Dice Test Suite', function () {
     return new Dice({
       scriptHash,
       invoker: await NeonInvoker.init(NODE, account),
-      parser: NeonParser,
+      parser: NeonParser
     })
-  }  
+  }
 
   beforeEach(async function () {
-    await exec('neoxp checkpoint restore -i ../default.neo-express -f ../postSetup.neoxp-checkpoint')
-    const {stdout} = await exec('neoxp contract get "Dice" -i ../default.neo-express')
+    await exec(
+      'neoxp checkpoint restore -i ../default.neo-express -f ../postSetup.neoxp-checkpoint'
+    )
+    const { stdout } = await exec(
+      'neoxp contract get "Dice" -i ../default.neo-express'
+    )
 
     const neoxpContract = JSON.parse(stdout)[0]
     scriptHash = neoxpContract.hash
     spawn('neoxp', ['run', '-i', '../default.neo-express', '-s', '1'], {})
     await wait(TIME_CONSTANT)
 
-    const network = JSON.parse(fs.readFileSync('../default.neo-express').toString())
+    const network = JSON.parse(
+      fs.readFileSync('../default.neo-express').toString()
+    )
     wallets = network.wallets.map((walletObj: any) => ({
       ...walletObj,
-      account: new Neon.wallet.Account(walletObj.accounts[0]['private-key']),
+      account: new Neon.wallet.Account(walletObj.accounts[0]['private-key'])
     }))
 
     cozWallet = wallets.find((wallet: any) => wallet.name === 'coz')
@@ -53,7 +59,7 @@ describe('Basic Dice Test Suite', function () {
     return true
   })
 
-  it('Tests randbetween', async function() {
+  it('Tests randbetween', async function () {
     this.timeout(0)
     const dice = await getSdk(cozWallet.account)
 
@@ -62,22 +68,21 @@ describe('Basic Dice Test Suite', function () {
 
     const txids: string[] = []
     for (let i = 0; i < runSize; i++) {
-        const res = await dice.randBetween({ start: 0, end: bins - 1})
-        txids.push(res)
+      const res = await dice.randBetween({ start: 0, end: bins - 1 })
+      txids.push(res)
     }
     await wait(TIME_CONSTANT)
 
     const results: string[] = []
     for (let txid of txids) {
-        let result = await txDidComplete(NODE, txid)
-        results.push(result[0])
+      let result = await txDidComplete(NODE, txid)
+      results.push(result[0])
     }
 
     // chi-squared test for uniformity
     const chiSquared = chiSquaredFunction(results)
     assert(chiSquared < 30, chiSquared.toString())
-})
-
+  })
 
   it('Tests fair dice roll using rollDie', async () => {
     this.timeout(0)
@@ -86,24 +91,21 @@ describe('Basic Dice Test Suite', function () {
     const runSize = 2000
     const die = 'd20'
 
-
     const txids: string[] = []
     for (let i = 0; i < runSize; i++) {
-        const res = await dice.rollDie({die})
-        txids.push(res)
+      const res = await dice.rollDie({ die })
+      txids.push(res)
     }
     await wait(TIME_CONSTANT)
 
     const results: any[] = []
     for (let txid of txids) {
-        let result = await txDidComplete(NODE, txid)
-        results.push(result[0])
+      let result = await txDidComplete(NODE, txid)
+      results.push(result[0])
     }
 
     // chi-squared test for uniformity
     const chiSquared = chiSquaredFunction(results)
     assert(chiSquared < 20, chiSquared.toString())
-
   })
-
 })

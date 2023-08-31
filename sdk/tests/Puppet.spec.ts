@@ -1,13 +1,12 @@
 import Neon from '@cityofzion/neon-core'
 import fs from 'fs'
 import assert from 'assert'
-import {Collection, Puppet, TraitLevel} from '../src/index'
-import {exec as _exec, spawn} from 'child_process'
-import {afterEach} from 'mocha'
+import { Collection, Puppet, TraitLevel } from '../src/index'
+import { exec as _exec, spawn } from 'child_process'
+import { afterEach } from 'mocha'
 import * as util from 'util'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonParser } from '@cityofzion/neon-parser'
-import { txDidComplete } from './helper'
 
 describe('Basic Puppet Test Suite', function () {
   this.timeout(60000)
@@ -25,35 +24,43 @@ describe('Basic Puppet Test Suite', function () {
     return new Puppet({
       scriptHash,
       invoker: await NeonInvoker.init(NODE, account),
-      parser: NeonParser,
+      parser: NeonParser
     })
-  }  
+  }
 
   const getCollectionSdk = async (account?: any) => {
     return new Collection({
       scriptHash: scriptHashCollection,
       invoker: await NeonInvoker.init(NODE, account),
-      parser: NeonParser,
+      parser: NeonParser
     })
-  }  
+  }
 
   beforeEach(async function () {
-    await exec('neoxp checkpoint restore -i ../default.neo-express -f ../postSetup.neoxp-checkpoint')
-    let {stdout} = await exec('neoxp contract get "Puppet" -i ../default.neo-express')
+    await exec(
+      'neoxp checkpoint restore -i ../default.neo-express -f ../postSetup.neoxp-checkpoint'
+    )
+    let { stdout } = await exec(
+      'neoxp contract get "Puppet" -i ../default.neo-express'
+    )
     let neoxpContract = JSON.parse(stdout)[0]
     scriptHash = neoxpContract.hash
 
-    stdout = (await exec('neoxp contract get "Collection" -i ../default.neo-express')).stdout
+    stdout = (
+      await exec('neoxp contract get "Collection" -i ../default.neo-express')
+    ).stdout
     neoxpContract = JSON.parse(stdout)[0]
     scriptHashCollection = neoxpContract.hash
 
     spawn('neoxp', ['run', '-i', '../default.neo-express', '-s', '1'], {})
     await wait(TIME_CONSTANT)
 
-    const network = JSON.parse(fs.readFileSync('../default.neo-express').toString())
+    const network = JSON.parse(
+      fs.readFileSync('../default.neo-express').toString()
+    )
     wallets = network.wallets.map((walletObj: any) => ({
       ...walletObj,
-      account: new Neon.wallet.Account(walletObj.accounts[0]['private-key']),
+      account: new Neon.wallet.Account(walletObj.accounts[0]['private-key'])
     }))
 
     cozWallet = wallets.find((wallet: any) => wallet.name === 'coz')
@@ -68,29 +75,31 @@ describe('Basic Puppet Test Suite', function () {
 
   it('Tests getting token symbol', async () => {
     const puppet = await getSdk()
-    
+
     const symbol = await puppet.symbol()
     assert.equal(symbol, 'PUPPET')
   })
 
   it('Tests getting token decimals', async () => {
     const puppet = await getSdk()
-    
+
     const symbol = await puppet.decimals()
     assert.equal(symbol, 0)
   })
 
   it('Tests getting token total supply', async () => {
     const puppet = await getSdk()
-    
+
     const symbol = await puppet.totalSupply()
     assert(symbol >= 0)
   })
 
-  it("Tests getting the balance of an account", async () => {
+  it('Tests getting the balance of an account', async () => {
     const puppet = await getSdk()
 
-    const balance = await puppet.balanceOf({address: cozWallet.account.address})
+    const balance = await puppet.balanceOf({
+      address: cozWallet.account.address
+    })
     assert(balance >= 0)
   })
 
@@ -321,13 +330,13 @@ describe('Basic Puppet Test Suite', function () {
   })
    */
 
-  it("should get the total epochs", async() => {
+  it('should get the total epochs', async () => {
     const puppet = await getSdk(cozWallet.account)
 
     const total = await puppet.totalEpochs()
     assert(total > 0)
   })
-  
+
   /* The method createEpoch was expecting different args on the original test and EpochType had a trait_levels prop
   it("should create an epoch using a collection", async() => {
     const puppet = await getSdk(cozWallet.account)
@@ -378,5 +387,4 @@ describe('Basic Puppet Test Suite', function () {
     })
   })
    */
-
 })

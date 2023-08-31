@@ -1,13 +1,13 @@
 import Neon from '@cityofzion/neon-core'
 import fs from 'fs'
 import assert from 'assert'
-import {Collection, Generator} from '../src'
-import {exec as _exec, spawn} from 'child_process'
-import {afterEach} from 'mocha'
+import { Collection, Generator } from '../src'
+import { exec as _exec, spawn } from 'child_process'
+import { afterEach } from 'mocha'
 import * as util from 'util'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonParser } from '@cityofzion/neon-parser'
-import { chiSquaredFunction, txDidComplete } from './helper'
+import { txDidComplete } from './helper'
 
 describe('Basic Generator Test Suite', function () {
   this.timeout(60000)
@@ -25,36 +25,43 @@ describe('Basic Generator Test Suite', function () {
     return new Generator({
       scriptHash,
       invoker: await NeonInvoker.init(NODE, account),
-      parser: NeonParser,
+      parser: NeonParser
     })
-  }  
+  }
 
   const getCollectionSdk = async (account?: any) => {
     return new Collection({
       scriptHash: scriptHashCollection,
       invoker: await NeonInvoker.init(NODE, account),
-      parser: NeonParser,
+      parser: NeonParser
     })
-  }  
-
+  }
 
   beforeEach(async function () {
-    await exec('neoxp checkpoint restore -i ../default.neo-express -f ../postSetup.neoxp-checkpoint')
-    let {stdout} = await exec('neoxp contract get "Generator" -i ../default.neo-express')
+    await exec(
+      'neoxp checkpoint restore -i ../default.neo-express -f ../postSetup.neoxp-checkpoint'
+    )
+    let { stdout } = await exec(
+      'neoxp contract get "Generator" -i ../default.neo-express'
+    )
     let neoxpContract = JSON.parse(stdout)[0]
     scriptHash = neoxpContract.hash
 
-    stdout = (await exec('neoxp contract get "Collection" -i ../default.neo-express')).stdout
+    stdout = (
+      await exec('neoxp contract get "Collection" -i ../default.neo-express')
+    ).stdout
     neoxpContract = JSON.parse(stdout)[0]
     scriptHashCollection = neoxpContract.hash
-    
+
     spawn('neoxp', ['run', '-i', '../default.neo-express', '-s', '1'], {})
     await wait(TIME_CONSTANT)
 
-    const network = JSON.parse(fs.readFileSync('../default.neo-express').toString())
+    const network = JSON.parse(
+      fs.readFileSync('../default.neo-express').toString()
+    )
     wallets = network.wallets.map((walletObj: any) => ({
       ...walletObj,
-      account: new Neon.wallet.Account(walletObj.accounts[0]['private-key']),
+      account: new Neon.wallet.Account(walletObj.accounts[0]['private-key'])
     }))
 
     cozWallet = wallets.find((wallet: any) => wallet.name === 'coz')
@@ -102,7 +109,7 @@ describe('Basic Generator Test Suite', function () {
   })
   */
 
-  it("Tests getting the total generators", async() => {
+  it('Tests getting the total generators', async () => {
     const generator = await getSdk(cozWallet.account)
 
     const maxTraits = 5
@@ -111,43 +118,44 @@ describe('Basic Generator Test Suite', function () {
     const totalOriginal = await generator.totalGenerators()
     await buildGenerator(dropRate, maxTraits, -1, generator)
     const newTotal = await generator.totalGenerators()
-    assert(newTotal === (totalOriginal + 1))
+    assert(newTotal === totalOriginal + 1)
   })
 
-  it("Tests creating a new generator instance and mint from it, verifying uniqueness", async() => {
+  it('Tests creating a new generator instance and mint from it, verifying uniqueness', async () => {
     const generator = await getSdk(cozWallet.account)
 
     const generator_id = await buildGenerator(1, 1, 1, generator)
 
     const sampleCount = 300
-    const masterSet: {testTrait: string[]} = {testTrait: []}
+    const masterSet: { testTrait: string[] } = { testTrait: [] }
     const txids: string[] = []
     let txid: string
 
-    txid = await generator.createInstance({generatorId: generator_id})
+    txid = await generator.createInstance({ generatorId: generator_id })
     await wait(TIME_CONSTANT)
     const instanceId = (await txDidComplete(NODE, txid))[0]
 
     for (let i = 0; i < sampleCount; i++) {
-      txid = await generator.mintFromInstance({instanceId: instanceId})
+      txid = await generator.mintFromInstance({ instanceId: instanceId })
       txids.push(txid)
     }
     await wait(TIME_CONSTANT)
     for (txid of txids) {
-        const res = await txDidComplete(NODE, txid)
-        Object.keys(res[0]).forEach((key) => {
-            if (key == 'testTrait') {
-                masterSet.testTrait.push(res[0][key])
-            }
-        })
+      const res = await txDidComplete(NODE, txid)
+      Object.keys(res[0]).forEach(key => {
+        if (key == 'testTrait') {
+          masterSet.testTrait.push(res[0][key])
+        }
+      })
     }
 
-    assert(masterSet.testTrait.length === [...new Set(masterSet.testTrait)].length, masterSet.testTrait.length.toString())
-
+    assert(
+      masterSet.testTrait.length === [...new Set(masterSet.testTrait)].length,
+      masterSet.testTrait.length.toString()
+    )
   })
 
-
-  it("Tests evaluating instance access rights", async() => {    
+  it('Tests evaluating instance access rights', async () => {
     const generator = await getSdk(cozWallet.account)
     const otherWallet = new Neon.wallet.Account()
     const generatorOtherWallet = await getSdk(otherWallet)
@@ -159,12 +167,12 @@ describe('Basic Generator Test Suite', function () {
     let buildInvoke = [
       {
         scriptHash: '0xd2a4cff31913016155e38e474a2c06d08be276cf',
-        operation:'transfer',
+        operation: 'transfer',
         args: [
-          {type: 'Hash160', value: cozWallet.account.address},
-          {type: 'Hash160', value: otherWallet.scriptHash},	
-          {type: 'Integer', value: 100 * 10**8},	
-          {type: 'Any', value: ''},	
+          { type: 'Hash160', value: cozWallet.account.address },
+          { type: 'Hash160', value: otherWallet.scriptHash },
+          { type: 'Integer', value: 100 * 10 ** 8 },
+          { type: 'Any', value: '' }
         ]
       }
     ]
@@ -174,43 +182,45 @@ describe('Basic Generator Test Suite', function () {
       invocations: buildInvoke
     })
     await wait(TIME_CONSTANT)
-    await txDidComplete(NODE,txid, false)
+    await txDidComplete(NODE, txid, false)
 
     //create a new generator and instance
     const generator_id = await buildGenerator(1, 1, 1, generator)
-    txid = await generator.createInstance({generatorId: generator_id})
+    txid = await generator.createInstance({ generatorId: generator_id })
     await wait(TIME_CONSTANT)
     const instanceId = (await txDidComplete(NODE, txid))[0]
-
 
     /////////////UNAUTHENTICATED USER TESTS////////////////
 
     //test minting from the instance for a user who doesn't have access
     try {
-        txid = await generatorOtherWallet.mintFromInstance({instanceId})
-        await wait(TIME_CONSTANT)
-        await txDidComplete(NODE, txid)
-        assert.fail("Successful minting by unauthorized user")
+      txid = await generatorOtherWallet.mintFromInstance({ instanceId })
+      await wait(TIME_CONSTANT)
+      await txDidComplete(NODE, txid)
+      assert.fail('Successful minting by unauthorized user')
     } catch (e) {}
 
     //test setting the instance fee
-    const targetFee = 4 * 10**8
+    const targetFee = 4 * 10 ** 8
     try {
-        txid = await generatorOtherWallet.setInstanceFee({instanceId, fee: targetFee})
-        await wait(TIME_CONSTANT)
-        await txDidComplete(NODE, txid)
-        assert.fail("Successful fee manipulation by unauthorized user")
+      txid = await generatorOtherWallet.setInstanceFee({
+        instanceId,
+        fee: targetFee
+      })
+      await wait(TIME_CONSTANT)
+      await txDidComplete(NODE, txid)
+      assert.fail('Successful fee manipulation by unauthorized user')
     } catch (e) {}
 
     //test changing the authorized users
     try {
-        txid = await generator.setInstanceAuthorizedUsers({
-          instanceId,
-          authorizedUsers: [cozWallet.account.address, otherWallet.address]
-        })
-        await wait(TIME_CONSTANT)
-        await txDidComplete(NODE, txid)
-        assert.fail("Successful role change by unauthorized user")
+      txid = await generator.setInstanceAuthorizedUsers({
+        instanceId,
+        authorizedUsers: [cozWallet.account.address, otherWallet.address]
+      })
+      await wait(TIME_CONSTANT)
+      await txDidComplete(NODE, txid)
+      assert.fail('Successful role change by unauthorized user')
     } catch (e) {}
 
     /////////////Set Authentication////////////////
@@ -224,12 +234,12 @@ describe('Basic Generator Test Suite', function () {
     await txDidComplete(NODE, txid)
 
     //verify that both accounts can mint
-    txid = await generatorOtherWallet.mintFromInstance({instanceId})
+    txid = await generatorOtherWallet.mintFromInstance({ instanceId })
     await wait(TIME_CONSTANT)
     let res = await txDidComplete(NODE, txid)
     assert(res)
 
-    txid = await generator.mintFromInstance({instanceId})
+    txid = await generator.mintFromInstance({ instanceId })
     await wait(TIME_CONSTANT)
     res = await txDidComplete(NODE, txid)
     assert(res)
@@ -237,28 +247,28 @@ describe('Basic Generator Test Suite', function () {
     // verify that the new user still cannot change authorization or set fees
     //test setting the instance fee
     try {
-        txid = await generatorOtherWallet.setInstanceFee({instanceId, fee: targetFee})
-        await wait(TIME_CONSTANT)
-        await txDidComplete(NODE, txid)
-        assert.fail("Successful fee manipulation by unauthorized user")
+      txid = await generatorOtherWallet.setInstanceFee({
+        instanceId,
+        fee: targetFee
+      })
+      await wait(TIME_CONSTANT)
+      await txDidComplete(NODE, txid)
+      assert.fail('Successful fee manipulation by unauthorized user')
     } catch (e) {}
 
     //test changing the authorized users
     try {
-        txid = await generator.setInstanceAuthorizedUsers({
-          instanceId,
-          authorizedUsers: [
-            cozWallet.account.address,
-            otherWallet.address
-          ]
-        })
-        await wait(TIME_CONSTANT)
-        await txDidComplete(NODE, txid)
-        assert.fail("Successful role change by unauthorized user")
+      txid = await generator.setInstanceAuthorizedUsers({
+        instanceId,
+        authorizedUsers: [cozWallet.account.address, otherWallet.address]
+      })
+      await wait(TIME_CONSTANT)
+      await txDidComplete(NODE, txid)
+      assert.fail('Successful role change by unauthorized user')
     } catch (e) {}
   })
 
-  it("Tests evaluating the ability to get generator instances and increment the total count", async() => {
+  it('Tests evaluating the ability to get generator instances and increment the total count', async () => {
     const generator = await getSdk(cozWallet.account)
 
     const totalInstances = await generator.totalGeneratorInstances()
@@ -269,47 +279,48 @@ describe('Basic Generator Test Suite', function () {
     await txDidComplete(NODE, txid, false)
 
     const newTotalInstances = await generator.totalGeneratorInstances()
-    assert(newTotalInstances === (totalInstances + 1))
+    assert(newTotalInstances === totalInstances + 1)
 
     for (let i = 0; i < totalInstances; i++) {
-      let instance = await generator.getGeneratorInstanceJSON({instanceId: i + 1})
+      let instance = await generator.getGeneratorInstanceJSON({
+        instanceId: i + 1
+      })
       let instanceKeys = Object.keys(instance)
 
       const expectedKeys = [
-          'generatorId',
-          'instanceId',
-          'author',
-          'authorizedUsers',
-          'objectStorage'
+        'generatorId',
+        'instanceId',
+        'author',
+        'authorizedUsers',
+        'objectStorage'
       ]
       expectedKeys.forEach(key => assert(instanceKeys.indexOf(key) !== -1))
     }
-
   })
 
-  it("Test evaluating the ability to get generators and increment the total count", async() => {
+  it('Test evaluating the ability to get generators and increment the total count', async () => {
     const generator = await getSdk(cozWallet.account)
 
     const total = await generator.totalGenerators()
     await buildGenerator(1, 1, 1, generator)
     const newTotal = await generator.totalGenerators()
-    assert(newTotal === (total + 1))
+    assert(newTotal === total + 1)
 
     for (let i = 0; i < total; i++) {
       let g = await generator.getGeneratorJSON({ generatorId: i + 1 })
       let generatorKeys = Object.keys(g)
       const expectedKeys = [
-          'id',
-          'author',
-          'baseGeneratorFee',
-          'label',
-          'traits'
+        'id',
+        'author',
+        'baseGeneratorFee',
+        'label',
+        'traits'
       ]
       expectedKeys.forEach(key => assert(generatorKeys.indexOf(key) !== -1))
     }
   })
 
-  it("Test evaluating a non-owner user's ability to attach traits to a generator", async() => {
+  it("Test evaluating a non-owner user's ability to attach traits to a generator", async () => {
     const generator = await getSdk(cozWallet.account)
     const otherWallet = new Neon.wallet.Account()
     const generatorOtherWallet = await getSdk(otherWallet)
@@ -320,12 +331,12 @@ describe('Basic Generator Test Suite', function () {
     let buildInvoke = [
       {
         scriptHash: '0xd2a4cff31913016155e38e474a2c06d08be276cf',
-        operation:'transfer',
+        operation: 'transfer',
         args: [
-          {type: 'Hash160', value: cozWallet.account.address},
-          {type: 'Hash160', value: otherWallet.scriptHash},	
-          {type: 'Integer', value: 100 * 10**8},	
-          {type: 'Any', value: ''},	
+          { type: 'Hash160', value: cozWallet.account.address },
+          { type: 'Hash160', value: otherWallet.scriptHash },
+          { type: 'Integer', value: 100 * 10 ** 8 },
+          { type: 'Any', value: '' }
         ]
       }
     ]
@@ -335,23 +346,23 @@ describe('Basic Generator Test Suite', function () {
       invocations: buildInvoke
     })
     await wait(TIME_CONSTANT)
-    await txDidComplete(NODE,txid, false)
+    await txDidComplete(NODE, txid, false)
 
     //create a new generator and instance
     const generatorId = await buildGenerator(1, 1, 1, generator)
 
     //attempt to attach a trait without being the generator author
     try {
-        const trait = {
-            "label": "badTrait",
-            "slots": 1,
-            "traitLevels": []
-        }
+      const trait = {
+        label: 'badTrait',
+        slots: 1,
+        traitLevels: []
+      }
 
-        txid = await generatorOtherWallet.createTrait({ generatorId,trait})
-        await wait(TIME_CONSTANT)
-        await txDidComplete(NODE, txid)
-        assert.fail("Successful trait creation by unauthorized user")
+      txid = await generatorOtherWallet.createTrait({ generatorId, trait })
+      await wait(TIME_CONSTANT)
+      await txDidComplete(NODE, txid)
+      assert.fail('Successful trait creation by unauthorized user')
     } catch (e) {}
   })
 
@@ -525,44 +536,51 @@ describe('Basic Generator Test Suite', function () {
   })
   */
 
-  async function buildGenerator(dropRate: number, maxTraits: number, maxMint: number, generator: Generator) {
+  async function buildGenerator(
+    dropRate: number,
+    maxTraits: number,
+    maxMint: number,
+    generator: Generator
+  ) {
     const collection = await getCollectionSdk(cozWallet.account)
 
     const cid = await createCollectionHelper(collection)
 
-    const initialCollection = await collection.getCollectionJSON({collectionId: cid})
+    const initialCollection = await collection.getCollectionJSON({
+      collectionId: cid
+    })
 
     const traits = initialCollection.values.map((value, i) => {
-        return {
-            "type": 0,
-            "maxMint": maxMint,
-            "args": {
-                "collectionId": cid,
-                "index": i
-            }
+      return {
+        type: 0,
+        maxMint: maxMint,
+        args: {
+          collectionId: cid,
+          index: i
         }
+      }
     })
 
     const newGenerator = {
-        'label': 'new generator',
-        'baseGeneratorFee': 1000000000,
-        'traits': [
+      label: 'new generator',
+      baseGeneratorFee: 1000000000,
+      traits: [
+        {
+          label: 'testTrait',
+          slots: maxTraits,
+          traitLevels: [
             {
-                "label": "testTrait",
-                "slots": maxTraits,
-                "traitLevels": [
-                    {
-                        "dropScore": dropRate * 10000,
-                        "mintMode": 0,
-                        "traits": traits
-                    }
-                ]
+              dropScore: dropRate * 10000,
+              mintMode: 0,
+              traits: traits
             }
-        ]
+          ]
+        }
+      ]
     }
     let res = await generator.createGenerator({
-      label:  newGenerator.label,
-      baseGeneratorFee:  newGenerator.baseGeneratorFee
+      label: newGenerator.label,
+      baseGeneratorFee: newGenerator.baseGeneratorFee
     })
 
     await wait(TIME_CONSTANT)
@@ -572,36 +590,41 @@ describe('Basic Generator Test Suite', function () {
 
     await generator.createTraits({
       generatorId: giid,
-      traits: newGenerator.traits,
+      traits: newGenerator.traits
     })
 
     return giid
   }
 
   async function createCollectionHelper(collection: Collection) {
-    const txid = await collection.createFromFile('../props_initialize_data/collections/3_traits.colors.json')
+    const txid = await collection.createFromFile(
+      '../props_initialize_data/collections/3_traits.colors.json'
+    )
     await wait(TIME_CONSTANT)
     const res = await txDidComplete(NODE, txid, true)
     return res[0]
   }
 
-  async function mintFromInstanceFunction(instanceId: number, count: number, generator: Generator) {
+  async function mintFromInstanceFunction(
+    instanceId: number,
+    count: number,
+    generator: Generator
+  ) {
     const txids: string[] = []
 
     for (let i = 0; i < count; i++) {
-        const txid = await generator.mintFromInstance({
-          instanceId: instanceId
-        })
-        txids.push(txid)
+      const txid = await generator.mintFromInstance({
+        instanceId: instanceId
+      })
+      txids.push(txid)
     }
     await wait(TIME_CONSTANT)
 
     const res: any[] = []
     for (let txid of txids) {
-        const traits = await txDidComplete(NODE, txid, false)
-        res.push(traits[0])
+      const traits = await txDidComplete(NODE, txid, false)
+      res.push(traits[0])
     }
     return res
   }
-
 })

@@ -1,5 +1,5 @@
-import { Neo3Invoker } from '@cityofzion/neo3-invoker'
-import { Neo3Parser } from '@cityofzion/neo3-parser'
+import type { Neo3Invoker } from '@cityofzion/neo3-invoker'
+import type { Neo3Parser } from '@cityofzion/neo3-parser'
 
 export type SmartContractConfig = {
   scriptHash: string
@@ -24,15 +24,14 @@ export enum InstanceAccessMode {
 }
 
 export interface InstanceAuthorizedContracts {
-  scriptHash: string,
+  scriptHash: string
   code: number
 }
 
-
 export interface GeneratorType {
-  id?: number,
+  id?: number
   author?: string
-  label: string,
+  label: string
   baseGeneratorFee: number
   traits: TraitType[] | string[]
 }
@@ -44,28 +43,28 @@ export interface TraitType {
 }
 
 export interface TraitLevel {
-  dropScore: number,
-  mintMode: number,
+  dropScore: number
+  mintMode: number
   traits: EventTypeWrapper[]
 }
 
 export interface EventTypeWrapper {
-  type: EventTypeEnum,
+  type: EventTypeEnum
   maxMint: number
   args:
-    EventCollectionPointer |
-    EventInstanceCall |
-    EventValue |
-    EventCollectionSampleFrom
+    | EventCollectionPointer
+    | EventInstanceCall
+    | EventValue
+    | EventCollectionSampleFrom
 }
 
 export interface EventCollectionPointer {
-  collectionId: number,
+  collectionId: number
   index: number
 }
 
 export interface EventCollectionSampleFrom {
-  collectionId: number,
+  collectionId: number
 }
 
 export interface EventInstanceCall {
@@ -87,13 +86,13 @@ export enum EventTypeEnum {
 
 export interface EpochType {
   author: string
-  label: string,
-  epochId: number,
-  generatorInstanceId: number,
-  initialRollCollectionId: number,
-  mintFee: number,
+  label: string
+  epochId: number
+  generatorInstanceId: number
+  initialRollCollectionId: number
+  mintFee: number
   sysFee: number
-  maxSupply: number,
+  maxSupply: number
   totalSupply: number
 }
 

@@ -1,9 +1,6 @@
-import { SmartContractConfig } from './types'
-import { ContractInvocation } from '@cityofzion/neo3-invoker'
-import { Neo3Parser } from '@cityofzion/neo3-parser'
-
-
-
+import type { SmartContractConfig } from './types'
+import type { ContractInvocation } from '@cityofzion/neo3-invoker'
+import type { Neo3Parser } from '@cityofzion/neo3-parser'
 
 /**
  * The dice prop normalizes a lot of behaviors associated with random number generation to improve usability within
@@ -35,13 +32,12 @@ export class Dice {
   static MAINNET = '0x4380f2c1de98bb267d3ea821897ec571a04fe3e0'
   static TESTNET = ''
 
-	private config: SmartContractConfig
+  private config: SmartContractConfig
 
-	constructor(configOptions: SmartContractConfig) {
-			this.config = configOptions
-	}
-    
-  
+  constructor(configOptions: SmartContractConfig) {
+    this.config = configOptions
+  }
+
   /**
    * Gets a random number of range [start -> end] inclusive. This method supports negative integer ranges.
    *
@@ -53,22 +49,21 @@ export class Dice {
    *
    * @returns The transaction id of a transaction that will return the random number.
    */
-	async randBetween(options: {start: number, end: number}): Promise<string> {
+  async randBetween(options: { start: number; end: number }): Promise<string> {
     const res = await this.config.invoker.invokeFunction({
       invocations: [
-        Dice.buildRandBetweenInvocation(
-					this.config.scriptHash, 
-					{start: options.start, end: options.end}
-				)
+        Dice.buildRandBetweenInvocation(this.config.scriptHash, {
+          start: options.start,
+          end: options.end
+        })
       ],
-      signers: [],
+      signers: []
     })
 
     return res
   }
 
-
-	/**
+  /**
    * Maps bytes onto a range of numbers:
    *
    * [0 -> Max(entropy.length)][entropy] --> [start, end]
@@ -79,25 +74,29 @@ export class Dice {
    *
    * @returns The resulting number from the mapping.
    */
-	async mapBytesOntoRange(options: {start: number, end: number, entropy: string}): Promise<number | string> {
-		const res = await this.config.invoker.testInvoke({
-			invocations: [
-				Dice.buildRandBetweenInvocation(
-					this.config.scriptHash, 
-					{start: options.start, end: options.end}
-				)
-			],
-			signers: [],
-		})
+  async mapBytesOntoRange(options: {
+    start: number
+    end: number
+    entropy: string
+  }): Promise<number | string> {
+    const res = await this.config.invoker.testInvoke({
+      invocations: [
+        Dice.buildRandBetweenInvocation(this.config.scriptHash, {
+          start: options.start,
+          end: options.end
+        })
+      ],
+      signers: []
+    })
 
-		if (res.stack.length === 0) {
-			throw new Error(res.exception ?? 'unrecognized response')
-		}
+    if (res.stack.length === 0) {
+      throw new Error(res.exception ?? 'unrecognized response')
+    }
 
-		return this.config.parser.parseRpcResponse(res.stack[0])
-	}
+    return this.config.parser.parseRpcResponse(res.stack[0])
+  }
 
-	/**
+  /**
    * Rolls for a `dX` formatted random number.
    *
    * **Note:**
@@ -108,16 +107,18 @@ export class Dice {
    *
    * @returns The transaction id of a transaction that will return the result of the die roll.
    */
-	async rollDie(options: {die: string}): Promise<string> {
+  async rollDie(options: { die: string }): Promise<string> {
     return await this.config.invoker.invokeFunction({
       invocations: [
-        Dice.buildRollDieInvocation(this.config.scriptHash, {die: options.die})
+        Dice.buildRollDieInvocation(this.config.scriptHash, {
+          die: options.die
+        })
       ],
-      signers: [],
+      signers: []
     })
-	}
+  }
 
-	/**
+  /**
    * Calculates dice rolls using provided entropy.  This method will return and array of length `entropy.length / precision`.
    *
    * @param options.die The die to roll. The input format can support arbitarilly large dice which are effectively spherical..
@@ -128,57 +129,70 @@ export class Dice {
    *
    * @returns The transaction id of a transaction that will return the result an array of dice rolls.
    */
-	async rollDiceWithEntropy(options: {die: string, precision: number, entropy: string}): Promise<string> {
+  async rollDiceWithEntropy(options: {
+    die: string
+    precision: number
+    entropy: string
+  }): Promise<string> {
     return await this.config.invoker.invokeFunction({
       invocations: [
-        Dice.buildRollDieInvocation(this.config.scriptHash, {die: options.die})
+        Dice.buildRollDieInvocation(this.config.scriptHash, {
+          die: options.die
+        })
       ],
-      signers: [],
+      signers: []
     })
-	}
-	
+  }
 
-  static buildRandBetweenInvocation(scriptHash: string, params: {start: number, end: number}): ContractInvocation{
+  static buildRandBetweenInvocation(
+    scriptHash: string,
+    params: { start: number; end: number }
+  ): ContractInvocation {
     return {
       scriptHash,
       operation: 'rand_between',
       args: [
-        {type: 'Integer', value: params.start},
-        {type: 'Integer', value: params.end},
+        { type: 'Integer', value: params.start },
+        { type: 'Integer', value: params.end }
       ]
     }
   }
-  
-  static buildMapBytesOntoRangeInvocation(scriptHash: string, params: {start: number, end: number, entropy: string}): ContractInvocation{
+
+  static buildMapBytesOntoRangeInvocation(
+    scriptHash: string,
+    params: { start: number; end: number; entropy: string }
+  ): ContractInvocation {
     return {
       scriptHash,
       operation: 'map_bytes_onto_range',
       args: [
-        {type: 'Integer', value: params.start},
-        {type: 'Integer', value: params.end},
-        {type: 'String', value: params.entropy},
+        { type: 'Integer', value: params.start },
+        { type: 'Integer', value: params.end },
+        { type: 'String', value: params.entropy }
       ]
     }
   }
-  
-  static buildRollDieInvocation(scriptHash: string, params: {die: string}): ContractInvocation{
+
+  static buildRollDieInvocation(
+    scriptHash: string,
+    params: { die: string }
+  ): ContractInvocation {
     return {
       scriptHash,
       operation: 'roll_die',
-      args: [
-        {type: 'String', value: params.die},
-      ]
+      args: [{ type: 'String', value: params.die }]
     }
   }
-  
-  static buildRollDieWithEntropyInvocation(scriptHash: string, parser: Neo3Parser, params: {die: string, precision: number, }): ContractInvocation{
+
+  static buildRollDieWithEntropyInvocation(
+    scriptHash: string,
+    parser: Neo3Parser,
+    params: { die: string; precision: number }
+  ): ContractInvocation {
     return {
       scriptHash,
       operation: 'roll_die',
-      args: [
-        {type: 'ByteArray', value: parser.strToBase64(params.die)},
-      ]
+      args: [{ type: 'ByteArray', value: parser.strToBase64(params.die) }]
     }
   }
-  
 }
